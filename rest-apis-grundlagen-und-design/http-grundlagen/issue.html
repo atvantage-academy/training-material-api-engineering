@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Einer Website beim Sprechen zusehen · API Engineering (Academy)</title><meta name="description" content="Öffne die Entwicklerwerkzeuge Deines Browsers und lies mit, was Deine Lieblingswebsite den ganzen Tag erzählt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Einer Website beim Sprechen zusehen</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 30 Minuten</span><span class="avd-academy-tag">HTTP</span><span class="avd-academy-tag">Entwicklerwerkzeuge</span><span class="avd-academy-tag">curl</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Einer Website beim Sprechen zusehen</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="einer-website-beim-sprechen-zusehen">Einer Website beim Sprechen zusehen</h1>
+
+<p><strong>Als</strong> jemand, der künftig Schnittstellen entwerfen soll, <strong>möchte ich</strong> echte
+HTTP-Nachrichten mit eigenen Augen sehen, <strong>damit</strong> ich beim Entwerfen weiß, worüber
+ich eigentlich rede.</p>
+
+<p>HTTP ist nichts Verborgenes. Dein Browser schreibt jede Nachricht mit, die er
+schickt und empfängt – Du musst nur das richtige Fenster aufmachen. Danach wirst
+Du das Internet nicht mehr ganz so ansehen wie vorher.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>öffnest die Entwicklerwerkzeuge Deines Browsers und findest darin eine einzelne
+HTTP-Nachricht wieder.</li>
+  <li>benennst an einer echten Nachricht Methode, Pfad, Statuscode, mindestens drei
+Header und den Body.</li>
+  <li>unterscheidest Header von Body und ordnest einer beliebigen Information zu, wo
+sie hingehört.</li>
+  <li>wiederholst einen beobachteten Aufruf mit einem HTTP-Client außerhalb des
+Browsers.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Entwicklerwerkzeuge offen und siehst eine Liste von Nachrichten.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast <strong>eine</strong> Nachricht ausgewählt und kannst ihre Startzeile vorlesen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast drei Header im Request und drei in der Response benannt und weißt,
+    wofür sie da sind.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Nachricht gefunden, deren Antwort <strong>kein</strong> HTML war.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast denselben Aufruf einmal außerhalb des Browsers abgesetzt.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="öffne-die-entwicklerwerkzeuge">Öffne die Entwicklerwerkzeuge</h3>
+
+<p>Such Dir eine Website aus, die Du wirklich benutzt – Deine Bank, ein Nachrichtenportal,
+ein Shop. Öffne die Entwicklerwerkzeuge (<code>F12</code> oder <code>Strg</code>/<code>Cmd</code> + <code>Shift</code> + <code>I</code>) und
+wechsle auf den Reiter <strong>Netzwerk</strong> bzw. <strong>Network</strong>.</p>
+
+<p>Lade die Seite neu. Jetzt füllt sich die Liste.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Wenn die Liste leer bleibt, waren die Werkzeuge beim Laden noch zu.
+Erst öffnen, dann neu laden.</p>
+</blockquote>
+
+<h3 id="zähl-nach">Zähl nach</h3>
+
+<p>Wie viele Nachrichten waren nötig, um diese eine Seite darzustellen? Die Zahl steht
+meist unten in der Leiste.</p>
+
+<p>Schreib sie auf. Du wirst sie in der Nachbesprechung brauchen.</p>
+
+<h3 id="nimm-eine-nachricht-auseinander">Nimm eine Nachricht auseinander</h3>
+
+<p>Klick die <strong>erste</strong> Nachricht in der Liste an – das ist die Seite selbst. Sieh Dir
+die Reiter <em>Headers</em>, <em>Payload</em> und <em>Response</em> an und beantworte für Dich:</p>
+
+<ul>
+  <li>Welche <strong>Methode</strong> und welcher <strong>Pfad</strong> stehen in der Startzeile?</li>
+  <li>Welchen <strong>Statuscode</strong> hat die Antwort, und was bedeutet er?</li>
+  <li>Welche drei <strong>Header</strong> hat der Request geschickt? Was sagen sie dem Server?</li>
+  <li>Welche drei Header hat die Antwort zurückgegeben?</li>
+  <li>Was steht im <strong>Body</strong> der Antwort?</li>
+</ul>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Viele Browser zeigen die Header standardmäßig aufbereitet. Such nach
+einem Schalter wie <em>„Raw“</em> oder <em>„Quelle anzeigen“</em> – dann siehst Du die Nachricht
+so, wie sie wirklich über die Leitung ging. Genau dieses Bild sollst Du im Kopf
+behalten.</p>
+</blockquote>
+
+<h3 id="finde-eine-nachricht-ohne-html">Finde eine Nachricht ohne HTML</h3>
+
+<p>Filtere die Liste auf <strong>Fetch/XHR</strong>. Was dort auftaucht, sind Aufrufe, die die Seite
+im Hintergrund macht, während Du sie ansiehst.</p>
+
+<p>Sieh Dir einen davon an. Was kommt als Antwort zurück? Welchen <code>Content-Type</code> hat sie?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Wenn der Filter nichts zeigt, klick auf der Seite ein wenig herum –
+scrollen, ein Menü öffnen, eine Suche starten. Die interessanten Aufrufe passieren
+selten beim ersten Laden.</p>
+</blockquote>
+
+<h3 id="hol-den-aufruf-aus-dem-browser-heraus">Hol den Aufruf aus dem Browser heraus</h3>
+
+<p>Klick eine Nachricht mit der rechten Maustaste an und wähle <strong>„Copy“ → „Copy as
+cURL“</strong>. Füg das Ergebnis in ein Terminal ein und führe es aus.</p>
+
+<p>Vergleiche: Bekommst Du dasselbe zurück wie der Browser? Wenn nicht – woran könnte
+das liegen?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Der kopierte Befehl ist oft sehr lang, weil alle Header mitkommen.
+Probier aus, welche Du weglassen kannst, ohne dass sich die Antwort ändert. Das
+ist die eigentliche Übung: Du findest heraus, welche Header wirklich gebraucht
+werden.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Hast Du kein Terminal zur Hand, tut es auch der IntelliJ HTTP Client,
+die VS-Code-Erweiterung <em>REST Client</em> oder Postman/Bruno. Es geht um den
+Unterschied zwischen „der Browser macht das“ und „ich mache das“.</p>
+</blockquote>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>Wie viele Nachrichten waren für eine einzige Seite nötig? Was bedeutet das für
+eine Schnittstelle, die eine Übersichtsliste liefern soll?</li>
+  <li>Welche Header hast Du in <strong>jeder</strong> Nachricht gefunden? Warum ausgerechnet diese?</li>
+  <li>Du hast eine Antwort gefunden, die kein HTML war. Wer hat diesen Aufruf ausgelöst,
+und wozu?</li>
+  <li>War der Statuscode immer <code>200</code>? Welche anderen hast Du gesehen, und was sagen sie
+aus?</li>
+  <li>Welche Header konntest Du aus dem <code>curl</code>-Befehl streichen, ohne dass sich etwas
+änderte – und welcher war unverzichtbar? Was sagt das über den Unterschied
+zwischen „nötig“ und „üblich“?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Einer Website beim Sprechen zusehen
+
+**Als** jemand, der künftig Schnittstellen entwerfen soll, **möchte ich** echte
+HTTP-Nachrichten mit eigenen Augen sehen, **damit** ich beim Entwerfen weiß, worüber
+ich eigentlich rede.
+
+HTTP ist nichts Verborgenes. Dein Browser schreibt jede Nachricht mit, die er
+schickt und empfängt – Du musst nur das richtige Fenster aufmachen. Danach wirst
+Du das Internet nicht mehr ganz so ansehen wie vorher.
+
+## Lernziele
+
+Du…
+
+- öffnest die Entwicklerwerkzeuge Deines Browsers und findest darin eine einzelne
+  HTTP-Nachricht wieder.
+- benennst an einer echten Nachricht Methode, Pfad, Statuscode, mindestens drei
+  Header und den Body.
+- unterscheidest Header von Body und ordnest einer beliebigen Information zu, wo
+  sie hingehört.
+- wiederholst einen beobachteten Aufruf mit einem HTTP-Client außerhalb des
+  Browsers.
+
+## Definition of Done
+
+* [ ] Du hast die Entwicklerwerkzeuge offen und siehst eine Liste von Nachrichten.
+* [ ] Du hast **eine** Nachricht ausgewählt und kannst ihre Startzeile vorlesen.
+* [ ] Du hast drei Header im Request und drei in der Response benannt und weißt,
+      wofür sie da sind.
+* [ ] Du hast eine Nachricht gefunden, deren Antwort **kein** HTML war.
+* [ ] Du hast denselben Aufruf einmal außerhalb des Browsers abgesetzt.
+* [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
+
+## Arbeitsschritte
+
+### Öffne die Entwicklerwerkzeuge
+
+Such Dir eine Website aus, die Du wirklich benutzt – Deine Bank, ein Nachrichtenportal,
+ein Shop. Öffne die Entwicklerwerkzeuge (`F12` oder `Strg`/`Cmd` + `Shift` + `I`) und
+wechsle auf den Reiter **Netzwerk** bzw. **Network**.
+
+Lade die Seite neu. Jetzt füllt sich die Liste.
+
+&gt; **Hinweis:** Wenn die Liste leer bleibt, waren die Werkzeuge beim Laden noch zu.
+&gt; Erst öffnen, dann neu laden.
+
+### Zähl nach
+
+Wie viele Nachrichten waren nötig, um diese eine Seite darzustellen? Die Zahl steht
+meist unten in der Leiste.
+
+Schreib sie auf. Du wirst sie in der Nachbesprechung brauchen.
+
+### Nimm eine Nachricht auseinander
+
+Klick die **erste** Nachricht in der Liste an – das ist die Seite selbst. Sieh Dir
+die Reiter *Headers*, *Payload* und *Response* an und beantworte für Dich:
+
+- Welche **Methode** und welcher **Pfad** stehen in der Startzeile?
+- Welchen **Statuscode** hat die Antwort, und was bedeutet er?
+- Welche drei **Header** hat der Request geschickt? Was sagen sie dem Server?
+- Welche drei Header hat die Antwort zurückgegeben?
+- Was steht im **Body** der Antwort?
+
+&gt; **Hinweis:** Viele Browser zeigen die Header standardmäßig aufbereitet. Such nach
+&gt; einem Schalter wie *„Raw“* oder *„Quelle anzeigen“* – dann siehst Du die Nachricht
+&gt; so, wie sie wirklich über die Leitung ging. Genau dieses Bild sollst Du im Kopf
+&gt; behalten.
+
+### Finde eine Nachricht ohne HTML
+
+Filtere die Liste auf **Fetch/XHR**. Was dort auftaucht, sind Aufrufe, die die Seite
+im Hintergrund macht, während Du sie ansiehst.
+
+Sieh Dir einen davon an. Was kommt als Antwort zurück? Welchen `Content-Type` hat sie?
+
+&gt; **Hinweis:** Wenn der Filter nichts zeigt, klick auf der Seite ein wenig herum –
+&gt; scrollen, ein Menü öffnen, eine Suche starten. Die interessanten Aufrufe passieren
+&gt; selten beim ersten Laden.
+
+### Hol den Aufruf aus dem Browser heraus
+
+Klick eine Nachricht mit der rechten Maustaste an und wähle **„Copy“ → „Copy as
+cURL“**. Füg das Ergebnis in ein Terminal ein und führe es aus.
+
+Vergleiche: Bekommst Du dasselbe zurück wie der Browser? Wenn nicht – woran könnte
+das liegen?
+
+&gt; **Hinweis:** Der kopierte Befehl ist oft sehr lang, weil alle Header mitkommen.
+&gt; Probier aus, welche Du weglassen kannst, ohne dass sich die Antwort ändert. Das
+&gt; ist die eigentliche Übung: Du findest heraus, welche Header wirklich gebraucht
+&gt; werden.
+
+&gt; **Hinweis:** Hast Du kein Terminal zur Hand, tut es auch der IntelliJ HTTP Client,
+&gt; die VS-Code-Erweiterung *REST Client* oder Postman/Bruno. Es geht um den
+&gt; Unterschied zwischen „der Browser macht das“ und „ich mache das“.
+
+## Reflexionsfragen
+
+- Wie viele Nachrichten waren für eine einzige Seite nötig? Was bedeutet das für
+  eine Schnittstelle, die eine Übersichtsliste liefern soll?
+- Welche Header hast Du in **jeder** Nachricht gefunden? Warum ausgerechnet diese?
+- Du hast eine Antwort gefunden, die kein HTML war. Wer hat diesen Aufruf ausgelöst,
+  und wozu?
+- War der Statuscode immer `200`? Welche anderen hast Du gesehen, und was sagen sie
+  aus?
+- Welche Header konntest Du aus dem `curl`-Befehl streichen, ohne dass sich etwas
+  änderte – und welcher war unverzichtbar? Was sagt das über den Unterschied
+  zwischen „nötig“ und „üblich“?
+
+## Weiterführende Informationen
+
+- [MDN: HTTP-Nachrichten](https://developer.mozilla.org/de/docs/Web/HTTP/Messages)
+- [MDN: Übersicht der HTTP-Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+- [curl – Dokumentation](https://curl.se/docs/manpage.html)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://developer.mozilla.org/de/docs/Web/HTTP/Messages" target="_blank" rel="noopener"><span>MDN: HTTP-Nachrichten</span></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank" rel="noopener"><span>MDN: Übersicht der HTTP-Header</span></a><a href="https://curl.se/docs/manpage.html" target="_blank" rel="noopener"><span>curl – Dokumentation</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

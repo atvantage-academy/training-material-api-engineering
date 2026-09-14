@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Den Entwurf als OpenAPI aufschreiben · API Engineering (Academy)</title><meta name="description" content="Übersetze Euren Entwurf von gestern in ein OpenAPI-Dokument – so weit Ihr kommt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Den Entwurf als OpenAPI aufschreiben</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 55 Minuten</span><span class="avd-academy-tag">OpenAPI</span><span class="avd-academy-tag">Contract First</span><span class="avd-academy-tag">YAML</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Den Entwurf als OpenAPI aufschreiben</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="den-entwurf-als-openapi-aufschreiben">Den Entwurf als OpenAPI aufschreiben</h1>
+
+<p><strong>Als</strong> Team, das eine API herausgibt, <strong>möchten wir</strong> unseren Entwurf in einem
+maschinenlesbaren Format festhalten, <strong>damit</strong> andere Teams damit arbeiten können,
+ohne uns zu fragen.</p>
+
+<p>Euer Entwurf von gestern steht. Jetzt schreibt Ihr ihn so auf, dass ein Programm ihn
+lesen kann.</p>
+
+<div class="avd-academy-callout avd-academy-callout--info">
+  <p><strong>Diese Übung muss nicht fertig werden.</strong> Sie ist so bemessen, dass niemand alles
+schafft – das ist beabsichtigt, nicht Dein Tempo. Wer drei Operationen sauber
+hinbekommt, hat die Übung bestanden. Alles Weitere kannst Du nach dem Kurs
+ergänzen; das Werkzeug läuft im Browser und kostet nichts.</p>
+</div>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>übersetzt einen formlosen API-Entwurf in ein gültiges OpenAPI-Dokument.</li>
+  <li>beschreibst eine Operation vollständig: Pfad, Methode, Parameter, Request-Body,
+Antworten mit Statuscodes und Inhalt.</li>
+  <li>definierst ein Schema unter <code>components</code> und referenzierst es mit <code>$ref</code>.</li>
+  <li>liest die Meldungen des Editors und behebst die Fehler selbst.</li>
+  <li>benennst mindestens eine Stelle, an der Euer Entwurf von gestern unvollständig war.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Euer Dokument hat einen gültigen Kopf: <code>openapi</code>, <code>info</code> mit <code>title</code> und
+    <code>version</code>.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Mindestens <strong>drei Operationen</strong> sind vollständig beschrieben – mit allen
+    Antworten, die Ihr gestern notiert habt, nicht nur dem Erfolgsfall.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Mindestens <strong>ein Schema</strong> steht unter <code>components</code> und wird per <code>$ref</code>
+    referenziert.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Der Editor zeigt <strong>keine Fehler</strong> mehr an.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Rechts im Editor seht Ihr eine benutzbare Dokumentation Eurer API.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt notiert, an welcher Stelle Euer Entwurf von gestern eine Lücke hatte.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="legt-den-kopf-an">Legt den Kopf an</h3>
+
+<p>Öffnet <a href="https://editor.swagger.io/">editor.swagger.io</a>, löscht das Beispiel und
+fangt mit dem Nötigsten an:</p>
+
+<pre><code class="language-yaml">openapi: 3.1.0
+info:
+  title: Account Service API
+  description: Verwaltung der Kundenkonten des Online-Shops
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+paths: {}
+</code></pre>
+
+<p>Der Editor beschwert sich jetzt nicht mehr. Das ist Euer Ausgangspunkt.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> <code>version</code> ist die Version <strong>Eurer API</strong>, nicht die von OpenAPI. Die
+steht ganz oben in <code>openapi</code>.</p>
+</blockquote>
+
+<h3 id="beschreibt-genau-eine-operation--ganz">Beschreibt genau eine Operation – ganz</h3>
+
+<p>Nehmt Euch die einfachste lesende Operation vor, meist <code>GET /customers</code>. Und macht
+sie <strong>vollständig</strong>, bevor Ihr die nächste anfangt.</p>
+
+<pre><code class="language-yaml">paths:
+  /customers:
+    get:
+      summary: Alle Kunden lesen
+      responses:
+        '200':
+          description: Die Liste der Kunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+</code></pre>
+
+<p>Seht Euch die rechte Seite an. Da steht jetzt Eure API.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Die Anführungszeichen um <code>'200'</code> sind kein Zufall. Ohne sie liest
+YAML eine Zahl, gefordert ist aber ein Textschlüssel. Das ist der häufigste
+Stolperstein.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Die Verschachtelung ist immer dieselbe: Pfad → Methode →
+<code>responses</code> → Statuscode → <code>content</code> → Medientyp → <code>schema</code>. Wenn Ihr Euch
+verlauft, zählt die Ebenen von oben durch.</p>
+</blockquote>
+
+<h3 id="zieht-das-schema-heraus">Zieht das Schema heraus</h3>
+
+<p>Das Kunden-Objekt werdet Ihr noch mehrfach brauchen. Definiert es einmal und
+verweist darauf:</p>
+
+<pre><code class="language-yaml">components:
+  schemas:
+    Customer:
+      type: object
+      required: [name]
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          minLength: 3
+</code></pre>
+
+<p>Und in der Operation:</p>
+
+<pre><code class="language-yaml">              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+</code></pre>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> <code>readOnly: true</code> ist die Antwort auf eine Frage, die Ihr gestern
+vielleicht diskutiert habt: Die ID kommt beim Lesen mit, wird beim Anlegen aber
+nicht mitgeschickt. So braucht Ihr dafür kein zweites Schema.</p>
+</blockquote>
+
+<h3 id="ergänzt-eine-schreibende-operation">Ergänzt eine schreibende Operation</h3>
+
+<p>Jetzt <code>POST /customers</code>. Hier kommt etwas Neues dazu: ein <code>requestBody</code>.</p>
+
+<p>Und die Antworten sind interessanter – denkt an das, was Ihr gestern notiert habt:
+Was kommt bei Erfolg zurück? Welcher Statuscode? Steht da ein <code>Location</code>-Header?
+Und was passiert, wenn die Daten nicht taugen?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Wenn Euch auffällt, dass Ihr gestern gar nicht entschieden habt, was
+bei einem Fehler zurückkommt – <strong>schreibt das auf</strong>. Das ist kein Versäumnis,
+sondern genau der Effekt, um den es hier geht: Das Format erzwingt Entscheidungen,
+die man formlos umgehen kann.</p>
+</blockquote>
+
+<h3 id="beschreibt-eine-operation-mit-pfadparameter">Beschreibt eine Operation mit Pfadparameter</h3>
+
+<p><code>GET /customers/{id}</code> braucht eine Deklaration des Parameters – sonst meckert der
+Editor.</p>
+
+<p>Überlegt dabei: Der <code>id</code>-Parameter wird bei <code>GET</code>, <code>PUT</code>, <code>PATCH</code> und <code>DELETE</code>
+gleich aussehen. Wo gehört er hin, damit Ihr ihn nur einmal schreibt?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Es gibt zwei Stellen, an denen ein Parameter stehen kann – bei der
+einzelnen Operation oder beim Pfad, dann gilt er für alle Methoden darunter. Und
+es gibt <code>components/parameters</code> für die Wiederverwendung über Pfade hinweg.</p>
+</blockquote>
+
+<h3 id="macht-den-editor-still">Macht den Editor still</h3>
+
+<p>Geht die Meldungen von oben nach unten durch. Behebt sie, bis links nichts mehr
+rot ist.</p>
+
+<p>Lest dabei mit, <strong>was</strong> der Editor sagt – nicht nur, dass er etwas sagt. Die
+Meldungen sind nützlicher, als sie aussehen.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Findet Ihr einen Fehler nicht, schaut auf die Einrückung der Zeile
+<strong>darüber</strong>. In YAML ist fast jeder Fehler ein Einrückungsfehler.</p>
+</blockquote>
+
+<h3 id="wenn-noch-zeit-ist">Wenn noch Zeit ist</h3>
+
+<p>In dieser Reihenfolge lohnt es sich weiterzumachen:</p>
+
+<ol>
+  <li>Die übrigen Operationen Eures Entwurfs.</li>
+  <li>Die Fehlerantworten, die Ihr bisher weggelassen habt.</li>
+  <li><code>tags</code>, um die Operationen zu gruppieren – seht Euch an, was rechts passiert.</li>
+  <li><code>example</code>-Werte bei den Feldern. Das ist die Stelle, an der Eure Dokumentation
+plötzlich richtig gut aussieht.</li>
+</ol>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>An welcher Stelle habt Ihr gemerkt, dass Euer Entwurf von gestern unvollständig
+war? Was hat gefehlt?</li>
+  <li>Was habt Ihr in <code>components</code> ausgelagert, und woran habt Ihr das festgemacht?</li>
+  <li>Wie unterscheidet sich das Kunden-Objekt beim Anlegen von dem beim Lesen? Wie habt
+Ihr das gelöst?</li>
+  <li>Was hat der Editor bemängelt, das Ihr für richtig gehalten habt? Wer hatte recht?</li>
+  <li>Hat das Aufschreiben länger gedauert als das Entwerfen gestern? Was bekommt Ihr
+für diese zusätzliche Zeit?</li>
+  <li>Stellt Euch vor, ein anderes Team bekommt nur dieses Dokument – ohne Euch. Was
+fehlt ihm noch?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Den Entwurf als OpenAPI aufschreiben
+
+**Als** Team, das eine API herausgibt, **möchten wir** unseren Entwurf in einem
+maschinenlesbaren Format festhalten, **damit** andere Teams damit arbeiten können,
+ohne uns zu fragen.
+
+Euer Entwurf von gestern steht. Jetzt schreibt Ihr ihn so auf, dass ein Programm ihn
+lesen kann.
+
+&lt;div class=&quot;avd-academy-callout avd-academy-callout--info&quot; markdown=&quot;1&quot;&gt;
+**Diese Übung muss nicht fertig werden.** Sie ist so bemessen, dass niemand alles
+schafft – das ist beabsichtigt, nicht Dein Tempo. Wer drei Operationen sauber
+hinbekommt, hat die Übung bestanden. Alles Weitere kannst Du nach dem Kurs
+ergänzen; das Werkzeug läuft im Browser und kostet nichts.
+&lt;/div&gt;
+
+## Lernziele
+
+Du…
+
+- übersetzt einen formlosen API-Entwurf in ein gültiges OpenAPI-Dokument.
+- beschreibst eine Operation vollständig: Pfad, Methode, Parameter, Request-Body,
+  Antworten mit Statuscodes und Inhalt.
+- definierst ein Schema unter `components` und referenzierst es mit `$ref`.
+- liest die Meldungen des Editors und behebst die Fehler selbst.
+- benennst mindestens eine Stelle, an der Euer Entwurf von gestern unvollständig war.
+
+## Definition of Done
+
+* [ ] Euer Dokument hat einen gültigen Kopf: `openapi`, `info` mit `title` und
+      `version`.
+* [ ] Mindestens **drei Operationen** sind vollständig beschrieben – mit allen
+      Antworten, die Ihr gestern notiert habt, nicht nur dem Erfolgsfall.
+* [ ] Mindestens **ein Schema** steht unter `components` und wird per `$ref`
+      referenziert.
+* [ ] Der Editor zeigt **keine Fehler** mehr an.
+* [ ] Rechts im Editor seht Ihr eine benutzbare Dokumentation Eurer API.
+* [ ] Ihr habt notiert, an welcher Stelle Euer Entwurf von gestern eine Lücke hatte.
+* [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
+
+## Arbeitsschritte
+
+### Legt den Kopf an
+
+Öffnet [editor.swagger.io](https://editor.swagger.io/), löscht das Beispiel und
+fangt mit dem Nötigsten an:
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Account Service API
+  description: Verwaltung der Kundenkonten des Online-Shops
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+paths: {}
+```
+
+Der Editor beschwert sich jetzt nicht mehr. Das ist Euer Ausgangspunkt.
+
+&gt; **Hinweis:** `version` ist die Version **Eurer API**, nicht die von OpenAPI. Die
+&gt; steht ganz oben in `openapi`.
+
+### Beschreibt genau eine Operation – ganz
+
+Nehmt Euch die einfachste lesende Operation vor, meist `GET /customers`. Und macht
+sie **vollständig**, bevor Ihr die nächste anfangt.
+
+```yaml
+paths:
+  /customers:
+    get:
+      summary: Alle Kunden lesen
+      responses:
+        &apos;200&apos;:
+          description: Die Liste der Kunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+```
+
+Seht Euch die rechte Seite an. Da steht jetzt Eure API.
+
+&gt; **Hinweis:** Die Anführungszeichen um `&apos;200&apos;` sind kein Zufall. Ohne sie liest
+&gt; YAML eine Zahl, gefordert ist aber ein Textschlüssel. Das ist der häufigste
+&gt; Stolperstein.
+
+&gt; **Hinweis:** Die Verschachtelung ist immer dieselbe: Pfad → Methode →
+&gt; `responses` → Statuscode → `content` → Medientyp → `schema`. Wenn Ihr Euch
+&gt; verlauft, zählt die Ebenen von oben durch.
+
+### Zieht das Schema heraus
+
+Das Kunden-Objekt werdet Ihr noch mehrfach brauchen. Definiert es einmal und
+verweist darauf:
+
+```yaml
+components:
+  schemas:
+    Customer:
+      type: object
+      required: [name]
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          minLength: 3
+```
+
+Und in der Operation:
+
+```yaml
+              schema:
+                type: array
+                items:
+                  $ref: &apos;#/components/schemas/Customer&apos;
+```
+
+&gt; **Hinweis:** `readOnly: true` ist die Antwort auf eine Frage, die Ihr gestern
+&gt; vielleicht diskutiert habt: Die ID kommt beim Lesen mit, wird beim Anlegen aber
+&gt; nicht mitgeschickt. So braucht Ihr dafür kein zweites Schema.
+
+### Ergänzt eine schreibende Operation
+
+Jetzt `POST /customers`. Hier kommt etwas Neues dazu: ein `requestBody`.
+
+Und die Antworten sind interessanter – denkt an das, was Ihr gestern notiert habt:
+Was kommt bei Erfolg zurück? Welcher Statuscode? Steht da ein `Location`-Header?
+Und was passiert, wenn die Daten nicht taugen?
+
+&gt; **Hinweis:** Wenn Euch auffällt, dass Ihr gestern gar nicht entschieden habt, was
+&gt; bei einem Fehler zurückkommt – **schreibt das auf**. Das ist kein Versäumnis,
+&gt; sondern genau der Effekt, um den es hier geht: Das Format erzwingt Entscheidungen,
+&gt; die man formlos umgehen kann.
+
+### Beschreibt eine Operation mit Pfadparameter
+
+`GET /customers/{id}` braucht eine Deklaration des Parameters – sonst meckert der
+Editor.
+
+Überlegt dabei: Der `id`-Parameter wird bei `GET`, `PUT`, `PATCH` und `DELETE`
+gleich aussehen. Wo gehört er hin, damit Ihr ihn nur einmal schreibt?
+
+&gt; **Hinweis:** Es gibt zwei Stellen, an denen ein Parameter stehen kann – bei der
+&gt; einzelnen Operation oder beim Pfad, dann gilt er für alle Methoden darunter. Und
+&gt; es gibt `components/parameters` für die Wiederverwendung über Pfade hinweg.
+
+### Macht den Editor still
+
+Geht die Meldungen von oben nach unten durch. Behebt sie, bis links nichts mehr
+rot ist.
+
+Lest dabei mit, **was** der Editor sagt – nicht nur, dass er etwas sagt. Die
+Meldungen sind nützlicher, als sie aussehen.
+
+&gt; **Hinweis:** Findet Ihr einen Fehler nicht, schaut auf die Einrückung der Zeile
+&gt; **darüber**. In YAML ist fast jeder Fehler ein Einrückungsfehler.
+
+### Wenn noch Zeit ist
+
+In dieser Reihenfolge lohnt es sich weiterzumachen:
+
+1. Die übrigen Operationen Eures Entwurfs.
+2. Die Fehlerantworten, die Ihr bisher weggelassen habt.
+3. `tags`, um die Operationen zu gruppieren – seht Euch an, was rechts passiert.
+4. `example`-Werte bei den Feldern. Das ist die Stelle, an der Eure Dokumentation
+   plötzlich richtig gut aussieht.
+
+## Reflexionsfragen
+
+- An welcher Stelle habt Ihr gemerkt, dass Euer Entwurf von gestern unvollständig
+  war? Was hat gefehlt?
+- Was habt Ihr in `components` ausgelagert, und woran habt Ihr das festgemacht?
+- Wie unterscheidet sich das Kunden-Objekt beim Anlegen von dem beim Lesen? Wie habt
+  Ihr das gelöst?
+- Was hat der Editor bemängelt, das Ihr für richtig gehalten habt? Wer hatte recht?
+- Hat das Aufschreiben länger gedauert als das Entwerfen gestern? Was bekommt Ihr
+  für diese zusätzliche Zeit?
+- Stellt Euch vor, ein anderes Team bekommt nur dieses Dokument – ohne Euch. Was
+  fehlt ihm noch?
+
+## Weiterführende Informationen
+
+- [Swagger Editor (ohne Installation)](https://editor.swagger.io/)
+- [OpenAPI Specification 3.1](https://spec.openapis.org/oas/v3.1.0.html)
+- [Swagger: Basic Structure](https://swagger.io/docs/specification/basic-structure/)
+- [Musterlösung: sample-customer-api](https://github.com/atvantage-academy/sample-customer-api)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://editor.swagger.io/" target="_blank" rel="noopener"><span>Swagger Editor (ohne Installation)</span></a><a href="https://spec.openapis.org/oas/v3.1.0.html" target="_blank" rel="noopener"><span>OpenAPI Specification 3.1</span></a><a href="https://swagger.io/docs/specification/basic-structure/" target="_blank" rel="noopener"><span>Swagger: Basic Structure</span></a><a href="https://github.com/atvantage-academy/sample-customer-api" target="_blank" rel="noopener"><span>Musterlösung: sample-customer-api</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

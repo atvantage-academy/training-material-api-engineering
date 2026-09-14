@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – Layout „simulation“ (Jekyll)
+  ------------------------------------------------
+  Bühne für BEWEGTE Abläufe. Anders als eine Präsentation, die Folien wechselt,
+  zeigt eine Simulation EINEN Schauplatz, der sich Schritt für Schritt verändert:
+  Kästen entstehen, Werte wandern, Pfeile werden gezogen. Der Ablauf lässt sich
+  vorwärts und rückwärts durchgehen, zurücksetzen und automatisch abspielen.
+
+  Optisch ist die Seite an das Layout „presentation“ angelehnt – dieselbe schmale
+  Kopfleiste mit Logo, Titel, QR-Code und Farbschema-Umschalter. Drei Zonen:
+
+    ┌──────────────────────────────────────────────┐
+    │ Kopfleiste  Logo · Titel · Schritt · Werkzeug│
+    ├───────────────────────────────┬──────────────┤
+    │ Bühne (der Inhalt dieser Datei)│ Erklärtext   │
+    │                               │ (je Schritt) │
+    ├───────────────────────────────┴──────────────┤
+    │ Fortschritt + Steuerleiste (⟲ ‹ ▶ Abspielen 1×▴ ›)│
+    └──────────────────────────────────────────────┘
+
+  AUFZEICHNEN: Der Capture-Modus (Taste C oder ?capture in der Adresse) räumt alles
+  weg, was nicht zur Sache gehört – Kopfleiste, Erklärspalte, Fortschritt,
+  Steuerleiste – und blendet den Mauszeiger aus. Die Bühne füllt das Fenster. Der
+  Erklärtext ist dann nicht verloren: Taste T holt ihn als Einblendung (OST) an den
+  unteren Rand zurück, für den Fall, dass beim Aufzeichnen niemand spricht.
+
+  NICHT DRUCKBAR – bewusst. Eine Simulation lebt von der Bewegung; ein Ausdruck
+  wäre ein willkürliches Standbild. Es gibt daher weder Druck-Knopf noch
+  Drucklayout; wer die Seite trotzdem druckt, bekommt den gerade sichtbaren
+  Schritt und den QR-Code als Rückweg zur Online-Fassung.
+
+  Front Matter (alles optional außer `layout`):
+    layout: simulation
+    title:        "…"            → Titel in der Kopfleiste; sonst die erste #-Überschrift
+    description:  "…"            → Meta-Description
+    simulation:
+      aside: false               → rechte Spalte weglassen (Bühne über volle Breite)
+      intro: "…"                 → ein Satz auf der Szenario-Übersicht (nur bei mehreren)
+      speed: 0.5 | 1 | 2 | 5     → Start-Tempo des automatischen Abspielens
+      step:
+        interval: 2500           → Grunddauer je Schritt beim Abspielen (ms)
+
+  MEHRERE SZENARIEN: Meldet die Seite über `registerScenario` mehr als einen
+  Ablauf an, bekommt sie eine Reiterleiste und eine Übersicht als Startbild. Je
+  Szenario liefert die Seite ein eigenes Bühnenbild in einem Container mit
+  `data-avd-academy-sim-scene="«id»"`; sichtbar ist immer genau eines. Mit nur
+  einem Szenario (oder bloßem `registerStep`) ändert sich nichts.
+
+  Der INHALT dieser Seite ist das BÜHNENBILD: die Kulisse (Kästen, Beschriftungen,
+  Container) plus ein <script>, das die Schritte anmeldet. Das Miniframework dazu
+  liefert theme/jekyll/simulation.js als `AvdSimulation` – es wird ABSICHTLICH
+  ohne `defer` geladen, damit ein Inline-<script> im Body es bereits vorfindet.
+
+  Ohne JavaScript bleibt die Seite lesbar: Die Kulisse steht da, Steuerleiste und
+  Erklärspalte bleiben leer – der Ablauf ist eine Zutat, keine Voraussetzung.
+
+  Anleitung und Beispiel: /templates/simulations/.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Blättern mit Offset und mit Cursor · API Engineering (Academy)</title><meta name="description" content="Was passiert, wenn jemand einen Datensatz anlegt, während ein Client gerade blättert – einmal mit Seitenzahl, einmal mit Cursor."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789369286"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789369286"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head>
+<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Blättern mit Offset und mit Cursor"
+      data-avd-academy-sim-speed="1"
+      data-avd-academy-sim-step-interval="3000">
+  <a class="avd-academy-skip-link" href="#avd-academy-sim-stage">Zum Inhalt springen</a>
+
+  <header class="avd-academy-sim__bar">
+    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__title">Blättern mit Offset und mit Cursor</span>
+    <span class="avd-academy-sim__counter" data-avd-academy-sim-counter aria-live="off"></span>
+    <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
+              title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
+              data-avd-academy-sim-full
+              title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
+  </header><nav class="avd-academy-sim__tabs" data-avd-academy-sim-tabs hidden aria-label="Szenarien"></nav>
+
+  <main class="avd-academy-sim__main"><div class="avd-academy-sim__stage" id="avd-academy-sim-stage" data-avd-academy-sim-stage>
+      <style>
+  .buehne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+    align-items: start;
+    align-content: center;
+    min-height: 100%;
+  }
+  .buehne .avd-academy-sim-panel__body { min-height: 13rem; }
+  .anfrage {
+    display: flex; flex-direction: column; gap: .6rem; justify-content: center;
+    min-height: 13rem; text-align: center;
+  }
+  .anfrage__pfeil { font-size: 1.5rem; line-height: 1; color: var(--avd-academy-color-accent); }
+  .anfrage__url {
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .8rem;
+    padding: .5rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
+    border: 1px dashed var(--avd-academy-color-border);
+    background: var(--avd-academy-color-bg-subtle);
+    word-break: break-all;
+  }
+  .anfrage__still { color: var(--avd-academy-color-ink-muted); font-size: .85rem; font-style: italic; }
+  .anfrage__notiz { font-size: .82rem; color: var(--avd-academy-color-ink-muted); }
+  .anfrage__notiz strong { color: var(--avd-academy-color-ink); }
+  .zaehler { font-size: .78rem; color: var(--avd-academy-color-ink-muted); padding: .2rem 0 .4rem; }
+</style>
+
+<div class="buehne" data-avd-academy-sim-scene="seitenbasiert">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Bestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
+    <div class="zaehler" id="seitenbasiert-zaehler"></div>
+    <div class="avd-academy-sim-panel__body" id="seitenbasiert-bestand"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Anfrage</h2>
+    <div class="avd-academy-sim-panel__body anfrage" id="seitenbasiert-anfrage"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
+    <h2 class="avd-academy-sim-panel__title">Beim Client angekommen</h2>
+    <div class="avd-academy-sim-panel__body" id="seitenbasiert-empfangen"></div>
+  </div>
+</div>
+
+<div class="buehne" data-avd-academy-sim-scene="cursor">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Bestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
+    <div class="zaehler" id="cursor-zaehler"></div>
+    <div class="avd-academy-sim-panel__body" id="cursor-bestand"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Anfrage</h2>
+    <div class="avd-academy-sim-panel__body anfrage" id="cursor-anfrage"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
+    <h2 class="avd-academy-sim-panel__title">Beim Client angekommen</h2>
+    <div class="avd-academy-sim-panel__body" id="cursor-empfangen"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var sim = window.AvdSimulation;
+
+  function bestellungen() {
+    return [
+      { id: "B-106", betrag: "84,50 €" },
+      { id: "B-105", betrag: "12,00 €" },
+      { id: "B-104", betrag: "239,90 €" },
+      { id: "B-103", betrag: "7,99 €" },
+      { id: "B-102", betrag: "56,40 €" },
+      { id: "B-101", betrag: "18,20 €" }
+    ];
+  }
+
+  function startzustand() {
+    return { bestand: bestellungen(), empfangen: [], anfrage: null, notiz: "" };
+  }
+
+  function zelle() {
+    var el = document.createElement("div");
+    el.className = "avd-academy-sim-cell";
+    el.innerHTML = '<span class="avd-academy-sim-cell__label"></span>' +
+                   '<span class="avd-academy-sim-cell__name"></span>' +
+                   '<span class="avd-academy-sim-cell__value"></span>';
+    return el;
+  }
+
+  sim.setup({
+    state: startzustand,
+
+    render: function (s, ctx) {
+      var sz = ctx.scenario || "seitenbasiert";
+
+      var zaehler = document.getElementById(sz + "-zaehler");
+      if (zaehler) zaehler.textContent = s.bestand.length + " Bestellungen";
+
+      sim.list(document.getElementById(sz + "-bestand"), s.bestand, {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: zelle,
+        update: function (el, x, i) {
+          el.querySelector(".avd-academy-sim-cell__label").textContent = "Pos. " + (i + 1);
+          el.querySelector(".avd-academy-sim-cell__name").textContent = x.id;
+          el.querySelector(".avd-academy-sim-cell__value").textContent = x.betrag;
+          el.classList.toggle("is-active", !!x.markiert);
+          el.classList.toggle("is-pulse", !!x.neu);
+        }
+      });
+
+      sim.list(document.getElementById(sz + "-empfangen"), s.empfangen, {
+        animated: ctx.animated,
+        key: function (x) { return x.schluessel; },
+        create: zelle,
+        update: function (el, x) {
+          el.querySelector(".avd-academy-sim-cell__label").textContent = x.seite;
+          el.querySelector(".avd-academy-sim-cell__name").textContent = x.id;
+          el.querySelector(".avd-academy-sim-cell__value").textContent = x.hinweis || x.betrag;
+          el.classList.toggle("is-error", !!x.doppelt);
+        }
+      });
+
+      var anfrage = document.getElementById(sz + "-anfrage");
+      if (!anfrage) return;
+      anfrage.innerHTML = s.anfrage
+        ? '<div class="anfrage__pfeil">◀</div><div class="anfrage__url">' +
+          s.anfrage.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>" +
+          (s.notiz ? '<p class="anfrage__notiz">' + s.notiz + "</p>" : "")
+        : '<p class="anfrage__still">still</p>' +
+          (s.notiz ? '<p class="anfrage__notiz">' + s.notiz + "</p>" : "");
+    }
+  });
+
+  sim.registerScenario({
+    id: "seitenbasiert",
+    title: "Blättern mit Seitenzahl",
+    description: "?page=2&size=3 – und dazwischen legt jemand eine Bestellung an.",
+    steps: [
+      {
+        title: "Die Ausgangslage",
+        text: "<p>Sechs Bestellungen, neueste zuerst. Ein Programm soll alle abholen – drei auf einmal.</p><p>Beim Client ist noch nichts angekommen.</p>",
+        apply: function () {}
+      },
+      {
+        title: "Der Client holt die erste Seite",
+        text: "<p><code>page=1</code>, <code>size=3</code> heißt für den Server: <b>überspringe 0, nimm 3</b>. Die Seitenzahl zeigt auf eine <b>Position</b> in der Liste – nicht auf einen bestimmten Eintrag.</p>",
+        apply: function (s) {
+          s.anfrage = "GET /orders?page=1&size=3";
+          s.bestand[0].markiert = true;
+          s.bestand[1].markiert = true;
+          s.bestand[2].markiert = true;
+        }
+      },
+      {
+        title: "Drei Bestellungen kommen an",
+        text: "<p>B-106, B-105, B-104. Der Client verarbeitet sie – das dauert ein paar Sekunden.</p>",
+        apply: function (s) {
+          s.anfrage = null;
+          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = false;
+          s.empfangen = [
+            { schluessel: "s1-106", seite: "Seite 1", id: "B-106", betrag: "84,50 €" },
+            { schluessel: "s1-105", seite: "Seite 1", id: "B-105", betrag: "12,00 €" },
+            { schluessel: "s1-104", seite: "Seite 1", id: "B-104", betrag: "239,90 €" }
+          ];
+        }
+      },
+      {
+        title: "Und jetzt bestellt jemand",
+        text: "<p>Ein Kunde schließt seine Bestellung ab. <b>B-107</b> rutscht ganz nach oben – alles andere verschiebt sich um eine Position nach unten.</p><p>Der Client weiß davon nichts. Er holt gleich <code>page=2</code>. <b>Was bekommt er?</b></p>",
+        apply: function (s) {
+          s.bestand.unshift({ id: "B-107", betrag: "45,00 €", neu: true });
+          s.notiz = "Alles rutscht <strong>eine Position</strong> nach unten.";
+        }
+      },
+      {
+        title: "Der Client holt die zweite Seite",
+        text: "<p><code>page=2</code>, <code>size=3</code> heißt: <b>überspringe 3, nimm 3</b>. Das sind jetzt die Positionen 4, 5 und 6 – und die sind nicht mehr dieselben Einträge wie eben.</p>",
+        apply: function (s) {
+          s.bestand[0].neu = false;
+          s.anfrage = "GET /orders?page=2&size=3";
+          s.bestand[3].markiert = true;
+          s.bestand[4].markiert = true;
+          s.bestand[5].markiert = true;
+          s.notiz = "Positionen 4–6: <strong>B-104, B-103, B-102</strong>";
+        }
+      },
+      {
+        title: "B-104 zum zweiten Mal – und B-107 nie",
+        text: "<p><b>B-104</b> war schon auf Seite 1 dabei und kommt jetzt noch einmal. <b>B-107</b> stand beim zweiten Abruf auf Position 1 – die hat der Client längst hinter sich.</p><p>Ein Eintrag doppelt, ein Eintrag verloren. Beide Anfragen waren korrekt beantwortet.</p>",
+        apply: function (s) {
+          s.anfrage = null;
+          s.bestand[3].markiert = s.bestand[4].markiert = s.bestand[5].markiert = false;
+          s.empfangen = s.empfangen.concat([
+            { schluessel: "s2-104", seite: "Seite 2", id: "B-104", hinweis: "doppelt!", doppelt: true },
+            { schluessel: "s2-103", seite: "Seite 2", id: "B-103", betrag: "7,99 €" },
+            { schluessel: "s2-102", seite: "Seite 2", id: "B-102", betrag: "56,40 €" }
+          ]);
+          s.notiz = "<strong>B-107 hat der Client nie gesehen.</strong>";
+        }
+      },
+      {
+        title: "Die Seitenzahl zeigt auf eine Position",
+        text: "<p><b>Nicht auf einen Eintrag.</b> Sobald sich der Bestand zwischen zwei Abrufen ändert, zeigt dieselbe Seitenzahl auf etwas anderes.</p><p>Für eine Oberfläche mit Seitenzahlen ist das meist verkraftbar. Für ein Programm, das einen Bestand vollständig abholen soll, ist es ein Datenfehler.</p>",
+        apply: function (s) { s.anfrage = null; s.notiz = ""; },
+        duration: 5000
+      }
+    ]
+  });
+
+  sim.registerScenario({
+    id: "cursor",
+    title: "Blättern mit Cursor",
+    description: "?after=… – der Merkzettel zeigt auf einen Eintrag, nicht auf eine Position.",
+    state: startzustand,
+    steps: [
+      {
+        title: "Dieselbe Ausgangslage",
+        text: "<p>Derselbe Bestand, dieselbe Aufgabe: alles abholen, drei auf einmal. Diesmal aber ohne Seitenzahl.</p>",
+        apply: function () {}
+      },
+      {
+        title: "Der Client holt die ersten drei",
+        text: "<p>Nur <code>limit=3</code>, keine Seite. Der Client sagt nicht, <i>wo</i> er anfangen will – er fängt am Anfang an.</p>",
+        apply: function (s) {
+          s.anfrage = "GET /orders?limit=3";
+          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = true;
+        }
+      },
+      {
+        title: "Drei Bestellungen – und ein Merkzettel",
+        text: "<p>Die Antwort enthält zusätzlich einen <b>Cursor</b>: ein undurchsichtiges Merkzeichen, das auf den <b>letzten gelieferten Eintrag</b> zeigt. Der Client muss es nicht verstehen – nur zurückgeben.</p>",
+        apply: function (s) {
+          s.anfrage = null;
+          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = false;
+          s.empfangen = [
+            { schluessel: "c-106", seite: "1. Abruf", id: "B-106", betrag: "84,50 €" },
+            { schluessel: "c-105", seite: "1. Abruf", id: "B-105", betrag: "12,00 €" },
+            { schluessel: "c-104", seite: "1. Abruf", id: "B-104", betrag: "239,90 €" }
+          ];
+          s.notiz = "Antwort enthält <strong>nextCursor: „eyJpZCI6IkItMTA0In0“</strong> – das ist B-104.";
+        }
+      },
+      {
+        title: "Und wieder bestellt jemand",
+        text: "<p><b>B-107</b> rutscht nach oben, alles verschiebt sich – genau wie vorhin.</p><p>Nur interessiert das den Cursor nicht: Er zeigt auf <b>B-104</b>, und B-104 ist immer noch B-104.</p>",
+        apply: function (s) {
+          s.bestand.unshift({ id: "B-107", betrag: "45,00 €", neu: true });
+          s.notiz = "Der Cursor zeigt auf <strong>einen Eintrag</strong>, nicht auf Position 3.";
+        }
+      },
+      {
+        title: "Der Client holt weiter",
+        text: "<p><code>after=…</code> heißt: <b>gib mir, was nach B-104 kommt</b>. Der Server sucht B-104 und liefert die drei danach – unabhängig davon, wie viele vorne dazugekommen sind.</p>",
+        apply: function (s) {
+          s.bestand[0].neu = false;
+          s.anfrage = "GET /orders?limit=3&after=eyJpZCI6IkItMTA0In0";
+          s.bestand[4].markiert = s.bestand[5].markiert = s.bestand[6].markiert = true;
+          s.notiz = "";
+        }
+      },
+      {
+        title: "Kein Eintrag doppelt, keiner übersprungen",
+        text: "<p>B-103, B-102, B-101 – sauber angeschlossen. <b>B-107 fehlt auch hier</b>, aber aus einem anderen Grund: Es gab die Bestellung noch nicht, als der Abruf begann.</p><p>Das ist kein Fehler, sondern ein sauberer Schnitt. Beim nächsten Lauf ist B-107 dabei.</p>",
+        apply: function (s) {
+          s.anfrage = null;
+          s.bestand[4].markiert = s.bestand[5].markiert = s.bestand[6].markiert = false;
+          s.empfangen = s.empfangen.concat([
+            { schluessel: "c-103", seite: "2. Abruf", id: "B-103", betrag: "7,99 €" },
+            { schluessel: "c-102", seite: "2. Abruf", id: "B-102", betrag: "56,40 €" },
+            { schluessel: "c-101", seite: "2. Abruf", id: "B-101", betrag: "18,20 €" }
+          ]);
+          s.notiz = "Sechs Einträge, jeder <strong>genau einmal</strong>.";
+        }
+      },
+      {
+        title: "Der Preis: kein Sprung auf Seite 7",
+        text: "<p><b>Der Cursor zeigt auf einen Eintrag, die Seitenzahl auf eine Position.</b> Deshalb ist er stabil – und deshalb kann er nicht springen.</p><p>Blättert ein <b>Mensch</b> mit Seitenzahlen, nimm die Seitenzahl. Holt ein <b>Programm</b> einen Bestand ab oder scrollt eine Oberfläche endlos, nimm den Cursor.</p>",
+        apply: function (s) { s.anfrage = null; s.notiz = ""; },
+        duration: 5000
+      }
+    ]
+  });
+})();
+</script>
+
+
+    </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
+         data-lead="Derselbe Bestand, dieselbe Störung, zwei Arten zu blättern. Einmal sieht der Client einen Eintrag doppelt und einen gar nicht."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
+      <p class="avd-academy-sim__ost-title" data-avd-academy-sim-ost-title></p>
+      <div class="avd-academy-sim__ost-text" data-avd-academy-sim-ost-text></div>
+    </div>
+    <aside class="avd-academy-sim__aside" aria-label="Erklärung zum aktuellen Schritt">
+      <h2 class="avd-academy-sim__note-title" data-avd-academy-sim-note-title></h2>
+      <div class="avd-academy-sim__note" data-avd-academy-sim-note aria-live="polite"></div>
+    </aside>
+  </main>
+
+  <div class="avd-academy-sim__progress" aria-hidden="true">
+    <div class="avd-academy-sim__progress-fill" data-avd-academy-sim-progress></div>
+  </div>
+
+  <footer class="avd-academy-sim__controls" aria-label="Simulation steuern" data-avd-academy-sim-controls>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-reset
+            title="Zurück auf Anfang (Taste R)" aria-label="Zurück auf Anfang">⟲</button>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-prev
+            title="Schritt zurück (←)" aria-label="Schritt zurück">‹</button><div class="avd-academy-sim__play-group">
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--play" data-avd-academy-sim-play
+              title="Abspielen (Leertaste)" aria-label="Abspielen">
+        <span class="avd-academy-sim__btn-icon" data-avd-academy-sim-play-icon>▶</span>
+        <span class="avd-academy-sim__btn-text" data-avd-academy-sim-play-text>Abspielen</span>
+      </button>
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--speed" data-avd-academy-sim-speed-toggle
+              title="Tempo wählen (Taste T)" aria-label="Tempo wählen"
+              aria-haspopup="true" aria-expanded="false">
+        <span data-avd-academy-sim-speed-label>1×</span>
+        <span class="avd-academy-sim__caret" aria-hidden="true">▴</span>
+      </button>
+      <ul class="avd-academy-sim__speed-menu" data-avd-academy-sim-speed-menu hidden role="menu"
+          aria-label="Tempo"><li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="0.5">0,5×<span> langsam</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="true"  data-avd-academy-sim-speed-value="1">1×<span> normal</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="2">2×<span> zügig</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="5">5×<span> im Zeitraffer</span></button></li>
+      </ul>
+    </div>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-next
+            title="Schritt vor (→)" aria-label="Schritt vor">›</button>
+  </footer><p class="avd-academy-sim__capture-hint" data-avd-academy-sim-capture-hint hidden aria-hidden="true">
+    Capture-Modus · <b>C</b> beenden · <b>T</b> Text einblenden
+  </p><p class="avd-academy-sim__print-hint" aria-hidden="true">
+    Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.
+  </p>
+</body>
+</html>

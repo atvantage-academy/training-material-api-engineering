@@ -59,7 +59,7 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title> · API Engineering (Academy)</title><meta name="description" content="Schulungskonzepte rund um öffentliche APIs: API-Design, REST, OpenAPI, GraphQL, gRPC, API Management und API Security."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Kursbeschreibung · API Engineering (Academy)</title><meta name="description" content="REST APIs verstehen und entwerfen: HTTP-Grundlagen, Ressourcenschnitt, Idempotenz und OpenAPI – in zwei Tagen."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
 <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
@@ -94,7 +94,7 @@
   <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
           aria-label="Navigation umschalten" aria-expanded="false">☰</button>
   <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
-      <a href="/training-material-api-engineering/" aria-current="page">Start</a>
+      <a href="/training-material-api-engineering/">Start</a>
       <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
   </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
                 title="Diese Seite auf Deinem Smartphone öffnen"
@@ -103,29 +103,143 @@
               aria-label="Farbschema umschalten">◐</button></div>
 </header>
 
-  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Home</a></nav><div class="avd-academy-guide-hero__meta">
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Home</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Kursbeschreibung</span></nav><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
       </div>
       <div class="avd-academy-guide-hero__actions">
       </div>
-    </div><h1></h1>
+    </div><h1>Kursbeschreibung</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main" id="avd-academy-content">
-      <h1 id="api-engineering">API Engineering</h1>
+      <h1 id="rest-apis--grundlagen-und-design">REST APIs – Grundlagen und Design</h1>
 
-<p>Hier findest Du die Unterlagen zu den Trainings der ATVANTAGE Academy rund um
-öffentliche APIs. Wähle Dein Training aus.</p>
+<h2 id="zielgruppe">Zielgruppe</h2>
 
-<div class="avd-academy-grid">
+<p>Alle, die an einer HTTP-Schnittstelle mitarbeiten – <strong>Softwareentwickler:innen</strong>
+(Backend und Frontend), <strong>Architekt:innen</strong>, <strong>Tester:innen und QA</strong> sowie
+<strong>Product Owner und fachliche Rollen</strong>, die Schnittstellen abstimmen oder abnehmen.</p>
 
-  <div class="avd-academy-card">
-    <h3 id="rest-apis--grundlagen-und-design"><a href="rest-apis-grundlagen-und-design/">🔌 REST APIs – Grundlagen und Design</a></h3>
-    <p>Zwei Tage HTTP, Ressourcenschnitt und OpenAPI: eine Kundenverwaltung von der ersten
-URL bis zum fertigen Vertrag entwerfen.</p>
-  </div>
+<p><strong>Vorkenntnisse:</strong> Erfahrung mit Software-Projekten und ein Grundverständnis von
+Web-Anwendungen genügen. Programmierkenntnisse sind <strong>nicht</strong> erforderlich – im Kurs
+wird nichts implementiert, sondern entworfen. Wer schon einmal eine API aufgerufen
+oder getestet hat, findet sich schneller zurecht; wer es nicht hat, holt es am
+ersten Vormittag auf.</p>
 
-</div>
+<p>Der Kurs ist bewusst <strong>nicht</strong> in Grundlagen- und Vertiefungsteil getrennt. Jedes
+Thema beginnt bei der Anschauung und geht dann in die Tiefe, die für eine belastbare
+Entscheidung nötig ist – so kommen gemischte Gruppen gemeinsam durch.</p>
 
+<h2 id="überblick">Überblick</h2>
+
+<p>Eine API ist das Aushängeschild eines Systems. Sie ist wie die Speisekarte eines
+Restaurants: Wer sie liest, muss ohne Rückfrage erkennen, was es gibt, was es
+kostet und was passiert, wenn er bestellt. Schlecht entworfene APIs erkennt man
+daran, dass jede Nutzung eine Rückfrage auslöst – und daran, dass sich Fehler
+niemals nur im eigenen System auswirken, sondern bei allen, die davon abhängen.</p>
+
+<p>REST ist kein Framework und keine Bibliothek, sondern eine Haltung: <strong>HTTP so zu
+nutzen, wie es beim Entwurf gedacht war.</strong> Genau das macht den Unterschied zwischen
+einer Schnittstelle, die ein Netzwerk aus Proxies, Caches und Gateways einfach
+mitträgt, und einer, die überall Sonderbehandlung braucht.</p>
+
+<p>In zwei Tagen bauen wir dieses Verständnis von unten auf: erst die Mechanik von
+HTTP, dann die Entwurfsregeln, dann ein <strong>eigener Entwurf</strong> einer Kundenverwaltung,
+den wir am zweiten Tag gemeinsam auseinandernehmen und schließlich als OpenAPI
+formulieren. Am Ende steht nicht Wissen über REST, sondern die Fähigkeit, eine
+API zu entwerfen und einen fremden Entwurf zu beurteilen.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Die Lernenden…</p>
+
+<ul>
+  <li>benennen die Bestandteile einer HTTP-Nachricht und lesen den Verkehr einer
+Anwendung mit Browser-Entwicklerwerkzeugen und einem HTTP-Client mit.</li>
+  <li>bilden CRUD-Operationen auf HTTP-Methoden ab und begründen je Ressourcenart,
+welche Methode zulässig, sinnvoll oder verboten ist.</li>
+  <li>unterscheiden idempotente von nicht-idempotenten Operationen und entwerfen für
+einen fachlichen Auftrag eine idempotente Variante.</li>
+  <li>entwerfen zu einer fachlichen Anforderung ein Ressourcenmodell und begründen,
+wann etwas Subressource, eingebettetes Feld oder eigene Hauptressource wird.</li>
+  <li>übersetzen einen API-Entwurf in ein OpenAPI-Dokument und beurteilen ein fremdes
+OpenAPI-Dokument auf Vollständigkeit und Sauberkeit.</li>
+  <li>begründen die Wahl zwischen Contract First und Code First anhand der Lage, in der
+eine API entsteht.</li>
+</ul>
+
+<h2 id="agenda-2-tage">Agenda (2 Tage)</h2>
+
+<h3 id="warum-es-überhaupt-schnittstellen-gibt">Warum es überhaupt Schnittstellen gibt</h3>
+
+<ul>
+  <li>Woran man merkt, dass ein System zu groß geworden ist – und wie der Schnitt
+entlang der Fachlichkeit aussieht (<em>Microservices</em>, <em>Domain-Driven Design</em>)</li>
+  <li>Was man sich mit jeder zusätzlichen Schnittstelle einhandelt und was man dafür
+bekommt</li>
+  <li>Warum ausgerechnet HTTP das Protokoll der Wahl wurde – und was „REST“ damit zu
+tun hat (<em>Fielding 2000</em>)</li>
+</ul>
+
+<h3 id="was-auf-der-leitung-passiert">Was auf der Leitung passiert</h3>
+
+<ul>
+  <li>Wie eine Anfrage und ihre Antwort aufgebaut sind – und welcher Teil wofür da ist</li>
+  <li>Warum ein Server sich nichts merken darf, und was das für die eigene Anwendung
+bedeutet (<em>Zustandslosigkeit</em>)</li>
+  <li>Wie man dem eigenen System beim Sprechen zusieht, ohne Code zu schreiben
+(<em>Entwicklerwerkzeuge</em>, <code>curl</code>, <em>HTTP-Clients</em>)</li>
+  <li>Woran man erkennt, welcher Header gerade das Problem verursacht</li>
+</ul>
+
+<h3 id="adressen-verben-antworten">Adressen, Verben, Antworten</h3>
+
+<ul>
+  <li>Wie man eine Sache so benennt, dass die Adresse ohne Dokumentation verständlich ist</li>
+  <li>Welche Operation auf welche HTTP-Methode gehört – und woran man merkt, dass eine
+Kombination gar keinen Sinn ergibt</li>
+  <li>Wann eine Antwort einen Körper braucht und wann nicht</li>
+  <li>Wie Client und Server sich auf ein Format einigen (<em>Content Negotiation</em>)</li>
+  <li>Welcher Statuscode etwas aussagt und welcher nur höflich ist</li>
+  <li>Was passiert, wenn dieselbe Anfrage zweimal ankommt – und warum das kein
+Randfall ist (<em>Idempotenz</em>)</li>
+  <li>Wie man eine Liste leert, ohne sie zu löschen</li>
+</ul>
+
+<h3 id="eine-api-entwerfen">Eine API entwerfen</h3>
+
+<ul>
+  <li>Wie man aus einer fachlichen Beschreibung Ressourcen herausliest</li>
+  <li>Wann ein Detail ein eigenes Ding wird und wann es in das übergeordnete gehört</li>
+  <li>Woran man erkennt, dass eine Subressource eigentlich eine Hauptressource ist</li>
+  <li>Wie man eine Operation modelliert, die sich nicht als CRUD lesen lässt</li>
+  <li>Wie ein fremder Entwurf beurteilt wird, ohne über Geschmack zu streiten</li>
+</ul>
+
+<h3 id="den-vertrag-aufschreiben">Den Vertrag aufschreiben</h3>
+
+<ul>
+  <li>Warum eine Schnittstellenbeschreibung mehr ist als Dokumentation</li>
+  <li>Wie ein OpenAPI-Dokument aufgebaut ist und wo man beim Schreiben anfängt</li>
+  <li>Wie man Wiederholung vermeidet, ohne unlesbar zu werden (<em>Komponenten</em>, <code>$ref</code>)</li>
+  <li>Ob die Beschreibung vor oder nach dem Code entsteht – und was jeweils davon
+abhängt (<em>Contract First</em> ↔ <em>Code First</em>)</li>
+  <li>Welche Aufgaben gar nicht im eigenen Code landen, weil sie davor erledigt werden
+(<em>API Gateway</em>, <em>CORS</em>)</li>
+</ul>
+
+<h3 id="was-danach-kommt-nach-zeit-und-interesse">Was danach kommt (nach Zeit und Interesse)</h3>
+
+<ul>
+  <li>Wie man eine Schnittstelle ändert, ohne die Nutzer zu brechen (<em>Versionierung</em>,
+<em>Breaking Changes</em>)</li>
+  <li>Was man tut, wenn die Antwort eine Million Datensätze enthielte (<em>Paginierung</em>)</li>
+  <li>Wie man Fehler so meldet, dass der Aufrufer damit etwas anfangen kann
+(<em>Problem Details</em>, <em>RFC 9457</em>)</li>
+  <li>Wann eine andere Art von Schnittstelle die bessere Wahl wäre (<em>SOAP</em>, <em>GraphQL</em>,
+<em>gRPC</em>)</li>
+  <li>Was es bedeutet, wenn die Antwort dem Client sagt, was er als Nächstes tun kann
+(<em>Hypermedia</em>, <em>HAL</em>)</li>
+</ul>
 
 
     </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box

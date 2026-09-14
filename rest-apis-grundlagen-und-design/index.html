@@ -59,7 +59,7 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title> · API Engineering (Academy)</title><meta name="description" content="Schulungskonzepte rund um öffentliche APIs: API-Design, REST, OpenAPI, GraphQL, gRPC, API Management und API Security."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>REST APIs – Grundlagen und Design · API Engineering (Academy)</title><meta name="description" content="Zwei Tage HTTP, Ressourcenschnitt und OpenAPI – vom ersten Request bis zum fertigen Vertrag."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
 <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
@@ -94,8 +94,8 @@
   <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
           aria-label="Navigation umschalten" aria-expanded="false">☰</button>
   <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
-      <a href="/training-material-api-engineering/" aria-current="page">Start</a>
-      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/" aria-current="page">REST APIs – Grundlagen und Design</a>
   </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
                 title="Diese Seite auf Deinem Smartphone öffnen"
                 aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
@@ -103,25 +103,136 @@
               aria-label="Farbschema umschalten">◐</button></div>
 </header>
 
-  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Home</a></nav><div class="avd-academy-guide-hero__meta">
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Home</a><span>/</span><span aria-current="page">REST APIs – Grundlagen und Design</span></nav><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
       </div>
       <div class="avd-academy-guide-hero__actions">
       </div>
-    </div><h1></h1>
+    </div><h1>REST APIs – Grundlagen und Design</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main" id="avd-academy-content">
-      <h1 id="api-engineering">API Engineering</h1>
+      <h1 id="rest-apis--grundlagen-und-design">REST APIs – Grundlagen und Design</h1>
 
-<p>Hier findest Du die Unterlagen zu den Trainings der ATVANTAGE Academy rund um
-öffentliche APIs. Wähle Dein Training aus.</p>
+<p>Eine API ist das Aushängeschild eines Systems – und das Einzige, was andere davon
+zu sehen bekommen. Zwei Tage lang bauen wir das Verständnis dafür von unten auf:
+erst die Mechanik von HTTP, dann die Entwurfsregeln, dann ein eigener Entwurf, den
+wir auseinandernehmen und als Vertrag aufschreiben.</p>
 
-<div class="avd-academy-grid">
+<p>Du brauchst für diesen Kurs <strong>keine Programmierkenntnisse</strong> – wir implementieren
+nichts, wir entwerfen. Was Du brauchst, ist ein Browser, die Bereitschaft, fremde
+Dokumentationen zu lesen, und die Lust, Deinen eigenen Entwurf von anderen
+auseinandernehmen zu lassen. Ab dem Ressourcenschnitt arbeiten alle Übungen am
+selben Beispiel: dem <strong>Account Service</strong> eines Online-Shops.</p>
 
-  <div class="avd-academy-card">
-    <h3 id="rest-apis--grundlagen-und-design"><a href="rest-apis-grundlagen-und-design/">🔌 REST APIs – Grundlagen und Design</a></h3>
-    <p>Zwei Tage HTTP, Ressourcenschnitt und OpenAPI: eine Kundenverwaltung von der ersten
-URL bis zum fertigen Vertrag entwerfen.</p>
+<ul>
+  <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/kursbeschreibung.html">Kursbeschreibung</a></li>
+</ul>
+
+<h2 id="kursmaterial">Kursmaterial</h2>
+
+<p>Die Unterlagen bauen aufeinander auf – so, wie wir sie im Kurs durchgehen. Links
+stehen die <strong>Übungen</strong>, an denen Du selbst arbeitest, rechts das <strong>Material zum
+Nachschlagen</strong>: Folien aus dem Kurs, Nachschlagewerke und Simulationen. Du musst
+rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem Kurs.</p>
+
+<div class="avd-academy-topic">
+
+  <h3 id="wie-http-funktioniert--und-was-rest-daraus-macht">Wie HTTP funktioniert – und was REST daraus macht</h3>
+
+  <div class="avd-academy-materials">
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Übungen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/was-ist-rest/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Den Online-Shop zerlegen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/http-grundlagen/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Einer Website beim Sprechen zusehen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/ressourcen-und-methoden/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Eine fremde API lesen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Den ältesten Kunden löschen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/api-design-kundenverwaltung/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Die Kundenverwaltung entwerfen</a></li>
+      </ul>
+
+    </div>
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Zum Nachschlagen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/was-ist-rest/praesentation.html" class="avd-academy-doclink avd-academy-doclink--slides">Von einem System zu vielen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.html" class="avd-academy-doclink avd-academy-doclink--visualization">Methoden-Matrix: welches Verb auf welche Ressource?</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.html" class="avd-academy-doclink avd-academy-doclink--simulation">Wenn dieselbe Anfrage zweimal ankommt</a></li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="avd-academy-topic">
+
+  <h3 id="vom-entwurf-zum-vertrag">Vom Entwurf zum Vertrag</h3>
+
+  <div class="avd-academy-materials">
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Übungen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/eigenrecherche-architektur/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Vier Fragen, vier Antworten</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/openapi/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Den Entwurf als OpenAPI aufschreiben</a></li>
+      </ul>
+
+    </div>
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Zum Nachschlagen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/eigenrecherche-architektur/contract-first-vs-code-first.html" class="avd-academy-doclink avd-academy-doclink--visualization">Contract First oder Code First?</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/openapi/anatomie.html" class="avd-academy-doclink avd-academy-doclink--visualization">Anatomie eines OpenAPI-Dokuments</a></li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="avd-academy-topic">
+
+  <h3 id="weiterfhrende-themen">Weiterführende Themen</h3>
+
+  <div class="avd-academy-materials">
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Übungen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Welche Änderung bricht die API?</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/best-practices/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Eine Million Kunden ausliefern</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/api-stile-im-vergleich/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Vier Stile, ein Anwendungsfall</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/hypermedia-und-hal/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Die Antwort sagt, was als Nächstes geht</a></li>
+      </ul>
+
+    </div>
+
+    <div class="avd-academy-materials__col">
+
+      <p class="avd-academy-materials__head">Zum Nachschlagen</p>
+
+      <ul>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/best-practices/simulation.html" class="avd-academy-doclink avd-academy-doclink--simulation">Blättern mit Offset und mit Cursor</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/hypermedia-und-hal/reifegrad-modell.html" class="avd-academy-doclink avd-academy-doclink--visualization">Das Reifegrad-Modell von Richardson</a></li>
+      </ul>
+
+    </div>
+
   </div>
 
 </div>
@@ -133,6 +244,10 @@ URL bis zum fertigen Vertrag entwerfen.</p>
         <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
         <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
       </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://github.com/atvantage-academy/sample-customer-api" target="_blank" rel="noopener"><span>Musterlösung: sample-customer-api</span></a>
+        </div></div>
     </aside>
   </div><div class="avd-academy-print-contact" aria-hidden="true">
     <span>Kontakt: https://www.atvantage.com</span>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Das Reifegrad-Modell von Richardson · API Engineering (Academy)</title><meta name="description" content="Vier Stufen von „HTTP als Briefkasten“ bis zu Antworten, die sagen, was als Nächstes möglich ist – mit echten Nachrichten je Stufe."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>Das Reifegrad-Modell von Richardson</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="das-reifegrad-modell-von-richardson">Das Reifegrad-Modell von Richardson</h1>
+
+<p>Vier Stufen auf dem Weg von „wir schicken alles an eine Adresse“ bis zu
+„die Antwort sagt, was jetzt geht“. <strong>Klick eine Stufe an</strong> – rechts stehen
+die Nachrichten, die dazugehören.</p>
+
+<div class="avd-academy-callout avd-academy-callout--info">
+  <p><strong>Es ist eine Landkarte, keine Notenskala.</strong> Leonard Richardson hat das Modell als
+Erklärhilfe gemeint. Die allermeisten APIs stehen auf <strong>Stufe 2</strong>, und das ist in
+den meisten Fällen die richtige Entscheidung – nicht ein unfertiger Zustand.</p>
+</div>
+
+<div class="rm">
+
+<div class="rm__layout">
+
+<div class="rm__treppe" role="list">
+
+<button type="button" class="rm__stufe rm__stufe--0" data-rm="0" role="listitem">
+  <span class="rm__nr">0</span>
+  <span class="rm__txt"><strong>HTTP als Briefkasten</strong><small>eine Adresse, alles per POST</small></span>
+</button>
+
+<button type="button" class="rm__stufe rm__stufe--1" data-rm="1" role="listitem">
+  <span class="rm__nr">1</span>
+  <span class="rm__txt"><strong>Ressourcen</strong><small>viele Adressen – aber weiter nur POST</small></span>
+</button>
+
+<button type="button" class="rm__stufe rm__stufe--2" data-rm="2" role="listitem">
+  <span class="rm__nr">2</span>
+  <span class="rm__txt"><strong>HTTP-Verben und Statuscodes</strong><small>hier steht praktisch alles, was „REST“ heißt</small></span>
+</button>
+
+<button type="button" class="rm__stufe rm__stufe--3" data-rm="3" role="listitem">
+  <span class="rm__nr">3</span>
+  <span class="rm__txt"><strong>Hypermedia</strong><small>die Antwort sagt, was als Nächstes geht</small></span>
+</button>
+
+</div>
+
+<aside class="rm__panel" data-rm-panel="" aria-live="polite">
+  <p class="rm__hint">Klick eine Stufe an.</p>
+</aside>
+
+</div>
+
+<h2 class="rm__h2">Warum Stufe 3 so selten vorkommt</h2>
+
+<div class="rm__gegen">
+<div class="rm__spalte rm__spalte--kosten">
+<h3>Was es kostet</h3>
+<ul>
+<li>Die Antworten werden deutlich größer – bei Listen spürbar.</li>
+<li>Die meisten Clients werten die Verweise gar nicht aus, sondern bauen ihre
+Adressen weiter selbst zusammen. Dann ist der Aufwand umsonst.</li>
+<li>Erzeugte, typisierte Clients können mit dynamischen Verweisen wenig anfangen.</li>
+<li>Es gibt kein durchgesetztes Format – HAL, JSON:API, Siren, JSON-LD stehen
+nebeneinander.</li>
+<li><strong>Die Kosten sind sofort da, der Nutzen erst, wenn die Clients mitspielen.</strong></li>
+</ul>
+</div>
+<div class="rm__spalte rm__spalte--nutzen">
+<h3>Wo es sich trotzdem lohnt</h3>
+<ul>
+<li>Bei <strong>Abläufen mit vielen Zuständen</strong> – Bestellung, Antrag,
+Genehmigung. Die Regel, was gerade erlaubt ist, steht dann an einer Stelle statt in
+jedem Client.</li>
+<li>Wenn <strong>Berechtigungen</strong> entscheiden, was jemand darf: Der Verweis
+ist da oder er ist es nicht.</li>
+<li>Bei <strong>Paginierung</strong>. Ein <code>next</code>-Verweis ist Hypermedia –
+und den bauen viele APIs ganz selbstverständlich ein, ohne es so zu nennen.</li>
+</ul>
+</div>
+</div>
+
+<h2 class="rm__h2">Was Hypermedia <em>nicht</em> leistet</h2>
+
+<p class="rm__schluss">Die Verweise nehmen dem Client die <strong>Adressen</strong>
+ab – nicht das <strong>Vokabular</strong>. Dass ein Verweis namens <code>cancel</code>
+„stornieren“ bedeutet und was danach gilt, steht nirgends in den Daten. Das bleibt
+Absprache zwischen den Teams, mit oder ohne Hypermedia.</p>
+
+</div>
+
+<style>
+.rm { margin-block: var(--avd-academy-space-6, 1.5rem); }
+.rm__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: start; }
+@media (max-width: 56rem) { .rm__layout { grid-template-columns: 1fr; } }
+
+.rm__treppe { display: flex; flex-direction: column-reverse; gap: .5rem; }
+.rm__stufe {
+  display: flex; align-items: center; gap: .9rem; width: 100%;
+  font: inherit; text-align: left; cursor: pointer;
+  padding: .8rem 1rem; border-radius: var(--avd-academy-radius, 8px);
+  border: 1px solid var(--avd-academy-color-border);
+  background: var(--avd-academy-color-bg-subtle); color: var(--avd-academy-color-ink);
+  transition: var(--avd-academy-transition, all .15s ease);
+}
+.rm__stufe--0 { margin-right: 0; }
+.rm__stufe--1 { margin-right: 1.5rem; }
+.rm__stufe--2 { margin-right: 3rem; }
+.rm__stufe--3 { margin-right: 4.5rem; }
+@media (max-width: 40rem) { .rm__stufe { margin-right: 0 !important; } }
+.rm__stufe:hover { border-color: var(--avd-academy-color-accent); }
+.rm__stufe:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
+.rm__stufe.is-aktiv { border-color: var(--avd-academy-color-accent); background: var(--avd-academy-color-accent-soft); }
+.rm__nr {
+  flex: 0 0 auto; width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: var(--avd-academy-fw-bold, 700);
+  background: var(--avd-academy-color-border); color: var(--avd-academy-color-ink);
+}
+.rm__stufe--0 .rm__nr { background: var(--avd-academy-tone-alert); color: var(--avd-academy-color-accent-contrast); }
+.rm__stufe--1 .rm__nr { background: var(--avd-academy-tone-1); color: var(--avd-academy-color-accent-contrast); }
+.rm__stufe--2 .rm__nr { background: var(--avd-academy-tone-3); color: var(--avd-academy-color-accent-contrast); }
+.rm__stufe--3 .rm__nr { background: var(--avd-academy-tone-4); color: var(--avd-academy-color-accent-contrast); }
+.rm__txt { display: flex; flex-direction: column; gap: .1rem; }
+.rm__txt small { color: var(--avd-academy-color-ink-muted); }
+
+.rm__panel { position: sticky; top: 1rem; border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); min-height: 16rem; }
+.rm__panel h3 { margin-top: 0; }
+.rm__panel p:last-child { margin-bottom: 0; }
+.rm__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+.rm__msg { font-family: var(--avd-academy-font-mono, monospace); font-size: .8rem; line-height: 1.6; background: var(--avd-academy-code-bg, rgba(127,127,127,.12)); padding: .7rem .8rem; border-radius: var(--avd-academy-radius-sm, 4px); white-space: pre; overflow-x: auto; margin: 0 0 .8rem; }
+.rm__label { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--avd-academy-color-ink-muted); margin: 0 0 .25rem; }
+.rm__merke { font-size: var(--avd-academy-fs-sm, .9rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
+.rm__merke strong { color: var(--avd-academy-color-ink); }
+
+.rm__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+.rm__gegen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
+.rm__spalte { border: 1px solid var(--avd-academy-color-border); border-left: 4px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); }
+.rm__spalte--kosten { border-left-color: var(--avd-academy-color-warning); }
+.rm__spalte--nutzen { border-left-color: var(--avd-academy-color-success); }
+.rm__spalte h3 { margin-top: 0; }
+.rm__spalte ul { margin-bottom: 0; }
+.rm__schluss { border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
+@media (prefers-reduced-motion: reduce) { .rm * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var STUFEN = {
+    "0": {
+      titel: "Stufe 0 – HTTP als Briefkasten",
+      text: "Eine einzige Adresse, alles per <code>POST</code>. Was geschehen soll, steht im Body. HTTP überträgt nur – von seiner Bedeutung wird nichts genutzt.",
+      anfrage: "POST /api/execute\nContent-Type: application/json\n\n{\n  \"action\": \"getCustomer\",\n  \"id\": 5\n}",
+      antwort: "200 OK\n\n{\n  \"result\": { \"id\": 5, \"name\": \"Maier\" }\n}",
+      merke: "Kommt häufiger vor, als man denkt – auch bei Systemen, die sich „REST-API“ nennen. <strong>Erkennungszeichen:</strong> eine Adresse wie <code>/api/execute</code>, ein Feld <code>action</code> im Body, und Fehler kommen als <code>200 OK</code> mit einem Fehlerfeld."
+    },
+    "1": {
+      titel: "Stufe 1 – Ressourcen",
+      text: "Verschiedene Dinge bekommen verschiedene Adressen. Damit ist zumindest ansprechbar, worum es geht. Die Methode bleibt aber <code>POST</code>, und was getan werden soll, steht weiter im Body.",
+      anfrage: "POST /customers/5\nContent-Type: application/json\n\n{\n  \"action\": \"read\"\n}",
+      antwort: "200 OK\n\n{\n  \"result\": { \"id\": 5, \"name\": \"Maier\" }\n}",
+      merke: "Ein echter Fortschritt: Die Adresse sagt jetzt, <em>worum</em> es geht. Aber weil alles <code>POST</code> ist, kann <strong>keine Zwischenstation etwas damit anfangen</strong> – kein Cache, kein Gateway, kein Wiederholungsversuch."
+    },
+    "2": {
+      titel: "Stufe 2 – HTTP-Verben und Statuscodes",
+      text: "Die Methode sagt, <em>was</em> geschieht, die Adresse, <em>womit</em>. Der Statuscode sagt, wie es ausging. Jetzt arbeitet die Infrastruktur mit: <code>GET</code> ist cachebar, <code>PUT</code> und <code>DELETE</code> sind wiederholbar, <code>404</code> ist ein Fehler für jeden Beteiligten.",
+      anfrage: "GET /customers/5\nAccept: application/json",
+      antwort: "200 OK\nContent-Type: application/json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"status\": \"aktiv\"\n}",
+      merke: "<strong>Hier steht praktisch alles, was „REST-API“ heißt</strong> – und alles, was in diesem Kurs entworfen wurde. Das ist kein Zwischenstand, sondern für die meisten APIs der richtige Platz."
+    },
+    "3": {
+      titel: "Stufe 3 – Hypermedia",
+      text: "Die Antwort enthält, was jetzt möglich ist. Ein <strong>aktiver</strong> Kunde bekommt den Verweis zum Deaktivieren, ein <strong>deaktivierter</strong> den zum Aktivieren. Der Client muss die Regel nicht kennen – er zeigt einen Knopf, wenn der Verweis da ist.",
+      anfrage: "GET /customers/5\nAccept: application/hal+json",
+      antwort: "200 OK\nContent-Type: application/hal+json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"status\": \"aktiv\",\n  \"_links\": {\n    \"self\":       { \"href\": \"/customers/5\" },\n    \"orders\":     { \"href\": \"/customers/5/orders\" },\n    \"deactivate\": { \"href\": \"/customers/5/flags/deactivation\" }\n  }\n}",
+      merke: "<strong>Die Geschäftsregel steht nur noch an einer Stelle.</strong> Ändert sich, wann ein Kunde deaktiviert werden darf, muss kein einziger Client angefasst werden – der Verweis ist einfach da oder nicht."
+    }
+  };
+
+  var wurzel = document.querySelector(".rm");
+  if (!wurzel) return;
+  var panel = wurzel.querySelector("[data-rm-panel]");
+  var stufen = Array.prototype.slice.call(wurzel.querySelectorAll("[data-rm]"));
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  stufen.forEach(function (knopf) {
+    knopf.addEventListener("click", function () {
+      var d = STUFEN[knopf.getAttribute("data-rm")];
+      stufen.forEach(function (k) { k.classList.toggle("is-aktiv", k === knopf); });
+      panel.innerHTML =
+        "<h3>" + d.titel + "</h3>" +
+        "<p>" + d.text + "</p>" +
+        '<p class="rm__label">Anfrage</p><pre class="rm__msg">' + esc(d.anfrage) + "</pre>" +
+        '<p class="rm__label">Antwort</p><pre class="rm__msg">' + esc(d.antwort) + "</pre>" +
+        '<p class="rm__merke">' + d.merke + "</p>";
+    });
+  });
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

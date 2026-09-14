@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Contract First oder Code First? · API Engineering (Academy)</title><meta name="description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>Contract First oder Code First?</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="contract-first-oder-code-first">Contract First oder Code First?</h1>
+
+<p>Zwei Wege, zu einer beschriebenen Schnittstelle zu kommen. Beide haben gute
+Argumente – und ein klares Einsatzgebiet. Diese Seite stellt sie so gegenüber, dass
+Du damit im eigenen Unternehmen argumentieren kannst.</p>
+
+<div class="cf">
+
+<div class="cf__wege">
+
+<div class="cf__weg">
+<h2>Code First</h2>
+<svg viewBox="0 0 300 90" role="img" aria-label="Ablauf: Implementierung, daraus erzeugt ein Generator die API-Beschreibung, daraus optional Client-Code." class="cf__svg">
+  <title>Code First: Code zuerst, Beschreibung daraus erzeugt</title>
+  <rect x="2" y="25" width="80" height="40" rx="8" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <text x="42" y="50" text-anchor="middle" font-size="12" fill="currentColor">Code</text>
+  <rect x="110" y="25" width="88" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <text x="154" y="44" text-anchor="middle" font-size="11" fill="currentColor">API-</text>
+  <text x="154" y="57" text-anchor="middle" font-size="11" fill="currentColor">Beschreibung</text>
+  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <text x="262" y="50" text-anchor="middle" font-size="11" fill="currentColor">Client</text>
+  <g stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#cfa)">
+    <line x1="84" y1="45" x2="106" y2="45" /><line x1="200" y1="45" x2="222" y2="45" />
+  </g>
+  <defs><marker id="cfa" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker></defs>
+  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-ink-muted)">gestrichelt = erzeugt</text>
+</svg>
+<p>Die Implementierung entsteht zuerst – oder liegt als Altbestand schon vor. Die
+API-Beschreibung wird per Annotationen aus dem Code erzeugt, aus ihr optional
+Client-Code.</p>
+</div>
+
+<div class="cf__weg">
+<h2>Contract First</h2>
+<svg viewBox="0 0 300 90" role="img" aria-label="Ablauf: API-Beschreibung von Hand, daraus optional Server- und Client-Code erzeugt." class="cf__svg">
+  <title>Contract First: Beschreibung zuerst, Code daraus erzeugt</title>
+  <rect x="102" y="25" width="96" height="40" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <text x="150" y="44" text-anchor="middle" font-size="11" fill="currentColor">API-</text>
+  <text x="150" y="57" text-anchor="middle" font-size="11" fill="currentColor">Beschreibung</text>
+  <rect x="2" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <text x="38" y="50" text-anchor="middle" font-size="11" fill="currentColor">Server</text>
+  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <text x="262" y="50" text-anchor="middle" font-size="11" fill="currentColor">Client</text>
+  <g stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#cfb)">
+    <line x1="100" y1="45" x2="78" y2="45" /><line x1="200" y1="45" x2="222" y2="45" />
+  </g>
+  <defs><marker id="cfb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker></defs>
+  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-ink-muted)">gestrichelt = erzeugt</text>
+</svg>
+<p>Die API wird von Hand entworfen und aufgeschrieben. Aus der Beschreibung lässt
+sich bei Bedarf Gerüstcode für Server und Client erzeugen – muss aber nicht.</p>
+</div>
+
+</div>
+
+<h2 class="cf__h2">Was für Code First spricht – und was dagegen einzuwenden ist</h2>
+
+<p class="cf__lead">Diese Argumente sind <strong>nicht</strong> aus der Luft
+gegriffen. Sie sind der Grund, warum Code First so verbreitet ist – und wer sie
+übergeht, überzeugt niemanden.</p>
+
+<div class="cf__karten">
+
+<div class="cf__karte">
+<h3>„Die Lernkurve ist niedriger.“</h3>
+<p>Als Entwickler kenne ich meine Sprache. Eine API in einem gewohnten Format zu
+formulieren fällt mir leichter, als ein neues Beschreibungsformat zu lernen.
+Notfalls lerne ich ein paar Annotationen dazu. Das Beschreibungsformat meide ich,
+weil es kompliziert wirkt – und weil mir kein Compiler sagt, ob es stimmt.</p>
+<p class="cf__gegen"><strong>Einwand:</strong> Beides lässt sich auflösen. Editoren
+und IDEs bieten für das Beschreibungsformat Vervollständigung, Hervorhebung und
+Umbenennen; statt eines Compilers gibt es Validatoren, die in jeder Pipeline
+laufen. Der Aufwand ist einmalig, das Ergebnis dauerhaft.</p>
+</div>
+
+<div class="cf__karte">
+<h3>„Die API passt garantiert zum Code.“</h3>
+<p>Was ich herausgebe, entspricht exakt der Implementierung. Ändert sich der Code,
+ändert sich die Beschreibung automatisch mit. Es kann keine Abweichung geben.</p>
+<p class="cf__gegen"><strong>Einwand:</strong> Genau darin liegt die Gefahr. Wird die
+API von anderen Teams genutzt, ist die automatische Änderung kein Vorteil, sondern
+ein <strong>unbemerkter Vertragsbruch</strong>. Was heute Komfort ist, ist morgen ein
+Produktionsvorfall bei jemand anderem.</p>
+</div>
+
+<div class="cf__karte">
+<h3>„Für Prototypen bin ich schneller.“</h3>
+<p>Wenn ich noch wenig Erfahrung mit API-Design habe, erkenne ich im Code schneller,
+was möglich ist und was nicht – und welche Informationen ich überhaupt brauche, um
+die Fachlichkeit abzubilden.</p>
+<p class="cf__gegen"><strong>Einwand:</strong> Stimmt – für einen Prototyp. Der Haken
+ist nur, dass Prototypen selten sterben. Wer so anfängt, sollte den Zeitpunkt
+festlegen, an dem die Beschreibung die Führung übernimmt.</p>
+</div>
+
+</div>
+
+<h2 class="cf__h2">Was für Contract First spricht</h2>
+
+<div class="cf__karten">
+
+<div class="cf__karte cf__karte--pro">
+<h3>Die API ist ein Produkt</h3>
+<p>Eine API hat Anforderungen, ein verantwortliches Team, einen eigenen
+Entwicklungszyklus, eine eigene Versionierung und eigene Releases. Ihre
+Implementierung kann aus einem oder mehreren Projekten bestehen, jedes mit eigenem
+Lebenszyklus – daran sollte die API nicht eng gekoppelt sein.</p>
+<p>Dazu kommt: Wie eine Benutzeroberfläche ist die API das <strong>Aushängeschild</strong>
+des Teams nach innen und des Herstellers nach außen. Ob man dieses Aushängeschild
+von einem Generator erzeugen lassen möchte, darf man kritisch sehen.</p>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Es gibt zwei APIs, nicht eine</h3>
+<p>Die <strong>öffentliche API</strong> am Gateway – das, was Frontends und andere
+Dienste sehen, samt Gateway-Konfiguration, zusätzlichen Headern und Verweisen auf
+Operationen. Und die <strong>interne API</strong> der Implementierung, die das Gateway
+aufruft; sie kann andere Header tragen und andere Datentypen verwenden, wenn das
+Gateway übersetzt.</p>
+<p>Im einfachsten Fall sind beide gleich. Sobald aber eine öffentliche API von
+mehreren Implementierungen bedient wird – etwa weil eine Funktion besser als
+eigenständiger Dienst läuft –, <strong>lässt sich die öffentliche API gar nicht aus
+Code erzeugen</strong>. Nach außen steht die Fachlichkeit, nach innen bleibt die
+Umsetzung frei.</p>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Fallstricke der Generierung vermeiden</h3>
+<ul>
+<li>Hinter scheinbar kleinen Codeänderungen entstehen schnell und unbewusst
+<strong>Breaking Changes</strong> – nicht nur für die Nutzer, sondern auch in der
+Infrastruktur. Das Gateway passt sich dem Code an; damit entfällt die zweistufige,
+unabhängige Prüfung, die das BSI empfiehlt. Ein umbenannter Methodenname ändert die
+Kennung der Operation, auf die das Gateway schaltet.</li>
+<li><strong>Fehler im Generator</strong> wirken sich auf die API aus – und
+Unschönheiten darin sind öffentlich sichtbar.</li>
+<li>Auch ohne Fehler muss die erzeugte Beschreibung nach Clean-Code-Gesichtspunkten
+geprüft werden, etwa auf einmalig definierte und wiederverwendete Parameter.</li>
+<li>Bei mangelhafter Konfiguration werden <strong>interne Schnittstellen
+öffentlich</strong> – der Klassiker sind Betriebs- und Diagnose-Endpunkte, die
+standardmäßig in der Beschreibung landen, am Gateway aber nichts zu suchen haben.</li>
+</ul>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Kein unnötiger Code</h3>
+<p>Um eine saubere Beschreibung zu erhalten, muss man den Code verbiegen. So entsteht
+Code, der nur für die API da ist. Manches muss überhaupt nicht implementiert werden –
+CORS und Authentifizierung erledigt das Gateway davor –, und die Gateway-Konfiguration
+lässt sich im Code gar nicht ausdrücken.</p>
+<p>Nebenbei leidet die Lesbarkeit: Der Code beschreibt dann auch noch sich selbst.
+Von Trennung der Zuständigkeiten kann keine Rede mehr sein.</p>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Technologieneutralität</h3>
+<p>HTTP-basierte Schnittstellen sind technologieneutral; aus einer Beschreibung
+lässt sich Code für unterschiedliche Sprachen und Rahmenwerke erzeugen. Code First
+gefährdet genau das:</p>
+<ul>
+<li>Framework-eigene Datentypen machen die Beschreibung technologiespezifisch.</li>
+<li>Wird keine optimale Beschreibung erzeugt, wird auch der daraus erzeugte
+Client-Code suboptimal.</li>
+<li>Sie verrät unnötige Informationen an potenzielle Angreifer.</li>
+</ul>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Besseres Verständnis für fremde APIs</h3>
+<p>Wer das Beschreibungsformat selbst schreibt, erwirbt ein tieferes Verständnis für
+API-Design im Allgemeinen – und versteht damit auch fremde APIs besser. Das ist der
+Nutzen, der am längsten bleibt.</p>
+</div>
+
+<div class="cf__karte cf__karte--pro">
+<h3>Die API folgt dem Anwendungsfall</h3>
+<p>Im Idealfall ergibt sich die API aus den fachlichen Anforderungen – <strong>nicht</strong>
+aus dem Datenbankschema und den Eigenheiten der Implementierung (typisch für Code
+First) und <strong>nicht</strong> aus den Dialogen der Oberfläche.</p>
+<p>Am leichtesten gelingt das, wenn beim Entwurf gar kein Code im Spiel ist, sondern
+ein technologieunabhängiges Format – das hält den Blick auf dem, was die API leisten
+soll.</p>
+</div>
+
+</div>
+
+<h2 class="cf__h2">Passt das auf Deine Lage?</h2>
+
+<p class="cf__lead">Sechs Fragen. Antworte für eine konkrete Schnittstelle, die Du
+kennst.</p>
+
+<div class="cf__quiz" data-cf-quiz=""></div>
+
+<div class="cf__ergebnis" data-cf-ergebnis="" aria-live="polite">
+  <p class="cf__hint">Beantworte die Fragen – die Einschätzung erscheint hier.</p>
+</div>
+
+<h2 class="cf__h2">Das Fazit in drei Sätzen</h2>
+
+<div class="cf__fazit">
+<p><strong>Contract First gehört zum Standardvorgehen.</strong> Nur wenn wir die
+Beschreibung selbst schreiben, haben wir die volle Kontrolle und das volle
+Bewusstsein über eine sauber dokumentierte Schnittstelle.</p>
+<p><strong>Code First eignet sich für Schnittstellen zwischen Systemen, die
+team-intern entwickelt, betrieben und genutzt werden – und team-intern bleiben.</strong>
+Diese APIs brauchen wenig Dokumentation und verlangen auch keine strikte Einhaltung
+von Clean-Code- oder REST-Prinzipien.</p>
+<p><strong>Sobald die Wahrscheinlichkeit besteht, dass ein anderes Team auf die API
+zugreift – und sei es nur die Qualitätssicherung –, ist Code First nicht mehr
+anwendbar.</strong></p>
+</div>
+
+</div>
+
+<style>
+.cf { margin-block: var(--avd-academy-space-6, 1.5rem); }
+.cf__wege { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--avd-academy-space-6, 1.5rem); }
+.cf__weg { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg-subtle); }
+.cf__weg h2 { margin-top: 0; font-size: var(--avd-academy-fs-lg, 1.15rem); }
+.cf__weg p { margin-bottom: 0; }
+.cf__svg { width: 100%; max-width: 320px; display: block; margin: 0 auto .8rem; color: var(--avd-academy-color-ink); }
+.cf__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+.cf__lead { color: var(--avd-academy-color-ink-muted); }
+.cf__karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
+.cf__karte { border: 1px solid var(--avd-academy-color-border); border-left: 4px solid var(--avd-academy-color-warning); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg); }
+.cf__karte--pro { border-left-color: var(--avd-academy-color-success); }
+.cf__karte h3 { margin-top: 0; font-size: var(--avd-academy-fs-md, 1.05rem); }
+.cf__karte p:last-child, .cf__karte ul:last-child { margin-bottom: 0; }
+.cf__gegen { font-size: var(--avd-academy-fs-sm, .92rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
+.cf__gegen strong { color: var(--avd-academy-color-ink); }
+
+.cf__quiz { display: grid; gap: .6rem; margin-bottom: var(--avd-academy-space-4, 1rem); }
+.cf__frage { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: .7rem .9rem; background: var(--avd-academy-color-bg-subtle); }
+.cf__frage p { margin: 0; flex: 1 1 18rem; }
+.cf__wahl { display: flex; gap: .4rem; flex: 0 0 auto; }
+.cf__opt { font: inherit; font-size: var(--avd-academy-fs-sm, .9rem); cursor: pointer; padding: .3em 1em; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); transition: var(--avd-academy-transition, all .15s ease); }
+.cf__opt:hover { border-color: var(--avd-academy-color-accent); }
+.cf__opt[aria-pressed="true"] { background: var(--avd-academy-color-accent); border-color: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast); }
+.cf__opt:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
+.cf__ergebnis { border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); min-height: 6rem; }
+.cf__ergebnis h3 { margin-top: 0; }
+.cf__ergebnis p:last-child { margin-bottom: 0; }
+.cf__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+.cf__fazit { border-left: 4px solid var(--avd-academy-color-success); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
+.cf__fazit p:last-child { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .cf * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var FRAGEN = [
+    { id: "f1", text: "Greift ein anderes Team auf diese API zu – und sei es nur die Qualitätssicherung?", gewicht: 3 },
+    { id: "f2", text: "Steht ein API Gateway davor, das eigene Aufgaben übernimmt (Auth, CORS, Drosselung)?", gewicht: 2 },
+    { id: "f3", text: "Soll die API mehr als eine Implementierung überleben oder von mehreren bedient werden?", gewicht: 2 },
+    { id: "f4", text: "Wäre ein unbemerkter Bruch der Schnittstelle für jemanden teuer?", gewicht: 3 },
+    { id: "f5", text: "Wird die API außerhalb Eurer Sprache/Eures Frameworks genutzt?", gewicht: 1 },
+    { id: "f6", text: "Ist das hier ein Wegwerf-Prototyp mit festem Enddatum?", gewicht: -3 }
+  ];
+
+  var wurzel = document.querySelector(".cf");
+  if (!wurzel) return;
+  var quiz = wurzel.querySelector("[data-cf-quiz]");
+  var ergebnis = wurzel.querySelector("[data-cf-ergebnis]");
+  var antworten = {};
+
+  FRAGEN.forEach(function (f) {
+    var zeile = document.createElement("div");
+    zeile.className = "cf__frage";
+    var text = document.createElement("p");
+    text.textContent = f.text;
+    var wahl = document.createElement("div");
+    wahl.className = "cf__wahl";
+
+    [["ja", true], ["nein", false]].forEach(function (paar) {
+      var knopf = document.createElement("button");
+      knopf.type = "button";
+      knopf.className = "cf__opt";
+      knopf.textContent = paar[0];
+      knopf.setAttribute("aria-pressed", "false");
+      knopf.setAttribute("aria-label", f.text + " – " + paar[0]);
+      knopf.addEventListener("click", function () {
+        antworten[f.id] = paar[1];
+        Array.prototype.forEach.call(wahl.children, function (k) {
+          k.setAttribute("aria-pressed", k === knopf ? "true" : "false");
+        });
+        werte();
+      });
+      wahl.appendChild(knopf);
+    });
+
+    zeile.appendChild(text);
+    zeile.appendChild(wahl);
+    quiz.appendChild(zeile);
+  });
+
+  function werte() {
+    var beantwortet = FRAGEN.filter(function (f) { return f.id in antworten; });
+    if (beantwortet.length < FRAGEN.length) {
+      ergebnis.innerHTML = '<p class="cf__hint">Noch ' +
+        (FRAGEN.length - beantwortet.length) + " von " + FRAGEN.length +
+        " Fragen offen.</p>";
+      return;
+    }
+
+    var punkte = 0;
+    FRAGEN.forEach(function (f) { if (antworten[f.id]) punkte += f.gewicht; });
+
+    var titel, text, zusatz;
+    if (punkte >= 5) {
+      titel = "Contract First – ohne Wenn und Aber";
+      text = "Deine Schnittstelle ist ein Vertrag mit anderen. Sie zuerst zu beschreiben ist hier keine Stilfrage, sondern der Unterschied zwischen einer Änderung und einem Vorfall.";
+      zusatz = "Nächster Schritt: die Beschreibung dorthin legen, wo sie ein eigenes Release bekommen kann – nicht in den Service, der sie zufällig bedient.";
+    } else if (punkte >= 1) {
+      titel = "Contract First, mit pragmatischem Einstieg";
+      text = "Die Argumente wiegen schwer genug, dass die Beschreibung führen sollte. Wenn Euch der Einstieg schwerfällt, beginnt mit Code und legt einen Zeitpunkt fest, ab dem die Beschreibung die Führung übernimmt.";
+      zusatz = "Wichtig ist, dass dieser Zeitpunkt <strong>festgelegt</strong> wird. Prototypen, die niemand abgelöst hat, sind die häufigste Ursache für Code First im Produktivbetrieb.";
+    } else {
+      titel = "Code First ist hier vertretbar";
+      text = "Die Schnittstelle bleibt im Team, und ein Bruch trifft niemanden, der nicht mit im Raum sitzt. Dann darf die Beschreibung Nebenprodukt sein.";
+      zusatz = "Beobachte die erste Frage weiter: Sobald ein anderes Team zugreift – auch die Qualitätssicherung –, ändert sich die Antwort.";
+    }
+
+    ergebnis.innerHTML = "<h3>" + titel + "</h3><p>" + text + "</p><p>" + zusatz + "</p>";
+  }
+
+  werte();
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

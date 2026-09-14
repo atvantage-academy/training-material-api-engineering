@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Die Kundenverwaltung entwerfen · API Engineering (Academy)</title><meta name="description" content="Entwirf die komplette API einer Kundenverwaltung – formlos, aber vollständig genug, um sie morgen zu erklären."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Die Kundenverwaltung entwerfen</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 35 Minuten</span><span class="avd-academy-tag">API-Design</span><span class="avd-academy-tag">Ressourcenmodell</span><span class="avd-academy-tag">Gruppenarbeit</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Die Kundenverwaltung entwerfen</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="die-kundenverwaltung-entwerfen">Die Kundenverwaltung entwerfen</h1>
+
+<p><strong>Als</strong> Team, das den <em>Account Service</em> des Online-Shops baut, <strong>möchten wir</strong> eine
+API entwerfen, mit der andere Teams Kundendaten verwalten können, <strong>damit</strong> Shop,
+Bestellung und Versand nicht mehr direkt in unsere Datenbank greifen müssen.</p>
+
+<p>Ihr habt heute Morgen den Shop zerlegt. Einer der Kästen war das <strong>Kundenkonto</strong>.
+Jetzt entwerft Ihr die Linie, die dorthin führt.</p>
+
+<h2 id="der-fachliche-auftrag">Der fachliche Auftrag</h2>
+
+<p>Der Account Service verwaltet Kunden. Zu einem Kunden gehören:</p>
+
+<ul>
+  <li>eine <strong>Kennung</strong> und ein <strong>Name</strong></li>
+  <li>ein <strong>Geburtsdatum</strong></li>
+  <li>eine <strong>Anschrift</strong></li>
+  <li><strong>Bezahlinformationen</strong> – Kreditkarte und/oder PayPal</li>
+  <li>ein <strong>Status</strong>: aktiv, deaktiviert oder gesperrt</li>
+</ul>
+
+<p>Andere Teams müssen Kunden <strong>anlegen, suchen, lesen, ändern und löschen</strong> können.
+Außerdem soll sich ein Kundenkonto <strong>deaktivieren und wieder aktivieren</strong> lassen.</p>
+
+<p>Mehr steht nicht in der Anforderung. Alles Weitere entscheidet Ihr – und schreibt
+es auf.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>leitest aus einer fachlichen Beschreibung ein Ressourcenmodell ab und benennst
+die Adressen.</li>
+  <li>beschreibst zu jeder Operation Methode, Adresse, Request-Inhalt, Response-Inhalt
+und die möglichen Statuscodes.</li>
+  <li>entwirfst eine Modellierung für das Deaktivieren, das keine CRUD-Operation ist.</li>
+  <li>begründest mindestens zwei Eurer Entscheidungen so, dass eine andere Gruppe sie
+nachvollziehen kann.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt eine Liste der Ressourcen mit ihren Adressen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Zu jeder Operation steht: Methode, Adresse, was im Request-Body steht, was in
+    der Antwort steht, welche Statuscodes vorkommen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Für das Deaktivieren habt Ihr eine Lösung – und wisst, warum nicht eine der
+    anderen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt notiert, was Ihr <strong>angenommen</strong> habt, ohne dass es in der Anforderung
+    stand.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr könnt zwei Entscheidungen benennen, über die Ihr am längsten diskutiert
+    habt.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Euch lesen
+    kann.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="findet-die-ressourcen">Findet die Ressourcen</h3>
+
+<p>Geht die Anforderung durch und markiert die <strong>Substantive</strong>. Nicht jedes wird eine
+Ressource – aber jede Ressource steckt in einem.</p>
+
+<p>Entscheidet für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
+ein Teil von etwas anderem?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Es gibt hier keine richtige Zahl. Zwei Ressourcen können richtig
+sein, sechs auch. Was zählt, ist, dass Ihr begründen könnt, warum.</p>
+</blockquote>
+
+<h3 id="schreibt-die-operationen-auf">Schreibt die Operationen auf</h3>
+
+<p>Nehmt Euch jede Ressource vor und geht die Methoden durch – so wie in der
+Kreuzeltabelle vorhin. Für jede Kombination, die Ihr anbietet, notiert:</p>
+
+<pre><code>### Alle Kunden lesen
+- Request:  GET /customers
+- Response: 200 – Liste der Kundendaten
+</code></pre>
+
+<p>Und für jede, die Ihr <strong>nicht</strong> anbietet, notiert in einem Halbsatz, warum nicht.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Schreibt es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
+OpenAPI, kein YAML. Das Werkzeug kommt heute Nachmittag; jetzt würde es Euch nur
+vom Entwerfen abhalten.</p>
+</blockquote>
+
+<h3 id="vergesst-die-fehlerfälle-nicht">Vergesst die Fehlerfälle nicht</h3>
+
+<p>Zu jeder Operation: Was kann schiefgehen, und was bekommt der Aufrufer dann?</p>
+
+<ul>
+  <li>Was, wenn es die ID nicht gibt?</li>
+  <li>Was, wenn die geschickten Daten unvollständig sind?</li>
+  <li>Was, wenn jemand einen Kunden anlegt, den es schon gibt?</li>
+</ul>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Der Statuscode ist die halbe Antwort. Die andere Hälfte ist, ob der
+Aufrufer daraus erkennen kann, <strong>was er anders machen soll</strong>.</p>
+</blockquote>
+
+<h3 id="entscheidet-euch-beim-deaktivieren">Entscheidet Euch beim Deaktivieren</h3>
+
+<p>Das Deaktivieren ist kein Anlegen, kein Lesen, kein Löschen. Es gibt mehrere Wege,
+und sie sind alle vertretbar.</p>
+
+<p>Findet mindestens <strong>zwei</strong> Varianten, entscheidet Euch für eine – und notiert, was
+gegen die andere sprach.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Fragt Euch bei jeder Variante: Kann man sie zweimal hintereinander
+ausführen? Sieht man später noch, dass jemand deaktiviert hat? Wie viele Zustände
+müsst Ihr abbilden, wenn „gesperrt“ dazukommt?</p>
+</blockquote>
+
+<h3 id="schreibt-eure-annahmen-auf">Schreibt Eure Annahmen auf</h3>
+
+<p>Ihr habt Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
+Kunde zwei Kreditkarten haben? Ist die Anschrift Pflicht? Kommen die Bezahldaten
+mit, wenn jemand die Kundenliste liest?</p>
+
+<p>Sammelt diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – morgen früh
+wird genau das der Unterschied zu den anderen Gruppen sein.</p>
+
+<h3 id="macht-euch-bereit-fürs-erklären">Macht Euch bereit fürs Erklären</h3>
+
+<p>Zum Schluss: Sucht die <strong>zwei Entscheidungen</strong> heraus, über die Ihr am längsten
+diskutiert habt. Notiert das Argument beider Seiten.</p>
+
+<p>Morgen stellt Ihr Euren Entwurf den anderen vor – und diese zwei Stellen sind das,
+was die anderen wirklich interessiert.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Unfertig ist völlig in Ordnung. Drei saubere Operationen sind besser
+als zehn halbe.</p>
+</blockquote>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>Worüber habt Ihr in der Gruppe am längsten diskutiert? Was war das eigentliche
+Thema hinter dem Streit?</li>
+  <li>Welche Entscheidungen habt Ihr getroffen, die nicht in der Anforderung standen?</li>
+  <li>Kommen die Bezahldaten mit, wenn jemand die Kundenliste abruft? Was spricht
+dagegen, was dafür?</li>
+  <li>Ein anderes Team liest Euren Entwurf und fängt an zu programmieren. An welcher
+Stelle wird es Euch anrufen?</li>
+  <li>Der Fachbereich meldet: „Ach ja, ein Kunde kann mehrere Anschriften haben.“ Wie
+viel Eures Entwurfs müsst Ihr ändern?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Die Kundenverwaltung entwerfen
+
+**Als** Team, das den *Account Service* des Online-Shops baut, **möchten wir** eine
+API entwerfen, mit der andere Teams Kundendaten verwalten können, **damit** Shop,
+Bestellung und Versand nicht mehr direkt in unsere Datenbank greifen müssen.
+
+Ihr habt heute Morgen den Shop zerlegt. Einer der Kästen war das **Kundenkonto**.
+Jetzt entwerft Ihr die Linie, die dorthin führt.
+
+## Der fachliche Auftrag
+
+Der Account Service verwaltet Kunden. Zu einem Kunden gehören:
+
+- eine **Kennung** und ein **Name**
+- ein **Geburtsdatum**
+- eine **Anschrift**
+- **Bezahlinformationen** – Kreditkarte und/oder PayPal
+- ein **Status**: aktiv, deaktiviert oder gesperrt
+
+Andere Teams müssen Kunden **anlegen, suchen, lesen, ändern und löschen** können.
+Außerdem soll sich ein Kundenkonto **deaktivieren und wieder aktivieren** lassen.
+
+Mehr steht nicht in der Anforderung. Alles Weitere entscheidet Ihr – und schreibt
+es auf.
+
+## Lernziele
+
+Du…
+
+- leitest aus einer fachlichen Beschreibung ein Ressourcenmodell ab und benennst
+  die Adressen.
+- beschreibst zu jeder Operation Methode, Adresse, Request-Inhalt, Response-Inhalt
+  und die möglichen Statuscodes.
+- entwirfst eine Modellierung für das Deaktivieren, das keine CRUD-Operation ist.
+- begründest mindestens zwei Eurer Entscheidungen so, dass eine andere Gruppe sie
+  nachvollziehen kann.
+
+## Definition of Done
+
+* [ ] Ihr habt eine Liste der Ressourcen mit ihren Adressen.
+* [ ] Zu jeder Operation steht: Methode, Adresse, was im Request-Body steht, was in
+      der Antwort steht, welche Statuscodes vorkommen.
+* [ ] Für das Deaktivieren habt Ihr eine Lösung – und wisst, warum nicht eine der
+      anderen.
+* [ ] Ihr habt notiert, was Ihr **angenommen** habt, ohne dass es in der Anforderung
+      stand.
+* [ ] Ihr könnt zwei Entscheidungen benennen, über die Ihr am längsten diskutiert
+      habt.
+* [ ] Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Euch lesen
+      kann.
+* [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
+
+## Arbeitsschritte
+
+### Findet die Ressourcen
+
+Geht die Anforderung durch und markiert die **Substantive**. Nicht jedes wird eine
+Ressource – aber jede Ressource steckt in einem.
+
+Entscheidet für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
+ein Teil von etwas anderem?
+
+&gt; **Hinweis:** Es gibt hier keine richtige Zahl. Zwei Ressourcen können richtig
+&gt; sein, sechs auch. Was zählt, ist, dass Ihr begründen könnt, warum.
+
+### Schreibt die Operationen auf
+
+Nehmt Euch jede Ressource vor und geht die Methoden durch – so wie in der
+Kreuzeltabelle vorhin. Für jede Kombination, die Ihr anbietet, notiert:
+
+```
+### Alle Kunden lesen
+- Request:  GET /customers
+- Response: 200 – Liste der Kundendaten
+```
+
+Und für jede, die Ihr **nicht** anbietet, notiert in einem Halbsatz, warum nicht.
+
+&gt; **Hinweis:** Schreibt es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
+&gt; OpenAPI, kein YAML. Das Werkzeug kommt heute Nachmittag; jetzt würde es Euch nur
+&gt; vom Entwerfen abhalten.
+
+### Vergesst die Fehlerfälle nicht
+
+Zu jeder Operation: Was kann schiefgehen, und was bekommt der Aufrufer dann?
+
+- Was, wenn es die ID nicht gibt?
+- Was, wenn die geschickten Daten unvollständig sind?
+- Was, wenn jemand einen Kunden anlegt, den es schon gibt?
+
+&gt; **Hinweis:** Der Statuscode ist die halbe Antwort. Die andere Hälfte ist, ob der
+&gt; Aufrufer daraus erkennen kann, **was er anders machen soll**.
+
+### Entscheidet Euch beim Deaktivieren
+
+Das Deaktivieren ist kein Anlegen, kein Lesen, kein Löschen. Es gibt mehrere Wege,
+und sie sind alle vertretbar.
+
+Findet mindestens **zwei** Varianten, entscheidet Euch für eine – und notiert, was
+gegen die andere sprach.
+
+&gt; **Hinweis:** Fragt Euch bei jeder Variante: Kann man sie zweimal hintereinander
+&gt; ausführen? Sieht man später noch, dass jemand deaktiviert hat? Wie viele Zustände
+&gt; müsst Ihr abbilden, wenn „gesperrt“ dazukommt?
+
+### Schreibt Eure Annahmen auf
+
+Ihr habt Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
+Kunde zwei Kreditkarten haben? Ist die Anschrift Pflicht? Kommen die Bezahldaten
+mit, wenn jemand die Kundenliste liest?
+
+Sammelt diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – morgen früh
+wird genau das der Unterschied zu den anderen Gruppen sein.
+
+### Macht Euch bereit fürs Erklären
+
+Zum Schluss: Sucht die **zwei Entscheidungen** heraus, über die Ihr am längsten
+diskutiert habt. Notiert das Argument beider Seiten.
+
+Morgen stellt Ihr Euren Entwurf den anderen vor – und diese zwei Stellen sind das,
+was die anderen wirklich interessiert.
+
+&gt; **Hinweis:** Unfertig ist völlig in Ordnung. Drei saubere Operationen sind besser
+&gt; als zehn halbe.
+
+## Reflexionsfragen
+
+- Worüber habt Ihr in der Gruppe am längsten diskutiert? Was war das eigentliche
+  Thema hinter dem Streit?
+- Welche Entscheidungen habt Ihr getroffen, die nicht in der Anforderung standen?
+- Kommen die Bezahldaten mit, wenn jemand die Kundenliste abruft? Was spricht
+  dagegen, was dafür?
+- Ein anderes Team liest Euren Entwurf und fängt an zu programmieren. An welcher
+  Stelle wird es Euch anrufen?
+- Der Fachbereich meldet: „Ach ja, ein Kunde kann mehrere Anschriften haben.“ Wie
+  viel Eures Entwurfs müsst Ihr ändern?
+
+## Weiterführende Informationen
+
+- [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/)
+- [Methoden-Matrix zum Nachschlagen](../ressourcen-und-methoden/methoden-matrix.html)
+- [MDN: HTTP-Statuscodes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://opensource.zalando.com/restful-api-guidelines/" target="_blank" rel="noopener"><span>Zalando RESTful API Guidelines</span></a><a href="../ressourcen-und-methoden/methoden-matrix.html"><span>Methoden-Matrix zum Nachschlagen</span></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank" rel="noopener"><span>MDN: HTTP-Statuscodes</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

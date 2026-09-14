@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Eine fremde API lesen · API Engineering (Academy)</title><meta name="description" content="Nimm eine öffentliche API auseinander und beurteile sie an den Konventionen, die Du gerade erarbeitet hast."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Eine fremde API lesen</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 20 Minuten</span><span class="avd-academy-tag">Ressourcen</span><span class="avd-academy-tag">HTTP-Methoden</span><span class="avd-academy-tag">API-Review</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Eine fremde API lesen</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="eine-fremde-api-lesen">Eine fremde API lesen</h1>
+
+<p><strong>Als</strong> jemand, der bald selbst eine API entwerfen soll, <strong>möchte ich</strong> fremde APIs
+beurteilen können, <strong>damit</strong> ich bei meiner eigenen weiß, worauf andere schauen
+werden.</p>
+
+<p>Die schnellste Art, entwerfen zu lernen, ist: fremde Entwürfe ansehen und sich
+fragen, was man anders gemacht hätte. Genau das tust Du jetzt – und zwar
+<strong>kritisch</strong>. Such nicht nach dem Vorbild, such nach den Stellen, an denen Du
+stolperst.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>entnimmst einer API-Dokumentation die angebotenen Ressourcen und erkennst an der
+Adresse, ob es sich um eine Liste, ein Einzelding oder eine Subressource handelt.</li>
+  <li>benennst zu jeder Ressource die angebotenen Methoden und ordnest sie den
+CRUD-Operationen zu.</li>
+  <li>findest mindestens drei Stellen, an denen der Entwurf von den besprochenen
+Konventionen abweicht, und begründest Deine Kritik.</li>
+  <li>benennst für einen Deiner Kritikpunkte, was Deine eigene Lösung kosten würde.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Liste aller Ressourcen der API notiert.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Zu jeder Ressource steht bei Dir, welche Methoden sie anbietet.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast mindestens drei Kritikpunkte notiert – jeweils mit der konkreten
+    Adresse oder Operation, um die es geht.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Zu mindestens einem Kritikpunkt hast Du notiert, was Deine Alternative kosten
+    würde.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Operation tatsächlich ausgeführt und die Antwort angesehen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="verschaff-dir-einen-überblick">Verschaff Dir einen Überblick</h3>
+
+<p>Öffne die API-Dokumentation, die Dein:e Trainer:in genannt hat, oder such Dir eine
+eigene (Swagger UI ist ein guter Anhaltspunkt – viele öffentliche APIs bieten sie an).</p>
+
+<p>Sieh Dir <strong>zuerst nur die Liste der Adressen</strong> an, ohne die Details zu öffnen.
+Notiere sie untereinander.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Wenn die API sehr groß ist, nimm einen zusammenhängenden Ausschnitt –
+etwa alles, was zu einer Sache gehört. Vollständigkeit ist hier nicht das Ziel.</p>
+</blockquote>
+
+<h3 id="sortiere-die-adressen">Sortiere die Adressen</h3>
+
+<p>Geh Deine Liste durch und markiere jede Adresse:</p>
+
+<ul>
+  <li><strong>L</strong> für eine Listenressource (Mehrzahl, kein Bezeichner am Ende)</li>
+  <li><strong>E</strong> für ein Einzelding (endet auf einen Bezeichner)</li>
+  <li><strong>S</strong> für eine Subressource (steckt unter einem anderen Ding)</li>
+  <li><strong>?</strong> für alles, was in keine dieser Kategorien passt</li>
+</ul>
+
+<p>Die <code>?</code>-Fälle sind die interessanten. Notier Dir, warum Du sie nicht einordnen
+konntest.</p>
+
+<h3 id="trag-die-methoden-ein">Trag die Methoden ein</h3>
+
+<p>Ergänze zu jeder Adresse, welche Methoden angeboten werden – und welche
+CRUD-Operation das jeweils ist.</p>
+
+<p>Achte auf die Lücken: Wo fehlt eine Methode, die Du erwartet hättest?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Eine fehlende Methode ist nicht automatisch ein Fehler. Manche Dinge
+darf man mit gutem Grund nicht löschen. Die Frage ist, ob die Lücke erklärt wird.</p>
+</blockquote>
+
+<h3 id="ruf-eine-operation-wirklich-auf">Ruf eine Operation wirklich auf</h3>
+
+<p>Such Dir eine lesende Operation und führe sie aus – über die Oberfläche der
+Dokumentation oder mit Deinem HTTP-Client.</p>
+
+<p>Sieh Dir an: Welchen Statuscode bekommst Du? Welchen <code>Content-Type</code>? Und wie ist
+die Antwort aufgebaut – ist die Liste ein nacktes Array oder ein Objekt mit einem
+Feld darin?</p>
+
+<h3 id="sammle-drei-kritikpunkte">Sammle drei Kritikpunkte</h3>
+
+<p>Jetzt der eigentliche Teil. Notiere drei Stellen, an denen Du beim Lesen gestolpert
+bist. Für jede Stelle:</p>
+
+<ul>
+  <li><strong>Wo</strong> (die konkrete Adresse oder Operation)</li>
+  <li><strong>Was</strong> stört Dich</li>
+  <li><strong>Wie</strong> hättest Du es gemacht</li>
+  <li><strong>Was kostet</strong> Deine Variante – wen oder was bricht sie?</li>
+</ul>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Der letzte Punkt ist der wichtigste. Eine Kritik ohne Preisschild ist
+ein Geschmacksurteil. „Ich hätte das anders benannt“ überzeugt niemanden; „Ich
+hätte das anders benannt, weil man sonst die Dokumentation braucht, um es zu
+verstehen – und der Preis wäre, dass wir alle bestehenden Aufrufer brechen“ schon.</p>
+</blockquote>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>Welche Ressourcen hast Du gefunden – und erkennst Du an der Adresse, was sie sind,
+ohne die Beschreibung zu lesen?</li>
+  <li>Welche Methode hast Du vermisst? Ist die Lücke begründet oder übersehen?</li>
+  <li>Welche Statuscodes sind dokumentiert und welche nicht? Was passiert bei Dir als
+Aufrufer, wenn ein undokumentierter Fall eintritt?</li>
+  <li>Hättest Du diese API ohne Dokumentation benutzen können? An welcher Stelle nicht?</li>
+  <li>Von Deinen drei Kritikpunkten: Welcher ließe sich morgen beheben, ohne einen
+einzigen Aufrufer zu stören – und welcher nicht? Was ist der Unterschied zwischen
+beiden?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Eine fremde API lesen
+
+**Als** jemand, der bald selbst eine API entwerfen soll, **möchte ich** fremde APIs
+beurteilen können, **damit** ich bei meiner eigenen weiß, worauf andere schauen
+werden.
+
+Die schnellste Art, entwerfen zu lernen, ist: fremde Entwürfe ansehen und sich
+fragen, was man anders gemacht hätte. Genau das tust Du jetzt – und zwar
+**kritisch**. Such nicht nach dem Vorbild, such nach den Stellen, an denen Du
+stolperst.
+
+## Lernziele
+
+Du…
+
+- entnimmst einer API-Dokumentation die angebotenen Ressourcen und erkennst an der
+  Adresse, ob es sich um eine Liste, ein Einzelding oder eine Subressource handelt.
+- benennst zu jeder Ressource die angebotenen Methoden und ordnest sie den
+  CRUD-Operationen zu.
+- findest mindestens drei Stellen, an denen der Entwurf von den besprochenen
+  Konventionen abweicht, und begründest Deine Kritik.
+- benennst für einen Deiner Kritikpunkte, was Deine eigene Lösung kosten würde.
+
+## Definition of Done
+
+* [ ] Du hast eine Liste aller Ressourcen der API notiert.
+* [ ] Zu jeder Ressource steht bei Dir, welche Methoden sie anbietet.
+* [ ] Du hast mindestens drei Kritikpunkte notiert – jeweils mit der konkreten
+      Adresse oder Operation, um die es geht.
+* [ ] Zu mindestens einem Kritikpunkt hast Du notiert, was Deine Alternative kosten
+      würde.
+* [ ] Du hast eine Operation tatsächlich ausgeführt und die Antwort angesehen.
+* [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
+
+## Arbeitsschritte
+
+### Verschaff Dir einen Überblick
+
+Öffne die API-Dokumentation, die Dein:e Trainer:in genannt hat, oder such Dir eine
+eigene (Swagger UI ist ein guter Anhaltspunkt – viele öffentliche APIs bieten sie an).
+
+Sieh Dir **zuerst nur die Liste der Adressen** an, ohne die Details zu öffnen.
+Notiere sie untereinander.
+
+&gt; **Hinweis:** Wenn die API sehr groß ist, nimm einen zusammenhängenden Ausschnitt –
+&gt; etwa alles, was zu einer Sache gehört. Vollständigkeit ist hier nicht das Ziel.
+
+### Sortiere die Adressen
+
+Geh Deine Liste durch und markiere jede Adresse:
+
+- **L** für eine Listenressource (Mehrzahl, kein Bezeichner am Ende)
+- **E** für ein Einzelding (endet auf einen Bezeichner)
+- **S** für eine Subressource (steckt unter einem anderen Ding)
+- **?** für alles, was in keine dieser Kategorien passt
+
+Die `?`-Fälle sind die interessanten. Notier Dir, warum Du sie nicht einordnen
+konntest.
+
+### Trag die Methoden ein
+
+Ergänze zu jeder Adresse, welche Methoden angeboten werden – und welche
+CRUD-Operation das jeweils ist.
+
+Achte auf die Lücken: Wo fehlt eine Methode, die Du erwartet hättest?
+
+&gt; **Hinweis:** Eine fehlende Methode ist nicht automatisch ein Fehler. Manche Dinge
+&gt; darf man mit gutem Grund nicht löschen. Die Frage ist, ob die Lücke erklärt wird.
+
+### Ruf eine Operation wirklich auf
+
+Such Dir eine lesende Operation und führe sie aus – über die Oberfläche der
+Dokumentation oder mit Deinem HTTP-Client.
+
+Sieh Dir an: Welchen Statuscode bekommst Du? Welchen `Content-Type`? Und wie ist
+die Antwort aufgebaut – ist die Liste ein nacktes Array oder ein Objekt mit einem
+Feld darin?
+
+### Sammle drei Kritikpunkte
+
+Jetzt der eigentliche Teil. Notiere drei Stellen, an denen Du beim Lesen gestolpert
+bist. Für jede Stelle:
+
+- **Wo** (die konkrete Adresse oder Operation)
+- **Was** stört Dich
+- **Wie** hättest Du es gemacht
+- **Was kostet** Deine Variante – wen oder was bricht sie?
+
+&gt; **Hinweis:** Der letzte Punkt ist der wichtigste. Eine Kritik ohne Preisschild ist
+&gt; ein Geschmacksurteil. „Ich hätte das anders benannt“ überzeugt niemanden; „Ich
+&gt; hätte das anders benannt, weil man sonst die Dokumentation braucht, um es zu
+&gt; verstehen – und der Preis wäre, dass wir alle bestehenden Aufrufer brechen“ schon.
+
+## Reflexionsfragen
+
+- Welche Ressourcen hast Du gefunden – und erkennst Du an der Adresse, was sie sind,
+  ohne die Beschreibung zu lesen?
+- Welche Methode hast Du vermisst? Ist die Lücke begründet oder übersehen?
+- Welche Statuscodes sind dokumentiert und welche nicht? Was passiert bei Dir als
+  Aufrufer, wenn ein undokumentierter Fall eintritt?
+- Hättest Du diese API ohne Dokumentation benutzen können? An welcher Stelle nicht?
+- Von Deinen drei Kritikpunkten: Welcher ließe sich morgen beheben, ohne einen
+  einzigen Aufrufer zu stören – und welcher nicht? Was ist der Unterschied zwischen
+  beiden?
+
+## Weiterführende Informationen
+
+- [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/)
+- [Beispiel-API mit Swagger UI](https://cloud-native-entwicklung.github.io/api/)
+- [MDN: HTTP-Statuscodes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://opensource.zalando.com/restful-api-guidelines/" target="_blank" rel="noopener"><span>Zalando RESTful API Guidelines</span></a><a href="https://cloud-native-entwicklung.github.io/api/" target="_blank" rel="noopener"><span>Beispiel-API mit Swagger UI</span></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank" rel="noopener"><span>MDN: HTTP-Statuscodes</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

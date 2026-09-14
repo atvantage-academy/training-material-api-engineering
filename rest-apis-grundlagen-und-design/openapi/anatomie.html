@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Anatomie eines OpenAPI-Dokuments · API Engineering (Academy)</title><meta name="description" content="Ein vollständiges OpenAPI-Dokument zum Anklicken – jeder Abschnitt erklärt, wozu er da ist."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>Anatomie eines OpenAPI-Dokuments</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="anatomie-eines-openapi-dokuments">Anatomie eines OpenAPI-Dokuments</h1>
+
+<p>Ein OpenAPI-Dokument wirkt beim ersten Mal überladen. Es ist aber nur <strong>drei
+Fragen tief</strong>: Worum geht es, was kann die API, woraus bestehen die Daten.</p>
+
+<p><strong>Klick in den Text</strong> – links wird der Abschnitt hervorgehoben, rechts steht, wozu
+er da ist.</p>
+
+<div class="an">
+
+<div class="an__layout">
+
+<div class="an__codebox">
+<div class="an__tabs" role="tablist" aria-label="Abschnitte des Dokuments">
+  <button type="button" class="an__tab" data-an-jump="openapi">Kopf</button>
+  <button type="button" class="an__tab" data-an-jump="paths">paths</button>
+  <button type="button" class="an__tab" data-an-jump="components">components</button>
+</div>
+<pre class="an__code" data-an-code=""></pre>
+</div>
+
+<aside class="an__panel" data-an-panel="" aria-live="polite">
+  <p class="an__hint">Klick eine Zeile im Dokument an.</p>
+</aside>
+
+</div>
+
+<h2 class="an__h2">Die Verschachtelung, an der alle hängenbleiben</h2>
+
+<p class="an__lead">Von der Adresse bis zum einzelnen Feld sind es sieben Ebenen.
+Wer sich verläuft, zählt sie von oben durch.</p>
+
+<ol class="an__kette">
+  <li><code>paths</code><span>alle Adressen der API</span></li>
+  <li><code>/customers/{id}</code><span>eine Adresse</span></li>
+  <li><code>get</code><span>eine Operation darauf</span></li>
+  <li><code>responses</code><span>alles, was zurückkommen kann</span></li>
+  <li><code>'200'</code><span>ein bestimmter Statuscode</span></li>
+  <li><code>content</code><span>der Inhalt der Antwort</span></li>
+  <li><code>application/json</code> → <code>schema</code><span>in welchem Format, mit welcher Struktur</span></li>
+</ol>
+
+<h2 class="an__h2">Drei Versionen, die Dir begegnen</h2>
+
+<div class="an__versionen">
+<div class="an__version">
+<h3>2.0 <small>„Swagger“</small></h3>
+<p>Die alte Fassung. Noch weit verbreitet, aber anders aufgebaut: Schemas liegen
+unter <code>definitions</code>, es gibt kein <code>content</code> mit Medientypen.
+Wer ein Dokument findet, das mit <code>swagger: "2.0"</code> beginnt, sollte nicht
+nach <code>components</code> suchen.</p>
+</div>
+<div class="an__version">
+<h3>3.0</h3>
+<p>Der heutige Normalfall. Alles, was hier gezeigt wird, gilt. Von jedem Werkzeug
+unterstützt.</p>
+</div>
+<div class="an__version">
+<h3>3.1 <small>empfohlen für Neues</small></h3>
+<p>Vollständig kompatibel zu JSON Schema – Schemas lassen sich damit zwischen API
+und anderen Werkzeugen teilen. Vor der Festlegung prüfen, ob die eigene
+Werkzeugkette sie schon versteht; manche hinken hinterher.</p>
+</div>
+</div>
+
+<p class="an__foot">Format: <strong>YAML oder JSON</strong>, beides gleichwertig.
+YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
+
+</div>
+
+<style>
+.an { margin-block: var(--avd-academy-space-6, 1.5rem); }
+.an__layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: start; }
+@media (max-width: 56rem) { .an__layout { grid-template-columns: 1fr; } }
+
+.an__codebox { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; background: var(--avd-academy-code-bg, rgba(127,127,127,.08)); }
+.an__tabs { display: flex; gap: .3rem; padding: .5rem; border-bottom: 1px solid var(--avd-academy-color-border); background: var(--avd-academy-color-bg-subtle); }
+.an__tab { font: inherit; font-size: var(--avd-academy-fs-sm, .85rem); font-family: var(--avd-academy-font-mono, monospace); cursor: pointer; padding: .25em .8em; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); }
+.an__tab:hover { border-color: var(--avd-academy-color-accent); }
+.an__tab:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
+
+.an__code { margin: 0; padding: var(--avd-academy-space-3, .75rem) 0; overflow-x: auto; font-family: var(--avd-academy-font-mono, monospace); font-size: .82rem; line-height: 1.7; background: transparent; }
+.an__block { display: block; cursor: pointer; border-left: 3px solid transparent; transition: var(--avd-academy-transition, all .15s ease); }
+.an__block:hover { background: var(--avd-academy-color-accent-soft); }
+.an__block.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
+.an__zeile { display: block; padding: 0 .9rem; white-space: pre; }
+.an__k { color: var(--avd-academy-color-headline); }
+.an__c { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+
+.an__panel { position: sticky; top: 1rem; border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-4, 1rem); min-height: 12rem; }
+.an__panel h3 { margin-top: 0; font-family: var(--avd-academy-font-mono, monospace); font-size: var(--avd-academy-fs-md, 1.02rem); }
+.an__panel p:last-child { margin-bottom: 0; }
+.an__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+.an__merke { font-size: var(--avd-academy-fs-sm, .9rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
+.an__merke strong { color: var(--avd-academy-color-ink); }
+
+.an__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+.an__lead { color: var(--avd-academy-color-ink-muted); }
+.an__kette { list-style: none; padding: 0; margin: 0; counter-reset: kette; }
+.an__kette li { counter-increment: kette; display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem; padding: .45rem 0 .45rem 3.4rem; position: relative; border-bottom: 1px solid var(--avd-academy-color-border); }
+.an__kette li::before { content: counter(kette); position: absolute; left: 0; top: .4rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: var(--avd-academy-fw-bold, 700); background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast); }
+.an__kette li:nth-child(n+2) { margin-left: .6rem; }
+.an__kette code { font-family: var(--avd-academy-font-mono, monospace); font-weight: var(--avd-academy-fw-bold, 700); }
+.an__kette span { color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); }
+
+.an__versionen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
+.an__version { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg-subtle); }
+.an__version h3 { margin-top: 0; font-family: var(--avd-academy-font-mono, monospace); }
+.an__version h3 small { font-family: var(--avd-academy-font-sans, sans-serif); font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); }
+.an__version p:last-child { margin-bottom: 0; }
+.an__foot { color: var(--avd-academy-color-ink-muted); margin-top: var(--avd-academy-space-4, 1rem); }
+@media (prefers-reduced-motion: reduce) { .an * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var BLOECKE = [
+    { id: "openapi", zeilen: ["openapi: 3.1.0"],
+      titel: "openapi",
+      text: "Die Version der <strong>Spezifikation</strong> – nicht die Deiner API. Sie steht immer ganz oben und entscheidet, wie ein Werkzeug den Rest liest.",
+      merke: "Verwechselt wird sie regelmäßig mit <code>info.version</code>. Die eine sagt, nach welchen Regeln das Dokument geschrieben ist; die andere, welchen Stand Deine Schnittstelle hat." },
+
+    { id: "info", zeilen: ["info:", "  title: Account Service API", "  description: Verwaltung der Kundenkonten", "  version: 1.0.0"],
+      titel: "info",
+      text: "Wer bist Du, und welcher Stand ist das? <code>title</code> und <code>version</code> sind Pflicht – alles andere darf fehlen.",
+      merke: "<strong>version</strong> ist die Version <strong>Deiner API</strong>. Sie gehört gepflegt: Sie ist die einzige Stelle, an der ein Aufrufer sieht, ob sich etwas geändert hat." },
+
+    { id: "servers", zeilen: ["servers:", "  - url: https://api.example.com/v1"],
+      titel: "servers",
+      text: "Unter welchen Adressen ist die API erreichbar? Mehrere Einträge sind üblich – Produktion, Testumgebung, lokale Entwicklung.",
+      merke: "Fehlt der Abschnitt, nehmen Werkzeuge an, die API liege unter derselben Adresse wie das Dokument. Für die Probierfunktion einer Oberfläche ist das meist falsch." },
+
+    { id: "tags", zeilen: ["tags:", "  - name: customers", "    description: Kundenkonten verwalten"],
+      titel: "tags",
+      text: "Gruppiert die Operationen. Jede Operation verweist über ihr eigenes <code>tags</code>-Feld hierher.",
+      merke: "Optisch die günstigste Verbesserung überhaupt: Ohne Tags stehen in der Oberfläche alle Operationen in einer langen Liste; mit Tags entstehen aufklappbare Kapitel." },
+
+    { id: "paths", zeilen: ["paths:"],
+      titel: "paths",
+      text: "Hier beginnt das eigentliche Angebot: <strong>was die API kann</strong>. Darunter steht je eine Adresse – und unter jeder Adresse die Methoden, die dort erlaubt sind.",
+      merke: "Was <em>nicht</em> hier steht, gibt es nicht. Eine Operation ohne Eintrag ist für jeden Aufrufer unsichtbar – und für ein Gateway, das sich daraus konfiguriert, auch." },
+
+    { id: "pfad-liste", zeilen: ["  /customers:"],
+      titel: "Eine Adresse (Listenressource)",
+      text: "Der Pfad, relativ zu <code>servers.url</code>. Darunter folgen die Methoden – hier <code>get</code> und <code>post</code>.",
+      merke: "Der Pfad enthält keine Dateiendung und kein Format. Worin die Daten kommen, regelt <code>content</code> weiter unten." },
+
+    { id: "get-liste", zeilen: ["    get:", "      tags: [customers]", "      summary: Alle Kunden lesen", "      parameters:", "        - name: state", "          in: query", "          schema:", "            $ref: '#/components/schemas/CustomerState'"],
+      titel: "Eine Operation mit Query-Parameter",
+      text: "<code>summary</code> ist der Satz, den ein Mensch in der Oberfläche liest. <code>parameters</code> beschreibt alles, was nicht im Body steht – <code>in: query</code> für Filter, <code>in: path</code> für Platzhalter, <code>in: header</code> für Header.",
+      merke: "Auch ein Parameter kann per <code>$ref</code> auf eine gemeinsame Definition zeigen. Ab der zweiten Verwendung lohnt sich das." },
+
+    { id: "get-antwort", zeilen: ["      responses:", "        '200':", "          description: Die Liste der Kunden", "          content:", "            application/json:", "              schema:", "                $ref: '#/components/schemas/CustomersList'"],
+      titel: "Die Antwort – sieben Ebenen tief",
+      text: "Hier steckt die Verschachtelung, über die alle stolpern: <code>responses</code> → Statuscode → <code>content</code> → Medientyp → <code>schema</code>. Jede Ebene beantwortet eine eigene Frage.",
+      merke: "Die Anführungszeichen um <code>'200'</code> sind kein Zufall: Ohne sie liest YAML eine Zahl, gefordert ist ein Textschlüssel. <strong>Der häufigste Anfängerfehler.</strong>" },
+
+    { id: "post", zeilen: ["    post:", "      tags: [customers]", "      summary: Einen Kunden anlegen", "      requestBody:", "        required: true", "        content:", "          application/json:", "            schema:", "              $ref: '#/components/schemas/Customer'", "      responses:", "        '201':", "          description: Kunde wurde angelegt", "          headers:", "            Location:", "              description: Adresse des neuen Kunden", "              schema: { type: string }", "        '400':", "          description: Die Daten sind nicht gültig"],
+      titel: "Eine schreibende Operation",
+      text: "Neu ist <code>requestBody</code> – was der Client mitschickt. Und die Antworten werden interessanter: <code>201</code> mit einem <code>Location</code>-Header auf das Neue, <code>400</code> für ungültige Daten.",
+      merke: "<strong>Die Fehlerfälle sind der Teil, den alle weglassen</strong> – und genau der, an dem die Integration später scheitert. Ein Aufrufer muss wissen, womit er rechnen muss." },
+
+    { id: "pfad-einzeln", zeilen: ["  /customers/{id}:", "    parameters:", "      - $ref: '#/components/parameters/customerId'"],
+      titel: "Eine Adresse mit Platzhalter",
+      text: "Der geschweifte Teil ist ein Platzhalter und <strong>muss</strong> als Parameter deklariert sein. Steht die Deklaration hier – auf Pfadebene statt in der Operation –, gilt sie für <em>alle</em> Methoden darunter.",
+      merke: "Genau dafür ist die Pfadebene da: <code>id</code> sieht bei <code>get</code>, <code>put</code>, <code>patch</code> und <code>delete</code> gleich aus. Einmal schreiben statt viermal." },
+
+    { id: "get-einzeln", zeilen: ["    get:", "      summary: Einen Kunden lesen", "      responses:", "        '200':", "          description: Der Kunde wurde gefunden", "          content:", "            application/json:", "              schema:", "                $ref: '#/components/schemas/Customer'", "        '404':", "          description: Diesen Kunden gibt es nicht"],
+      titel: "Lesen eines einzelnen Kunden",
+      text: "Derselbe Aufbau wie oben – nur liefert das Schema jetzt ein Objekt statt einer Liste. Und es gibt einen Fall mehr: Die ID kann ins Leere zeigen.",
+      merke: "Ein <code>404</code> ist keine Ausnahme, sondern ein normaler Ausgang. Wer ihn weglässt, zwingt den Aufrufer zum Raten." },
+
+    { id: "delete", zeilen: ["    delete:", "      summary: Einen Kunden löschen", "      responses:", "        '204':", "          description: Gelöscht – kein Inhalt", "        '404':", "          description: Diesen Kunden gibt es nicht"],
+      titel: "Löschen",
+      text: "<code>204</code> heißt: erledigt, und es gibt nichts zurückzugeben. Deshalb steht hier <strong>kein</strong> <code>content</code>.",
+      merke: "Ein <code>204</code> mit Body ist ein Widerspruch – der Code sagt gerade, dass keiner kommt. Manche Werkzeuge melden das, andere nicht." },
+
+    { id: "components", zeilen: ["components:"],
+      titel: "components",
+      text: "Die dritte Frage: <strong>woraus bestehen die Daten?</strong> Alles, was mehrfach vorkommt, wird hier einmal definiert und oben referenziert – Schemas, Parameter, Antworten, Header.",
+      merke: "Der Nutzen ist nicht Tippersparnis, sondern <strong>eine Wahrheit</strong>: Ein Kunde sieht beim Lesen und beim Schreiben gleich aus, weil es derselbe Eintrag ist." },
+
+    { id: "schema", zeilen: ["  schemas:", "    Customer:", "      type: object", "      required: [name, birthdate]", "      properties:", "        id:", "          type: string", "          format: uuid", "          readOnly: true", "        name:", "          type: string", "          minLength: 3", "          maxLength: 100", "          examples: [Tom Mayer]", "        birthdate:", "          type: string", "          format: date"],
+      titel: "Ein Schema",
+      text: "Die Struktur eines Datensatzes: welche Felder es gibt, welchen Typ sie haben, welche Pflicht sind und welche Grenzen gelten. Das ist gewöhnliches JSON Schema.",
+      merke: "<code>readOnly: true</code> löst die Frage, an der viele Entwürfe hängen: Die ID kommt beim Lesen mit, wird beim Anlegen aber nicht geschickt. <strong>Damit braucht es kein zweites Schema.</strong>" },
+
+    { id: "liste-schema", zeilen: ["    CustomersList:", "      type: object", "      properties:", "        items:", "          type: array", "          items:", "            $ref: '#/components/schemas/Customer'"],
+      titel: "Eine Listenantwort als Objekt",
+      text: "Die Liste steht in einem Feld eines Objekts – nicht als nacktes Array auf oberster Ebene.",
+      merke: "<strong>Das ist Absicht und eine der nützlichsten Gewohnheiten überhaupt.</strong> Ein Objekt kann später um Seitenangaben, Gesamtzahl oder Verweise wachsen, ohne dass ein einziger Aufrufer bricht. Ein Array kann das nicht." },
+
+    { id: "parameter", zeilen: ["  parameters:", "    customerId:", "      name: id", "      in: path", "      required: true", "      schema:", "        type: string", "        format: uuid"],
+      titel: "Ein wiederverwendbarer Parameter",
+      text: "Einmal definiert, von jedem Pfad referenzierbar. Bei <code>in: path</code> ist <code>required: true</code> Pflicht – ein Platzhalter kann nicht optional sein.",
+      merke: "Genau solche Kleinigkeiten sind der Grund, warum erzeugte Dokumente oft unschön aussehen: Ein Generator schreibt denselben Parameter an jede Operation, statt ihn einmal zu definieren." }
+  ];
+
+  var wurzel = document.querySelector(".an");
+  if (!wurzel) return;
+  var code = wurzel.querySelector("[data-an-code]");
+  var panel = wurzel.querySelector("[data-an-panel]");
+  var bloecke = {};
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  function faerbe(zeile) {
+    var t = esc(zeile);
+    // Schlüssel am Zeilenanfang hervorheben (alles vor dem ersten Doppelpunkt).
+    return t.replace(/^(\s*-?\s*)([A-Za-z0-9_$'{}\/\[\]{}.\-]+)(:)/, function (_, pre, key, dp) {
+      return pre + '<span class="an__k">' + key + "</span>" + dp;
+    });
+  }
+
+  BLOECKE.forEach(function (b) {
+    var el = document.createElement("span");
+    el.className = "an__block";
+    el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", b.titel + " – erklären");
+    el.innerHTML = b.zeilen.map(function (z) {
+      return '<span class="an__zeile">' + (faerbe(z) || "&nbsp;") + "</span>";
+    }).join("");
+    el.addEventListener("click", function () { zeige(b, el); });
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); zeige(b, el); }
+    });
+    bloecke[b.id] = el;
+    code.appendChild(el);
+  });
+
+  function zeige(b, el) {
+    Array.prototype.forEach.call(code.children, function (k) { k.classList.remove("is-aktiv"); });
+    el.classList.add("is-aktiv");
+    panel.innerHTML = "<h3>" + b.titel + "</h3><p>" + b.text + "</p>" +
+      (b.merke ? '<p class="an__merke">' + b.merke + "</p>" : "");
+  }
+
+  wurzel.querySelectorAll("[data-an-jump]").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      var ziel = bloecke[tab.getAttribute("data-an-jump")] || bloecke.openapi;
+      var b = BLOECKE.filter(function (x) { return bloecke[x.id] === ziel; })[0];
+      ziel.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      zeige(b, ziel);
+    });
+  });
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

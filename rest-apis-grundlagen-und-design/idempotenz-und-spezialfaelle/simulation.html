@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – Layout „simulation“ (Jekyll)
+  ------------------------------------------------
+  Bühne für BEWEGTE Abläufe. Anders als eine Präsentation, die Folien wechselt,
+  zeigt eine Simulation EINEN Schauplatz, der sich Schritt für Schritt verändert:
+  Kästen entstehen, Werte wandern, Pfeile werden gezogen. Der Ablauf lässt sich
+  vorwärts und rückwärts durchgehen, zurücksetzen und automatisch abspielen.
+
+  Optisch ist die Seite an das Layout „presentation“ angelehnt – dieselbe schmale
+  Kopfleiste mit Logo, Titel, QR-Code und Farbschema-Umschalter. Drei Zonen:
+
+    ┌──────────────────────────────────────────────┐
+    │ Kopfleiste  Logo · Titel · Schritt · Werkzeug│
+    ├───────────────────────────────┬──────────────┤
+    │ Bühne (der Inhalt dieser Datei)│ Erklärtext   │
+    │                               │ (je Schritt) │
+    ├───────────────────────────────┴──────────────┤
+    │ Fortschritt + Steuerleiste (⟲ ‹ ▶ Abspielen 1×▴ ›)│
+    └──────────────────────────────────────────────┘
+
+  AUFZEICHNEN: Der Capture-Modus (Taste C oder ?capture in der Adresse) räumt alles
+  weg, was nicht zur Sache gehört – Kopfleiste, Erklärspalte, Fortschritt,
+  Steuerleiste – und blendet den Mauszeiger aus. Die Bühne füllt das Fenster. Der
+  Erklärtext ist dann nicht verloren: Taste T holt ihn als Einblendung (OST) an den
+  unteren Rand zurück, für den Fall, dass beim Aufzeichnen niemand spricht.
+
+  NICHT DRUCKBAR – bewusst. Eine Simulation lebt von der Bewegung; ein Ausdruck
+  wäre ein willkürliches Standbild. Es gibt daher weder Druck-Knopf noch
+  Drucklayout; wer die Seite trotzdem druckt, bekommt den gerade sichtbaren
+  Schritt und den QR-Code als Rückweg zur Online-Fassung.
+
+  Front Matter (alles optional außer `layout`):
+    layout: simulation
+    title:        "…"            → Titel in der Kopfleiste; sonst die erste #-Überschrift
+    description:  "…"            → Meta-Description
+    simulation:
+      aside: false               → rechte Spalte weglassen (Bühne über volle Breite)
+      intro: "…"                 → ein Satz auf der Szenario-Übersicht (nur bei mehreren)
+      speed: 0.5 | 1 | 2 | 5     → Start-Tempo des automatischen Abspielens
+      step:
+        interval: 2500           → Grunddauer je Schritt beim Abspielen (ms)
+
+  MEHRERE SZENARIEN: Meldet die Seite über `registerScenario` mehr als einen
+  Ablauf an, bekommt sie eine Reiterleiste und eine Übersicht als Startbild. Je
+  Szenario liefert die Seite ein eigenes Bühnenbild in einem Container mit
+  `data-avd-academy-sim-scene="«id»"`; sichtbar ist immer genau eines. Mit nur
+  einem Szenario (oder bloßem `registerStep`) ändert sich nichts.
+
+  Der INHALT dieser Seite ist das BÜHNENBILD: die Kulisse (Kästen, Beschriftungen,
+  Container) plus ein <script>, das die Schritte anmeldet. Das Miniframework dazu
+  liefert theme/jekyll/simulation.js als `AvdSimulation` – es wird ABSICHTLICH
+  ohne `defer` geladen, damit ein Inline-<script> im Body es bereits vorfindet.
+
+  Ohne JavaScript bleibt die Seite lesbar: Die Kulisse steht da, Steuerleiste und
+  Erklärspalte bleiben leer – der Ablauf ist eine Zutat, keine Voraussetzung.
+
+  Anleitung und Beispiel: /templates/simulations/.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Wenn dieselbe Anfrage zweimal ankommt · API Engineering (Academy)</title><meta name="description" content="Eine verlorene Antwort, eine Wiederholung – und zwei Entwürfe, die sich dabei völlig unterschiedlich verhalten."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789369286"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789369286"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head>
+<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Wenn dieselbe Anfrage zweimal ankommt"
+      data-avd-academy-sim-speed="1"
+      data-avd-academy-sim-step-interval="3000">
+  <a class="avd-academy-skip-link" href="#avd-academy-sim-stage">Zum Inhalt springen</a>
+
+  <header class="avd-academy-sim__bar">
+    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__title">Wenn dieselbe Anfrage zweimal ankommt</span>
+    <span class="avd-academy-sim__counter" data-avd-academy-sim-counter aria-live="off"></span>
+    <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
+              title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
+              data-avd-academy-sim-full
+              title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
+  </header><nav class="avd-academy-sim__tabs" data-avd-academy-sim-tabs hidden aria-label="Szenarien"></nav>
+
+  <main class="avd-academy-sim__main"><div class="avd-academy-sim__stage" id="avd-academy-sim-stage" data-avd-academy-sim-stage>
+      <style>
+  .buehne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+    align-items: start;
+    align-content: center;
+    min-height: 100%;
+  }
+  .buehne .avd-academy-sim-panel__body { min-height: 11rem; }
+  .leitung {
+    display: flex; flex-direction: column; gap: .5rem; justify-content: center;
+    min-height: 11rem; text-align: center;
+  }
+  .leitung__pfeil { font-size: 1.6rem; line-height: 1; color: var(--avd-academy-color-ink-muted); }
+  .leitung__paket {
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .85rem;
+    padding: .5rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
+    border: 1px dashed var(--avd-academy-color-border);
+    background: var(--avd-academy-color-bg-subtle);
+    word-break: break-all;
+  }
+  .leitung__paket.is-weg {
+    border-color: var(--avd-academy-color-danger);
+    color: var(--avd-academy-color-danger);
+    text-decoration: line-through;
+  }
+  .leitung__still { color: var(--avd-academy-color-ink-muted); font-size: .85rem; font-style: italic; }
+  .notiz { font-size: .85rem; color: var(--avd-academy-color-ink-muted); margin-top: .6rem; }
+  .notiz strong { color: var(--avd-academy-color-ink); }
+</style>
+
+<div class="buehne" data-avd-academy-sim-scene="superlativ">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
+    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">weiß nur, was zurückkommt</span></h2>
+    <div class="avd-academy-sim-panel__body" id="superlativ-client"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung</h2>
+    <div class="avd-academy-sim-panel__body leitung" id="superlativ-leitung"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Kundenbestand <span class="avd-academy-sim-panel__hint">auf dem Server</span></h2>
+    <div class="avd-academy-sim-panel__body" id="superlativ-server"></div>
+  </div>
+</div>
+
+<div class="buehne" data-avd-academy-sim-scene="feste-id">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
+    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">hat vorher nachgesehen</span></h2>
+    <div class="avd-academy-sim-panel__body" id="feste-id-client"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung</h2>
+    <div class="avd-academy-sim-panel__body leitung" id="feste-id-leitung"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Kundenbestand <span class="avd-academy-sim-panel__hint">auf dem Server</span></h2>
+    <div class="avd-academy-sim-panel__body" id="feste-id-server"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var sim = window.AvdSimulation;
+
+  function ausgangsbestand() {
+    return [
+      { id: "1", name: "Anna Berger",  seit: "Kunde seit 2019", weg: false },
+      { id: "5", name: "Bruno Cimen",  seit: "Kunde seit 2021", weg: false },
+      { id: "9", name: "Cem Dogan",    seit: "Kunde seit 2023", weg: false }
+    ];
+  }
+
+  function startzustand() {
+    return {
+      kunden: ausgangsbestand(),
+      clientZeilen: [{ id: "c0", label: "Stand", name: "noch nichts geschickt", wert: "" }],
+      leitung: null,
+      notiz: ""
+    };
+  }
+
+  sim.setup({
+    state: startzustand,
+
+    render: function (s, ctx) {
+      var szenario = ctx.scenario || "superlativ";
+
+      sim.list(document.getElementById(szenario + "-client"), s.clientZeilen, {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: function () {
+          var el = document.createElement("div");
+          el.className = "avd-academy-sim-cell";
+          el.innerHTML = '<span class="avd-academy-sim-cell__label"></span>' +
+                         '<span class="avd-academy-sim-cell__name"></span>' +
+                         '<span class="avd-academy-sim-cell__value"></span>';
+          return el;
+        },
+        update: function (el, x) {
+          el.querySelector(".avd-academy-sim-cell__label").textContent = x.label || "";
+          el.querySelector(".avd-academy-sim-cell__name").textContent = x.name || "";
+          el.querySelector(".avd-academy-sim-cell__value").textContent = x.wert || "";
+          el.classList.toggle("is-error", !!x.fehler);
+        }
+      });
+
+      sim.list(document.getElementById(szenario + "-server"), s.kunden.filter(function (k) { return !k.weg; }), {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: function () {
+          var el = document.createElement("div");
+          el.className = "avd-academy-sim-cell";
+          el.innerHTML = '<span class="avd-academy-sim-cell__label"></span>' +
+                         '<span class="avd-academy-sim-cell__name"></span>' +
+                         '<span class="avd-academy-sim-cell__value"></span>';
+          return el;
+        },
+        update: function (el, x) {
+          el.querySelector(".avd-academy-sim-cell__label").textContent = "ID " + x.id;
+          el.querySelector(".avd-academy-sim-cell__name").textContent = x.name;
+          el.querySelector(".avd-academy-sim-cell__value").textContent = x.seit;
+          el.classList.toggle("is-active", !!x.markiert);
+        }
+      });
+
+      var leitung = document.getElementById(szenario + "-leitung");
+      if (!leitung) return;
+      if (!s.leitung) {
+        leitung.innerHTML = '<p class="leitung__still">still</p>';
+      } else {
+        leitung.innerHTML =
+          '<div class="leitung__pfeil">' + (s.leitung.rueckweg ? "◀" : "▶") + "</div>" +
+          '<div class="leitung__paket' + (s.leitung.weg ? " is-weg" : "") + '">' +
+          s.leitung.text.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>" +
+          (s.notiz ? '<p class="notiz">' + s.notiz + "</p>" : "");
+      }
+    }
+  });
+
+  sim.registerScenario({
+    id: "superlativ",
+    title: "Der Superlativ in der Adresse",
+    description: "DELETE /customers/oldest – die Adresse bezeichnet bei jedem Aufruf jemand anderen.",
+    steps: [
+      {
+        title: "Die Ausgangslage",
+        text: "<p>Drei Kunden im Bestand. Der Fachbereich möchte, dass der <b>älteste</b> gelöscht wird – Anna Berger, seit 2019 dabei.</p><p>Der Client hat noch nichts geschickt.</p>",
+        apply: function () { /* Ausgangslage */ }
+      },
+      {
+        title: "Der Client schickt den Auftrag",
+        text: "<p>Ein einziger Aufruf, bequem und lesbar. Der Server soll selbst herausfinden, wer der älteste ist.</p>",
+        apply: function (s) {
+          s.leitung = { text: "DELETE /customers/oldest", rueckweg: false, weg: false };
+          s.clientZeilen = [{ id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "wartet …" }];
+        }
+      },
+      {
+        title: "Der Server führt aus",
+        text: "<p>Der Server sortiert, findet Anna Berger – und löscht sie. Fachlich genau richtig.</p>",
+        apply: function (s) {
+          s.kunden[0].weg = true;
+          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
+          s.notiz = "Auf dem Server ist die Arbeit <strong>getan</strong>.";
+        }
+      },
+      {
+        title: "Die Antwort kommt nie an",
+        text: "<p>Ein Timeout, ein Verbindungsabbruch, ein überlastetes Gateway – die Antwort geht auf dem Rückweg verloren.</p><p><b>Der Client weiß jetzt nichts.</b> Er kann nicht unterscheiden, ob der Server gar nichts getan hat oder ob nur die Bestätigung fehlt.</p>",
+        apply: function (s) {
+          s.leitung = { text: "204 No Content", rueckweg: true, weg: true };
+          s.clientZeilen = [{ id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true }];
+          s.notiz = "Der Client sieht <strong>nur einen Timeout</strong>.";
+        }
+      },
+      {
+        title: "Also noch einmal",
+        text: "<p>Genau das tut jede Retry-Logik – in der Client-Bibliothek, im Gateway, oder weil jemand den Knopf noch einmal drückt.</p><p>Es ist <b>dieselbe Anfrage</b>, Zeichen für Zeichen.</p>",
+        apply: function (s) {
+          s.leitung = { text: "DELETE /customers/oldest", rueckweg: false, weg: false };
+          s.clientZeilen = [
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true },
+            { id: "c2", label: "2. Versuch", name: "DELETE /customers/oldest", wert: "wartet …" }
+          ];
+          s.notiz = "";
+        }
+      },
+      {
+        title: "Und jetzt ist Bruno der älteste",
+        text: "<p>Der Server sortiert erneut. Anna ist weg – also ist <b>Bruno Cimen</b> der älteste Kunde. Und wird gelöscht.</p><p>Zwei Kunden verloren, obwohl nur einer gemeint war. Beide Aufrufe waren korrekt.</p>",
+        apply: function (s) {
+          s.kunden[1].weg = true;
+          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
+          s.clientZeilen = [
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true },
+            { id: "c2", label: "2. Versuch", name: "DELETE /customers/oldest", wert: "204 – alles gut?", fehler: true }
+          ];
+          s.notiz = "Der Client hält das für <strong>einen</strong> erfolgreichen Löschvorgang.";
+        }
+      },
+      {
+        title: "Es lag nicht an der Methode",
+        text: "<p><b>DELETE ist idempotent – diese Adresse ist es nicht.</b> <code>/customers/oldest</code> hat beim zweiten Aufruf jemand anderen bezeichnet als beim ersten.</p><p>Eine Adresse muss bei jedem Aufruf dieselbe Sache meinen. Sonst ist keine Wiederholung mehr sicher.</p>",
+        apply: function (s) {
+          s.leitung = null;
+          s.notiz = "";
+        },
+        duration: 5000
+      }
+    ]
+  });
+
+  sim.registerScenario({
+    id: "feste-id",
+    title: "Dieselbe Adresse, dieselbe Sache",
+    description: "Erst nachsehen, dann gezielt löschen – ein Aufruf mehr, dafür beliebig wiederholbar.",
+    state: startzustand,
+    steps: [
+      {
+        title: "Die Ausgangslage",
+        text: "<p>Derselbe Bestand, dieselbe Anforderung. Diesmal fragt der Client aber <b>zuerst</b>, wer der älteste ist: <code>GET /customers?sort=createdAt&amp;limit=1</code>.</p><p>Die Antwort: Anna Berger, ID 1.</p>",
+        apply: function (s) {
+          s.clientZeilen = [{ id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" }];
+          s.kunden[0].markiert = true;
+        }
+      },
+      {
+        title: "Der Client löscht gezielt",
+        text: "<p>Jetzt trägt die Adresse eine <b>feste ID</b>. Der Client weiß, wen er löscht – und könnte es vorher jemandem zeigen.</p>",
+        apply: function (s) {
+          s.leitung = { text: "DELETE /customers/1", rueckweg: false, weg: false };
+          s.clientZeilen = [
+            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "wartet …" }
+          ];
+        }
+      },
+      {
+        title: "Der Server führt aus",
+        text: "<p>Anna Berger wird gelöscht. Genau wie im ersten Szenario.</p>",
+        apply: function (s) {
+          s.kunden[0].weg = true;
+          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
+        }
+      },
+      {
+        title: "Und wieder geht die Antwort verloren",
+        text: "<p>Dieselbe Störung wie vorhin. Der Client sieht wieder nur einen Timeout und weiß nicht, was passiert ist.</p>",
+        apply: function (s) {
+          s.leitung = { text: "204 No Content", rueckweg: true, weg: true };
+          s.clientZeilen = [
+            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true }
+          ];
+          s.notiz = "Der Client sieht <strong>nur einen Timeout</strong>.";
+        }
+      },
+      {
+        title: "Also noch einmal – dieselbe Anfrage",
+        text: "<p>Dieselbe Retry-Logik, derselbe Reflex. Nur heißt die Adresse jetzt <code>/customers/1</code>.</p>",
+        apply: function (s) {
+          s.leitung = { text: "DELETE /customers/1", rueckweg: false, weg: false };
+          s.clientZeilen = [
+            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true },
+            { id: "c2", label: "2. Versuch", name: "DELETE /customers/1", wert: "wartet …" }
+          ];
+          s.notiz = "";
+        }
+      },
+      {
+        title: "Diesmal passiert nichts mehr",
+        text: "<p>Kunde 1 ist schon weg. Der Server hat nichts zu tun und antwortet <code>404</code> – oder wieder <code>204</code>, das ist eine Entwurfsentscheidung.</p><p><b>Der Bestand ist unverändert.</b> Bruno und Cem sind noch da.</p>",
+        apply: function (s) {
+          s.leitung = { text: "404 Not Found", rueckweg: true, weg: false };
+          s.clientZeilen = [
+            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
+            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true },
+            { id: "c2", label: "2. Versuch", name: "DELETE /customers/1", wert: "404 – war schon weg" }
+          ];
+          s.notiz = "Andere <strong>Antwort</strong>, gleicher <strong>Zustand</strong>.";
+        }
+      },
+      {
+        title: "Idempotenz ist entwerfbar",
+        text: "<p><b>Idempotent heißt: derselbe Zustand, nicht dieselbe Antwort.</b> Die <code>404</code> beim zweiten Mal ist kein Widerspruch – der Bestand ist gleich geblieben.</p><p>Der Preis: ein Aufruf mehr, und zwischen Lesen und Löschen kann sich die Liste ändern. Dafür entscheidet der Client, wen er löscht – und kann es vorher sehen.</p>",
+        apply: function (s) {
+          s.leitung = null;
+          s.notiz = "";
+        },
+        duration: 5000
+      }
+    ]
+  });
+})();
+</script>
+
+
+    </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
+         data-lead="Dieselbe Störung, zwei Entwürfe. Einmal geht ein Kunde zu viel verloren, einmal passiert beim zweiten Mal gar nichts."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
+      <p class="avd-academy-sim__ost-title" data-avd-academy-sim-ost-title></p>
+      <div class="avd-academy-sim__ost-text" data-avd-academy-sim-ost-text></div>
+    </div>
+    <aside class="avd-academy-sim__aside" aria-label="Erklärung zum aktuellen Schritt">
+      <h2 class="avd-academy-sim__note-title" data-avd-academy-sim-note-title></h2>
+      <div class="avd-academy-sim__note" data-avd-academy-sim-note aria-live="polite"></div>
+    </aside>
+  </main>
+
+  <div class="avd-academy-sim__progress" aria-hidden="true">
+    <div class="avd-academy-sim__progress-fill" data-avd-academy-sim-progress></div>
+  </div>
+
+  <footer class="avd-academy-sim__controls" aria-label="Simulation steuern" data-avd-academy-sim-controls>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-reset
+            title="Zurück auf Anfang (Taste R)" aria-label="Zurück auf Anfang">⟲</button>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-prev
+            title="Schritt zurück (←)" aria-label="Schritt zurück">‹</button><div class="avd-academy-sim__play-group">
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--play" data-avd-academy-sim-play
+              title="Abspielen (Leertaste)" aria-label="Abspielen">
+        <span class="avd-academy-sim__btn-icon" data-avd-academy-sim-play-icon>▶</span>
+        <span class="avd-academy-sim__btn-text" data-avd-academy-sim-play-text>Abspielen</span>
+      </button>
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--speed" data-avd-academy-sim-speed-toggle
+              title="Tempo wählen (Taste T)" aria-label="Tempo wählen"
+              aria-haspopup="true" aria-expanded="false">
+        <span data-avd-academy-sim-speed-label>1×</span>
+        <span class="avd-academy-sim__caret" aria-hidden="true">▴</span>
+      </button>
+      <ul class="avd-academy-sim__speed-menu" data-avd-academy-sim-speed-menu hidden role="menu"
+          aria-label="Tempo"><li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="0.5">0,5×<span> langsam</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="true"  data-avd-academy-sim-speed-value="1">1×<span> normal</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="2">2×<span> zügig</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="5">5×<span> im Zeitraffer</span></button></li>
+      </ul>
+    </div>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-next
+            title="Schritt vor (→)" aria-label="Schritt vor">›</button>
+  </footer><p class="avd-academy-sim__capture-hint" data-avd-academy-sim-capture-hint hidden aria-hidden="true">
+    Capture-Modus · <b>C</b> beenden · <b>T</b> Text einblenden
+  </p><p class="avd-academy-sim__print-hint" aria-hidden="true">
+    Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.
+  </p>
+</body>
+</html>

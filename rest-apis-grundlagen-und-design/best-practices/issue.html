@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Eine Million Kunden ausliefern · API Engineering (Academy)</title><meta name="description" content="Eure Kundenverwaltung ist gewachsen. Baut Paginierung, brauchbare Fehler und eine Suche ein, die nicht in eine URL passt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789369286">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789369286"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789369286">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789369286" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789369286" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789369286">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789369286">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789369286"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Eine Million Kunden ausliefern</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 20 Minuten</span><span class="avd-academy-tag">Paginierung</span><span class="avd-academy-tag">Problem Details</span><span class="avd-academy-tag">API-Design</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Eine Million Kunden ausliefern</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="eine-million-kunden-ausliefern">Eine Million Kunden ausliefern</h1>
+
+<p><strong>Als</strong> Team, dessen API erfolgreich geworden ist, <strong>möchten wir</strong> große
+Datenmengen und Fehlerfälle so ausliefern, <strong>damit</strong> unsere Aufrufer damit
+arbeiten können, ohne uns anzurufen.</p>
+
+<p>Euer Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
+Teams greifen zu, und das Support-Postfach füllt sich.</p>
+
+<p>Nehmt Euren Entwurf noch einmal vor.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>erweiterst eine Listenoperation um Paginierung und begründest die gewählte Art.</li>
+  <li>benennst Vorgabewert und Obergrenze für die Seitengröße und beschreibst, was bei
+Überschreitung passiert.</li>
+  <li>entwirfst eine Fehlerantwort, mit der ein Aufrufer den Fehler selbst beheben kann.</li>
+  <li>entscheidest für eine komplexe Suche zwischen Query-Parametern und einer eigenen
+Ressource.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code>GET /customers</code> hat Paginierung – Ihr wisst, welche Art und warum.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Vorgabewert und Obergrenze der Seitengröße stehen fest, und Ihr wisst, was bei
+    Überschreitung passiert.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Die Antwort enthält, was ein Aufrufer braucht, um die nächste Seite zu holen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt entschieden, wie die komplexe Suche aussieht – und den Preis Eurer
+    Entscheidung benannt.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="entscheidet-euch-für-eine-paginierungsart">Entscheidet Euch für eine Paginierungsart</h3>
+
+<p>Zwei Anwendungsfälle liegen vor:</p>
+
+<ol>
+  <li>Die interne Verwaltungsoberfläche zeigt eine Tabelle mit Seitenzahlen unten.
+Die Sachbearbeitung springt zu „Seite 12“.</li>
+  <li>Das Marketing-Team holt jede Nacht alle Kunden ab, um sie in sein eigenes
+System zu übernehmen.</li>
+</ol>
+
+<p>Welche Art passt zu welchem Fall? Entscheidet Euch – und notiert, ob Ihr <strong>beide</strong>
+anbieten wollt.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Beides anzubieten ist erlaubt und kommt vor. Es ist aber auch
+doppelte Arbeit und doppelte Dokumentation. Fragt Euch, ob die zweite Art ihren
+Preis wert ist.</p>
+</blockquote>
+
+<h3 id="schreibt-die-operation-auf">Schreibt die Operation auf</h3>
+
+<p>Notiert die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
+steht.</p>
+
+<p>Denkt daran, dass der Aufrufer erfahren muss, wie er weiterkommt.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Genau hier zahlt sich aus, dass die Listenantwort ein Objekt ist und
+kein nacktes Array. Wäre sie ein Array – wo würdet Ihr den Verweis auf die nächste
+Seite unterbringen?</p>
+</blockquote>
+
+<h3 id="zieht-die-grenzen">Zieht die Grenzen</h3>
+
+<p>Beantwortet drei Fragen und schreibt die Antworten auf:</p>
+
+<ul>
+  <li>Was ist die <strong>Vorgabe</strong>, wenn der Aufrufer nichts angibt?</li>
+  <li>Was ist die <strong>Obergrenze</strong>?</li>
+  <li>Was passiert bei <code>?limit=1000000</code> – abschneiden oder Fehler?</li>
+</ul>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Alle drei Antworten gehören in die Dokumentation. Eine
+undokumentierte Obergrenze führt zu genau einem Support-Ticket pro Aufrufer.</p>
+</blockquote>
+
+<h3 id="formuliert-eine-brauchbare-fehlerantwort">Formuliert eine brauchbare Fehlerantwort</h3>
+
+<p>Jemand legt einen Kunden an. Der Name ist zu kurz <strong>und</strong> das Geburtsdatum liegt in
+der Zukunft.</p>
+
+<p>Schreibt die komplette Antwort auf: Statuscode, <code>Content-Type</code>, Body.</p>
+
+<p>Prüfstein: Kann ein Aufrufer allein aus dieser Antwort seinen Aufruf korrigieren –
+ohne bei Euch nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Das Problem-Details-Format erlaubt eigene Felder. Genau dort gehören
+die einzelnen Feldfehler hin.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Prüft zum Schluss, ob in Eurer Antwort etwas steht, das ein
+Fremder nicht wissen sollte.</p>
+</blockquote>
+
+<h3 id="entwerft-die-komplexe-suche">Entwerft die komplexe Suche</h3>
+
+<p>Der Fachbereich möchte suchen können nach: Namensteil, Statusliste, Anlagezeitraum,
+Wohnort, Bezahlart, Bestellsumme zwischen X und Y – und die Ergebnisse sortiert
+nach zwei Kriterien.</p>
+
+<p>Entwerft den Aufruf. Notiert dazu, was Eure Lösung kostet.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Versucht ruhig, das zuerst als Query-Parameter zu schreiben. Der
+Punkt, an dem es unangenehm wird, ist die eigentliche Erkenntnis.</p>
+</blockquote>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>Welche Paginierungsart habt Ihr gewählt, und für welchen der beiden Anwendungsfälle
+war sie die schlechtere?</li>
+  <li>Ein Aufrufer holt Seite 1, jemand legt einen Kunden an, dann holt er Seite 2. Was
+bekommt er zu sehen? Ist Eure Lösung davon betroffen?</li>
+  <li>Wie erfährt der Aufrufer, dass es weitere Seiten gibt? Und wie erfährt er, wie
+viele es insgesamt sind – oder erfährt er das gar nicht?</li>
+  <li>Eure Fehlerantwort: Woran erkennt ein <strong>Programm</strong> (nicht ein Mensch), um welchen
+Fehler es sich handelt?</li>
+  <li>Habt Ihr die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
+verliert Ihr durch Eure Wahl?</li>
+  <li>Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Euren Entwurf?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Eine Million Kunden ausliefern
+
+**Als** Team, dessen API erfolgreich geworden ist, **möchten wir** große
+Datenmengen und Fehlerfälle so ausliefern, **damit** unsere Aufrufer damit
+arbeiten können, ohne uns anzurufen.
+
+Euer Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
+Teams greifen zu, und das Support-Postfach füllt sich.
+
+Nehmt Euren Entwurf noch einmal vor.
+
+## Lernziele
+
+Du…
+
+- erweiterst eine Listenoperation um Paginierung und begründest die gewählte Art.
+- benennst Vorgabewert und Obergrenze für die Seitengröße und beschreibst, was bei
+  Überschreitung passiert.
+- entwirfst eine Fehlerantwort, mit der ein Aufrufer den Fehler selbst beheben kann.
+- entscheidest für eine komplexe Suche zwischen Query-Parametern und einer eigenen
+  Ressource.
+
+## Definition of Done
+
+* [ ] `GET /customers` hat Paginierung – Ihr wisst, welche Art und warum.
+* [ ] Vorgabewert und Obergrenze der Seitengröße stehen fest, und Ihr wisst, was bei
+      Überschreitung passiert.
+* [ ] Die Antwort enthält, was ein Aufrufer braucht, um die nächste Seite zu holen.
+* [ ] Ihr habt eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.
+* [ ] Ihr habt entschieden, wie die komplexe Suche aussieht – und den Preis Eurer
+      Entscheidung benannt.
+* [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
+
+## Arbeitsschritte
+
+### Entscheidet Euch für eine Paginierungsart
+
+Zwei Anwendungsfälle liegen vor:
+
+1. Die interne Verwaltungsoberfläche zeigt eine Tabelle mit Seitenzahlen unten.
+   Die Sachbearbeitung springt zu „Seite 12“.
+2. Das Marketing-Team holt jede Nacht alle Kunden ab, um sie in sein eigenes
+   System zu übernehmen.
+
+Welche Art passt zu welchem Fall? Entscheidet Euch – und notiert, ob Ihr **beide**
+anbieten wollt.
+
+&gt; **Hinweis:** Beides anzubieten ist erlaubt und kommt vor. Es ist aber auch
+&gt; doppelte Arbeit und doppelte Dokumentation. Fragt Euch, ob die zweite Art ihren
+&gt; Preis wert ist.
+
+### Schreibt die Operation auf
+
+Notiert die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
+steht.
+
+Denkt daran, dass der Aufrufer erfahren muss, wie er weiterkommt.
+
+&gt; **Hinweis:** Genau hier zahlt sich aus, dass die Listenantwort ein Objekt ist und
+&gt; kein nacktes Array. Wäre sie ein Array – wo würdet Ihr den Verweis auf die nächste
+&gt; Seite unterbringen?
+
+### Zieht die Grenzen
+
+Beantwortet drei Fragen und schreibt die Antworten auf:
+
+- Was ist die **Vorgabe**, wenn der Aufrufer nichts angibt?
+- Was ist die **Obergrenze**?
+- Was passiert bei `?limit=1000000` – abschneiden oder Fehler?
+
+&gt; **Hinweis:** Alle drei Antworten gehören in die Dokumentation. Eine
+&gt; undokumentierte Obergrenze führt zu genau einem Support-Ticket pro Aufrufer.
+
+### Formuliert eine brauchbare Fehlerantwort
+
+Jemand legt einen Kunden an. Der Name ist zu kurz **und** das Geburtsdatum liegt in
+der Zukunft.
+
+Schreibt die komplette Antwort auf: Statuscode, `Content-Type`, Body.
+
+Prüfstein: Kann ein Aufrufer allein aus dieser Antwort seinen Aufruf korrigieren –
+ohne bei Euch nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?
+
+&gt; **Hinweis:** Das Problem-Details-Format erlaubt eigene Felder. Genau dort gehören
+&gt; die einzelnen Feldfehler hin.
+
+&gt; **Hinweis:** Prüft zum Schluss, ob in Eurer Antwort etwas steht, das ein
+&gt; Fremder nicht wissen sollte.
+
+### Entwerft die komplexe Suche
+
+Der Fachbereich möchte suchen können nach: Namensteil, Statusliste, Anlagezeitraum,
+Wohnort, Bezahlart, Bestellsumme zwischen X und Y – und die Ergebnisse sortiert
+nach zwei Kriterien.
+
+Entwerft den Aufruf. Notiert dazu, was Eure Lösung kostet.
+
+&gt; **Hinweis:** Versucht ruhig, das zuerst als Query-Parameter zu schreiben. Der
+&gt; Punkt, an dem es unangenehm wird, ist die eigentliche Erkenntnis.
+
+## Reflexionsfragen
+
+- Welche Paginierungsart habt Ihr gewählt, und für welchen der beiden Anwendungsfälle
+  war sie die schlechtere?
+- Ein Aufrufer holt Seite 1, jemand legt einen Kunden an, dann holt er Seite 2. Was
+  bekommt er zu sehen? Ist Eure Lösung davon betroffen?
+- Wie erfährt der Aufrufer, dass es weitere Seiten gibt? Und wie erfährt er, wie
+  viele es insgesamt sind – oder erfährt er das gar nicht?
+- Eure Fehlerantwort: Woran erkennt ein **Programm** (nicht ein Mensch), um welchen
+  Fehler es sich handelt?
+- Habt Ihr die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
+  verliert Ihr durch Eure Wahl?
+- Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Euren Entwurf?
+
+## Weiterführende Informationen
+
+- [Zalando Guidelines: Pagination](https://opensource.zalando.com/restful-api-guidelines/#pagination)
+- [RFC 9457 – Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc9457)
+- [Bulk and Batch Operations (mscharhag)](https://www.mscharhag.com/api-design/bulk-and-batch-operations)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://opensource.zalando.com/restful-api-guidelines/#pagination" target="_blank" rel="noopener"><span>Zalando Guidelines: Pagination</span></a><a href="https://datatracker.ietf.org/doc/html/rfc9457" target="_blank" rel="noopener"><span>RFC 9457 – Problem Details for HTTP APIs</span></a><a href="https://www.mscharhag.com/api-design/bulk-and-batch-operations" target="_blank" rel="noopener"><span>Bulk and Batch Operations (mscharhag)</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://www.atvantage.com</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>API Engineering (Academy)</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://www.atvantage.com" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>
