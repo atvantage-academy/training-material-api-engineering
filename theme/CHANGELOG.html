@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Änderungen am ATVANTAGE Academy Theme · ATVANTAGE Academy</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789452573">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789452573" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789452573" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789452573">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789469803"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789469803"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789469803">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789469803" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789469803" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789469803">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789452573">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789452573"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789469803">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789469803"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -146,6 +146,269 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2120">2.12.0</h2>
+
+<h3 id="der-alarmton-trug-als-schrift-nicht--gefunden-vom-eigenen-neuen-werkzeug">Der Alarmton trug als Schrift nicht – gefunden vom eigenen neuen Werkzeug</h3>
+
+<p><strong>Der erste Lauf von <code>theme/jekyll/contrast.rb</code> (2.11.0) im eigenen Repo.</strong> Zwei Regeln
+in <code>components.css</code> setzen <code>--avd-academy-tone-alert</code> als <strong>Schrift</strong>:</p>
+
+<ul>
+  <li><code>.avd-academy-grouptable__group--tone-alert</code> – die Gruppenzelle einer Zeile außerhalb
+des Rasters färbt ihren Text im Signalton</li>
+  <li><code>.avd-academy-grouptable__alert td</code> – die Ankündigungszeile</li>
+</ul>
+
+<p>Der Ton ist als <strong>Fläche</strong> gerechnet. Als Schrift kam er im Light-Theme auf <strong>4,39:1</strong>,
+auf Kartenflächen auf <strong>3,75:1</strong> – beides unter AA für Kleintext, und die
+Ankündigungszeile steht auf <code>--avd-academy-fs-sm</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>vorher</th>
+      <th>nachher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Light, auf <code>color-bg</code></td>
+      <td>4,39:1</td>
+      <td><strong>8,53:1</strong></td>
+    </tr>
+    <tr>
+      <td>Light, auf <code>color-bg-subtle</code></td>
+      <td>3,75:1</td>
+      <td><strong>7,29:1</strong></td>
+    </tr>
+    <tr>
+      <td>Dark, auf <code>color-bg</code></td>
+      <td>6,62:1</td>
+      <td><strong>9,99:1</strong></td>
+    </tr>
+    <tr>
+      <td>Dark, auf <code>color-bg-subtle</code></td>
+      <td>5,72:1</td>
+      <td><strong>8,64:1</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Behoben</strong> mit der <code>-ink</code>-Fassung aus 2.10.0: <code>--avd-academy-tone-alert-ink</code>. Die
+<strong>Linie</strong> behält den vollen Ton – sie ist Fläche, nicht Schrift; das Signal bleibt also
+genauso laut.</p>
+
+<p><strong>Bemerkenswert am Zustandekommen.</strong> Diese Regeln stehen seit Langem im Paket. Die
+Rückmeldung, die zu 2.10.0 führte, beschrieb genau diese Fehlerklasse – „sobald ein Repo
+eine Fehlermeldung <strong>schreibt</strong> statt sie zu umranden, gibt es kein Token, das trägt“ –
+und hielt dabei fest, das Theme selbst benutze Danger <strong>ausschließlich</strong> als Rahmenfarbe.
+Das stimmte nicht ganz, und niemandem ist es aufgefallen, auch beim Bauen der
+<code>-ink</code>-Fassungen nicht. Gefunden hat es das Werkzeug, im ersten Lauf, ohne dass jemand
+danach suchte.</p>
+
+<p>Nach der Korrektur meldet es 19 statt 22 Gruppen. Die verbleibenden 19 sind ausnahmslos
+die offene Markenfrage – der Akzent des Fundaments als Schrift auf hellen Flächen.</p>
+
+<h3 id="einstufung">Einstufung</h3>
+
+<p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; ein Farbwert mit
+sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0, 2.7.0 und 2.9.0.</p>
+
+<p><strong>Was sich sichtbar ändert:</strong> Der Text einer Alarm-Zeile in einer gruppierten Tabelle ist
+gedämpfter als bisher. Die Linie darüber nicht.</p>
+
+<hr />
+
+<h2 id="2110">2.11.0</h2>
+
+<h3 id="neu-die-kontrastprüfung-themejekyllcontrastrb">Neu: die Kontrastprüfung <code>theme/jekyll/contrast.rb</code></h3>
+
+<p>Ein Farbwert wird gegen <strong>einen</strong> Untergrund entworfen und später vor <strong>einen
+anderen</strong> gestellt. Nichts im Build wird davon rot: Das Schema ist zufrieden, die
+Seite entsteht, der Text steht da – nur lesen kann ihn niemand.</p>
+
+<p>Allein zwischen 2.6.0 und 2.10.0 hat diese Fehlerart <strong>sechsmal</strong> zugeschlagen.
+<strong>Zweimal entstand sie beim Beheben einer anderen.</strong> Gefunden hat sie jedes Mal ein
+Mensch, meist Wochen später und meist in fertigen Schulungsunterlagen. Das Repo prüft
+Paketinhalt, Markup Contract, Schemas, JS-Haken, HTML-Attribute und tote Verweise –
+für Farbe gab es nichts.</p>
+
+<p><strong>Was sie tut.</strong> Sie rendert jede Seite aus <code>_site</code> in <strong>beiden</strong> Farbschemata in
+einem Headless-Browser, ermittelt für jedes Element mit eigenem Textknoten die
+<strong>tatsächlich wirksame</strong> Fläche darunter und rechnet den Kontrast nach WCAG 2.1.
+Gruppiert wird nach CSS-Herkunft, nicht nach Element – aus einer Regel sollen nicht
+zweihundert Zeilen werden.</p>
+
+<p><strong>Warum gegen das gebaute HTML.</strong> Dieselbe Begründung wie bei <code>links.rb</code> und
+<code>bin/js-hooks.sh</code>, hier aber noch zwingender: Kontrast ist eine Eigenschaft
+gerenderter <strong>Paare</strong>. Welche Fläche wirklich unter einem Text liegt, steht in keiner
+einzelnen CSS-Regel. Eine Prüfung über die Quellen hätte ihr Loch genau dort, wo die
+echten Fälle lagen: <code>.bubble.a</code> setzte <code>background: #fff</code> und erbte die Schrift von
+weit oben; die getönte Tafel färbte Schrift und Fläche aus <strong>derselben</strong> Variablen.</p>
+
+<p><strong>Warum beide Farbschemata.</strong> Vier der sechs Fälle zeigten sich nur in einem davon,
+zwei davon nur im Dark-Theme – dem, das beim Schreiben niemand offen hat.</p>
+
+<pre><code class="language-bash">ruby theme/jekyll/contrast.rb --require-site     # Bericht
+ruby theme/jekyll/contrast.rb --self-test        # die Prüfung selbst prüfen
+make contrast                                    # beides
+</code></pre>
+
+<p><strong>Sie bricht nichts, und das ist Absicht.</strong> Der Aufruf meldet und endet mit 0; sie
+steht <strong>nicht</strong> in <code>make check</code> und in keinem Workflow. Ein Prüfer, der aus
+unwichtigem oder unentschiedenem Grund rot wird, wird weggeklickt und schützt dann gar
+nichts mehr – dieselbe Überlegung wie beim Markup Contract. Erst wenn eine
+Ausnahmeliste steht und ein Lauf sauber durchgeht, macht <code>--strict</code> ein Tor daraus.</p>
+
+<p><strong>Was der erste Lauf im eigenen Repo meldet: 22 Gruppen.</strong> Neunzehn davon sind
+dieselbe offene Frage – die Akzentfarbe des Fundaments als Schrift auf hellen Flächen
+(2,75–3,22:1). Das ist eine Markenentscheidung, kein Fehler, und sie ist nicht Teil
+dieser Fassung.</p>
+
+<p>Die übrigen <strong>drei sind echte Befunde</strong>: <code>.avd-academy-grouptable__alert td</code> und die
+zugehörigen Legendenschlüssel setzen <code>--avd-academy-tone-alert</code> als <strong>Schrift</strong> und
+kommen im Light-Theme auf 4,39:1. Das ist genau die Klasse, für die 2.10.0 die
+<code>-ink</code>-Fassungen eingeführt hat – die Prüfung hat sie im ersten Lauf gefunden, in
+Regeln, die seit Langem im Paket stehen. Sie werden getrennt behoben; dieses Release
+liefert das Werkzeug, nicht die Korrektur.</p>
+
+<p><strong>Sie liegt im Paket</strong> und läuft damit in jedem Schulungs-Repo über dessen <strong>eigene</strong>
+Unterlagen. Das ist der eigentliche Punkt: Die Befunde, die zu 2.7.0 bis 2.10.0 geführt
+haben, kamen aus einem Schulungs-Repo, das von Hand in Chromium nachgemessen hat. Eine
+Prüfung, die nur hier läuft, sieht die Beispielseiten des Themes – nicht die
+Präsentation, in der eine Überschrift unlesbar war.</p>
+
+<p><strong>Ausnahmeliste mit Begründungspflicht.</strong> Eine Zeile ist <code>Signatur⇥Begründung</code>; ein
+Eintrag <strong>ohne</strong> Begründung ist ein Fehler, keine stille Ausnahme.</p>
+
+<p><strong>Was sie nicht kann – und meldet.</strong> Text über Verlauf, Bild oder SVG-Fläche (die
+wirksame Farbe ist dort kein einzelner Wert), halbdurchsichtige Schrift, und alles, was
+erst nach einer Eingabe entsteht: aufgeklappte Menüs, Folien hinter der ersten,
+Simulationsschritte. Solche Elemente werden <strong>gezählt und im Bericht genannt</strong>. Stille
+Auslassung liest sich sonst wie „alles geprüft“.</p>
+
+<p><strong>Abhängigkeitsfrei geblieben.</strong> Kein Gem: Der HTTP-Server, den die Messung braucht –
+über <code>file://</code> laufen die wurzelabsoluten Asset-Pfade ins Leere und die Seite rendert
+ganz ohne Theme-CSS –, steht in rund vierzig Zeilen auf <code>socket</code> aus der
+Standardbibliothek. WEBrick ist seit Ruby 3.0 keine Default-Gem mehr und auf einem
+fremden Runner nicht zugesichert.</p>
+
+<p><strong>Browser nötig.</strong> Chrome oder Chromium, gefunden über <code>--browser</code>, <code>CHROME</code> oder die
+üblichen Pfade. Fehlt er, wird <strong>sichtbar</strong> übersprungen (<code>--require-browser</code>
+erzwingt das Scheitern). Ob die eigenen Runner einen mitbringen, ist die Frage, die vor
+einer Aufnahme in die Pipeline zu klären ist.</p>
+
+<p><strong>Selbsttest inklusive</strong>, aus demselben Grund wie bei <code>links.rb</code>: Im eigenen Repo trägt
+nach jeder Korrektur wieder jedes Paar – die interessanten Fälle entstehen dort gar
+nicht. Der Selbsttest baut eine Seite, in der jeder Befund einmal vorkommt <strong>und</strong> jeder
+Fall, der keiner sein darf: großer Text an der 3:1-Schwelle, bewusst gedämpfte
+Bedienelemente, Verlauf, halbdurchsichtige Schrift, nicht gerenderter Text. Dazu zwei
+Gegenproben, die ein vertauschtes oder verschlucktes Farbschema auffliegen lassen.</p>
+
+<p><strong>Laufzeit</strong> rund anderthalb Minuten für 70 Seiten × 2 Schemata mit acht parallelen
+Browsern (<code>--jobs</code>).</p>
+
+<h3 id="einstufung-1">Einstufung</h3>
+
+<p><strong>Minor.</strong> Eine neue Datei im Paket, rein ergänzend. Kein Token, keine Klasse, kein
+Pfad, kein Front-Matter-Feld ändert sich; nichts Bestehendes verhält sich anders, und
+kein Lauf wird davon rot, der es vorher nicht war.</p>
+<h2 id="2101">2.10.1</h2>
+
+<h3 id="die-verweisprüfung-meldete-jeden-folienanker-als-tot">Die Verweisprüfung meldete jeden Folienanker als tot</h3>
+
+<p>Gemeldet aus einem Schulungs-Repo (Register A-004, Nachtrag). <code>links.rb</code> prüft jeden
+<code>#anker</code> gegen eine <code>id</code> im gebauten HTML. Eine Präsentation nummeriert ihre Folien
+aber <strong>zur Laufzeit</strong>: <code>presentation.js</code> liest <code>#/5</code> und springt zur fünften Folie.
+Eine <code>id="/5"</code> steht dafür nicht im HTML – und soll dort auch nicht stehen, die Folien
+entstehen erst im Browser.</p>
+
+<p>Ergebnis: <strong>jeder</strong> Folienanker wurde als toter Anker gemeldet. Im meldenden Repo waren
+das 7 Befunde auf 2 Seiten bei <strong>null</strong> echten toten Verweisen.</p>
+
+<p><strong>Es war kein Autorenfehler.</strong> Die Schreibweise stammt aus dem Werkzeug selbst – der
+Skill <code>konzept-pflegen</code> schreibt „je Kapitel mit Folien-Anker, z. B.
+<code>praesentation.md#/9</code>“ ausdrücklich vor. Das Theme forderte die Schreibweise an einer
+Stelle an und meldete sie an einer anderen als Fehler.</p>
+
+<p><strong>Die Folge wiegt schwerer als die Meldung.</strong> <code>links.rb</code> ist die einzige Prüfung, die
+tote Verweise überhaupt findet. Ein Prüfer, der verlässlich Fehlalarme liefert, wird
+nicht in die Pipeline genommen – im meldenden Repo lief er deshalb <strong>gar nicht</strong>, und
+damit prüfte dort niemand die Verweise. Das Skript verfehlte seinen Zweck genau an der
+Stelle, an der sein eigener Kommentar ihn am besten begründet.</p>
+
+<p><strong>Behoben, und zwar ohne Ausnahmeliste.</strong> Die Prüfung kennt jetzt die beiden Layouts mit
+Laufzeit-Nummerierung und prüft Laufzeit-Anker gegen die <strong>Form</strong>, die das jeweilige
+Skript zusichert, und gegen das <strong>Layout der Zielseite</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Verweis</th>
+      <th>Ziel</th>
+      <th>Ergebnis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>praesentation.html#/5</code></td>
+      <td>Präsentation</td>
+      <td>in Ordnung</td>
+    </tr>
+    <tr>
+      <td><code>simulation.html#/uebersicht</code></td>
+      <td>Simulation</td>
+      <td>in Ordnung</td>
+    </tr>
+    <tr>
+      <td><code>simulation.html#/szenario/2</code></td>
+      <td>Simulation</td>
+      <td>in Ordnung</td>
+    </tr>
+    <tr>
+      <td><code>praesentation.html#/kapitel</code></td>
+      <td>Präsentation</td>
+      <td><strong>Befund</strong> – die Form kennt das Layout nicht</td>
+    </tr>
+    <tr>
+      <td><code>gibt-es.html#/5</code></td>
+      <td>gewöhnliche Seite</td>
+      <td><strong>Befund</strong> – dort schaltet nichts auf <code>#/…</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Der Betroffene ist damit nicht ausgenommen, sondern <strong>anders geprüft</strong>. Eine
+Ausnahmeliste hätte in jedem Repo mit einer Präsentation neu gepflegt werden müssen –
+das meldende Repo hat bewusst darauf verzichtet und stattdessen berichtet. Richtig so.</p>
+
+<p><strong>Was ausdrücklich NICHT geprüft wird:</strong> ob es die fünfte Folie überhaupt gibt. Dafür
+müsste <code>links.rb</code> die Aufteilungsregeln aus <code>presentation.js</code> nachbauen (<code>h2</code> beginnt
+eine Folie, Inhalt davor wird zur Titelfolie, fehlt sie, wird eine erzeugt) und dann bei
+jeder Änderung dort mitwandern – genau die stille Drift, die #152 verursacht hat. Ein
+Anker auf eine Folie, die es nicht gibt, landet auf der letzten; das ist sichtbar, ein
+toter Verweis ist es nicht. Die Quelle der Formen sind die <code>ausHash()</code>-Funktionen der
+beiden Skripte; wer sie dort ändert, ändert sie hier mit. Beides steht als Kommentar an
+der Konstanten.</p>
+
+<p><strong>Zur Frage, ob <code>links.rb</code> als CI-Schritt gedacht ist: ja.</strong> Sie läuft in <code>make check</code>,
+im <code>pages</code>-Workflow dieses Repos mit <code>--require-site</code> und – weil das Skript im Paket
+liegt – in der Kopiervorlage <code>github-pages/deploy.example.yml</code>, die jedes Schulungs-Repo
+übernimmt. Dieser Befund war für die Aufnahme also tatsächlich blockierend.</p>
+
+<p>Der Selbsttest deckt die neuen Fälle ab: vier gültige Laufzeit-Anker, die <strong>kein</strong>
+Befund sein dürfen, und zwei ungültige, die einer sein müssen.</p>
+
+<h3 id="einstufung-2">Einstufung</h3>
+
+<p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Fehlalarme lieferte. Kein Token, keine
+Klasse, kein Pfad, kein Front-Matter-Feld ändert sich; für Autoren gibt es nichts Neues
+zu nutzen. Wer die Prüfung bisher wegen der Fehlalarme nicht in der Pipeline hatte, kann
+sie jetzt aufnehmen.</p>
 
 <hr />
 
@@ -298,7 +561,7 @@ Dark-Wert war nie betroffen (6,88:1) und bleibt.</p>
 <p>Anders als die beiden anderen Befunde kann ein Projekt diesen weder auslösen noch
 vermeiden.</p>
 
-<h3 id="einstufung">Einstufung</h3>
+<h3 id="einstufung-3">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; die neuen
 <code>-ink</code>-Tokens sind rein ergänzend, die geänderten Werte sind sichtbar, verlangen aber
@@ -386,7 +649,7 @@ hängt an ihm, nicht an der Überschrift – die Zuordnung bleibt also sichtbar.
 gedämpfter als bisher. Das ist eine sichtbare Änderung am Ergebnis bestehender Simulationen –
 deshalb <strong>Minor</strong>, nicht Patch. Ungetönte Tafeln bleiben unverändert.</p>
 
-<h3 id="einstufung-1">Einstufung</h3>
+<h3 id="einstufung-4">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; es ändert sich ein
 Farbwert mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0 und
@@ -459,7 +722,7 @@ color: color-mix(in srgb, var(--ci-accent) 12%, #fff);
 <code>simulation-erstellen</code>, ab Plugin 2.5.2) – aber auch das erneuert nur die Vorlage, nicht
 eine bereits abgeleitete Datei im Schulungs-Repo.</p>
 
-<h3 id="einstufung-2">Einstufung</h3>
+<h3 id="einstufung-5">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt; es ändert sich ein Wert, und zwar nur für
 Projekte, die den Akzent überschreiben. Im Auslieferungszustand ist das Ergebnis identisch.</p>
@@ -577,7 +840,7 @@ das Skript <strong>eine Variable je Zeile</strong> liest und <code>--avd-academy
 Dark-Block werden sie jetzt gefunden. Das Artefakt ist nachgezogen; damit sind diese
 Namen ab sofort auch gegen stilles Wegfallen geschützt.</p>
 
-<h3 id="einstufung-3">Einstufung</h3>
+<h3 id="einstufung-6">Einstufung</h3>
 
 <p><strong>Minor.</strong> Keines der Major-Kriterien greift: kein Token entfernt, keines umbenannt, kein
 Pfad und kein Front-Matter-Feld geändert. Es ändern sich <strong>Werte</strong> – sichtbar, aber ohne

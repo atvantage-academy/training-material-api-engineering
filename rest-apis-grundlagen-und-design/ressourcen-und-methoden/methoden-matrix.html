@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Methoden-Matrix · ATVANTAGE Academy</title><meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789452573">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789452573">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789452573" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789452573" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789452573">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789469803"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789469803">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789469803"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789469803">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789469803" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789469803" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789469803">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789452573">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789452573"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789469803">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789469803"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -181,6 +181,83 @@ Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
 <code>GET /products</code> danach? <code>200 OK</code> mit <code>[]</code>. Die Liste ist
 leer, aber sie ist da. Käme <code>404</code>, hättest Du sie wirklich gelöscht – und das
 war nicht die Aufgabe.</p>
+
+<h2 class="mm__h2">Was eine ID leisten muss</h2>
+
+<p class="mm__foot">Eine Einzelressource wird über ihre ID adressiert –
+<code>/products/<strong>12345</strong></code>. Ob eine ID taugt, entscheidet sich an
+fünf Fragen. Die zweite ist die, an der die meisten Entwürfe scheitern.</p>
+
+<div class="mm__scroll">
+<table class="mm__props mm__props--wort">
+  <thead>
+    <tr><th scope="col">Kriterium</th><th scope="col">Heißt</th><th scope="col">Woran es scheitert</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Eindeutig</th>
+      <td>Die ID bezeichnet <em>genau eine</em> Ressource – und zwar dauerhaft.</td>
+      <td>Eine gelöschte ID neu zu vergeben. Wer den alten Verweis noch hat, bekommt wortlos etwas anderes geliefert, ohne dass ein Fehler auftritt.</td>
+    </tr>
+    <tr>
+      <th scope="row">Unveränderlich</th>
+      <td>Sie ändert sich nie, solange es die Ressource gibt.</td>
+      <td><strong>Positionen, die für Identitäten gehalten werden.</strong> Siehe unten – das ist der lehrreichste Fall.</td>
+    </tr>
+    <tr>
+      <th scope="row">URL-tauglich</th>
+      <td>Sie übersteht ein Pfadsegment, ohne maskiert werden zu müssen.</td>
+      <td>Schrägstriche, Leerzeichen, Umlaute. Und der Klassiker: <strong>der Punkt</strong> – viele Frameworks lesen alles dahinter als Formatangabe, aus <code>/customers/a.b@x.de</code> wird eine Anfrage nach dem Format <code>de</code>.</td>
+    </tr>
+    <tr>
+      <th scope="row">Verschwiegen</th>
+      <td>Sie verrät nichts, was nicht in einer Adresse stehen soll.</td>
+      <td>Ein laufender Zähler verrät die Menge (<code>/customers/8</code> – es gibt also acht) und lädt zum Durchzählen ein. Eine E-Mail-Adresse als ID steht ab dann in jedem Server-Log, jedem <code>Referer</code> und jeder Browser-Chronik.</td>
+    </tr>
+    <tr>
+      <th scope="row">Vergeben von wem?</th>
+      <td>Vom Server oder vom Client – eine Entwurfsentscheidung, keine Kleinigkeit.</td>
+      <td>Sie nicht zu treffen. <strong>Der Server vergibt → <code>POST</code> auf die Liste</strong> (deshalb nicht idempotent). <strong>Der Client bestimmt → <code>PUT</code> auf die Einzelressource</strong> (deshalb idempotent). Dieselbe Entscheidung steht oben in der Matrix.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p class="mm__foot"><strong>Der Fall, an dem es am deutlichsten wird.</strong> Die
+Bilder eines Produkts werden durchnummeriert: <code>…/images/0</code>,
+<code>…/images/1</code>, <code>…/images/2</code>. Das sieht aus wie eine ID, ist aber
+eine <strong>Position</strong>. Jemand löscht <code>…/images/1</code> – und aus dem
+alten <code>/2</code> wird das neue <code>/1</code>. Jeder gespeicherte Verweis zeigt
+ab diesem Moment auf ein <em>anderes</em> Bild, und nirgendwo tritt ein Fehler auf:
+Die Adresse ist ja weiterhin gültig. <strong>Eine ID sagt nicht, wo etwas steht,
+sondern was es ist.</strong></p>
+
+<p class="mm__foot">Die Probe: Gib jedem Bild beim Hochladen eine eigene Kennung
+(<code>…/images/7f3a</code>) statt einer Nummer in der Reihe. Dann darf gelöscht,
+sortiert und eingefügt werden, ohne dass ein einziger Verweis kaputtgeht.</p>
+
+<h3 class="mm__h3">Sechs Kandidaten</h3>
+
+<div class="mm__scroll">
+<table class="mm__props mm__props--wort">
+  <thead>
+    <tr><th scope="col">Kandidat</th><th scope="col">Taugt?</th><th scope="col">Begründung</th></tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">Fachlicher Schlüssel<br /><small>Kundennummer, ISBN, IBAN</small></th><td class="mm__yes">ja</td><td>Eindeutig, stabil, URL-tauglich – und außerhalb des Systems schon bekannt. Deshalb kann der Client sie bestimmen und mit <code>PUT</code> anlegen. <em>Bedingung:</em> Sie muss wirklich stabil sein, nicht nur heute.</td></tr>
+    <tr><th scope="row">UUID</th><td class="mm__yes">ja</td><td>Erfüllt die ersten vier mühelos und lässt sich ohne Rückfrage beim Server erzeugen – auch offline. Preis: nicht vorlesbar und nicht zu merken.</td></tr>
+    <tr><th scope="row">Laufende Nummer<br /><small><code>1</code>, <code>2</code>, <code>3</code> …</small></th><td class="mm__maybe">mit Vorbehalt</td><td>Eindeutig und unveränderlich – aber sie verrät die Menge und lädt zum Durchzählen ein. Intern meist unproblematisch, nach außen selten eine gute Wahl.</td></tr>
+    <tr><th scope="row">Slug<br /><small><code>kaffeemuehle-classic</code></small></th><td class="mm__maybe">mit Vorbehalt</td><td>Lesbar und URL-tauglich, gut für Suchmaschinen – aber er hängt am Namen, und Namen ändern sich. Nur tragfähig, wenn die alte Adresse danach weiterleitet.</td></tr>
+    <tr><th scope="row">E-Mail-Adresse</th><td class="mm__no">nein</td><td>Eindeutig ist sie. Aber Menschen wechseln sie, der Punkt darin bricht viele Frameworks – und sie ist ein Personendatum, das ab dann überall mitläuft.</td></tr>
+    <tr><th scope="row">Position in der Liste<br /><small><code>0</code>, <code>1</code>, <code>2</code></small></th><td class="mm__no">nein</td><td>Gar keine Identität, sondern eine Stelle. Sie ändert sich, sobald davor etwas gelöscht oder eingefügt wird – lautlos.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="mm__foot">Und eine Frage für den Alltag, die in keiner Spezifikation steht:
+<strong>Kannst Du die ID am Telefon vorlesen?</strong> Eine UUID kann das nicht. Ob
+das zählt, hängt davon ab, wer die API bedient – ein Support-Team oder ein anderes
+Programm.</p>
 
 <h2 class="mm__h2">Die Methoden für sich genommen</h2>
 
@@ -292,9 +369,16 @@ und tut es in der Praxis auch.</p>
    Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
    Container (`--avd-academy-space-12`). */
 .mm h2.mm__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
+.mm h3.mm__h3 { margin-top: var(--avd-academy-space-8, 2rem); font-size: var(--avd-academy-fs-md, 1.05rem); }
 .mm__props th, .mm__props td { border: 1px solid var(--avd-academy-color-border); padding: .5rem .8rem; text-align: left; }
 .mm__props thead th { background: var(--avd-academy-color-bg-subtle); }
 .mm__props tbody th { font-family: var(--avd-academy-font-mono, monospace); }
+/* Monospace passt zu Methodennamen und Adressen. Wo in der Kopfspalte FLIESSTEXT
+   steht - Kriterien, Kandidaten -, ist sie falsch: „URL-tauglich" wirkt dort wie
+   Code, und der Bindestrich liest sich als Minuszeichen. */
+.mm__props--wort tbody th { font-family: inherit; font-weight: var(--avd-academy-fw-bold, 700); }
+.mm__props--wort tbody th small { display: block; font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); font-size: .85em; margin-top: .15rem; }
+.mm__props--wort tbody th small code { font-family: var(--avd-academy-font-mono, monospace); }
 .mm__yes { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
 .mm__no { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
 .mm__maybe { color: color-mix(in srgb, var(--avd-academy-color-warning) 48%, var(--avd-academy-color-ink)); }

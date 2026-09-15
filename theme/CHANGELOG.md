@@ -15,6 +15,214 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.12.0
+
+### Der Alarmton trug als Schrift nicht – gefunden vom eigenen neuen Werkzeug
+
+**Der erste Lauf von `theme/jekyll/contrast.rb` (2.11.0) im eigenen Repo.** Zwei Regeln
+in `components.css` setzen `--avd-academy-tone-alert` als **Schrift**:
+
+- `.avd-academy-grouptable__group--tone-alert` – die Gruppenzelle einer Zeile außerhalb
+  des Rasters färbt ihren Text im Signalton
+- `.avd-academy-grouptable__alert td` – die Ankündigungszeile
+
+Der Ton ist als **Fläche** gerechnet. Als Schrift kam er im Light-Theme auf **4,39:1**,
+auf Kartenflächen auf **3,75:1** – beides unter AA für Kleintext, und die
+Ankündigungszeile steht auf `--avd-academy-fs-sm`.
+
+| | vorher | nachher |
+| --- | --- | --- |
+| Light, auf `color-bg` | 4,39:1 | **8,53:1** |
+| Light, auf `color-bg-subtle` | 3,75:1 | **7,29:1** |
+| Dark, auf `color-bg` | 6,62:1 | **9,99:1** |
+| Dark, auf `color-bg-subtle` | 5,72:1 | **8,64:1** |
+
+**Behoben** mit der `-ink`-Fassung aus 2.10.0: `--avd-academy-tone-alert-ink`. Die
+**Linie** behält den vollen Ton – sie ist Fläche, nicht Schrift; das Signal bleibt also
+genauso laut.
+
+**Bemerkenswert am Zustandekommen.** Diese Regeln stehen seit Langem im Paket. Die
+Rückmeldung, die zu 2.10.0 führte, beschrieb genau diese Fehlerklasse – „sobald ein Repo
+eine Fehlermeldung **schreibt** statt sie zu umranden, gibt es kein Token, das trägt“ –
+und hielt dabei fest, das Theme selbst benutze Danger **ausschließlich** als Rahmenfarbe.
+Das stimmte nicht ganz, und niemandem ist es aufgefallen, auch beim Bauen der
+`-ink`-Fassungen nicht. Gefunden hat es das Werkzeug, im ersten Lauf, ohne dass jemand
+danach suchte.
+
+Nach der Korrektur meldet es 19 statt 22 Gruppen. Die verbleibenden 19 sind ausnahmslos
+die offene Markenfrage – der Akzent des Fundaments als Schrift auf hellen Flächen.
+
+### Einstufung
+
+**Minor.** Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; ein Farbwert mit
+sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0, 2.7.0 und 2.9.0.
+
+**Was sich sichtbar ändert:** Der Text einer Alarm-Zeile in einer gruppierten Tabelle ist
+gedämpfter als bisher. Die Linie darüber nicht.
+
+---
+
+## 2.11.0
+
+### Neu: die Kontrastprüfung `theme/jekyll/contrast.rb`
+
+Ein Farbwert wird gegen **einen** Untergrund entworfen und später vor **einen
+anderen** gestellt. Nichts im Build wird davon rot: Das Schema ist zufrieden, die
+Seite entsteht, der Text steht da – nur lesen kann ihn niemand.
+
+Allein zwischen 2.6.0 und 2.10.0 hat diese Fehlerart **sechsmal** zugeschlagen.
+**Zweimal entstand sie beim Beheben einer anderen.** Gefunden hat sie jedes Mal ein
+Mensch, meist Wochen später und meist in fertigen Schulungsunterlagen. Das Repo prüft
+Paketinhalt, Markup Contract, Schemas, JS-Haken, HTML-Attribute und tote Verweise –
+für Farbe gab es nichts.
+
+**Was sie tut.** Sie rendert jede Seite aus `_site` in **beiden** Farbschemata in
+einem Headless-Browser, ermittelt für jedes Element mit eigenem Textknoten die
+**tatsächlich wirksame** Fläche darunter und rechnet den Kontrast nach WCAG 2.1.
+Gruppiert wird nach CSS-Herkunft, nicht nach Element – aus einer Regel sollen nicht
+zweihundert Zeilen werden.
+
+**Warum gegen das gebaute HTML.** Dieselbe Begründung wie bei `links.rb` und
+`bin/js-hooks.sh`, hier aber noch zwingender: Kontrast ist eine Eigenschaft
+gerenderter **Paare**. Welche Fläche wirklich unter einem Text liegt, steht in keiner
+einzelnen CSS-Regel. Eine Prüfung über die Quellen hätte ihr Loch genau dort, wo die
+echten Fälle lagen: `.bubble.a` setzte `background: #fff` und erbte die Schrift von
+weit oben; die getönte Tafel färbte Schrift und Fläche aus **derselben** Variablen.
+
+**Warum beide Farbschemata.** Vier der sechs Fälle zeigten sich nur in einem davon,
+zwei davon nur im Dark-Theme – dem, das beim Schreiben niemand offen hat.
+
+```bash
+ruby theme/jekyll/contrast.rb --require-site     # Bericht
+ruby theme/jekyll/contrast.rb --self-test        # die Prüfung selbst prüfen
+make contrast                                    # beides
+```
+
+**Sie bricht nichts, und das ist Absicht.** Der Aufruf meldet und endet mit 0; sie
+steht **nicht** in `make check` und in keinem Workflow. Ein Prüfer, der aus
+unwichtigem oder unentschiedenem Grund rot wird, wird weggeklickt und schützt dann gar
+nichts mehr – dieselbe Überlegung wie beim Markup Contract. Erst wenn eine
+Ausnahmeliste steht und ein Lauf sauber durchgeht, macht `--strict` ein Tor daraus.
+
+**Was der erste Lauf im eigenen Repo meldet: 22 Gruppen.** Neunzehn davon sind
+dieselbe offene Frage – die Akzentfarbe des Fundaments als Schrift auf hellen Flächen
+(2,75–3,22:1). Das ist eine Markenentscheidung, kein Fehler, und sie ist nicht Teil
+dieser Fassung.
+
+Die übrigen **drei sind echte Befunde**: `.avd-academy-grouptable__alert td` und die
+zugehörigen Legendenschlüssel setzen `--avd-academy-tone-alert` als **Schrift** und
+kommen im Light-Theme auf 4,39:1. Das ist genau die Klasse, für die 2.10.0 die
+`-ink`-Fassungen eingeführt hat – die Prüfung hat sie im ersten Lauf gefunden, in
+Regeln, die seit Langem im Paket stehen. Sie werden getrennt behoben; dieses Release
+liefert das Werkzeug, nicht die Korrektur.
+
+**Sie liegt im Paket** und läuft damit in jedem Schulungs-Repo über dessen **eigene**
+Unterlagen. Das ist der eigentliche Punkt: Die Befunde, die zu 2.7.0 bis 2.10.0 geführt
+haben, kamen aus einem Schulungs-Repo, das von Hand in Chromium nachgemessen hat. Eine
+Prüfung, die nur hier läuft, sieht die Beispielseiten des Themes – nicht die
+Präsentation, in der eine Überschrift unlesbar war.
+
+**Ausnahmeliste mit Begründungspflicht.** Eine Zeile ist `Signatur⇥Begründung`; ein
+Eintrag **ohne** Begründung ist ein Fehler, keine stille Ausnahme.
+
+**Was sie nicht kann – und meldet.** Text über Verlauf, Bild oder SVG-Fläche (die
+wirksame Farbe ist dort kein einzelner Wert), halbdurchsichtige Schrift, und alles, was
+erst nach einer Eingabe entsteht: aufgeklappte Menüs, Folien hinter der ersten,
+Simulationsschritte. Solche Elemente werden **gezählt und im Bericht genannt**. Stille
+Auslassung liest sich sonst wie „alles geprüft“.
+
+**Abhängigkeitsfrei geblieben.** Kein Gem: Der HTTP-Server, den die Messung braucht –
+über `file://` laufen die wurzelabsoluten Asset-Pfade ins Leere und die Seite rendert
+ganz ohne Theme-CSS –, steht in rund vierzig Zeilen auf `socket` aus der
+Standardbibliothek. WEBrick ist seit Ruby 3.0 keine Default-Gem mehr und auf einem
+fremden Runner nicht zugesichert.
+
+**Browser nötig.** Chrome oder Chromium, gefunden über `--browser`, `CHROME` oder die
+üblichen Pfade. Fehlt er, wird **sichtbar** übersprungen (`--require-browser`
+erzwingt das Scheitern). Ob die eigenen Runner einen mitbringen, ist die Frage, die vor
+einer Aufnahme in die Pipeline zu klären ist.
+
+**Selbsttest inklusive**, aus demselben Grund wie bei `links.rb`: Im eigenen Repo trägt
+nach jeder Korrektur wieder jedes Paar – die interessanten Fälle entstehen dort gar
+nicht. Der Selbsttest baut eine Seite, in der jeder Befund einmal vorkommt **und** jeder
+Fall, der keiner sein darf: großer Text an der 3:1-Schwelle, bewusst gedämpfte
+Bedienelemente, Verlauf, halbdurchsichtige Schrift, nicht gerenderter Text. Dazu zwei
+Gegenproben, die ein vertauschtes oder verschlucktes Farbschema auffliegen lassen.
+
+**Laufzeit** rund anderthalb Minuten für 70 Seiten × 2 Schemata mit acht parallelen
+Browsern (`--jobs`).
+
+### Einstufung
+
+**Minor.** Eine neue Datei im Paket, rein ergänzend. Kein Token, keine Klasse, kein
+Pfad, kein Front-Matter-Feld ändert sich; nichts Bestehendes verhält sich anders, und
+kein Lauf wird davon rot, der es vorher nicht war.
+## 2.10.1
+
+### Die Verweisprüfung meldete jeden Folienanker als tot
+
+Gemeldet aus einem Schulungs-Repo (Register A-004, Nachtrag). `links.rb` prüft jeden
+`#anker` gegen eine `id` im gebauten HTML. Eine Präsentation nummeriert ihre Folien
+aber **zur Laufzeit**: `presentation.js` liest `#/5` und springt zur fünften Folie.
+Eine `id="/5"` steht dafür nicht im HTML – und soll dort auch nicht stehen, die Folien
+entstehen erst im Browser.
+
+Ergebnis: **jeder** Folienanker wurde als toter Anker gemeldet. Im meldenden Repo waren
+das 7 Befunde auf 2 Seiten bei **null** echten toten Verweisen.
+
+**Es war kein Autorenfehler.** Die Schreibweise stammt aus dem Werkzeug selbst – der
+Skill `konzept-pflegen` schreibt „je Kapitel mit Folien-Anker, z. B.
+`praesentation.md#/9`“ ausdrücklich vor. Das Theme forderte die Schreibweise an einer
+Stelle an und meldete sie an einer anderen als Fehler.
+
+**Die Folge wiegt schwerer als die Meldung.** `links.rb` ist die einzige Prüfung, die
+tote Verweise überhaupt findet. Ein Prüfer, der verlässlich Fehlalarme liefert, wird
+nicht in die Pipeline genommen – im meldenden Repo lief er deshalb **gar nicht**, und
+damit prüfte dort niemand die Verweise. Das Skript verfehlte seinen Zweck genau an der
+Stelle, an der sein eigener Kommentar ihn am besten begründet.
+
+**Behoben, und zwar ohne Ausnahmeliste.** Die Prüfung kennt jetzt die beiden Layouts mit
+Laufzeit-Nummerierung und prüft Laufzeit-Anker gegen die **Form**, die das jeweilige
+Skript zusichert, und gegen das **Layout der Zielseite**:
+
+| Verweis | Ziel | Ergebnis |
+| ------- | ---- | -------- |
+| `praesentation.html#/5` | Präsentation | in Ordnung |
+| `simulation.html#/uebersicht` | Simulation | in Ordnung |
+| `simulation.html#/szenario/2` | Simulation | in Ordnung |
+| `praesentation.html#/kapitel` | Präsentation | **Befund** – die Form kennt das Layout nicht |
+| `gibt-es.html#/5` | gewöhnliche Seite | **Befund** – dort schaltet nichts auf `#/…` |
+
+Der Betroffene ist damit nicht ausgenommen, sondern **anders geprüft**. Eine
+Ausnahmeliste hätte in jedem Repo mit einer Präsentation neu gepflegt werden müssen –
+das meldende Repo hat bewusst darauf verzichtet und stattdessen berichtet. Richtig so.
+
+**Was ausdrücklich NICHT geprüft wird:** ob es die fünfte Folie überhaupt gibt. Dafür
+müsste `links.rb` die Aufteilungsregeln aus `presentation.js` nachbauen (`h2` beginnt
+eine Folie, Inhalt davor wird zur Titelfolie, fehlt sie, wird eine erzeugt) und dann bei
+jeder Änderung dort mitwandern – genau die stille Drift, die #152 verursacht hat. Ein
+Anker auf eine Folie, die es nicht gibt, landet auf der letzten; das ist sichtbar, ein
+toter Verweis ist es nicht. Die Quelle der Formen sind die `ausHash()`-Funktionen der
+beiden Skripte; wer sie dort ändert, ändert sie hier mit. Beides steht als Kommentar an
+der Konstanten.
+
+**Zur Frage, ob `links.rb` als CI-Schritt gedacht ist: ja.** Sie läuft in `make check`,
+im `pages`-Workflow dieses Repos mit `--require-site` und – weil das Skript im Paket
+liegt – in der Kopiervorlage `github-pages/deploy.example.yml`, die jedes Schulungs-Repo
+übernimmt. Dieser Befund war für die Aufnahme also tatsächlich blockierend.
+
+Der Selbsttest deckt die neuen Fälle ab: vier gültige Laufzeit-Anker, die **kein**
+Befund sein dürfen, und zwei ungültige, die einer sein müssen.
+
+### Einstufung
+
+**Patch.** Eine Korrektur an einer Prüfung, die Fehlalarme lieferte. Kein Token, keine
+Klasse, kein Pfad, kein Front-Matter-Feld ändert sich; für Autoren gibt es nichts Neues
+zu nutzen. Wer die Prüfung bisher wegen der Fehlalarme nicht in der Pipeline hatte, kann
+sie jetzt aufnehmen.
+
+---
+
 ## 2.10.0
 
 Drei Befunde aus einer Rückmeldung (Register A-004), gemessen an einem gebauten
