@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Änderungen am ATVANTAGE Academy Theme · ATVANTAGE Academy</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789382773">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789382773" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789382773" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789382773">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789382773">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789382773"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -146,6 +146,455 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2100">2.10.0</h2>
+
+<p>Drei Befunde aus einer Rückmeldung (Register A-004), gemessen an einem gebauten
+Trainer-Bundle über CDP – 13 400 Messungen je Schema, 1 222 eindeutige
+Vordergrund/Flächen-Paare. Alle drei hier gegengerechnet und bestätigt. Dazu die
+Antwort auf eine Frage, die über die Befunde hinausging und die wichtigste
+Änderung dieser Fassung ist.</p>
+
+<h3 id="vordergrundfassungen--ink">Vordergrundfassungen: <code>*-ink</code></h3>
+
+<p>Eine Farbe der Palette ist als <strong>Fläche</strong> gedacht. Als <strong>Schrift</strong> trägt sie nicht:
+<code>--avd-academy-color-danger</code> ergibt auf der Seitenfläche 4,39:1 (Light) bzw. 3,81:1
+(Dark), auf <code>-bg-subtle</code> 3,75:1 bzw. 3,29:1. Das Theme selbst benutzt Danger
+ausschließlich als <strong>Rahmen</strong> (<code>.avd-academy-callout--danger</code>,
+<code>.avd-academy-sim-panel.is-error</code>) – dort ist es richtig, und <strong>deshalb</strong> ist es
+nie aufgefallen. Sobald ein Repo eine Fehlermeldung <em>schreibt</em> statt sie zu
+umranden, gab es kein Token, das trägt.</p>
+
+<p>Neu, nach <strong>einer</strong> Regel abgeleitet – 45 % Farbe im Fließtext:</p>
+
+<p><code>--avd-academy-color-danger-ink</code>, <code>--avd-academy-color-accent-ink</code>,
+<code>--avd-academy-tone-1-ink</code> … <code>-4-ink</code>, <code>--avd-academy-tone-alert-ink</code></p>
+
+<pre><code class="language-css">--avd-academy-color-danger-ink:
+  color-mix(in srgb, var(--avd-academy-color-danger) 45%, var(--avd-academy-color-ink));
+</code></pre>
+
+<p>Weil <code>--avd-academy-color-ink</code> mit dem Farbschema kippt, trägt derselbe Ausdruck in
+beiden Schemata – die Tokens stehen deshalb <strong>nur einmal</strong> in <code>:root</code> und nicht in
+den Dark-Blöcken.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Light</th>
+      <th>auf <code>bg</code></th>
+      <th>Dark</th>
+      <th>auf <code>bg</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>danger-ink</code></td>
+      <td><code>#882D2E</code></td>
+      <td>8,53:1</td>
+      <td><code>#EB8E8E</code></td>
+      <td>7,00:1</td>
+    </tr>
+    <tr>
+      <td><code>accent-ink</code></td>
+      <td><code>#8F4823</code></td>
+      <td>6,73:1</td>
+      <td><code>#F2A883</code></td>
+      <td>8,52:1</td>
+    </tr>
+    <tr>
+      <td><code>tone-3-ink</code></td>
+      <td><code>#776B34</code></td>
+      <td>5,33:1</td>
+      <td><code>#E4DCBB</code></td>
+      <td>12,14:1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Zugesagt</strong> ist AA auf <code>--avd-academy-color-bg</code> und <code>--avd-academy-color-bg-subtle</code>
+in beiden Schemata; Engpass über alle sieben ist <strong>4,56:1</strong> (Ton 3, Gold, Light).
+<strong>Nicht zugesagt</strong> auf den Füllflächen – dort trägt Gold nur 4,17:1; Text auf einer
+Füllfläche nimmt <code>ink</code> oder <code>ink-muted</code>.</p>
+
+<p><strong>Warum Tokens und nicht nur ein Abschnitt in der Doku.</strong> Im Inline-SVG steht
+<code>fill="var(…)"</code> – dort lässt sich nichts zusammenmischen, man kann nur auf ein Token
+zeigen. Genau dort fielen die gemeldeten Stellen durch, während dieselben Projekte es
+in ihrem CSS selbst lösen konnten: In einem Repo ist die Konstruktion an vier Stellen
+unabhängig voneinander entstanden. Das war das ausschlaggebende Argument.</p>
+
+<p>Die getönten Tafeln (2.9.0) mischen weiterhin mit 35 %. Kein Widerspruch, sondern ein
+anderer Fall: Dort ist die Fläche mit <strong>derselben</strong> Farbe getönt, Schrift und Grund
+wandern miteinander.</p>
+
+<h3 id="füllflächen-im-dark-theme-26---18-">Füllflächen im Dark-Theme: 26 % → 18 %</h3>
+
+<p>Die Ableitung aus 2.7.0 war gegen <code>--avd-academy-color-ink</code> gerechnet – und nur
+dagegen. Sekundärtext auf derselben Fläche fiel bei drei von vier Füllungen durch:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fläche, Dark</th>
+      <th><code>ink</code></th>
+      <th><code>ink-muted</code> vorher</th>
+      <th><code>ink-muted</code> nachher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fill-1-bg</code></td>
+      <td>8,62 → 10,10:1</td>
+      <td>4,53:1</td>
+      <td><strong>5,30:1</strong></td>
+    </tr>
+    <tr>
+      <td><code>fill-2-bg</code></td>
+      <td>8,44 → 10,05:1</td>
+      <td>4,43:1</td>
+      <td><strong>5,28:1</strong></td>
+    </tr>
+    <tr>
+      <td><code>fill-3-bg</code></td>
+      <td>7,58 → 9,36:1</td>
+      <td><strong>3,98:1</strong></td>
+      <td><strong>4,91:1</strong></td>
+    </tr>
+    <tr>
+      <td><code>fill-4-bg</code></td>
+      <td>8,21 → 9,82:1</td>
+      <td>4,31:1</td>
+      <td><strong>5,16:1</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Im Light-Theme trug dasselbe Paar immer (4,99–5,39:1) – es war kein Farbfehler,
+sondern derselbe Fehlertyp wie in 2.7.0: ein Token, gegen <strong>einen</strong> Untergrund
+gerechnet und vor <strong>einem anderen</strong> eingesetzt.</p>
+
+<p><strong>Der Preis:</strong> Die Flächen heben sich schwächer von der Seite ab (1,40–1,51:1 statt
+1,64–1,87:1). Vertretbar, weil die Kategorie auch vom Strich <code>--avd-academy-fill-N</code>
+getragen wird. <strong>Der Light-Block bleibt unverändert.</strong></p>
+
+<p>Bemerkenswert am Zustandekommen: Diese Flächen waren vor 2.7.0 im Dark-Theme
+unbrauchbar. Sie wurden erst benutzt, <em>nachdem</em> 2.7.0 sie reparierte – und dabei fiel
+der nächste Fall auf.</p>
+
+<h3 id="metanav-text-stand-unter-aa--und-das-war-hier-falsch-eingestuft"><code>metanav-text</code> stand unter AA – und das war hier falsch eingestuft</h3>
+
+<p><code>--avd-academy-metanav-text</code> hing an <code>--avd-gray-metatext</code> (<code>#707173</code>). Auf der
+Metanav-Fläche (<code>#F4F4F4</code>) sind das <strong>4,44:1</strong>, für Kleintext bei 14 px unter AA – auf
+<strong>jeder</strong> Seite des Themes.</p>
+
+<p>Die Zahl steht seit 2.7.0 im CHANGELOG dieses Pakets, dort mit dem Satz, das Token
+bleibe an <code>gray-metatext</code>, „dort ist es richtig“. Sie war gemessen und die Einstufung
+schlicht falsch. Das Token hängt jetzt an <code>--avd-gray-footer</code>: <strong>5,81:1</strong>. Der
+Dark-Wert war nie betroffen (6,88:1) und bleibt.</p>
+
+<p>Anders als die beiden anderen Befunde kann ein Projekt diesen weder auslösen noch
+vermeiden.</p>
+
+<h3 id="einstufung">Einstufung</h3>
+
+<p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; die neuen
+<code>-ink</code>-Tokens sind rein ergänzend, die geänderten Werte sind sichtbar, verlangen aber
+von keinem Projekt eine Umstellung.</p>
+
+<p><strong>Für Projekte:</strong></p>
+
+<ul>
+  <li>Wer eine Fehlermeldung, einen Akzent oder einen Ton als <strong>Schrift</strong> setzt – im CSS
+oder im Inline-SVG –, nimmt ab jetzt die <code>-ink</code>-Fassung.</li>
+  <li>Wer die Mischung selbst nachgebaut hat, kann sie durch das Token ersetzen.</li>
+  <li>Sekundärtext auf einer Füllfläche trägt im Dark-Theme jetzt; die Flächen sind dort
+etwas dunkler.</li>
+  <li>Die Meta-Navigation ist einen Hauch dunkler.</li>
+</ul>
+
+<hr />
+
+<h2 id="290">2.9.0</h2>
+
+<h3 id="getönte-tafeln-die-überschrift-stand-im-vollen-ton-auf-ihrer-eigenen-tönung">Getönte Tafeln: die Überschrift stand im vollen Ton auf ihrer eigenen Tönung</h3>
+
+<p>Gefunden von einem Prototyp, der jede gebaute Seite in beiden Farbschemata rendert und
+jedes Vordergrund/Flächen-Paar nachrechnet – nicht von Hand. <strong>Weder gemeldet noch in drei
+Runden Handarbeit aufgefallen.</strong></p>
+
+<p>Eine Tafel mit Ton (<code>.avd-academy-sim-panel--ton-1/-3/-4/-alert</code>) färbt ihre Fläche mit 8 %
+des Tons und ihre Überschrift mit dem <strong>vollen</strong> Ton. Im Dark-Theme geht das auf, weil die
+Töne dort aufgehellt werden. Im Light-Theme stand der rohe Ton auf seiner eigenen blassen
+Tönung:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tafel, Light</th>
+      <th>Schrift auf Fläche</th>
+      <th>vorher</th>
+      <th>nachher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ton 1 · Slate</td>
+      <td><code>#303E4F</code> auf <code>#DEDFE0</code></td>
+      <td>8,16:1</td>
+      <td>8,21:1</td>
+    </tr>
+    <tr>
+      <td>Ton 4 · Violett</td>
+      <td><code>#7A6FB3</code> auf <code>#E4E3E8</code></td>
+      <td>3,46:1</td>
+      <td><strong>6,27:1</strong></td>
+    </tr>
+    <tr>
+      <td>Ton alert · Rot</td>
+      <td><code>#EE1919</code> auf <code>#EDDCDC</code></td>
+      <td>3,31:1</td>
+      <td><strong>7,08:1</strong></td>
+    </tr>
+    <tr>
+      <td>Ton 3 · Gold</td>
+      <td><code>#C9A227</code> auf <code>#EAE7DD</code></td>
+      <td><strong>1,96:1</strong></td>
+      <td><strong>5,06:1</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Warum es niemandem auffiel:</strong> Dieselbe Regel besteht mit Ton 1 bei 8,16:1 und fällt mit
+Ton 3 bei 1,96:1 durch. Wer eine Simulation öffnet, sieht die Tafel, die gerade da ist – und
+die ist mit zwei von vier Tönen in Ordnung. Die Rückmeldung, die 2.7.0 ausgelöst hat, nannte
+<code>sim-panel__title</code> sogar ausdrücklich (dort 4,17:1 in der <strong>ungetönten</strong> Tafel); der
+schlimmere Fall stand daneben.</p>
+
+<p><strong>Behoben:</strong> Die Schriftfassung des Tons wird zum Fließtext hin gemischt –
+<code>color-mix(in srgb, var(--avd-academy-sim-ton) 35%, var(--avd-academy-color-ink))</code>. Weil
+<code>--avd-academy-color-ink</code> mit dem Farbschema kippt, trägt <strong>derselbe Ausdruck in beiden
+Schemata</strong>: im Light-Theme dunkelt er den Ton ab, im Dark-Theme hellt er ihn weiter auf.
+Gemessen über alle vier Töne: 5,06–8,21:1 hell, 8,27–9,15:1 dunkel.</p>
+
+<p><strong>Der Rahmen behält den vollen Ton.</strong> Die Wiedererkennung einer Tafel über Szenarien hinweg
+hängt an ihm, nicht an der Überschrift – die Zuordnung bleibt also sichtbar.</p>
+
+<p><strong>Was sich sichtbar ändert:</strong> Die Überschrift einer getönten Tafel ist im Light-Theme
+gedämpfter als bisher. Das ist eine sichtbare Änderung am Ergebnis bestehender Simulationen –
+deshalb <strong>Minor</strong>, nicht Patch. Ungetönte Tafeln bleiben unverändert.</p>
+
+<h3 id="einstufung-1">Einstufung</h3>
+
+<p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; es ändert sich ein
+Farbwert mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0 und
+2.7.0.</p>
+
+<!-- Die zugehörige Korrektur an der Simulations-VORLAGE (acht fest weiße Flächen) steht
+     nicht hier: templates/ liegt nicht im npm-Paket. Sie ist in plugin/CHANGELOG.md
+     unter 2.5.3 beschrieben. -->
+
+<hr />
+
+<h2 id="280">2.8.0</h2>
+
+<h3 id="accent-soft-folgt-jetzt-dem-akzent--und-eine-regression-aus-270"><code>accent-soft</code> folgt jetzt dem Akzent – und eine Regression aus 2.7.0</h3>
+
+<p>Nachtrag zu 2.7.0. Dort wurde <code>--avd-academy-color-accent-soft</code> nur im <strong>Dark</strong>-Block
+an den Akzent gehängt; im Light-Block hing sie weiter an <code>--avd-orange</code>. Ein Projekt mit
+eigenem Akzent behielt damit im Light-Theme eine <strong>orange getönte</strong> Fläche zu einer Farbe,
+die gar nicht mehr orange ist.</p>
+
+<p><strong>Behoben:</strong> Die Mischung nimmt jetzt in beiden Schemata <code>--avd-academy-color-accent</code> als
+Ausgangsfarbe und mischt in <code>--avd-academy-color-bg</code> statt in festes <code>#fff</code>. <strong>Im
+Auslieferungszustand ändert das nichts</strong> – dort <em>ist</em> der Akzent das ATVANTAGE-Orange und
+die Seitenfläche <code>#FFFFFF</code>, das Ergebnis bleibt <code>#FFEAE1</code>.</p>
+
+<p>Die <strong>kategoriale Füllpalette</strong> bleibt bewusst unangetastet: <code>--avd-academy-fill-2-bg</code> hängt
+weiterhin an <code>--avd-orange</code>. Füllung 2 <em>ist</em> per Definition das ATVANTAGE-Orange (siehe
+<code>docs/theme/academy.md</code>, „Diagramm-Füllpalette“) – sie ist eine Markenfarbe der Palette,
+nicht der Akzent des Projekts. Das ist derselbe Ausdruck, aber nicht dieselbe Bedeutung.</p>
+
+<h4 id="regression-aus-270-bubblemono-in-der-simulations-vorlage">Regression aus 2.7.0: <code>.bubble.mono</code> in der Simulations-Vorlage</h4>
+
+<p>Beim Nachziehen aufgefallen und hier mit behoben. <code>--avd-academy-color-accent-soft</code> ist eine
+<strong>Fläche</strong>. In <code>templates/simulations/simulation-template.html</code> wurde sie an <strong>einer</strong> Stelle
+als <strong>Schriftfarbe</strong> benutzt:</p>
+
+<pre><code class="language-css">.bubble.mono { background: var(--ci-primary-dark); color: var(--ci-accent-soft); }
+</code></pre>
+
+<p>Das ging gut, solange die Fläche in beiden Schemata nahezu weiß war. Seit 2.7.0 schaltet sie
+mit – und <code>--ci-primary-dark</code> (<code>--avd-academy-color-primary-dark</code>, <code>#1A2627</code>) schaltet
+<strong>nicht</strong> mit. Im Dark-Theme stand damit dunkle Schrift auf dunkler Blase: <strong>1,21:1</strong>, vorher
+13,41:1.</p>
+
+<p><strong>Behoben</strong> in der Vorlage, nicht im Token: Die Fläche dieser Blase ist fest dunkel, also muss
+die Schrift es auch sein. Sie wird jetzt <strong>lokal</strong> aus dem Akzent gemischt
+(<code>color-mix(in srgb, var(--ci-accent) 12%, #fff)</code>) – dasselbe Aussehen wie bisher
+(<code>#FFEAE1</code> beim ATVANTAGE-Orange) und 12,5–14,4:1 auch mit einem eigenen Akzent.</p>
+
+<p>Es war die <strong>einzige</strong> solche Stelle; alle 13 übrigen Verwendungen von <code>accent-soft</code> und
+<code>fill-*-bg</code> in der Vorlage sind <code>background</code>, also korrekt.</p>
+
+<!-- Lehre daraus, ohne eigenen Abschnitt: Ein Token, das zur mitschaltenden Fläche wird,
+     muss gegen jede Stelle geprüft werden, die es als VORDERGRUND benutzt – besonders dort,
+     wo die Fläche darunter NICHT mitschaltet. -->
+
+<p><strong>Jedes Projekt mit einer Simulation muss die eine Zeile von Hand nachziehen</strong> – ein
+<code>npm update</code> behebt es nicht. <code>templates/</code> liegt <strong>nicht</strong> im npm-Paket (siehe <code>files</code> in
+<code>theme/package.json</code>); die Vorlage ist zum <strong>Kopieren</strong> gedacht („<code>simulation-template.html</code>
+ins Schulungs-Repo kopieren und sinnvoll benennen“). Jede Simulation da draußen ist also
+eine Kopie. Zu ändern ist in der kopierten Datei:</p>
+
+<pre><code class="language-css">/* .bubble.mono – vorher */
+color: var(--ci-accent-soft);
+/* nachher */
+color: color-mix(in srgb, var(--ci-accent) 12%, #fff);
+</code></pre>
+
+<p>Über das <strong>Plugin</strong> kommt die korrigierte Fassung mit (Asset des Skills
+<code>simulation-erstellen</code>, ab Plugin 2.5.2) – aber auch das erneuert nur die Vorlage, nicht
+eine bereits abgeleitete Datei im Schulungs-Repo.</p>
+
+<h3 id="einstufung-2">Einstufung</h3>
+
+<p><strong>Minor.</strong> Kein Token entfernt oder umbenannt; es ändert sich ein Wert, und zwar nur für
+Projekte, die den Akzent überschreiben. Im Auslieferungszustand ist das Ergebnis identisch.</p>
+
+<hr />
+
+<h2 id="270">2.7.0</h2>
+
+<h3 id="drei-farb-tokens-trugen-ihren-untergrund-nicht">Drei Farb-Tokens trugen ihren Untergrund nicht</h3>
+
+<p>Gemeldet aus einem Schulungs-Repo, alle drei Befunde im gebauten Bundle mit Chromium
+nachgemessen und hier gegen die Token-Dateien gegengemessen. Gemeinsame Ursache: Ein
+Token wurde gegen <strong>einen</strong> Untergrund entworfen und später vor <strong>einen anderen</strong>
+gestellt – ohne dass irgendetwas dabei rot geworden wäre.</p>
+
+<h4 id="füllflächen-ohne-dark-werte">Füllflächen ohne Dark-Werte</h4>
+
+<p><code>--avd-academy-fill-1-bg</code> bis <code>-4-bg</code> und <code>--avd-academy-color-accent-soft</code> blieben im
+Dark-Theme auf ihren hellen Pastelltönen stehen, während <code>--avd-academy-color-ink</code> auf
+<code>#e8edee</code> wechselte. Wer eine Fläche damit füllt und den Text in <code>currentColor</code> setzt –
+der naheliegende Weg für ein Inline-SVG –, bekam <strong>1,00–1,08:1</strong>: Schrift, die nicht da
+ist. Im Bericht waren eine Überschrift und drei Beschriftungen einer Präsentation
+betroffen.</p>
+
+<p>Der Dark-Block hellt die <strong>Töne</strong> seit jeher auf und begründet das damit, dass die
+Füllpalette auf helle Flächen gerechnet ist. Für die zugehörigen <strong>Flächen</strong> gilt dasselbe
+Argument – sie waren übersehen worden.</p>
+
+<p><strong>Behoben:</strong> Beide Dark-Blöcke leiten die Flächen jetzt aus dem bereits aufgehellten
+<strong>Ton</strong> ab, nicht aus der rohen Füllung: <code>color-mix(… var(--avd-academy-tone-N) 26%,
+var(--avd-academy-color-bg))</code>. Über die rohe Füllung wäre Ton 1 (Slate) selbst so dunkel,
+dass die Fläche nur 1,10:1 von der Seite abstände und als Kategorie nicht mehr erkennbar
+wäre. Gemessen nach der Änderung: heller Text <strong>7,58–8,62:1</strong>, Fläche gegen Seite
+<strong>1,64–1,87:1</strong>. Die weiche Akzentfläche folgt demselben Muster und hängt im Dark-Theme
+am Akzent, damit ein Projekt mit eigenem Akzent keine orange getönte Fläche behält.</p>
+
+<p><strong>Der Light-Block bleibt unverändert</strong> – die hellen Werte sind byte-identisch.</p>
+
+<p><em>Bekannte Grenze:</em> Ton 1 (Slate) und Ton 4 (Violett) bleiben schwach gegeneinander
+unterscheidbar (ΔE ≈ 5). Das sind sie im Light-Theme heute schon (ΔE ≈ 6); die Ableitung
+verschlechtert nichts, behebt es aber auch nicht.</p>
+
+<h4 id="text-auf-akzentfläche-stand-fest-auf-weiß">Text auf Akzentfläche stand fest auf Weiß</h4>
+
+<p><code>--avd-academy-color-accent-contrast</code> ist das Token für Schrift <strong>auf</strong> der Akzentfarbe
+(Abspiel-Knopf und Tab-Nummer der Simulation, Intro-Nummer, Hover-Zustand der Knöpfe).
+Es stand fest auf <code>--avd-white</code>.</p>
+
+<p><strong>Das war schon im Auslieferungszustand unter AA, und schon im Light-Theme:</strong> Weiß auf
+ATVANTAGE-Orange trägt <strong>3,22:1</strong>; <code>.avd-academy-sim__btn-text</code> steht auf
+<code>--avd-academy-fs-sm</code> (≈13 px) und ist damit Kleintext, für den WCAG 2.1 AA 4,5:1
+verlangt. Setzt ein Projekt einen eigenen, helleren Akzent, wird daraus 1,9:1. Ein Kippen
+nur im Dark-Block hätte nichts behoben – der Akzent des Themes wechselt zwischen den
+Schemata gar nicht, der Fehler stand in beiden.</p>
+
+<p><strong>Behoben:</strong> Der Wert wird nicht mehr gesetzt, sondern <strong>aus dem Akzent abgeleitet</strong> –
+heller Akzent ergibt schwarze, dunkler Akzent weiße Schrift:</p>
+
+<pre><code class="language-css">@supports (color: oklch(from red l c h)) {
+  :root {
+    --avd-academy-color-accent-contrast:
+      oklch(from var(--avd-academy-color-accent) clamp(0, (l - 0.58) * -1e5, 1) 0 h);
+  }
+}
+</code></pre>
+
+<p>Die Schwelle 0,58 ist nicht geschätzt: über 60 000 Zufallsfarben geprüft, trennt sie
+schwarz und weiß am zuverlässigsten (≈2 % suboptimal; bei 0,62 waren es 9,5 %).</p>
+
+<p><strong>Kein neues Token.</strong> Ein zweites „Text auf Akzentfläche“ wäre ein Duplikat – das
+bestehende bedeutet genau das und wird an fünf Stellen so verwendet. Kaputt war der Wert,
+nicht der Name.</p>
+
+<p><strong>Warum <code>@supports</code> und nicht zwei Deklarationen.</strong> Custom Properties nehmen beim Parsen
+jede Zeichenfolge an; die zweite Deklaration gewinnt also immer, und eine Engine ohne
+relative Farbsyntax lässt <code>color</code> erst beim Rechnen ungültig werden – das Ergebnis ist
+<strong>Schwarz</strong>, nicht der Rückfall auf Weiß. Auf einem dunklen Akzent wäre das exakt der
+Fehler, der hier behoben wird. Beide Varianten in Chrome gegengeprüft. Mit dem Gate bleibt
+es in alten Engines bei Weiß wie bisher.</p>
+
+<p><strong>Was sich sichtbar ändert:</strong> Im Auslieferungszustand trägt der Abspiel-Knopf jetzt
+<strong>schwarze statt weißer</strong> Schrift auf Orange (6,52:1 statt 3,22:1). Das ist eine
+Abweichung vom ATVANTAGE-Fundament, das bei <code>Tag</code>/orange selbst Weiß auf Orange setzt –
+begründet und eingetragen in <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/theme/academy.md"><code>docs/theme/academy.md</code></a>.</p>
+
+<h4 id="--avd-academy-color-ink-muted-unter-aa-auf-abgesetzten-flächen"><code>--avd-academy-color-ink-muted</code> unter AA auf abgesetzten Flächen</h4>
+
+<p>Gemeldet als „4,17:1 auf <code>#fff</code>“ – auf <code>#fff</code> sind es tatsächlich <strong>4,89:1</strong>, und damit
+besteht das Token AA. Die 4,17:1 stehen auf <strong><code>--avd-academy-color-bg-subtle</code></strong>
+(<code>#EDEDED</code>), also auf Karten und erhöhten Flächen; auf dem Metanav-Grau (<code>#F4F4F4</code>) sind
+es 4,44:1. Das Token war nicht theme-weit zu hell, sondern auf den Untergründen zu hell,
+gegen die es nie gerechnet wurde – was auch erklärt, warum es an
+<code>.avd-academy-sim-panel__title</code> und <code>.avd-academy-sim-panel__hint</code> auffiel.</p>
+
+<p><strong>Behoben:</strong> <code>--avd-academy-color-ink-muted</code> hängt jetzt an <code>--avd-gray-footer</code> (<code>#5F5F5F</code>)
+statt an <code>--avd-gray-metatext</code> (<code>#707173</code>). Danach: <strong>6,39:1</strong> auf der Seite, <strong>5,45:1</strong>
+auf abgesetzten Flächen, 5,81:1 auf dem Metanav-Grau.</p>
+
+<p><strong>Das ist keine Abweichung vom Fundament, sondern der richtige Alias.</strong> ATVANTAGE führt
+<code>--avd-gray-footer</code> selbst als „Footer, Schatten, <strong>sekundärer Text</strong>“ und
+<code>--avd-gray-metatext</code> als „Meta-Navigation, Affiliation-Leiste“. <code>ink-muted</code> hing am Token
+der Meta-Navigation. <code>--avd-academy-metanav-text</code> bleibt unverändert an
+<code>--avd-gray-metatext</code> – dort ist es richtig.</p>
+
+<p>Der Dark-Wert (<code>#9fb0b3</code>) war nie betroffen (6,42–7,43:1) und bleibt.</p>
+
+<h4 id="markup-contract-fünf-nachgetragene-namen">Markup Contract: fünf nachgetragene Namen</h4>
+
+<p><code>bin/markup-contract.sh</code> meldete beim Nachziehen fünf „neue“ öffentliche Namen:
+<code>--avd-academy-fill-1-bg</code> bis <code>-4-bg</code> und <code>avd-academy-sim__btn-text</code>. Sie sind <strong>nicht
+neu</strong> – die vier Tokens stehen seit jeher in der Doku und werden von
+<code>templates/simulations/simulation-template.html</code> benutzt. Sie fehlten im Artefakt, weil
+das Skript <strong>eine Variable je Zeile</strong> liest und <code>--avd-academy-fill-N</code> und
+<code>--avd-academy-fill-N-bg</code> gepaart auf einer Zeile standen. Durch die eigenen Zeilen im
+Dark-Block werden sie jetzt gefunden. Das Artefakt ist nachgezogen; damit sind diese
+Namen ab sofort auch gegen stilles Wegfallen geschützt.</p>
+
+<h3 id="einstufung-3">Einstufung</h3>
+
+<p><strong>Minor.</strong> Keines der Major-Kriterien greift: kein Token entfernt, keines umbenannt, kein
+Pfad und kein Front-Matter-Feld geändert. Es ändern sich <strong>Werte</strong> – sichtbar, aber ohne
+dass ein Projekt etwas umstellen müsste. Dieselbe Einstufung wie 2.6.0, die ebenfalls das
+Ergebnis bestehender Seiten sichtbar veränderte.</p>
+
+<p><strong>Was Projekte prüfen sollten, auch wenn nichts zu tun ist:</strong></p>
+
+<ul>
+  <li>Wer <code>--avd-academy-color-accent</code> überschreibt, bekommt die passende Schriftfarbe jetzt
+<strong>von allein</strong> und kann ein eigenes <code>--avd-academy-color-accent-contrast</code> entfernen.
+Wer es gesetzt lässt, überstimmt die Ableitung weiterhin – das Gate steht in <code>:root</code>,
+eine projekteigene Regel gleicher Spezifität später im Kaskadenlauf gewinnt.</li>
+  <li>Wer eigene Flächen aus <code>--avd-academy-fill-*-bg</code> baut, sieht sie im Dark-Theme jetzt
+<strong>zum ersten Mal</strong> – vorher waren sie dort unbrauchbar.</li>
+  <li>Sekundärtext ist theme-weit einen Hauch dunkler.</li>
+</ul>
 
 <hr />
 

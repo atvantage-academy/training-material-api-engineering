@@ -15,6 +15,366 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.10.0
+
+Drei Befunde aus einer Rückmeldung (Register A-004), gemessen an einem gebauten
+Trainer-Bundle über CDP – 13 400 Messungen je Schema, 1 222 eindeutige
+Vordergrund/Flächen-Paare. Alle drei hier gegengerechnet und bestätigt. Dazu die
+Antwort auf eine Frage, die über die Befunde hinausging und die wichtigste
+Änderung dieser Fassung ist.
+
+### Vordergrundfassungen: `*-ink`
+
+Eine Farbe der Palette ist als **Fläche** gedacht. Als **Schrift** trägt sie nicht:
+`--avd-academy-color-danger` ergibt auf der Seitenfläche 4,39:1 (Light) bzw. 3,81:1
+(Dark), auf `-bg-subtle` 3,75:1 bzw. 3,29:1. Das Theme selbst benutzt Danger
+ausschließlich als **Rahmen** (`.avd-academy-callout--danger`,
+`.avd-academy-sim-panel.is-error`) – dort ist es richtig, und **deshalb** ist es
+nie aufgefallen. Sobald ein Repo eine Fehlermeldung *schreibt* statt sie zu
+umranden, gab es kein Token, das trägt.
+
+Neu, nach **einer** Regel abgeleitet – 45 % Farbe im Fließtext:
+
+`--avd-academy-color-danger-ink`, `--avd-academy-color-accent-ink`,
+`--avd-academy-tone-1-ink` … `-4-ink`, `--avd-academy-tone-alert-ink`
+
+```css
+--avd-academy-color-danger-ink:
+  color-mix(in srgb, var(--avd-academy-color-danger) 45%, var(--avd-academy-color-ink));
+```
+
+Weil `--avd-academy-color-ink` mit dem Farbschema kippt, trägt derselbe Ausdruck in
+beiden Schemata – die Tokens stehen deshalb **nur einmal** in `:root` und nicht in
+den Dark-Blöcken.
+
+| | Light | auf `bg` | Dark | auf `bg` |
+| --- | --- | --- | --- | --- |
+| `danger-ink` | `#882D2E` | 8,53:1 | `#EB8E8E` | 7,00:1 |
+| `accent-ink` | `#8F4823` | 6,73:1 | `#F2A883` | 8,52:1 |
+| `tone-3-ink` | `#776B34` | 5,33:1 | `#E4DCBB` | 12,14:1 |
+
+**Zugesagt** ist AA auf `--avd-academy-color-bg` und `--avd-academy-color-bg-subtle`
+in beiden Schemata; Engpass über alle sieben ist **4,56:1** (Ton 3, Gold, Light).
+**Nicht zugesagt** auf den Füllflächen – dort trägt Gold nur 4,17:1; Text auf einer
+Füllfläche nimmt `ink` oder `ink-muted`.
+
+**Warum Tokens und nicht nur ein Abschnitt in der Doku.** Im Inline-SVG steht
+`fill="var(…)"` – dort lässt sich nichts zusammenmischen, man kann nur auf ein Token
+zeigen. Genau dort fielen die gemeldeten Stellen durch, während dieselben Projekte es
+in ihrem CSS selbst lösen konnten: In einem Repo ist die Konstruktion an vier Stellen
+unabhängig voneinander entstanden. Das war das ausschlaggebende Argument.
+
+Die getönten Tafeln (2.9.0) mischen weiterhin mit 35 %. Kein Widerspruch, sondern ein
+anderer Fall: Dort ist die Fläche mit **derselben** Farbe getönt, Schrift und Grund
+wandern miteinander.
+
+### Füllflächen im Dark-Theme: 26 % → 18 %
+
+Die Ableitung aus 2.7.0 war gegen `--avd-academy-color-ink` gerechnet – und nur
+dagegen. Sekundärtext auf derselben Fläche fiel bei drei von vier Füllungen durch:
+
+| Fläche, Dark | `ink` | `ink-muted` vorher | `ink-muted` nachher |
+| --- | --- | --- | --- |
+| `fill-1-bg` | 8,62 → 10,10:1 | 4,53:1 | **5,30:1** |
+| `fill-2-bg` | 8,44 → 10,05:1 | 4,43:1 | **5,28:1** |
+| `fill-3-bg` | 7,58 → 9,36:1 | **3,98:1** | **4,91:1** |
+| `fill-4-bg` | 8,21 → 9,82:1 | 4,31:1 | **5,16:1** |
+
+Im Light-Theme trug dasselbe Paar immer (4,99–5,39:1) – es war kein Farbfehler,
+sondern derselbe Fehlertyp wie in 2.7.0: ein Token, gegen **einen** Untergrund
+gerechnet und vor **einem anderen** eingesetzt.
+
+**Der Preis:** Die Flächen heben sich schwächer von der Seite ab (1,40–1,51:1 statt
+1,64–1,87:1). Vertretbar, weil die Kategorie auch vom Strich `--avd-academy-fill-N`
+getragen wird. **Der Light-Block bleibt unverändert.**
+
+Bemerkenswert am Zustandekommen: Diese Flächen waren vor 2.7.0 im Dark-Theme
+unbrauchbar. Sie wurden erst benutzt, *nachdem* 2.7.0 sie reparierte – und dabei fiel
+der nächste Fall auf.
+
+### `metanav-text` stand unter AA – und das war hier falsch eingestuft
+
+`--avd-academy-metanav-text` hing an `--avd-gray-metatext` (`#707173`). Auf der
+Metanav-Fläche (`#F4F4F4`) sind das **4,44:1**, für Kleintext bei 14 px unter AA – auf
+**jeder** Seite des Themes.
+
+Die Zahl steht seit 2.7.0 im CHANGELOG dieses Pakets, dort mit dem Satz, das Token
+bleibe an `gray-metatext`, „dort ist es richtig“. Sie war gemessen und die Einstufung
+schlicht falsch. Das Token hängt jetzt an `--avd-gray-footer`: **5,81:1**. Der
+Dark-Wert war nie betroffen (6,88:1) und bleibt.
+
+Anders als die beiden anderen Befunde kann ein Projekt diesen weder auslösen noch
+vermeiden.
+
+### Einstufung
+
+**Minor.** Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; die neuen
+`-ink`-Tokens sind rein ergänzend, die geänderten Werte sind sichtbar, verlangen aber
+von keinem Projekt eine Umstellung.
+
+**Für Projekte:**
+
+- Wer eine Fehlermeldung, einen Akzent oder einen Ton als **Schrift** setzt – im CSS
+  oder im Inline-SVG –, nimmt ab jetzt die `-ink`-Fassung.
+- Wer die Mischung selbst nachgebaut hat, kann sie durch das Token ersetzen.
+- Sekundärtext auf einer Füllfläche trägt im Dark-Theme jetzt; die Flächen sind dort
+  etwas dunkler.
+- Die Meta-Navigation ist einen Hauch dunkler.
+
+---
+
+## 2.9.0
+
+### Getönte Tafeln: die Überschrift stand im vollen Ton auf ihrer eigenen Tönung
+
+Gefunden von einem Prototyp, der jede gebaute Seite in beiden Farbschemata rendert und
+jedes Vordergrund/Flächen-Paar nachrechnet – nicht von Hand. **Weder gemeldet noch in drei
+Runden Handarbeit aufgefallen.**
+
+Eine Tafel mit Ton (`.avd-academy-sim-panel--ton-1/-3/-4/-alert`) färbt ihre Fläche mit 8 %
+des Tons und ihre Überschrift mit dem **vollen** Ton. Im Dark-Theme geht das auf, weil die
+Töne dort aufgehellt werden. Im Light-Theme stand der rohe Ton auf seiner eigenen blassen
+Tönung:
+
+| Tafel, Light | Schrift auf Fläche | vorher | nachher |
+| ------------ | ------------------ | ------ | ------- |
+| Ton 1 · Slate | `#303E4F` auf `#DEDFE0` | 8,16:1 | 8,21:1 |
+| Ton 4 · Violett | `#7A6FB3` auf `#E4E3E8` | 3,46:1 | **6,27:1** |
+| Ton alert · Rot | `#EE1919` auf `#EDDCDC` | 3,31:1 | **7,08:1** |
+| Ton 3 · Gold | `#C9A227` auf `#EAE7DD` | **1,96:1** | **5,06:1** |
+
+**Warum es niemandem auffiel:** Dieselbe Regel besteht mit Ton 1 bei 8,16:1 und fällt mit
+Ton 3 bei 1,96:1 durch. Wer eine Simulation öffnet, sieht die Tafel, die gerade da ist – und
+die ist mit zwei von vier Tönen in Ordnung. Die Rückmeldung, die 2.7.0 ausgelöst hat, nannte
+`sim-panel__title` sogar ausdrücklich (dort 4,17:1 in der **ungetönten** Tafel); der
+schlimmere Fall stand daneben.
+
+**Behoben:** Die Schriftfassung des Tons wird zum Fließtext hin gemischt –
+`color-mix(in srgb, var(--avd-academy-sim-ton) 35%, var(--avd-academy-color-ink))`. Weil
+`--avd-academy-color-ink` mit dem Farbschema kippt, trägt **derselbe Ausdruck in beiden
+Schemata**: im Light-Theme dunkelt er den Ton ab, im Dark-Theme hellt er ihn weiter auf.
+Gemessen über alle vier Töne: 5,06–8,21:1 hell, 8,27–9,15:1 dunkel.
+
+**Der Rahmen behält den vollen Ton.** Die Wiedererkennung einer Tafel über Szenarien hinweg
+hängt an ihm, nicht an der Überschrift – die Zuordnung bleibt also sichtbar.
+
+**Was sich sichtbar ändert:** Die Überschrift einer getönten Tafel ist im Light-Theme
+gedämpfter als bisher. Das ist eine sichtbare Änderung am Ergebnis bestehender Simulationen –
+deshalb **Minor**, nicht Patch. Ungetönte Tafeln bleiben unverändert.
+
+### Einstufung
+
+**Minor.** Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; es ändert sich ein
+Farbwert mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0 und
+2.7.0.
+
+<!-- Die zugehörige Korrektur an der Simulations-VORLAGE (acht fest weiße Flächen) steht
+     nicht hier: templates/ liegt nicht im npm-Paket. Sie ist in plugin/CHANGELOG.md
+     unter 2.5.3 beschrieben. -->
+
+---
+
+## 2.8.0
+
+### `accent-soft` folgt jetzt dem Akzent – und eine Regression aus 2.7.0
+
+Nachtrag zu 2.7.0. Dort wurde `--avd-academy-color-accent-soft` nur im **Dark**-Block
+an den Akzent gehängt; im Light-Block hing sie weiter an `--avd-orange`. Ein Projekt mit
+eigenem Akzent behielt damit im Light-Theme eine **orange getönte** Fläche zu einer Farbe,
+die gar nicht mehr orange ist.
+
+**Behoben:** Die Mischung nimmt jetzt in beiden Schemata `--avd-academy-color-accent` als
+Ausgangsfarbe und mischt in `--avd-academy-color-bg` statt in festes `#fff`. **Im
+Auslieferungszustand ändert das nichts** – dort *ist* der Akzent das ATVANTAGE-Orange und
+die Seitenfläche `#FFFFFF`, das Ergebnis bleibt `#FFEAE1`.
+
+Die **kategoriale Füllpalette** bleibt bewusst unangetastet: `--avd-academy-fill-2-bg` hängt
+weiterhin an `--avd-orange`. Füllung 2 *ist* per Definition das ATVANTAGE-Orange (siehe
+`docs/theme/academy.md`, „Diagramm-Füllpalette“) – sie ist eine Markenfarbe der Palette,
+nicht der Akzent des Projekts. Das ist derselbe Ausdruck, aber nicht dieselbe Bedeutung.
+
+#### Regression aus 2.7.0: `.bubble.mono` in der Simulations-Vorlage
+
+Beim Nachziehen aufgefallen und hier mit behoben. `--avd-academy-color-accent-soft` ist eine
+**Fläche**. In `templates/simulations/simulation-template.html` wurde sie an **einer** Stelle
+als **Schriftfarbe** benutzt:
+
+```css
+.bubble.mono { background: var(--ci-primary-dark); color: var(--ci-accent-soft); }
+```
+
+Das ging gut, solange die Fläche in beiden Schemata nahezu weiß war. Seit 2.7.0 schaltet sie
+mit – und `--ci-primary-dark` (`--avd-academy-color-primary-dark`, `#1A2627`) schaltet
+**nicht** mit. Im Dark-Theme stand damit dunkle Schrift auf dunkler Blase: **1,21:1**, vorher
+13,41:1.
+
+**Behoben** in der Vorlage, nicht im Token: Die Fläche dieser Blase ist fest dunkel, also muss
+die Schrift es auch sein. Sie wird jetzt **lokal** aus dem Akzent gemischt
+(`color-mix(in srgb, var(--ci-accent) 12%, #fff)`) – dasselbe Aussehen wie bisher
+(`#FFEAE1` beim ATVANTAGE-Orange) und 12,5–14,4:1 auch mit einem eigenen Akzent.
+
+Es war die **einzige** solche Stelle; alle 13 übrigen Verwendungen von `accent-soft` und
+`fill-*-bg` in der Vorlage sind `background`, also korrekt.
+
+<!-- Lehre daraus, ohne eigenen Abschnitt: Ein Token, das zur mitschaltenden Fläche wird,
+     muss gegen jede Stelle geprüft werden, die es als VORDERGRUND benutzt – besonders dort,
+     wo die Fläche darunter NICHT mitschaltet. -->
+
+**Jedes Projekt mit einer Simulation muss die eine Zeile von Hand nachziehen** – ein
+`npm update` behebt es nicht. `templates/` liegt **nicht** im npm-Paket (siehe `files` in
+`theme/package.json`); die Vorlage ist zum **Kopieren** gedacht („`simulation-template.html`
+ins Schulungs-Repo kopieren und sinnvoll benennen“). Jede Simulation da draußen ist also
+eine Kopie. Zu ändern ist in der kopierten Datei:
+
+```css
+/* .bubble.mono – vorher */
+color: var(--ci-accent-soft);
+/* nachher */
+color: color-mix(in srgb, var(--ci-accent) 12%, #fff);
+```
+
+Über das **Plugin** kommt die korrigierte Fassung mit (Asset des Skills
+`simulation-erstellen`, ab Plugin 2.5.2) – aber auch das erneuert nur die Vorlage, nicht
+eine bereits abgeleitete Datei im Schulungs-Repo.
+
+### Einstufung
+
+**Minor.** Kein Token entfernt oder umbenannt; es ändert sich ein Wert, und zwar nur für
+Projekte, die den Akzent überschreiben. Im Auslieferungszustand ist das Ergebnis identisch.
+
+---
+
+## 2.7.0
+
+### Drei Farb-Tokens trugen ihren Untergrund nicht
+
+Gemeldet aus einem Schulungs-Repo, alle drei Befunde im gebauten Bundle mit Chromium
+nachgemessen und hier gegen die Token-Dateien gegengemessen. Gemeinsame Ursache: Ein
+Token wurde gegen **einen** Untergrund entworfen und später vor **einen anderen**
+gestellt – ohne dass irgendetwas dabei rot geworden wäre.
+
+#### Füllflächen ohne Dark-Werte
+
+`--avd-academy-fill-1-bg` bis `-4-bg` und `--avd-academy-color-accent-soft` blieben im
+Dark-Theme auf ihren hellen Pastelltönen stehen, während `--avd-academy-color-ink` auf
+`#e8edee` wechselte. Wer eine Fläche damit füllt und den Text in `currentColor` setzt –
+der naheliegende Weg für ein Inline-SVG –, bekam **1,00–1,08:1**: Schrift, die nicht da
+ist. Im Bericht waren eine Überschrift und drei Beschriftungen einer Präsentation
+betroffen.
+
+Der Dark-Block hellt die **Töne** seit jeher auf und begründet das damit, dass die
+Füllpalette auf helle Flächen gerechnet ist. Für die zugehörigen **Flächen** gilt dasselbe
+Argument – sie waren übersehen worden.
+
+**Behoben:** Beide Dark-Blöcke leiten die Flächen jetzt aus dem bereits aufgehellten
+**Ton** ab, nicht aus der rohen Füllung: `color-mix(… var(--avd-academy-tone-N) 26%,
+var(--avd-academy-color-bg))`. Über die rohe Füllung wäre Ton 1 (Slate) selbst so dunkel,
+dass die Fläche nur 1,10:1 von der Seite abstände und als Kategorie nicht mehr erkennbar
+wäre. Gemessen nach der Änderung: heller Text **7,58–8,62:1**, Fläche gegen Seite
+**1,64–1,87:1**. Die weiche Akzentfläche folgt demselben Muster und hängt im Dark-Theme
+am Akzent, damit ein Projekt mit eigenem Akzent keine orange getönte Fläche behält.
+
+**Der Light-Block bleibt unverändert** – die hellen Werte sind byte-identisch.
+
+*Bekannte Grenze:* Ton 1 (Slate) und Ton 4 (Violett) bleiben schwach gegeneinander
+unterscheidbar (ΔE ≈ 5). Das sind sie im Light-Theme heute schon (ΔE ≈ 6); die Ableitung
+verschlechtert nichts, behebt es aber auch nicht.
+
+#### Text auf Akzentfläche stand fest auf Weiß
+
+`--avd-academy-color-accent-contrast` ist das Token für Schrift **auf** der Akzentfarbe
+(Abspiel-Knopf und Tab-Nummer der Simulation, Intro-Nummer, Hover-Zustand der Knöpfe).
+Es stand fest auf `--avd-white`.
+
+**Das war schon im Auslieferungszustand unter AA, und schon im Light-Theme:** Weiß auf
+ATVANTAGE-Orange trägt **3,22:1**; `.avd-academy-sim__btn-text` steht auf
+`--avd-academy-fs-sm` (≈13 px) und ist damit Kleintext, für den WCAG 2.1 AA 4,5:1
+verlangt. Setzt ein Projekt einen eigenen, helleren Akzent, wird daraus 1,9:1. Ein Kippen
+nur im Dark-Block hätte nichts behoben – der Akzent des Themes wechselt zwischen den
+Schemata gar nicht, der Fehler stand in beiden.
+
+**Behoben:** Der Wert wird nicht mehr gesetzt, sondern **aus dem Akzent abgeleitet** –
+heller Akzent ergibt schwarze, dunkler Akzent weiße Schrift:
+
+```css
+@supports (color: oklch(from red l c h)) {
+  :root {
+    --avd-academy-color-accent-contrast:
+      oklch(from var(--avd-academy-color-accent) clamp(0, (l - 0.58) * -1e5, 1) 0 h);
+  }
+}
+```
+
+Die Schwelle 0,58 ist nicht geschätzt: über 60 000 Zufallsfarben geprüft, trennt sie
+schwarz und weiß am zuverlässigsten (≈2 % suboptimal; bei 0,62 waren es 9,5 %).
+
+**Kein neues Token.** Ein zweites „Text auf Akzentfläche“ wäre ein Duplikat – das
+bestehende bedeutet genau das und wird an fünf Stellen so verwendet. Kaputt war der Wert,
+nicht der Name.
+
+**Warum `@supports` und nicht zwei Deklarationen.** Custom Properties nehmen beim Parsen
+jede Zeichenfolge an; die zweite Deklaration gewinnt also immer, und eine Engine ohne
+relative Farbsyntax lässt `color` erst beim Rechnen ungültig werden – das Ergebnis ist
+**Schwarz**, nicht der Rückfall auf Weiß. Auf einem dunklen Akzent wäre das exakt der
+Fehler, der hier behoben wird. Beide Varianten in Chrome gegengeprüft. Mit dem Gate bleibt
+es in alten Engines bei Weiß wie bisher.
+
+**Was sich sichtbar ändert:** Im Auslieferungszustand trägt der Abspiel-Knopf jetzt
+**schwarze statt weißer** Schrift auf Orange (6,52:1 statt 3,22:1). Das ist eine
+Abweichung vom ATVANTAGE-Fundament, das bei `Tag`/orange selbst Weiß auf Orange setzt –
+begründet und eingetragen in [`docs/theme/academy.md`](https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/theme/academy.md).
+
+#### `--avd-academy-color-ink-muted` unter AA auf abgesetzten Flächen
+
+Gemeldet als „4,17:1 auf `#fff`“ – auf `#fff` sind es tatsächlich **4,89:1**, und damit
+besteht das Token AA. Die 4,17:1 stehen auf **`--avd-academy-color-bg-subtle`**
+(`#EDEDED`), also auf Karten und erhöhten Flächen; auf dem Metanav-Grau (`#F4F4F4`) sind
+es 4,44:1. Das Token war nicht theme-weit zu hell, sondern auf den Untergründen zu hell,
+gegen die es nie gerechnet wurde – was auch erklärt, warum es an
+`.avd-academy-sim-panel__title` und `.avd-academy-sim-panel__hint` auffiel.
+
+**Behoben:** `--avd-academy-color-ink-muted` hängt jetzt an `--avd-gray-footer` (`#5F5F5F`)
+statt an `--avd-gray-metatext` (`#707173`). Danach: **6,39:1** auf der Seite, **5,45:1**
+auf abgesetzten Flächen, 5,81:1 auf dem Metanav-Grau.
+
+**Das ist keine Abweichung vom Fundament, sondern der richtige Alias.** ATVANTAGE führt
+`--avd-gray-footer` selbst als „Footer, Schatten, **sekundärer Text**“ und
+`--avd-gray-metatext` als „Meta-Navigation, Affiliation-Leiste“. `ink-muted` hing am Token
+der Meta-Navigation. `--avd-academy-metanav-text` bleibt unverändert an
+`--avd-gray-metatext` – dort ist es richtig.
+
+Der Dark-Wert (`#9fb0b3`) war nie betroffen (6,42–7,43:1) und bleibt.
+
+#### Markup Contract: fünf nachgetragene Namen
+
+`bin/markup-contract.sh` meldete beim Nachziehen fünf „neue“ öffentliche Namen:
+`--avd-academy-fill-1-bg` bis `-4-bg` und `avd-academy-sim__btn-text`. Sie sind **nicht
+neu** – die vier Tokens stehen seit jeher in der Doku und werden von
+`templates/simulations/simulation-template.html` benutzt. Sie fehlten im Artefakt, weil
+das Skript **eine Variable je Zeile** liest und `--avd-academy-fill-N` und
+`--avd-academy-fill-N-bg` gepaart auf einer Zeile standen. Durch die eigenen Zeilen im
+Dark-Block werden sie jetzt gefunden. Das Artefakt ist nachgezogen; damit sind diese
+Namen ab sofort auch gegen stilles Wegfallen geschützt.
+
+### Einstufung
+
+**Minor.** Keines der Major-Kriterien greift: kein Token entfernt, keines umbenannt, kein
+Pfad und kein Front-Matter-Feld geändert. Es ändern sich **Werte** – sichtbar, aber ohne
+dass ein Projekt etwas umstellen müsste. Dieselbe Einstufung wie 2.6.0, die ebenfalls das
+Ergebnis bestehender Seiten sichtbar veränderte.
+
+**Was Projekte prüfen sollten, auch wenn nichts zu tun ist:**
+
+- Wer `--avd-academy-color-accent` überschreibt, bekommt die passende Schriftfarbe jetzt
+  **von allein** und kann ein eigenes `--avd-academy-color-accent-contrast` entfernen.
+  Wer es gesetzt lässt, überstimmt die Ableitung weiterhin – das Gate steht in `:root`,
+  eine projekteigene Regel gleicher Spezifität später im Kaskadenlauf gewinnt.
+- Wer eigene Flächen aus `--avd-academy-fill-*-bg` baut, sieht sie im Dark-Theme jetzt
+  **zum ersten Mal** – vorher waren sie dort unbrauchbar.
+- Sekundärtext ist theme-weit einen Hauch dunkler.
+
+---
+
 ## 2.6.0
 
 ### `title: ""` ließ die Überschrift ganz verschwinden

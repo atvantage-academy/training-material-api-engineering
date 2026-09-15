@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Methoden-Matrix · ATVANTAGE Academy</title><meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789382773">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789382773" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789382773" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789382773">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789382773">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789382773"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -103,6 +103,13 @@
 <p>Vier Ressourcenarten, fünf Methoden, zwanzig Fragen. <strong>Rate zuerst selbst</strong>, dann
 deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begründung.</p>
 
+<p>Die vier Spalten entstehen aus <strong>zwei</strong> Unterscheidungen, und beide tragen unabhängig
+voneinander: Eine <strong>Listenressource</strong> hält beliebig viele gleichartige Einträge, eine
+<strong>Einzelressource</strong> genau einen. Davon unabhängig ist eine <strong>Hauptressource</strong> für sich
+adressierbar, während eine <strong>Unterressource</strong> unter einer anderen hängt und ohne sie
+nicht existiert. Achte beim Aufdecken darauf, welche der beiden Unterscheidungen die
+Zelle entscheidet – es ist öfter die erste, als man erwartet.</p>
+
 <div class="mm">
 
 <div class="mm__bar">
@@ -117,10 +124,10 @@ deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begrü
   <thead>
     <tr>
       <th scope="col"><span class="mm__corner">Methode ↓ · Ressource →</span></th>
-      <th scope="col"><code>/products</code><small>Liste</small></th>
-      <th scope="col"><code>/products/12345</code><small>Einzelnes Ding</small></th>
-      <th scope="col"><code>…/12345/images</code><small>Unterliste</small></th>
-      <th scope="col"><code>…/12345/preview</code><small>Abgeleitetes Ding</small></th>
+      <th scope="col"><code>/products</code><small>Listenressource · Hauptressource</small></th>
+      <th scope="col"><code>/products/12345</code><small>Einzelressource · Hauptressource</small></th>
+      <th scope="col"><code>…/12345/images</code><small>Listenressource · Unterressource</small></th>
+      <th scope="col"><code>…/12345/preview</code><small>Einzelressource · Unterressource</small></th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -131,6 +138,45 @@ deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begrü
   <p class="mm__hint">Wähle eine Zelle – die Begründung erscheint hier.</p>
 </div>
 
+<h2 class="mm__h2">Und wie leert man dann eine Liste?</h2>
+
+<p class="mm__foot">DELETE ist dafür die falsche Methode – die Aufgabe bleibt aber
+bestehen. Drei Entwürfe, die alle vorkommen. <strong>Keiner ist umsonst zu haben:</strong>
+Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
+
+<div class="mm__scroll">
+<table class="mm__props">
+  <thead>
+    <tr><th scope="col">Entwurf</th><th scope="col">Die Idee</th><th scope="col">Dafür spricht</th><th scope="col">Das kostet es</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"><code>PUT /products</code></th>
+      <td>Die Liste vollständig ersetzen – durch eine leere.</td>
+      <td>Keine neue Adresse, keine neue Methode, nichts zu dokumentieren. PUT ist idempotent: zweimal gesendet, derselbe Zustand.</td>
+      <td>Wer leeren darf, darf damit <em>jede beliebige</em> Liste setzen – viel mehr Recht, als für „leeren“ nötig wäre. Und ein falscher Body ersetzt den Katalog, statt ihn zu leeren.</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>POST /products/actions/empty</code></th>
+      <td>Das Leeren selbst als Ressource adressieren – eine <strong>Aktionsressource</strong>. Kein Body nötig.</td>
+      <td>Die Absicht steht in der Adresse. Sie lässt sich einzeln mit Rechten versehen, protokollieren und dokumentieren – und man trifft sie nicht aus Versehen.</td>
+      <td>Ein Verb in der URL, also bewusst außerhalb des CRUD-Rasters. Wer das einmal zulässt, muss die Grenze danach selbst ziehen: Welche Aktion bekommt eine Adresse, welche nicht?</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>PATCH /products</code></th>
+      <td>Der Liste eine <em>Anweisung</em> schicken: „leeren“. Die Liste bleibt, ihr Inhalt ändert sich.</td>
+      <td>Trifft die Bedeutung am genauesten – PATCH ändert etwas an der Ressource, ohne sie zu ersetzen. Der Body sagt genau das eine, was geschehen soll; mehr Recht wird nicht vergeben.</td>
+      <td>Es braucht ein vereinbartes Änderungsformat, und das muss dokumentiert sein – sonst rät der Aufrufer. PATCH ist außerdem nicht automatisch idempotent; hier ist es das, aber das steht im Entwurf, nicht in der Methode.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p class="mm__foot"><strong>Die Probe für alle drei:</strong> Was antwortet
+<code>GET /products</code> danach? <code>200 OK</code> mit <code>[]</code>. Die Liste ist
+leer, aber sie ist da. Käme <code>404</code>, hättest Du sie wirklich gelöscht – und das
+war nicht die Aufgabe.</p>
+
 <h2 class="mm__h2">Die Methoden für sich genommen</h2>
 
 <div class="mm__scroll">
@@ -140,9 +186,9 @@ deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begrü
   </thead>
   <tbody>
     <tr><th scope="row">GET</th><td>Read</td><td class="mm__yes">ja</td><td class="mm__yes">ja</td><td class="mm__no">nein</td><td class="mm__yes">ja</td></tr>
-    <tr><th scope="row">POST</th><td>Create</td><td class="mm__no">nein</td><td class="mm__no">nein</td><td class="mm__yes">ja</td><td class="mm__maybe">meist</td></tr>
-    <tr><th scope="row">PUT</th><td>Update / Create</td><td class="mm__no">nein</td><td class="mm__yes">ja</td><td class="mm__yes">ja</td><td class="mm__maybe">optional</td></tr>
-    <tr><th scope="row">PATCH</th><td>Update</td><td class="mm__no">nein</td><td class="mm__maybe">nicht zwingend</td><td class="mm__yes">ja</td><td class="mm__maybe">optional</td></tr>
+    <tr><th scope="row">POST</th><td>Create</td><td class="mm__no">nein</td><td class="mm__maybe">nicht zwingend</td><td class="mm__maybe">optional</td><td class="mm__maybe">meist</td></tr>
+    <tr><th scope="row">PUT</th><td>Update / Create</td><td class="mm__no">nein</td><td class="mm__yes">ja</td><td class="mm__yes">Pflicht</td><td class="mm__maybe">optional</td></tr>
+    <tr><th scope="row">PATCH</th><td>Update</td><td class="mm__no">nein</td><td class="mm__maybe">nicht zwingend</td><td class="mm__maybe">optional</td><td class="mm__maybe">optional</td></tr>
     <tr><th scope="row">DELETE</th><td>Delete</td><td class="mm__no">nein</td><td class="mm__yes">ja</td><td class="mm__no">nein</td><td class="mm__maybe">selten</td></tr>
   </tbody>
 </table>
@@ -152,6 +198,23 @@ deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begrü
 beliebig oft und ungefragt tun (Caches und Suchmaschinen verlassen sich darauf).
 <strong>Idempotent</strong> heißt: mehrfach ausgeführt ist das Ergebnis dasselbe wie
 einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nicht.</p>
+
+<p class="mm__foot"><strong>„Nicht zwingend“ ist keine Absage.</strong> Bei GET, PUT und
+DELETE <em>garantiert</em> die Methode die Idempotenz – der Aufrufer darf sich darauf
+verlassen, ohne nachzufragen. Bei POST und PATCH tut sie es nicht: Ob zweimal Senden
+zweimal wirkt, entscheidet allein der Entwurf. Die
+<a href="https://opensource.zalando.com/restful-api-guidelines/">Zalando RESTful API
+Guidelines</a> empfehlen ausdrücklich, POST und PATCH <strong>trotzdem idempotent zu
+entwerfen</strong> – über einen fachlichen Zweitschlüssel oder einen vom Aufrufer
+mitgeschickten Idempotenzschlüssel. Der Preis: Es steht dann nicht mehr in der Methode,
+sondern nur in der Dokumentation. Wer sie nicht liest, weiß es nicht.</p>
+
+<p class="mm__foot"><strong>Zum Body in der Anfrage.</strong> Bei PUT ist er
+<strong>Pflicht</strong> – ohne Inhalt gibt es nichts, wodurch ersetzt werden könnte. Bei
+POST und PATCH ist er <em>optional</em>: Eine Aktionsressource wie
+<code>POST /products/actions/empty</code> braucht keinen, weil die Adresse schon alles
+sagt. GET und DELETE tragen keinen; was mitgeschickt wird, darf der Server ignorieren –
+und tut es in der Praxis auch.</p>
 
 </div>
 
@@ -191,9 +254,9 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
 .mm__mark { display: block; font-size: 1.35rem; line-height: 1.1; font-weight: var(--avd-academy-fw-bold, 700); }
 .mm__word { display: block; font-size: .72rem; color: var(--avd-academy-color-ink-muted); margin-top: .15rem; }
 .mm__cell:not(.is-open) .mm__mark { color: var(--avd-academy-color-ink-muted); font-weight: var(--avd-academy-fw-normal, 400); }
-.mm__cell.is-open.t-ok .mm__mark { color: var(--avd-academy-color-success); }
-.mm__cell.is-open.t-warn .mm__mark { color: var(--avd-academy-color-warning); }
-.mm__cell.is-open.t-no .mm__mark { color: var(--avd-academy-color-danger); }
+.mm__cell.is-open.t-ok .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
+.mm__cell.is-open.t-warn .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-warning) 72%, var(--avd-academy-color-ink)); }
+.mm__cell.is-open.t-no .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
 .mm__cell.is-open.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 8%, transparent); }
 .mm__cell.is-open.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 10%, transparent); }
 .mm__cell.is-open.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 8%, transparent); }
@@ -210,18 +273,26 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
 .mm__detail p:last-child { margin-bottom: 0; }
 .mm__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
 .mm__verdict { display: inline-block; font-weight: var(--avd-academy-fw-bold, 700); padding: .1em .6em; border-radius: var(--avd-academy-radius-sm, 4px); margin-bottom: .5rem; }
-.mm__verdict.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 18%, transparent); color: var(--avd-academy-color-success); }
+.mm__verdict.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 18%, transparent); color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
 .mm__verdict.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 20%, transparent); color: var(--avd-academy-color-warning); }
-.mm__verdict.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 18%, transparent); color: var(--avd-academy-color-danger); }
+.mm__verdict.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 18%, transparent); color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
 .mm__ex { font-family: var(--avd-academy-font-mono, monospace); font-size: .88em; background: var(--avd-academy-code-bg, rgba(127,127,127,.12)); padding: .5rem .7rem; border-radius: var(--avd-academy-radius-sm, 4px); display: block; white-space: pre-wrap; }
 
-.mm__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--avd-academy-space-12`). */
+.mm h2.mm__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
 .mm__props th, .mm__props td { border: 1px solid var(--avd-academy-color-border); padding: .5rem .8rem; text-align: left; }
 .mm__props thead th { background: var(--avd-academy-color-bg-subtle); }
 .mm__props tbody th { font-family: var(--avd-academy-font-mono, monospace); }
-.mm__yes { color: var(--avd-academy-color-success); }
-.mm__no { color: var(--avd-academy-color-danger); }
-.mm__maybe { color: var(--avd-academy-color-warning); }
+.mm__yes { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
+.mm__no { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
+.mm__maybe { color: color-mix(in srgb, var(--avd-academy-color-warning) 48%, var(--avd-academy-color-ink)); }
 .mm__foot { color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); margin-top: var(--avd-academy-space-3, .75rem); }
 
 @media (prefers-reduced-motion: reduce) { .mm * { transition: none !important; } }
@@ -232,10 +303,10 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
   "use strict";
 
   var SPALTEN = [
-    { id: "liste",     url: "/products",                 art: "Listenressource" },
-    { id: "einzeln",   url: "/products/12345",           art: "Einzelressource" },
-    { id: "unterliste",url: "/products/12345/images",    art: "Sub-Listenressource" },
-    { id: "abgeleitet",url: "/products/12345/preview",   art: "Sub-Einzelressource" }
+    { id: "liste",     url: "/products",                 art: "Listenressource · Hauptressource" },
+    { id: "einzeln",   url: "/products/12345",           art: "Einzelressource · Hauptressource" },
+    { id: "unterliste",url: "/products/12345/images",    art: "Listenressource · Unterressource" },
+    { id: "abgeleitet",url: "/products/12345/preview",   art: "Einzelressource · Unterressource" }
   ];
 
   // ton: ok = tragfähig, warn = geht, will aber begründet sein, no = ergibt keinen Sinn
@@ -246,7 +317,7 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
       bsp: "GET /products?category=books&page=1\n200 OK" },
     "GET|einzeln":      { mark: "R", wort: "Read", ton: "ok",
       urteil: "Der Normalfall",
-      text: "Ein einzelnes Ding lesen. Gibt es die ID nicht, ist die Antwort <code>404</code> – nicht <code>200</code> mit einem leeren Objekt.",
+      text: "Eine Einzelressource lesen. Gibt es die ID nicht, ist die Antwort <code>404</code> – nicht <code>200</code> mit einem leeren Objekt.",
       bsp: "GET /products/12345\n200 OK\n404 Not Found" },
     "GET|unterliste":   { mark: "R", wort: "Read", ton: "warn",
       urteil: "Ja – aber frag Dich, warum es sie gibt",
@@ -263,7 +334,7 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
       bsp: "POST /products\n{ \"name\": \"Kaffeemühle\" }\n\n201 Created\nLocation: /products/12345" },
     "POST|einzeln":     { mark: "✗", wort: "ohne Bedeutung", ton: "no",
       urteil: "Nicht verboten – aber es gibt nichts zu tun",
-      text: "Was sollte „wende Deine Logik auf das Mitgeschickte an“ bei einem <em>bestimmten</em> Produkt bedeuten? Es gibt nichts, dem man etwas hinzufügen könnte. Antwort: <code>405 Method Not Allowed</code>.<br><br><strong>Die Ausnahme, die Du kennen solltest:</strong> POST auf ein Einzelding ist der übliche Griff für <em>Aktionen</em>, die keine CRUD-Operation sind – <code>POST /orders/77/cancellation</code>. Dann adressiert man aber die Aktion als eigene Subressource, nicht das Ding selbst.",
+      text: "Was sollte „wende Deine Logik auf das Mitgeschickte an“ bei einem <em>bestimmten</em> Produkt bedeuten? Es gibt nichts, dem man etwas hinzufügen könnte. Antwort: <code>405 Method Not Allowed</code>.<br><br><strong>Die Ausnahme, die Du kennen solltest:</strong> POST auf eine Einzelressource ist der übliche Griff für <em>Aktionen</em>, die keine CRUD-Operation sind – <code>POST /orders/77/actions/cancel</code>. Dann adressiert man aber die Aktion als eigene <strong>Aktionsressource</strong>, nicht die Einzelressource selbst.",
       bsp: "POST /products/12345\n405 Method Not Allowed" },
     "POST|unterliste":  { mark: "C", wort: "Create", ton: "ok",
       urteil: "Der Normalfall zum Hinzufügen",
@@ -308,18 +379,18 @@ einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nich
       text: "Ein Bild hat keine Teilfelder, die man einzeln ändern könnte – dann ergibt PATCH keinen Sinn. Ist die Vorschau dagegen ein Objekt mit Einstellungen (Ausschnitt, Größe), ist PATCH der übliche Weg.",
       bsp: "PATCH /products/12345/preview\n{ \"crop\": \"square\" }" },
 
-    "DELETE|liste":     { mark: "✗?", wort: "Vorsicht", ton: "no",
-      urteil: "Die Frage, an der sich die Geister scheiden",
-      text: "<code>DELETE /products</code> hieße: alle Produkte löschen. Technisch sauber definiert, praktisch fast immer ein Betriebsunfall. <strong>Die meisten APIs bieten es nicht an</strong> – <code>405</code>.<br><br>Wer wirklich leeren muss, adressiert das Leeren als eigene Sache (ein Auftrag, den man anlegt) oder verlangt eine Einschränkung (<code>DELETE /products?status=draft</code>). Der Unterschied: Der Aufrufer muss sagen, <em>was</em> weg soll – und kann es nicht aus Versehen tun.",
-      bsp: "DELETE /products\n405 Method Not Allowed" },
+    "DELETE|liste":     { mark: "✗", wort: "geht nicht", ton: "no",
+      urteil: "Löschen und Leeren sind nicht dasselbe",
+      text: "Eine Ressource zu löschen heißt: Sie ist danach <strong>weg</strong> – ein anschließendes <code>GET</code> antwortet <code>404</code>. Genau das lässt sich mit einer Listenressource nicht machen. <code>/products</code> ist die Produktliste des Shops; sie existiert, solange es den Shop gibt – ob Produkte darin stehen oder keine. Nach einem <code>DELETE</code> wäre sie also immer noch da, nur leer. Und eine leere Liste antwortet <code>200</code> mit <code>[]</code>, nicht <code>404</code>.<br><br>Wer hier DELETE verlangt, meint deshalb nicht <em>löschen</em>, sondern <strong>leeren</strong> – und dafür ist DELETE die falsche Methode. Die Aufgabe bleibt damit aber bestehen: <em>Wie leert man eine Liste?</em> Drei Entwürfe stehen unter der Matrix.",
+      bsp: "DELETE /products\n405 Method Not Allowed\n\nGET /products\n200 OK\n[]   ← die Liste gibt es weiterhin" },
     "DELETE|einzeln":   { mark: "D", wort: "Delete", ton: "ok",
       urteil: "Der Normalfall",
-      text: "Löschen, Antwort <code>204</code> ohne Body. DELETE ist <em>idempotent</em>: Beim zweiten Mal ist das Ding immer noch weg – ob man dann <code>204</code> oder <code>404</code> antwortet, ist eine Entwurfsentscheidung. (Zweimal senden darf jedenfalls nicht zwei verschiedene Dinge löschen – genau das ist der Grund, warum <code>DELETE /customers/oldest</code> ein Fehler ist.)",
+      text: "Löschen, Antwort <code>204</code> ohne Body. DELETE ist <em>idempotent</em>: Beim zweiten Mal ist die Ressource immer noch weg – ob man dann <code>204</code> oder <code>404</code> antwortet, ist eine Entwurfsentscheidung. (Zweimal senden darf jedenfalls nicht zwei verschiedene Ressourcen löschen – genau das ist der Grund, warum <code>DELETE /customers/oldest</code> ein Fehler ist.)",
       bsp: "DELETE /products/12345\n204 No Content" },
-    "DELETE|unterliste":{ mark: "D?", wort: "begrenzt", ton: "warn",
-      urteil: "Anders als bei der Hauptliste – hier ist der Schaden begrenzt",
-      text: "„Alle Bilder dieses Produkts entfernen“ ist ein nachvollziehbarer Wunsch: Die Menge gehört einem einzigen Besitzer, ist überschaubar, und ein Versehen trifft ein Produkt statt den ganzen Katalog. <strong>Das ist der Unterschied zur globalen Liste</strong> – und der Grund, warum die Antwort hier „kommt darauf an“ lautet und nicht „nie“.",
-      bsp: "DELETE /products/12345/images\n204 No Content" },
+    "DELETE|unterliste":{ mark: "✗", wort: "geht nicht", ton: "no",
+      urteil: "Unterressource hin oder her – es bleibt eine Liste",
+      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>…/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die drei Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
+      bsp: "DELETE /products/12345/images\n405 Method Not Allowed\n\nGET /products/12345/images\n200 OK\n[]" },
     "DELETE|abgeleitet":{ mark: "D", wort: "Delete", ton: "warn",
       urteil: "Nur, wenn es etwas zu löschen gibt",
       text: "Bei einer rein berechneten Vorschau: nichts zu löschen, <code>405</code>. Bei einer hinterlegten: „nimm meine hochgeladene Vorschau weg und berechne wieder selbst“ – das ist eine saubere Bedeutung für DELETE.",

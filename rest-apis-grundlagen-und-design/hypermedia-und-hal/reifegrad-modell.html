@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Das Reifegrad-Modell von Richardson · ATVANTAGE Academy</title><meta name="description" content="Vier Stufen von „HTTP als Briefkasten“ bis zu Antworten, die sagen, was als Nächstes möglich ist – mit echten Nachrichten je Stufe."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789382773">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789382773" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789382773" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789382773">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789382773">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789382773"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -209,10 +209,15 @@ Absprache zwischen den Teams, mit oder ohne Hypermedia.</p>
   display: grid; place-items: center; font-weight: var(--avd-academy-fw-bold, 700);
   background: var(--avd-academy-color-border); color: var(--avd-academy-color-ink);
 }
-.rm__stufe--0 .rm__nr { background: var(--avd-academy-tone-alert); color: var(--avd-academy-color-accent-contrast); }
-.rm__stufe--1 .rm__nr { background: var(--avd-academy-tone-1); color: var(--avd-academy-color-accent-contrast); }
-.rm__stufe--2 .rm__nr { background: var(--avd-academy-tone-3); color: var(--avd-academy-color-accent-contrast); }
-.rm__stufe--3 .rm__nr { background: var(--avd-academy-tone-4); color: var(--avd-academy-color-accent-contrast); }
+/* Die Toene sind im Light Mode MITTELDUNKEL, im Dark Mode HELL. Eine feste
+   Schriftfarbe traegt deshalb nie beide Schemata. Statt die Flaeche voll zu
+   faerben, wird der Ton in den Seitenhintergrund gemischt - die Ziffer bleibt
+   `color-ink` und ist immer lesbar, der Ton unterscheidet die Stufen weiterhin. */
+.rm__stufe .rm__nr { color: var(--avd-academy-color-ink); }
+.rm__stufe--0 .rm__nr { background: color-mix(in srgb, var(--avd-academy-tone-alert) 55%, var(--avd-academy-color-bg)); }
+.rm__stufe--1 .rm__nr { background: color-mix(in srgb, var(--avd-academy-tone-1) 55%, var(--avd-academy-color-bg)); }
+.rm__stufe--2 .rm__nr { background: color-mix(in srgb, var(--avd-academy-tone-3) 55%, var(--avd-academy-color-bg)); }
+.rm__stufe--3 .rm__nr { background: color-mix(in srgb, var(--avd-academy-tone-4) 55%, var(--avd-academy-color-bg)); }
 .rm__txt { display: flex; flex-direction: column; gap: .1rem; }
 .rm__txt small { color: var(--avd-academy-color-ink-muted); }
 
@@ -225,7 +230,15 @@ Absprache zwischen den Teams, mit oder ohne Hypermedia.</p>
 .rm__merke { font-size: var(--avd-academy-fs-sm, .9rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
 .rm__merke strong { color: var(--avd-academy-color-ink); }
 
-.rm__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--avd-academy-space-12`). */
+.rm h2.rm__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
 .rm__gegen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
 .rm__spalte { border: 1px solid var(--avd-academy-color-border); border-left: 4px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); }
 .rm__spalte--kosten { border-left-color: var(--avd-academy-color-warning); }

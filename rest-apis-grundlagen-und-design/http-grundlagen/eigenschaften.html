@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>HTTP: Eigenschaften und Nachrichtenaufbau · ATVANTAGE Academy</title><meta name="description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>HTTP: Eigenschaften und Nachrichtenaufbau</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="http-eigenschaften-und-nachrichtenaufbau">HTTP: Eigenschaften und Nachrichtenaufbau</h1>
+
+<div class="hg">
+
+<div class="hg__start">
+<div class="hg__start__bild">
+<svg viewBox="0 0 420 250" role="img" aria-label="Ein Browserfenster mit Adresszeile; darunter ist der Reiter „Netzwerk“ geöffnet und zeigt eine Liste einzelner HTTP-Nachrichten, eine davon hervorgehoben.">
+  <title>Die Entwicklerwerkzeuge zeigen jede einzelne HTTP-Nachricht</title>
+  <rect x="8" y="8" width="404" height="234" rx="10" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <rect x="8" y="8" width="404" height="30" rx="10" fill="var(--avd-academy-color-bg-subtle)" />
+  <rect x="8" y="28" width="404" height="10" fill="var(--avd-academy-color-bg-subtle)" />
+  <g fill="var(--avd-academy-color-ink-muted)"><circle cx="26" cy="23" r="4" /><circle cx="40" cy="23" r="4" /><circle cx="54" cy="23" r="4" /></g>
+  <rect x="70" y="14" width="330" height="18" rx="9" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" />
+  <text x="80" y="27" font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink-muted)">shop.example.com</text>
+
+  <rect x="8" y="46" width="404" height="52" fill="var(--avd-academy-fill-3-bg)" opacity="0.5" />
+  <text x="210" y="77" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">die Seite</text>
+
+  <line x1="8" y1="106" x2="412" y2="106" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <text x="22" y="124" font-size="12" font-weight="600" fill="var(--avd-academy-color-accent)">Netzwerk</text>
+  <line x1="18" y1="130" x2="86" y2="130" stroke="var(--avd-academy-color-accent)" stroke-width="2" />
+
+  <g font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink)">
+    <rect x="18" y="140" width="384" height="20" rx="4" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="1.5" />
+    <text x="26" y="154">GET  /produkte          200  text/html</text>
+    <text x="26" y="176">GET  /style.css         200  text/css</text>
+    <text x="26" y="196">GET  /logo.svg          200  image/svg</text>
+    <text x="26" y="216">GET  /api/warenkorb     200  application/json</text>
+    <text x="26" y="236">GET  /icon.png          404  –</text>
+  </g>
+</svg>
+</div>
+<div class="hg__start__text">
+      <h3 id="mach-zuerst-die-entwicklerwerkzeuge-auf">Mach zuerst die Entwicklerwerkzeuge auf</h3>
+
+      <p>Alles auf dieser Seite kannst Du dort <strong>in Deinem eigenen Browser</strong> sehen – an
+jeder Website, sofort.</p>
+
+      <ol>
+        <li><code>F12</code> drücken (macOS: <code>⌘ ⌥ I</code>)</li>
+        <li>Reiter <strong>Netzwerk</strong> / <strong>Network</strong></li>
+        <li>Seite <strong>neu laden</strong></li>
+      </ol>
+
+      <p>Jede Zeile ist <strong>eine</strong> Nachricht und ihre Antwort.</p>
+    </div>
+</div>
+
+<h2 class="hg__h2">Drei Eigenschaften, aus denen alles Weitere folgt</h2>
+
+<p class="hg__lead">Klick eine Karte an – darunter steht, was daraus folgt.</p>
+
+<div class="hg__karten" data-hg-karten="">
+
+<div class="hg__karte">
+<svg viewBox="0 0 400 200" role="img" aria-label="Links der Browser, rechts der Server, beide mit lesbaren Textzeilen; dazwischen ein Tunnel mit Schloss, in dem die Zeichen unleserlich sind.">
+  <title>Textbasiert: an beiden Enden lesbar, auf dem Weg verschlüsselt</title>
+  <g stroke-width="2">
+    <rect x="6" y="46" width="104" height="108" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" />
+    <rect x="290" y="46" width="104" height="108" rx="10" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" />
+  </g>
+  <g font-size="9" font-family="monospace" fill="currentColor">
+    <text x="18" y="76">GET /produkte</text><text x="18" y="92">Host: shop…</text><text x="18" y="108">Accept-…</text>
+    <text x="302" y="76">200 OK</text><text x="302" y="92">Content-Ty…</text><text x="302" y="108">&lt;html&gt;…</text>
+  </g>
+  <text x="58" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">lesbar</text>
+  <text x="342" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">lesbar</text>
+
+  <rect x="118" y="62" width="164" height="76" rx="38" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-success)" stroke-width="2" />
+  <text x="200" y="88" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-success)">🔒 TLS</text>
+  <text x="200" y="112" text-anchor="middle" font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink-muted)">x9#kQ2·mZ7</text>
+  <text x="200" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">verschlüsselt</text>
+  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="2">
+    <line x1="110" y1="100" x2="116" y2="100" /><line x1="284" y1="100" x2="290" y2="100" />
+  </g>
+</svg>
+<h3>Textbasiert</h3>
+<p class="hg__karte__kurz">Eine HTTP-Nachricht ist lesbarer Text – deshalb kannst Du sie mitlesen.</p>
+<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<div class="hg__karte__detail">
+        <p>Kein Binärformat, kein Werkzeugzwang: Du kannst eine Nachricht in ein Ticket
+kopieren und von Hand nachbauen. Fehlersuche ist hier billig.</p>
+
+        <p><strong>Und HTTPS?</strong> Dasselbe HTTP, nur durch <strong>TLS</strong> verpackt. Verschlüsselt wird der
+<em>Transportweg</em> – an beiden Enden liegt wieder Klartext. Genau deshalb zeigen die
+Entwicklerwerkzeuge die Nachricht lesbar an: Sie sitzen an einem der Enden, nicht
+auf der Leitung.</p>
+      </div>
+</div>
+
+<div class="hg__karte">
+<svg viewBox="0 0 400 252" role="img" aria-label="Browser und Server, dazwischen zwei Anfrage-Antwort-Paare. Auf der Leitung zwischen den Paaren steht ein durchgestrichenes Gedächtnis; der Server selbst behält seine Datenquelle.">
+  <title>Zustandslos: die Leitung merkt sich nichts – der Server darf es</title>
+  <defs>
+    <marker id="pf-zs-h" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--avd-academy-color-accent)" /></marker>
+    <marker id="pf-zs-r" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--avd-academy-color-ink-muted)" /></marker>
+  </defs>
+
+  <rect x="4" y="18" width="74" height="198" rx="9" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <text x="41" y="120" text-anchor="middle" font-size="11" fill="currentColor">Browser</text>
+
+  <rect x="316" y="18" width="80" height="198" rx="9" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <text x="356" y="46" text-anchor="middle" font-size="11" fill="currentColor">Server</text>
+  <g fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="1.5">
+    <path d="M336 96 v26 a20 7 0 0 0 40 0 v-26 z" /><ellipse cx="356" cy="96" rx="20" ry="7" />
+  </g>
+  <text x="356" y="152" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">darf sich</text>
+  <text x="356" y="164" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">etwas merken</text>
+
+  <text x="196" y="24" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor">Anfrage · id=abc123</text>
+  <line x1="82" y1="34" x2="310" y2="34" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)" />
+  <line x1="310" y1="56" x2="82" y2="56" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)" />
+  <text x="196" y="70" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">Antwort</text>
+
+  <g>
+    <rect x="104" y="94" width="186" height="50" rx="8" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-danger)" stroke-width="1.5" stroke-dasharray="5 4" />
+    <text x="197" y="114" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-danger)">Gedächtnis der Leitung</text>
+    <text x="197" y="130" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-danger)">gibt es nicht</text>
+    <line x1="108" y1="140" x2="286" y2="98" stroke="var(--avd-academy-color-danger)" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+
+  <text x="196" y="172" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor">Anfrage · id=abc123</text>
+  <line x1="82" y1="182" x2="310" y2="182" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)" />
+  <line x1="310" y1="204" x2="82" y2="204" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)" />
+  <text x="196" y="218" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">Antwort</text>
+
+  <text x="200" y="244" text-anchor="middle" font-size="11" fill="currentColor">Die Kennung muss <tspan font-weight="600">jedes Mal mitkommen</tspan>.</text>
+</svg>
+<h3>Zustandslos</h3>
+<p class="hg__karte__kurz">Nicht der Server vergisst – die <em>Leitung</em> trägt keine Erinnerung von einem Nachrichtenpaar zum nächsten.</p>
+<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<div class="hg__karte__detail">
+        <p>HTTP verbindet zwei Anfrage-Antwort-Paare <strong>nicht</strong>. Für das Protokoll ist die
+vorherige Nachricht nicht vorhanden – also muss <strong>jede Anfrage aus sich heraus
+verständlich sein</strong> und alles mitbringen, was zu ihrer Bearbeitung nötig ist.</p>
+
+        <p><strong>Der Server darf sich sehr wohl etwas merken</strong> – in einer Datenbank, einem Cache,
+einem Sitzungsspeicher. Er erfährt nur nicht von allein, zu wem eine Anfrage
+gehört: Das muss in der Anfrage stehen.</p>
+
+        <p><strong>Deshalb gibt es Cookies.</strong> Der Server schickt eine Kennung mit, der Browser gibt
+sie bei <em>jeder</em> weiteren Anfrage zurück. So entsteht der Zusammenhang <strong>auf</strong> dem
+Protokoll, nicht in ihm.</p>
+      </div>
+</div>
+
+<div class="hg__karte">
+<svg viewBox="0 0 400 200" role="img" aria-label="Browser und Server, dazwischen ein Pfeil hin und ein Pfeil zurück als Paar; darunter ein durchgestrichener Pfeil vom Server zum Browser.">
+  <title>Request–Response: immer paarweise, nie vom Server aus</title>
+  <defs>
+    <marker id="pf-rr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker>
+    <marker id="pf-rr2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-danger)" /></marker>
+  </defs>
+  <g stroke-width="2">
+    <rect x="6" y="36" width="110" height="56" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" />
+    <rect x="284" y="36" width="110" height="56" rx="10" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" />
+  </g>
+  <text x="61" y="70" text-anchor="middle" font-size="12" fill="currentColor">Browser</text>
+  <text x="339" y="70" text-anchor="middle" font-size="12" fill="currentColor">Server</text>
+  <line x1="120" y1="54" x2="280" y2="54" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-rr)" />
+  <text x="200" y="46" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-accent)">Anfrage</text>
+  <line x1="280" y1="78" x2="120" y2="78" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-rr)" />
+  <text x="200" y="94" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-accent)">Antwort</text>
+  <path d="M126 40 h-8 v52 h8" fill="none" stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" />
+  <text x="200" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor">immer ein Paar</text>
+
+  <line x1="280" y1="154" x2="120" y2="154" stroke="var(--avd-academy-color-danger)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#pf-rr2)" />
+  <line x1="184" y1="168" x2="216" y2="140" stroke="var(--avd-academy-color-danger)" stroke-width="3" stroke-linecap="round" />
+  <text x="200" y="186" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-danger)">nie von sich aus</text>
+</svg>
+<h3>Request – Response</h3>
+<p class="hg__karte__kurz">Genau zwei Arten von Nachrichten, und sie kommen immer paarweise.</p>
+<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<div class="hg__karte__detail">
+        <p>Auf jede Anfrage folgt genau eine Antwort. Der Server spricht <strong>nie von sich aus</strong>.</p>
+
+        <p>Wer das braucht – eine Meldung ohne vorherige Frage –, braucht etwas anderes
+(WebSockets, Server-Sent Events). Für alles in diesem Kurs gilt: erst fragen, dann
+antworten.</p>
+      </div>
+</div>
+
+</div>
+
+<div class="avd-academy-callout avd-academy-callout--warning">
+    <p><strong>Zwei Dinge, die beide „zustandslos“ heißen.</strong> <em>HTTP ist zustandslos</em> heißt: <strong>die
+Leitung</strong> trägt nichts von einem Nachrichtenpaar zum nächsten. Nicht abwählbar – man
+kann nur etwas darüberbauen, wie Cookies es tun. <em>Ein Service ist zustandslos</em> ist
+dagegen eine <strong>Entwurfsentscheidung</strong>: Die Instanz hält nichts im Speicher, damit
+jede Instanz jede Anfrage beantworten kann.
+<strong>Das Protokoll ist es immer. Der Service ist es, wenn man ihn so baut.</strong></p>
+  </div>
+
+<h2 class="hg__h2">Der Aufbau ist in beiden Richtungen derselbe</h2>
+
+<div class="hg__aufbau">
+
+<div class="hg__schema">
+<svg viewBox="0 0 300 372" role="img" aria-label="Ein Briefumschlag: oben die Klappe, darunter darauf geschrieben die Startzeile und die Header. Darunter eine gestrichelte Linie als Leerzeile. Ganz unten ein Zettel – das ist der Body.">
+  <title>Auf dem Umschlag stehen die Header, im Umschlag liegt der Zettel</title>
+
+  <rect x="14" y="14" width="272" height="188" rx="8" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <path d="M14 16 L150 62 L286 16" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
+
+  <rect x="30" y="74" width="240" height="26" rx="5" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <text x="150" y="92" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Startzeile</text>
+
+  <text x="30" y="126" font-size="12" font-weight="600" fill="currentColor">Header</text>
+  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" opacity=".6">
+    <line x1="30" y1="140" x2="256" y2="140" /><line x1="30" y1="156" x2="230" y2="156" /><line x1="30" y1="172" x2="244" y2="172" />
+  </g>
+  <text x="150" y="192" text-anchor="middle" font-size="11" font-style="italic" fill="var(--avd-academy-color-ink-muted)">alles auf den Umschlag geschrieben</text>
+
+  <line x1="14" y1="224" x2="286" y2="224" stroke="var(--avd-academy-color-danger)" stroke-width="2" stroke-dasharray="7 5" />
+  <text x="150" y="218" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-danger)">Leerzeile – hier hört der Umschlag auf</text>
+
+  <g>
+    <path d="M46 240 h180 l22 22 v96 h-202 z" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+    <path d="M226 240 v22 h22" fill="none" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+    <text x="150" y="270" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Body</text>
+    <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" opacity=".6">
+      <line x1="64" y1="288" x2="234" y2="288" /><line x1="64" y1="304" x2="234" y2="304" /><line x1="64" y1="320" x2="190" y2="320" />
+    </g>
+    <text x="150" y="348" text-anchor="middle" font-size="11" font-style="italic" fill="var(--avd-academy-color-ink-muted)">der Zettel, der drinsteckt</text>
+  </g>
+</svg>
+<p class="hg__schema__fuss"><strong>Auf dem Umschlag stehen die Header</strong> –
+Absender, Empfänger, „Vorsicht Glas“. <strong>Der Body ist der Zettel darin.</strong>
+Die Post liest den Umschlag und befördert danach; den Zettel liest sie nicht. Genauso
+arbeiten Proxies, Caches und Gateways: Sie entscheiden anhand der Header und reichen
+den Body unbesehen weiter.</p>
+</div>
+
+<div class="hg__nachrichten">
+
+<p class="hg__lead hg__lead--eng"><strong>Klick einen Bestandteil an</strong> – darunter steht, wozu er da ist.</p>
+
+<div class="hg__msg">
+<p class="hg__msg__kopf">Anfrage <span>Browser → Server</span></p>
+<div class="hg__code" data-hg-msg="anfrage"></div>
+<p class="hg__msg__fuss">oben der Umschlag · unten der Zettel darin</p>
+</div>
+
+<div class="hg__msg">
+<p class="hg__msg__kopf">Antwort <span>Server → Browser</span></p>
+<div class="hg__code" data-hg-msg="antwort"></div>
+<p class="hg__msg__fuss">oben der Umschlag · unten der Zettel darin</p>
+</div>
+
+<div class="hg__detail" data-hg-detail="" aria-live="polite">
+  <p class="hg__hint">Klick einen Bestandteil an.</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="hg__druck"></div>
+
+<h2 class="hg__h2">GET und POST in klassischen Webanwendungen</h2>
+
+<figure class="hg__bild">
+<svg viewBox="0 0 760 290" role="img" aria-label="Links GET: die Suchanfrage steht in der Adresszeile, der Umschlag bleibt leer. Rechts POST: die Adresszeile bleibt schlicht, die Daten stecken im Umschlag.">
+  <title>Bei GET stehen die Daten in der Adresse, bei POST im Body</title>
+  <text x="180" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--avd-academy-color-accent)">GET</text>
+  <text x="580" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--avd-academy-color-accent)">POST</text>
+  <text x="180" y="46" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">Link, Lesezeichen, Suchformular</text>
+  <text x="580" y="46" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">Eingabeformular: bestellen, anmelden</text>
+
+  <rect x="20" y="62" width="320" height="36" rx="18" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <text x="36" y="85" font-size="12" font-family="monospace" fill="currentColor">/suche</text>
+  <rect x="86" y="68" width="96" height="24" rx="5" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="1.5" />
+  <text x="134" y="85" text-anchor="middle" font-size="12" font-family="monospace" fill="currentColor">?q=kaffee</text>
+  <text x="180" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Daten in der Adresse</text>
+
+  <rect x="420" y="62" width="320" height="36" rx="18" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <text x="436" y="85" font-size="12" font-family="monospace" fill="currentColor">/bestellungen</text>
+  <text x="580" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-ink-muted)">Adresse bleibt schlicht</text>
+
+  <g fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2">
+    <rect x="86" y="140" width="188" height="84" rx="8" />
+    <rect x="486" y="140" width="188" height="84" rx="8" />
+  </g>
+  <path d="M86 142 L180 176 L274 142" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
+  <path d="M486 142 L580 176 L674 142" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
+  <rect x="104" y="182" width="152" height="32" rx="4" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1.5" stroke-dasharray="5 4" />
+  <text x="180" y="203" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">kein Zettel drin</text>
+  <rect x="504" y="182" width="152" height="32" rx="4" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <text x="580" y="203" text-anchor="middle" font-size="11" font-family="monospace" fill="currentColor">artikel=…&amp;menge=1</text>
+  <text x="580" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-accent)">Daten im Body</text>
+  <text x="180" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-ink-muted)">Body bleibt leer</text>
+
+  <text x="180" y="274" text-anchor="middle" font-size="13" fill="currentColor">holt etwas · wiederholbar · teilbar</text>
+  <text x="580" y="274" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-danger)">verändert etwas · nicht wiederholbar</text>
+</svg>
+</figure>
+
+<div class="hg__scroll">
+<table class="hg__tab">
+  <thead><tr><th scope="col"></th><th scope="col">GET</th><th scope="col">POST</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Im Verlauf und in Lesezeichen?</th><td class="hg__ja">ja</td><td class="hg__nein">nein</td></tr>
+    <tr><th scope="row">Beliebig wiederholbar?</th><td class="hg__ja">ja</td><td class="hg__nein">nein</td></tr>
+    <tr><th scope="row">Was macht <kbd>F5</kbd>?</th><td>holt dieselbe Seite</td><td class="hg__nein">schickt das Formular erneut</td></tr>
+    <tr><th scope="row">Darf ein Passwort hinein?</th><td class="hg__nein">nein – die Adresse wird protokolliert</td><td class="hg__ja">ja</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="avd-academy-callout avd-academy-callout--warning">
+    <p><strong>Deshalb gibt es den Redirect</strong> (deutsch: Weiterleitung). Wer nach einem <code>POST</code>
+einfach die Seite zurückschickt, macht jedes <kbd>F5</kbd> zur Falle. Also antwortet
+der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; der Browser folgt mit einem
+<code>GET</code>, und ab da ist Neuladen harmlos. Denselben Griff sieht man auf Startseiten:
+<code>/</code> leitet auf <code>/de/start</code> weiter.</p>
+  </div>
+
+<p class="hg__lead">Wie das Schritt für Schritt abläuft, zeigt die
+<a href="/rest-apis-grundlagen-und-design/http-grundlagen/simulation.html">Simulation zu den vier Abläufen</a>.</p>
+
+</div>
+
+<style>
+.hg { margin-block: var(--avd-academy-space-6, 1.5rem); }
+.hg__lead { color: var(--avd-academy-color-ink); }
+.hg__lead--eng { margin-top: 0; }
+
+/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss geht das auf; hier steht davor ein eigenes Raster-<div> ohne
+   Aussenabstand. Ein blosses `.hg__h2` (0-1-0) verliert gegen die Theme-Regel. */
+.hg h2.hg__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
+
+/* Einstieg: Bild und Anleitung nebeneinander */
+.hg__start { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: center;
+  border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle);
+  border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
+@media (max-width: 48rem) { .hg__start { grid-template-columns: 1fr; } }
+.hg__start svg { width: 100%; height: auto; max-width: 420px; }
+.hg__start__text h3 { margin-top: 0; }
+.hg__start__text ol { margin-bottom: .6rem; }
+.hg__start__text p:last-child { margin-bottom: 0; }
+
+/* Die drei Eigenschaften */
+.hg__karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
+.hg__karte { border: 1px solid var(--avd-academy-color-border); border-top: 4px solid var(--avd-academy-color-accent);
+  border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg); }
+.hg__karte svg { width: 100%; height: auto; display: block; margin-bottom: .6rem; color: var(--avd-academy-color-ink); }
+.hg__karte h3 { margin: 0 0 .3rem; font-size: var(--avd-academy-fs-md, 1.05rem); }
+.hg__karte__kurz { margin: 0 0 .8rem; }
+.hg__mehr { font: inherit; font-size: var(--avd-academy-fs-sm, .9rem); font-weight: var(--avd-academy-fw-medium, 500);
+  cursor: pointer; padding: .35em 1em; border-radius: var(--avd-academy-radius-sm, 4px);
+  border: 1px solid var(--avd-academy-color-accent); background: transparent; color: var(--avd-academy-color-accent); }
+.hg__mehr:hover { background: var(--avd-academy-color-accent-soft); }
+.hg__mehr:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
+.hg__mehr::after { content: " ▾"; }
+.hg__mehr[aria-expanded="true"]::after { content: " ▴"; }
+.hg__karte__detail { display: none; margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--avd-academy-color-border); font-size: var(--avd-academy-fs-sm, .92rem); }
+.hg__karte__detail.is-offen { display: block; }
+.hg__karte__detail p:last-child { margin-bottom: 0; }
+
+/* Aufbau: Schema und Beispiel nebeneinander */
+.hg__aufbau { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: start; }
+@media (max-width: 54rem) { .hg__aufbau { grid-template-columns: 1fr; } }
+.hg__schema svg { width: 100%; height: auto; color: var(--avd-academy-color-ink); }
+.hg__schema__fuss { font-size: var(--avd-academy-fs-sm, .88rem); color: var(--avd-academy-color-ink); margin-top: .6rem; }
+.hg__nachrichten { display: grid; gap: var(--avd-academy-space-3, .75rem); }
+.hg__msg { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; }
+.hg__msg__kopf { margin: 0; padding: .45rem .8rem; background: var(--avd-academy-color-bg-subtle); border-bottom: 1px solid var(--avd-academy-color-border); font-weight: var(--avd-academy-fw-bold, 700); font-size: .92rem; }
+.hg__msg__kopf span { font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); font-size: .85em; margin-left: .4rem; }
+.hg__code { font-family: var(--avd-academy-font-mono, monospace); font-size: .78rem; line-height: 1.65; padding: .5rem 0 .6rem; background: color-mix(in srgb, var(--avd-academy-fill-3-bg) 55%, var(--avd-academy-color-bg)); }
+/* Der Body ist der ZETTEL IM UMSCHLAG – deshalb sitzt er als eigenes Blatt auf
+   der Umschlagflaeche, eingerueckt und heller. */
+.hg__teil--zettel { margin: .35rem .6rem 0; padding: .35rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
+  background: var(--avd-academy-color-bg); border: 1px solid var(--avd-academy-tone-4); border-left-width: 3px; }
+.hg__msg__fuss { margin: 0; padding: .35rem .8rem; font-size: .72rem; font-style: italic;
+  color: var(--avd-academy-color-ink-muted); background: var(--avd-academy-color-bg-subtle);
+  border-top: 1px solid var(--avd-academy-color-border); }
+.hg__teil { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid transparent; background: transparent; font: inherit; color: var(--avd-academy-color-ink); cursor: pointer; padding: .1rem .8rem; white-space: pre-wrap; word-break: break-word; transition: var(--avd-academy-transition, all .15s ease); }
+.hg__teil:hover { background: var(--avd-academy-color-accent-soft); }
+.hg__teil:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px; }
+.hg__teil.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
+.hg__teil--leer { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+.hg__marke { color: color-mix(in srgb, var(--avd-academy-color-accent) 82%, var(--avd-academy-color-ink)); font-weight: 600; }
+.hg__detail { padding: var(--avd-academy-space-3, .75rem) var(--avd-academy-space-4, 1rem); border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); min-height: 7rem; }
+.hg__detail h3 { margin-top: 0; font-size: var(--avd-academy-fs-md, 1rem); }
+.hg__detail p { font-size: var(--avd-academy-fs-sm, .92rem); }
+.hg__detail p:last-child { margin-bottom: 0; }
+.hg__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+.hg__merke { border-top: 1px dashed var(--avd-academy-color-border); padding-top: .5rem; color: var(--avd-academy-color-ink-muted); }
+.hg__merke strong { color: var(--avd-academy-color-ink); }
+
+.hg__bild svg { width: 100%; height: auto; color: var(--avd-academy-color-ink); }
+.hg__bild { margin: 0 0 var(--avd-academy-space-4, 1rem); }
+
+.hg__scroll { overflow-x: auto; }
+.hg__tab { border-collapse: collapse; width: 100%; min-width: 34rem; }
+.hg__tab th, .hg__tab td { border: 1px solid var(--avd-academy-color-border); padding: .5rem .8rem; text-align: left; }
+.hg__tab thead th { background: var(--avd-academy-color-bg-subtle); }
+.hg__tab tbody th { background: var(--avd-academy-color-bg-subtle); font-weight: var(--avd-academy-fw-medium, 500); width: 16rem; }
+.hg__ja { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
+.hg__nein { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
+
+/* Nur fuer den Ausdruck: die Erklaerungen, die am Bildschirm im Panel erscheinen. */
+.hg__druck { display: none; }
+
+@media (prefers-reduced-motion: reduce) { .hg * { transition: none !important; } }
+
+/* --- AUSDRUCK ---------------------------------------------------------------
+   Aufgeklapptes bleibt aufgeklappt, Bedienelemente verschwinden, und was am
+   Bildschirm hinter einem Klick liegt, steht auf dem Papier vollstaendig da. */
+@media print {
+  .hg__mehr { display: none; }
+  .hg__karte__detail { display: block !important; }
+  .hg__detail { display: none; }
+  .hg__druck { display: block; }
+  .hg__teil { background: none !important; border-left-color: transparent !important; }
+  .hg__karte, .hg__msg, .hg__schema, .hg__bild, .hg__start { break-inside: avoid; }
+  .hg__aufbau, .hg__karten { break-inside: auto; }
+  .hg__druck dt { font-weight: 700; margin-top: .6rem; }
+  .hg__druck dd { margin: 0 0 .2rem 0; }
+}
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var NACHRICHTEN = {
+    anfrage: [
+      { art: "start", zeilen: ["GET /produkte/kaffeemuehle HTTP/1.1"],
+        titel: "Startzeile der Anfrage",
+        text: "<strong>Methode</strong> (was soll geschehen), <strong>Pfad</strong> (womit), <strong>Version</strong>.",
+        merke: "Methode und Pfad ergeben zusammen den Satz: „Hol mir die Kaffeemühle.“" },
+      { art: "header", zeilen: ["Host: shop.example.com", "User-Agent: Mozilla/5.0 (Macintosh; …)", "Referer: https://shop.example.com/produkte"],
+        titel: "Header der Anfrage",
+        text: "Angaben <em>über</em> die Nachricht, je Zeile ein <code>Name: Wert</code>. <code>Host</code> sagt, welche Website gemeint ist – ein Server bedient oft viele.",
+        merke: "Auf dem Umschlag stehen die Header – Absender, Empfänger, Hinweise. Die Post liest sie und befördert danach." },
+      { art: "leer", zeilen: [""],
+        titel: "Die Leerzeile",
+        text: "Das <strong>einzige</strong> Trennzeichen zwischen Headern und Body. Der Empfänger liest Zeile für Zeile, bis eine leer ist – alles danach ist Inhalt.",
+        merke: "Wichtiger, als sie aussieht." },
+      { art: "body", zeilen: ["(kein Body – GET holt nur)"],
+        titel: "Body der Anfrage",
+        text: "Der <strong>Zettel im Umschlag</strong> – bei <code>GET</code> bleibt er leer, weil alles Nötige schon auf dem Umschlag steht.",
+        merke: "Beim <code>POST</code> eines Formulars stehen hier die eingegebenen Daten." }
+    ],
+    antwort: [
+      { art: "start", zeilen: ["HTTP/1.1 200 OK"],
+        titel: "Startzeile der Antwort",
+        text: "Erst die <strong>Version</strong>, dann der <strong>Statuscode</strong> und ein kurzer Text für Menschen.",
+        merke: "<code>2xx</code> geklappt · <code>3xx</code> woanders nachsehen · <code>4xx</code> <strong>Du</strong> · <code>5xx</code> <strong>ich</strong>." },
+      { art: "header", zeilen: ["Content-Type: text/html; charset=utf-8", "Content-Length: 1526", "Date: Mon, 14 Sep 2026 08:12:44 GMT"],
+        titel: "Header der Antwort",
+        text: "<code>Content-Type</code> sagt, <em>was</em> im Body liegt – ohne diese Zeile weiß der Browser nicht, ob er eine Seite anzeigen oder eine Datei anbieten soll.",
+        merke: "Bei einem <strong>Redirect</strong> steht hier <code>Location</code>." },
+      { art: "leer", zeilen: [""],
+        titel: "Die Leerzeile",
+        text: "Dieselbe Rolle wie in der Anfrage.",
+        merke: "Der Aufbau ist in <strong>beiden Richtungen identisch</strong> – nur die Startzeile unterscheidet sich." },
+      { art: "body", zeilen: ["<!DOCTYPE html>", "<html lang=\"de\"> … </html>"],
+        titel: "Body der Antwort",
+        text: "Der <strong>Zettel im Umschlag</strong>: der eigentliche Inhalt – hier HTML, es könnte ein Bild sein oder JSON. <em>Was</em> darauf steht, verrät der <code>Content-Type</code> auf dem Umschlag.",
+        merke: "Darin stecken Verweise auf weitere Adressen, die der Browser <strong>einzeln nachholt</strong> – deshalb sind es für eine Seite selten unter fünfzig Nachrichten." }
+    ]
+  };
+
+  var wurzel = document.querySelector(".hg");
+  if (!wurzel) return;
+
+  /* --- Die drei Eigenschaften: aufklappen ---------------------------------- */
+  wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
+    var detail = knopf.nextElementSibling;
+    knopf.addEventListener("click", function () {
+      var offen = detail.classList.toggle("is-offen");
+      knopf.setAttribute("aria-expanded", offen ? "true" : "false");
+      knopf.textContent = offen ? "Weniger" : "Was daraus folgt";
+    });
+  });
+
+  /* --- Die Nachricht: Bestandteile anklickbar ------------------------------ */
+  var detail = wurzel.querySelector("[data-hg-detail]");
+  var druck = wurzel.querySelector(".hg__druck");
+  var alle = [];
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  Object.keys(NACHRICHTEN).forEach(function (schluessel) {
+    var ziel = wurzel.querySelector('[data-hg-msg="' + schluessel + '"]');
+    NACHRICHTEN[schluessel].forEach(function (teil) {
+      var knopf = document.createElement("button");
+      knopf.type = "button";
+      knopf.className = "hg__teil hg__teil--" + (teil.art === "body" ? "zettel" : "umschlag") +
+        (teil.art === "leer" || teil.zeilen[0].charAt(0) === "(" ? " hg__teil--leer" : "");
+      knopf.setAttribute("aria-label", teil.titel + " – erklären");
+      knopf.innerHTML = teil.zeilen.map(function (z) {
+        if (z === "") return "&nbsp;";
+        var t = esc(z);
+        if (teil.art === "header") t = t.replace(/^([A-Za-z-]+)(:)/, '<span class="hg__marke">$1</span>$2');
+        if (teil.art === "start") t = t.replace(/^(GET|POST)\b/, '<span class="hg__marke">$1</span>')
+                                       .replace(/\b(200)\b/, '<span class="hg__marke">$1</span>');
+        return t;
+      }).join("\n");
+      knopf.addEventListener("click", function () { zeige(teil, knopf); });
+      alle.push(knopf);
+      ziel.appendChild(knopf);
+    });
+  });
+
+  function zeige(teil, knopf) {
+    alle.forEach(function (k) { k.classList.toggle("is-aktiv", k === knopf); });
+    detail.innerHTML = "<h3>" + teil.titel + "</h3><p>" + teil.text + "</p>" +
+      (teil.merke ? '<p class="hg__merke">' + teil.merke + "</p>" : "");
+  }
+
+  /* Fuer den Ausdruck: alle Erklaerungen als Liste. Am Bildschirm ausgeblendet. */
+  var dl = document.createElement("dl");
+  ["anfrage", "antwort"].forEach(function (k) {
+    NACHRICHTEN[k].forEach(function (t) {
+      var dt = document.createElement("dt");
+      dt.textContent = t.titel;
+      var dd = document.createElement("dd");
+      dd.innerHTML = t.text + (t.merke ? " " + t.merke : "");
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+  });
+  var h = document.createElement("h3");
+  h.textContent = "Die Bestandteile im Einzelnen";
+  druck.appendChild(h);
+  druck.appendChild(dl);
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>ATVANTAGE Academy</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Anatomie eines OpenAPI-Dokuments · ATVANTAGE Academy</title><meta name="description" content="Ein vollständiges OpenAPI-Dokument zum Anklicken – jeder Abschnitt erklärt, wozu er da ist."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789382773">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789382773" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789382773" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789382773">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789382773">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789382773"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -173,18 +173,30 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
 .an__layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: start; }
 @media (max-width: 56rem) { .an__layout { grid-template-columns: 1fr; } }
 
-.an__codebox { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; background: var(--avd-academy-code-bg, rgba(127,127,127,.08)); }
+.an__codebox { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; background: var(--avd-academy-color-bg); }
 .an__tabs { display: flex; gap: .3rem; padding: .5rem; border-bottom: 1px solid var(--avd-academy-color-border); background: var(--avd-academy-color-bg-subtle); }
 .an__tab { font: inherit; font-size: var(--avd-academy-fs-sm, .85rem); font-family: var(--avd-academy-font-mono, monospace); cursor: pointer; padding: .25em .8em; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); }
 .an__tab:hover { border-color: var(--avd-academy-color-accent); }
 .an__tab:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
 
-.an__code { margin: 0; padding: var(--avd-academy-space-3, .75rem) 0; overflow-x: auto; font-family: var(--avd-academy-font-mono, monospace); font-size: .82rem; line-height: 1.7; background: transparent; }
+/* SPEZIFITAET MIT ABSICHT: Das Theme faerbt Codebloecke dunkel
+   (`.avd-academy-guide-main pre { background: var(--avd-ink); color: #eef1f2 }`,
+   guide.css). Diese Regel hat 0-1-1 und schlaegt ein blosses `.an__code`. Hier ist
+   der Block aber kein Listing zum Lesen, sondern eine anklickbare Flaeche mit
+   eigener Hervorhebung - er braucht die Farben der Seite, nicht die des Listings.
+   `.an pre.an__code` (0-2-1) setzt sich durch; Farben kommen aus Tokens, die das
+   Theme fuer BEIDE Farbschemata pflegt. */
+.an pre.an__code {
+  margin: 0; padding: var(--avd-academy-space-3, .75rem) 0; overflow-x: auto;
+  font-family: var(--avd-academy-font-mono, monospace); font-size: .82rem; line-height: 1.7;
+  background: var(--avd-academy-code-bg); color: var(--avd-academy-color-ink);
+  border: 0; border-radius: 0;
+}
 .an__block { display: block; cursor: pointer; border-left: 3px solid transparent; transition: var(--avd-academy-transition, all .15s ease); }
 .an__block:hover { background: var(--avd-academy-color-accent-soft); }
 .an__block.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
 .an__zeile { display: block; padding: 0 .9rem; white-space: pre; }
-.an__k { color: var(--avd-academy-color-headline); }
+.an .an__k { color: color-mix(in srgb, var(--avd-academy-color-accent) 82%, var(--avd-academy-color-ink)); font-weight: 600; }
 .an__c { color: var(--avd-academy-color-ink-muted); font-style: italic; }
 
 .an__panel { position: sticky; top: 1rem; border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-4, 1rem); min-height: 12rem; }
@@ -194,7 +206,15 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
 .an__merke { font-size: var(--avd-academy-fs-sm, .9rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
 .an__merke strong { color: var(--avd-academy-color-ink); }
 
-.an__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--avd-academy-space-12`). */
+.an h2.an__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
 .an__lead { color: var(--avd-academy-color-ink-muted); }
 .an__kette { list-style: none; padding: 0; margin: 0; counter-reset: kette; }
 .an__kette li { counter-increment: kette; display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem; padding: .45rem 0 .45rem 3.4rem; position: relative; border-bottom: 1px solid var(--avd-academy-color-border); }

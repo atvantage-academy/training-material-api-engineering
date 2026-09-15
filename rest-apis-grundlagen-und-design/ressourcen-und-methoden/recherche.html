@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Drei Fragen vor der Kreuzeltabelle · ATVANTAGE Academy</title><meta name="description" content="Drei Fragen, die Du selbst beantwortest, bevor wir gemeinsam die Kreuzeltabelle aufstellen: Was tun PUT, PATCH und DELETE – und was heißt idempotent?"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite">
+    <img class="avd-academy-header__logo"
+         src="/training-material-api-engineering/assets/logo-schulung.svg"
+         alt="ATVANTAGE Academy">
+  </a>
+  <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button>
+  <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button></div>
+</header>
+
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Drei Fragen vor der Kreuzeltabelle</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 10 Minuten</span><span class="avd-academy-tag">HTTP-Methoden</span><span class="avd-academy-tag">CRUD</span><span class="avd-academy-tag">Idempotenz</span>
+      </div>
+      <div class="avd-academy-guide-hero__actions">
+        <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
+                data-avd-academy-copy-md="#avd-academy-md-source"
+                title="Markdown kopieren" aria-label="Markdown kopieren"></button>
+      </div>
+    </div><h1>Drei Fragen vor der Kreuzeltabelle</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
+      <h1 id="drei-fragen-vor-der-kreuzeltabelle">Drei Fragen vor der Kreuzeltabelle</h1>
+
+<p><strong>Als</strong> jemand, der gleich entscheiden soll, welche Methode auf welche Adresse
+gehört, <strong>möchte ich</strong> wissen, was die Methoden überhaupt bedeuten, <strong>damit</strong> ich
+die Entscheidung begründen kann und nicht rate.</p>
+
+<p>Gleich stellen wir gemeinsam eine Tabelle auf: Ressourcenarten in den Spalten,
+Methoden in den Zeilen, in jeder Zelle die Frage „ergibt das hier Sinn?“. Diese
+Frage lässt sich nur beantworten, wenn die Bedeutung der Methoden feststeht. Die
+holst Du Dir jetzt selbst – aus der Quelle, nicht aus einer Folie.</p>
+
+<p><strong>Zeit:</strong> knapp. Das ist Absicht. Du sollst nicht alles lesen, sondern drei Antworten
+finden, die Du gleich brauchst.</p>
+
+<h2 id="lernziele">Lernziele</h2>
+
+<p>Du…</p>
+
+<ul>
+  <li>beschreibst in je einem Satz, was <strong>PUT</strong>, <strong>PATCH</strong> und <strong>DELETE</strong> mit einer
+Ressource tun – und worin sich PUT und PATCH unterscheiden.</li>
+  <li>ordnest den fünf Methoden GET, POST, PUT, PATCH und DELETE die vier
+CRUD-Operationen zu und benennst die Stelle, an der die Zuordnung nicht aufgeht.</li>
+  <li>erklärst <strong>Idempotenz</strong> an einem eigenen Beispiel und unterscheidest sie von
+„sicher“.</li>
+</ul>
+
+<h2 id="definition-of-done">Definition of Done</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Zu jeder der drei Methoden PUT, PATCH und DELETE steht bei Dir ein Satz, was
+    sie tut.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Zuordnung der fünf Methoden zu Create, Read, Update und Delete
+    notiert – <strong>mit</strong> der Stelle, an der sie nicht eindeutig ist.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast Idempotenz in eigenen Worten notiert und ein Beispiel dazu, das
+    <strong>nicht</strong> aus der Quelle stammt.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du kannst Deine Quelle nennen.</li>
+</ul>
+
+<h2 id="arbeitsschritte">Arbeitsschritte</h2>
+
+<h3 id="nimm-eine-quelle-nicht-drei">Nimm eine Quelle, nicht drei</h3>
+
+<p>Such Dir <strong>eine</strong> der verlinkten Quellen aus und bleib dabei. MDN ist der schnellste
+Einstieg, der RFC die verbindliche Antwort. Beide zu lesen kostet mehr Zeit, als Du
+hier hast.</p>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Wenn Du feststeckst, ist das kein Zeichen, die Quelle zu wechseln –
+sondern die Frage enger zu stellen. „Was tut PUT?“ ist zu weit. „Was passiert mit
+einem Feld, das ich bei PUT <strong>nicht</strong> mitschicke?“ ist beantwortbar.</p>
+</blockquote>
+
+<h3 id="frage-1-was-tun-put-patch-und-delete">Frage 1: Was tun PUT, PATCH und DELETE?</h3>
+
+<p>Ein Satz je Methode. Achte besonders auf den Unterschied zwischen PUT und PATCH –
+und zwar an der konkreten Frage:</p>
+
+<blockquote>
+  <p>Eine Ressource hat die Felder <code>name</code> und <code>vorname</code>. Du schickst einen Body, in dem
+<strong>nur</strong> <code>name</code> steht. Was steht danach in <code>vorname</code> – einmal bei PUT, einmal bei
+PATCH?</p>
+</blockquote>
+
+<h3 id="frage-2-wie-passen-die-methoden-auf-crud">Frage 2: Wie passen die Methoden auf CRUD?</h3>
+
+<p>CRUD sind vier Operationen: <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete. HTTP hat
+hier fünf Methoden. Ordne zu.</p>
+
+<p>Die Zuordnung geht an einer Stelle <strong>nicht</strong> glatt auf. Finde sie und notiere, worin
+genau die Unschärfe besteht – das ist der eigentliche Ertrag dieser Frage, nicht die
+Tabelle.</p>
+
+<h3 id="frage-3-was-bedeutet-idempotenz">Frage 3: Was bedeutet Idempotenz?</h3>
+
+<p>Notiere die Bedeutung in eigenen Worten. Dann prüfe Dein Verständnis an zwei Proben:</p>
+
+<ul>
+  <li>Denk Dir ein Beispiel <strong>außerhalb</strong> von HTTP aus, das idempotent ist – etwas aus
+dem Alltag, ein Schalter, ein Formular, eine Handlung.</li>
+  <li>Klär für Dich den Unterschied zu <strong>sicher</strong>: Jede sichere Methode ist idempotent.
+Warum gilt das nicht umgekehrt?</li>
+</ul>
+
+<blockquote>
+  <p><strong>Hinweis:</strong> Idempotenz ist keine Eigenschaft, die man einer Methode ansieht,
+sondern ein Versprechen an den Aufrufer. Frag Dich beim Notieren: <em>Wem nützt dieses
+Versprechen, und wann?</em></p>
+</blockquote>
+
+<h2 id="reflexionsfragen">Reflexionsfragen</h2>
+
+<ul>
+  <li>Welche der fünf Methoden würdest Du einem Aufrufer guten Gewissens zum
+<strong>Wiederholen</strong> empfehlen, wenn die Antwort ausgeblieben ist – und welche nicht?</li>
+  <li>An welcher Stelle ging die Zuordnung auf CRUD nicht auf? Ist das ein Mangel von
+HTTP, ein Mangel von CRUD – oder keins von beidem?</li>
+  <li>Du hast Deine Antworten aus einer Quelle geholt. Hätte eine der anderen Quellen
+etwas anderes gesagt? Woran würdest Du das merken?</li>
+</ul>
+
+
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Drei Fragen vor der Kreuzeltabelle
+
+**Als** jemand, der gleich entscheiden soll, welche Methode auf welche Adresse
+gehört, **möchte ich** wissen, was die Methoden überhaupt bedeuten, **damit** ich
+die Entscheidung begründen kann und nicht rate.
+
+Gleich stellen wir gemeinsam eine Tabelle auf: Ressourcenarten in den Spalten,
+Methoden in den Zeilen, in jeder Zelle die Frage „ergibt das hier Sinn?“. Diese
+Frage lässt sich nur beantworten, wenn die Bedeutung der Methoden feststeht. Die
+holst Du Dir jetzt selbst – aus der Quelle, nicht aus einer Folie.
+
+**Zeit:** knapp. Das ist Absicht. Du sollst nicht alles lesen, sondern drei Antworten
+finden, die Du gleich brauchst.
+
+## Lernziele
+
+Du…
+
+- beschreibst in je einem Satz, was **PUT**, **PATCH** und **DELETE** mit einer
+  Ressource tun – und worin sich PUT und PATCH unterscheiden.
+- ordnest den fünf Methoden GET, POST, PUT, PATCH und DELETE die vier
+  CRUD-Operationen zu und benennst die Stelle, an der die Zuordnung nicht aufgeht.
+- erklärst **Idempotenz** an einem eigenen Beispiel und unterscheidest sie von
+  „sicher“.
+
+## Definition of Done
+
+* [ ] Zu jeder der drei Methoden PUT, PATCH und DELETE steht bei Dir ein Satz, was
+      sie tut.
+* [ ] Du hast eine Zuordnung der fünf Methoden zu Create, Read, Update und Delete
+      notiert – **mit** der Stelle, an der sie nicht eindeutig ist.
+* [ ] Du hast Idempotenz in eigenen Worten notiert und ein Beispiel dazu, das
+      **nicht** aus der Quelle stammt.
+* [ ] Du kannst Deine Quelle nennen.
+
+## Arbeitsschritte
+
+### Nimm eine Quelle, nicht drei
+
+Such Dir **eine** der verlinkten Quellen aus und bleib dabei. MDN ist der schnellste
+Einstieg, der RFC die verbindliche Antwort. Beide zu lesen kostet mehr Zeit, als Du
+hier hast.
+
+&gt; **Hinweis:** Wenn Du feststeckst, ist das kein Zeichen, die Quelle zu wechseln –
+&gt; sondern die Frage enger zu stellen. „Was tut PUT?“ ist zu weit. „Was passiert mit
+&gt; einem Feld, das ich bei PUT **nicht** mitschicke?“ ist beantwortbar.
+
+### Frage 1: Was tun PUT, PATCH und DELETE?
+
+Ein Satz je Methode. Achte besonders auf den Unterschied zwischen PUT und PATCH –
+und zwar an der konkreten Frage:
+
+&gt; Eine Ressource hat die Felder `name` und `vorname`. Du schickst einen Body, in dem
+&gt; **nur** `name` steht. Was steht danach in `vorname` – einmal bei PUT, einmal bei
+&gt; PATCH?
+
+### Frage 2: Wie passen die Methoden auf CRUD?
+
+CRUD sind vier Operationen: **C**reate, **R**ead, **U**pdate, **D**elete. HTTP hat
+hier fünf Methoden. Ordne zu.
+
+Die Zuordnung geht an einer Stelle **nicht** glatt auf. Finde sie und notiere, worin
+genau die Unschärfe besteht – das ist der eigentliche Ertrag dieser Frage, nicht die
+Tabelle.
+
+### Frage 3: Was bedeutet Idempotenz?
+
+Notiere die Bedeutung in eigenen Worten. Dann prüfe Dein Verständnis an zwei Proben:
+
+- Denk Dir ein Beispiel **außerhalb** von HTTP aus, das idempotent ist – etwas aus
+  dem Alltag, ein Schalter, ein Formular, eine Handlung.
+- Klär für Dich den Unterschied zu **sicher**: Jede sichere Methode ist idempotent.
+  Warum gilt das nicht umgekehrt?
+
+&gt; **Hinweis:** Idempotenz ist keine Eigenschaft, die man einer Methode ansieht,
+&gt; sondern ein Versprechen an den Aufrufer. Frag Dich beim Notieren: *Wem nützt dieses
+&gt; Versprechen, und wann?*
+
+## Reflexionsfragen
+
+- Welche der fünf Methoden würdest Du einem Aufrufer guten Gewissens zum
+  **Wiederholen** empfehlen, wenn die Antwort ausgeblieben ist – und welche nicht?
+- An welcher Stelle ging die Zuordnung auf CRUD nicht auf? Ist das ein Mangel von
+  HTTP, ein Mangel von CRUD – oder keins von beidem?
+- Du hast Deine Antworten aus einer Quelle geholt. Hätte eine der anderen Quellen
+  etwas anderes gesagt? Woran würdest Du das merken?
+
+## Weiterführende Informationen
+
+- [MDN: HTTP-Anfragemethoden](https://developer.mozilla.org/de/docs/Web/HTTP/Methods)
+- [RFC 9110, Abschnitt 9 – Methods](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
+- [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/)
+</textarea>
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered" data-avd-academy-progress hidden><div class="avd-academy-guide-side__label">Fortschritt</div>
+        <div class="avd-academy-progress__bar"><div class="avd-academy-progress__fill"></div></div>
+        <div class="avd-academy-progress__text"></div>
+      </div>
+      <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
+        <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
+        <div class="avd-academy-guide-side__links"><a href="https://developer.mozilla.org/de/docs/Web/HTTP/Methods" target="_blank" rel="noopener"><span>MDN: HTTP-Anfragemethoden</span></a><a href="https://www.rfc-editor.org/rfc/rfc9110.html#name-methods" target="_blank" rel="noopener"><span>RFC 9110, Abschnitt 9 – Methods</span></a><a href="https://opensource.zalando.com/restful-api-guidelines/" target="_blank" rel="noopener"><span>Zalando RESTful API Guidelines</span></a>
+        </div></div>
+    </aside>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>ATVANTAGE Academy</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

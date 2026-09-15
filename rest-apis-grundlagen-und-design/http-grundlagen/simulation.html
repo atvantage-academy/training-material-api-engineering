@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – Layout „simulation“ (Jekyll)
+  ------------------------------------------------
+  Bühne für BEWEGTE Abläufe. Anders als eine Präsentation, die Folien wechselt,
+  zeigt eine Simulation EINEN Schauplatz, der sich Schritt für Schritt verändert:
+  Kästen entstehen, Werte wandern, Pfeile werden gezogen. Der Ablauf lässt sich
+  vorwärts und rückwärts durchgehen, zurücksetzen und automatisch abspielen.
+
+  Optisch ist die Seite an das Layout „presentation“ angelehnt – dieselbe schmale
+  Kopfleiste mit Logo, Titel, QR-Code und Farbschema-Umschalter. Drei Zonen:
+
+    ┌──────────────────────────────────────────────┐
+    │ Kopfleiste  Logo · Titel · Schritt · Werkzeug│
+    ├───────────────────────────────┬──────────────┤
+    │ Bühne (der Inhalt dieser Datei)│ Erklärtext   │
+    │                               │ (je Schritt) │
+    ├───────────────────────────────┴──────────────┤
+    │ Fortschritt + Steuerleiste (⟲ ‹ ▶ Abspielen 1×▴ ›)│
+    └──────────────────────────────────────────────┘
+
+  AUFZEICHNEN: Der Capture-Modus (Taste C oder ?capture in der Adresse) räumt alles
+  weg, was nicht zur Sache gehört – Kopfleiste, Erklärspalte, Fortschritt,
+  Steuerleiste – und blendet den Mauszeiger aus. Die Bühne füllt das Fenster. Der
+  Erklärtext ist dann nicht verloren: Taste T holt ihn als Einblendung (OST) an den
+  unteren Rand zurück, für den Fall, dass beim Aufzeichnen niemand spricht.
+
+  NICHT DRUCKBAR – bewusst. Eine Simulation lebt von der Bewegung; ein Ausdruck
+  wäre ein willkürliches Standbild. Es gibt daher weder Druck-Knopf noch
+  Drucklayout; wer die Seite trotzdem druckt, bekommt den gerade sichtbaren
+  Schritt und den QR-Code als Rückweg zur Online-Fassung.
+
+  Front Matter (alles optional außer `layout`):
+    layout: simulation
+    title:        "…"            → Titel in der Kopfleiste; sonst die erste #-Überschrift
+    description:  "…"            → Meta-Description
+    simulation:
+      aside: false               → rechte Spalte weglassen (Bühne über volle Breite)
+      intro: "…"                 → ein Satz auf der Szenario-Übersicht (nur bei mehreren)
+      speed: 0.5 | 1 | 2 | 5     → Start-Tempo des automatischen Abspielens
+      step:
+        interval: 2500           → Grunddauer je Schritt beim Abspielen (ms)
+
+  MEHRERE SZENARIEN: Meldet die Seite über `registerScenario` mehr als einen
+  Ablauf an, bekommt sie eine Reiterleiste und eine Übersicht als Startbild. Je
+  Szenario liefert die Seite ein eigenes Bühnenbild in einem Container mit
+  `data-avd-academy-sim-scene="«id»"`; sichtbar ist immer genau eines. Mit nur
+  einem Szenario (oder bloßem `registerStep`) ändert sich nichts.
+
+  Der INHALT dieser Seite ist das BÜHNENBILD: die Kulisse (Kästen, Beschriftungen,
+  Container) plus ein <script>, das die Schritte anmeldet. Das Miniframework dazu
+  liefert theme/jekyll/simulation.js als `AvdSimulation` – es wird ABSICHTLICH
+  ohne `defer` geladen, damit ein Inline-<script> im Body es bereits vorfindet.
+
+  Ohne JavaScript bleibt die Seite lesbar: Die Kulisse steht da, Steuerleiste und
+  Erklärspalte bleiben leer – der Ablauf ist eine Zutat, keine Voraussetzung.
+
+  Anleitung und Beispiel: /templates/simulations/.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Vier Abläufe: Link, Suche, Formular, Redirect · ATVANTAGE Academy</title><meta name="description" content="Was zwischen Browser und Server wirklich passiert – vom Linkklick über das Suchformular bis zum Formular, das man besser nicht zweimal abschickt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789448922"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789448922"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head>
+<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Vier Abläufe: Link, Suche, Formular, Redirect"
+      data-avd-academy-sim-speed="1"
+      data-avd-academy-sim-step-interval="3200">
+  <a class="avd-academy-skip-link" href="#avd-academy-sim-stage">Zum Inhalt springen</a>
+
+  <header class="avd-academy-sim__bar">
+    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__title">Vier Abläufe: Link, Suche, Formular, Redirect</span>
+    <span class="avd-academy-sim__counter" data-avd-academy-sim-counter aria-live="off"></span>
+    <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
+              title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
+              data-avd-academy-sim-full
+              title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
+  </header><nav class="avd-academy-sim__tabs" data-avd-academy-sim-tabs hidden aria-label="Szenarien"></nav>
+
+  <main class="avd-academy-sim__main"><div class="avd-academy-sim__stage" id="avd-academy-sim-stage" data-avd-academy-sim-stage>
+      <style>
+  .buehne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+    align-items: start; align-content: center; min-height: 100%;
+  }
+
+  /* --- Browser ----------------------------------------------------------- */
+  .adresszeile {
+    display: flex; align-items: center; gap: .4rem;
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .74rem;
+    padding: .4rem .55rem; margin-bottom: .6rem;
+    border: 1px solid var(--avd-academy-color-border); border-radius: 999px;
+    background: var(--avd-academy-color-bg); word-break: break-all;
+    transition: border-color .3s ease, background-color .3s ease;
+  }
+  .adresszeile__schloss { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); flex: 0 0 auto; }
+  .adresszeile.is-neu { border-color: var(--avd-academy-color-accent); background: var(--avd-academy-color-accent-soft); }
+  .seite { min-height: 13rem; }
+  .seite__zeile { padding: .16rem 0; font-size: .9rem; }
+  .seite__zeile--titel { font-weight: var(--avd-academy-fw-bold, 700); font-size: 1rem; margin-bottom: .25rem; }
+  .seite__zeile--link { color: var(--avd-academy-color-accent); text-decoration: underline; cursor: pointer; border-radius: 3px; }
+  .seite__zeile--link.is-geklickt { background: var(--avd-academy-color-accent-soft); }
+
+  /* --- Formular: der Code steht am Rahmen, nicht im Feld ------------------ */
+  .formular {
+    position: relative; margin: 1rem 0 .5rem; padding: 1.1rem .7rem .7rem;
+    border: 1px dashed var(--avd-academy-color-ink-muted); border-radius: var(--avd-academy-radius-sm, 4px);
+  }
+  .formular__code {
+    position: absolute; top: -.62rem; left: .5rem; padding: 0 .35rem;
+    background: var(--avd-academy-color-bg);
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .66rem;
+    color: var(--avd-academy-color-ink-muted);
+  }
+  .eingabe { display: block; position: relative; margin: .9rem 0 .8rem; }
+  .eingabe__code {
+    position: absolute; top: -.72rem; left: .35rem; padding: 0 .3rem;
+    background: var(--avd-academy-color-bg);
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .64rem;
+    color: var(--avd-academy-color-ink-muted);
+  }
+  .eingabe__feld {
+    display: block; min-height: 1.9rem; padding: .32rem .5rem;
+    border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius-sm, 4px);
+    background: var(--avd-academy-color-bg);
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .82rem;
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / .08);
+  }
+  .eingabe__feld.is-aktiv { border-color: var(--avd-academy-color-accent); box-shadow: inset 0 1px 2px rgb(0 0 0 / .08), 0 0 0 3px var(--avd-academy-color-accent-soft); }
+  .eingabe__wert { display: inline-block; }
+  .eingabe__feld.is-tippt .eingabe__wert { animation: hg-tippen .9s steps(12, end) both; }
+  @keyframes hg-tippen { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .karet { display: inline-block; width: .55ch; margin-left: 1px; background: var(--avd-academy-color-accent); animation: hg-blinken 1s steps(2, start) infinite; }
+  @keyframes hg-blinken { 50% { opacity: 0; } }
+
+  .knopf {
+    display: inline-block; font-size: .8rem; font-weight: 600;
+    padding: .34rem .95rem; border-radius: var(--avd-academy-radius-sm, 4px);
+    background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
+    position: relative;
+  }
+  .knopf.is-gedrueckt { animation: hg-druck .5s ease both; }
+  /* Der Tastendruck ist eine Benutzerhandlung wie der Klick auf den Knopf –
+     und muss genauso zu sehen sein. Sonst steht F5 nur im Schritttitel, und
+     auf der Buehne faengt eine Nachricht ohne erkennbaren Anlass an zu
+     fliegen. */
+  .taste { display: flex; align-items: center; gap: .45rem; margin: 0 0 .7rem; font-size: .78rem; color: var(--avd-academy-color-ink-muted); }
+  .taste__kappe {
+    display: inline-block; padding: .16rem .5rem;
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .74rem; font-weight: 700;
+    color: var(--avd-academy-color-ink);
+    border: 1px solid var(--avd-academy-color-border); border-bottom-width: 3px;
+    border-radius: var(--avd-academy-radius-sm, 4px); background: var(--avd-academy-color-bg);
+  }
+  .taste.is-gedrueckt .taste__kappe { animation: hg-taste .55s ease both; }
+  @keyframes hg-taste {
+    0%   { transform: none;              box-shadow: 0 0 0 0 var(--avd-academy-color-accent-soft); }
+    35%  { transform: translateY(2px);   box-shadow: 0 0 0 9px var(--avd-academy-color-accent-soft); border-bottom-width: 1px; }
+    100% { transform: none;              box-shadow: 0 0 0 16px transparent; }
+  }
+  @keyframes hg-druck {
+    0%   { transform: none;       box-shadow: 0 0 0 0 var(--avd-academy-color-accent-soft); }
+    35%  { transform: scale(.9);  box-shadow: 0 0 0 10px var(--avd-academy-color-accent-soft); }
+    100% { transform: none;       box-shadow: 0 0 0 18px transparent; }
+  }
+
+  /* --- Leitung: ein Protokoll, keine Einzelaufnahme -----------------------
+     Nachrichten verschwinden nicht, sie werden blass. Nur die Nachricht des
+     AKTUELLEN Schritts steht vollständig da; ältere schrumpfen auf ihre
+     Startzeile. So bleibt der Ablauf als Ganzes lesbar, ohne dass die Spalte
+     ins Unermessliche waechst. */
+  .prot { min-height: 13rem; }
+  .prot__still { margin: 3.5rem 0; text-align: center; font-style: italic; color: var(--avd-academy-color-ink-muted); }
+  .prot__liste { display: flex; flex-direction: column; gap: .35rem; max-height: 23rem; overflow-y: auto; }
+  .prot__e {
+    display: grid; grid-template-columns: 1rem 1fr; gap: .35rem; align-items: start;
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .74rem;
+  }
+  .prot__pfeil { line-height: 1.5; text-align: center; color: var(--avd-academy-color-accent); }
+  .prot__e--zurueck .prot__pfeil { color: color-mix(in srgb, var(--avd-academy-tone-4) 70%, var(--avd-academy-color-ink)); }
+  .prot__e--alt { opacity: .62; }
+  .prot__kurz {
+    padding: .12rem .3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    border-bottom: 1px dotted var(--avd-academy-color-border);
+  }
+  .prot__voll {
+    line-height: 1.6; padding: .5rem .55rem .55rem;
+    border: 1px solid var(--avd-academy-tone-3); border-radius: var(--avd-academy-radius-sm, 4px);
+    background: var(--avd-academy-fill-3-bg);
+  }
+  .prot__e--warn .prot__voll { border-color: var(--avd-academy-color-danger); }
+  .prot__umschlag { white-space: pre-wrap; word-break: break-word; }
+  .prot__zettel {
+    white-space: pre-wrap; word-break: break-word;
+    margin: .45rem .2rem 0; padding: .35rem .5rem;
+    background: var(--avd-academy-color-bg);
+    border: 1px solid var(--avd-academy-tone-4); border-left-width: 3px;
+    border-radius: var(--avd-academy-radius-sm, 4px);
+  }
+  .prot__zettel--leer { color: var(--avd-academy-color-ink-muted); font-style: italic; border-style: dashed; }
+  .prot__legende { margin: .35rem 0 0; font-size: .68rem; font-style: italic; text-align: center; color: var(--avd-academy-color-ink-muted); }
+  .prot__e.is-new.prot__e--hin     { animation: hg-flug-hin .7s cubic-bezier(.22,.8,.3,1) both; }
+  .prot__e.is-new.prot__e--zurueck { animation: hg-flug-zurueck .7s cubic-bezier(.22,.8,.3,1) both; }
+  @keyframes hg-flug-hin     { from { transform: translateX(-46px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes hg-flug-zurueck { from { transform: translateX( 46px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* --- Server: schreibt ebenfalls mit ------------------------------------- */
+  .slog__still { margin: .4rem 0 0; font-style: italic; color: var(--avd-academy-color-ink-muted); }
+  .slog { display: flex; flex-direction: column; gap: .25rem; max-height: 21rem; overflow-y: auto; }
+  .slog__e {
+    display: grid; grid-template-columns: .55rem auto 1fr; gap: .4rem; align-items: baseline;
+    padding: .2rem .35rem; font-size: .78rem;
+    border-left: 3px solid transparent; border-radius: var(--avd-academy-radius-sm, 4px);
+  }
+  .slog__e--alt { opacity: .62; }
+  .slog__e--aktiv { border-left-color: var(--avd-academy-color-accent); background: var(--avd-academy-color-accent-soft); }
+  .slog__e--aktiv.slog__e--fehler { border-left-color: var(--avd-academy-color-danger); background: color-mix(in srgb, var(--avd-academy-color-danger) 12%, var(--avd-academy-color-bg)); }
+  .slog__punkt {
+    /* An der ERSTEN Zeile ausrichten, nicht mittig: Bei einem umbrechenden
+       Eintrag saesse der Punkt sonst zwischen den Zeilen. */
+    width: .5rem; height: .5rem; border-radius: 50%; align-self: start; margin-top: .42rem;
+    background: var(--avd-academy-color-ink-muted);
+  }
+  .slog__e--aktiv .slog__punkt { background: var(--avd-academy-color-accent); }
+  .slog__e--aktiv.slog__e--fehler .slog__punkt { background: var(--avd-academy-color-danger); }
+  .slog__e.is-new .slog__punkt { animation: hg-puls .8s ease-in-out 2; }
+  @keyframes hg-puls { 50% { transform: scale(1.8); opacity: .55; } }
+  .slog__art {
+    font-size: .62rem; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--avd-academy-color-ink-muted);
+  }
+  .slog__e.is-new { animation: hg-eintreffen .45s ease both; }
+  @keyframes hg-eintreffen { from { transform: translateX(-10px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .bestand__titel {
+    margin: .9rem 0 .3rem; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--avd-academy-color-ink-muted);
+  }
+
+  .hinweis {
+    margin-top: .6rem; padding: .5rem .6rem; font-size: .82rem;
+    border-left: 3px solid var(--avd-academy-color-danger);
+    background: var(--avd-academy-color-bg-subtle);
+  }
+  .hinweis--ok { border-left-color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
+  .hinweis--lesen { border-left-color: var(--avd-academy-color-accent); font-family: var(--avd-academy-font-mono, monospace); font-size: .76rem; }
+  .marke {
+    display: inline-block; margin-top: .55rem; padding: .2rem .6rem; font-size: .74rem;
+    border-radius: 999px; background: var(--avd-academy-color-accent-soft);
+    color: color-mix(in srgb, var(--avd-academy-color-accent) 82%, var(--avd-academy-color-ink));
+    animation: hg-auftauchen .5s ease both;
+  }
+  @keyframes hg-auftauchen { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prot__e, .slog__e, .slog__punkt, .knopf.is-gedrueckt, .taste.is-gedrueckt .taste__kappe,
+    .eingabe__feld.is-tippt .eingabe__wert, .marke, .karet { animation: none !important; }
+  }
+</style>
+
+<div class="buehne" data-avd-academy-sim-scene="link">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Browser</h2>
+    <div class="adresszeile" id="link-adresse"></div>
+    <div class="avd-academy-sim-panel__body seite" id="link-seite"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body prot">
+      <p class="prot__still" id="link-still">still – es läuft keine Nachricht</p>
+      <div class="prot__liste" id="link-msg"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Server <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body">
+      <p class="slog__still" id="link-slogstill">wartet auf Anfragen</p>
+      <div class="slog" id="link-log"></div>
+      <p class="bestand__titel" id="link-bestandtitel">Bestellungen</p>
+      <div id="link-bestand"></div>
+    </div>
+  </div>
+</div>
+
+<div class="buehne" data-avd-academy-sim-scene="suche">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Browser</h2>
+    <div class="adresszeile" id="suche-adresse"></div>
+    <div class="avd-academy-sim-panel__body seite" id="suche-seite"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body prot">
+      <p class="prot__still" id="suche-still">still – es läuft keine Nachricht</p>
+      <div class="prot__liste" id="suche-msg"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Server <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body">
+      <p class="slog__still" id="suche-slogstill">wartet auf Anfragen</p>
+      <div class="slog" id="suche-log"></div>
+      <p class="bestand__titel" id="suche-bestandtitel">Bestellungen</p>
+      <div id="suche-bestand"></div>
+    </div>
+  </div>
+</div>
+
+<div class="buehne" data-avd-academy-sim-scene="formular">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Browser</h2>
+    <div class="adresszeile" id="formular-adresse"></div>
+    <div class="avd-academy-sim-panel__body seite" id="formular-seite"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body prot">
+      <p class="prot__still" id="formular-still">still – es läuft keine Nachricht</p>
+      <div class="prot__liste" id="formular-msg"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Server <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body">
+      <p class="slog__still" id="formular-slogstill">wartet auf Anfragen</p>
+      <div class="slog" id="formular-log"></div>
+      <p class="bestand__titel" id="formular-bestandtitel">Bestellungen</p>
+      <div id="formular-bestand"></div>
+    </div>
+  </div>
+</div>
+
+<div class="buehne" data-avd-academy-sim-scene="redirect">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Browser</h2>
+    <div class="adresszeile" id="redirect-adresse"></div>
+    <div class="avd-academy-sim-panel__body seite" id="redirect-seite"></div>
+  </div>
+  <div class="avd-academy-sim-panel">
+    <h2 class="avd-academy-sim-panel__title">Leitung <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body prot">
+      <p class="prot__still" id="redirect-still">still – es läuft keine Nachricht</p>
+      <div class="prot__liste" id="redirect-msg"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Server <span class="avd-academy-sim-panel__hint">Protokoll</span></h2>
+    <div class="avd-academy-sim-panel__body">
+      <p class="slog__still" id="redirect-slogstill">wartet auf Anfragen</p>
+      <div class="slog" id="redirect-log"></div>
+      <p class="bestand__titel" id="redirect-bestandtitel">Bestellungen</p>
+      <div id="redirect-bestand"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var sim = window.AvdSimulation;
+
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  /* `t` ist der Taktzaehler: Jedes `apply` zaehlt ihn hoch, und jeder Eintrag
+     merkt sich den Takt seiner Entstehung. Was im AKTUELLEN Takt entstand, steht
+     in Farbe – alles Aeltere wird blass. Damit braucht kein Schritt die
+     Eintraege der vorherigen anzufassen. */
+  function start() {
+    return { t: 0, adresse: "", adresseNeu: false, seite: [], taste: null,
+             leitung: [], slog: [], bestand: [], hinweis: null, marke: null };
+  }
+  function takt(s) { s.t += 1; }
+  function sende(s, n) {
+    n.t = s.t; n.id = "l" + s.leitung.length; s.leitung.push(n);
+  }
+  function tut(s, art, text, fehler) {
+    s.slog.push({ id: "s" + s.slog.length, t: s.t, art: art, text: text, fehler: !!fehler });
+  }
+
+  /* Eine Seitenzeile zu HTML. `formular` traegt den Quelltext GRAU AM RAHMEN –
+     er ist das, was dahintersteht, und darf nicht wie ein ausfuellbares Feld
+     aussehen. Die Bedienelemente darin sehen dagegen aus wie Bedienelemente. */
+  function zeile(z, bewegt) {
+    if (z.art === "formular") {
+      var innen = (z.inhalt || []).map(function (i) {
+        if (i.art === "eingabe") {
+          return '<label class="eingabe">' +
+                 '<span class="eingabe__code">' + esc(i.code) + "</span>" +
+                 '<span class="eingabe__feld' + (i.aktiv ? " is-aktiv" : "") + (i.tippt && bewegt ? " is-tippt" : "") + '">' +
+                 '<span class="eingabe__wert">' + esc(i.wert || "") + "</span>" +
+                 (i.aktiv ? '<span class="karet">&nbsp;</span>' : "") + "</span></label>";
+        }
+        if (i.art === "knopf") {
+          return '<div><span class="knopf' + (i.gedrueckt && bewegt ? " is-gedrueckt" : "") + '">' + esc(i.text) + "</span></div>";
+        }
+        return '<div class="seite__zeile">' + esc(i.text) + "</div>";
+      }).join("");
+      return '<div class="formular"><span class="formular__code">' + esc(z.code) + "</span>" + innen + "</div>";
+    }
+    return '<div class="seite__zeile seite__zeile--' + (z.art || "text") +
+           (z.geklickt ? " is-geklickt" : "") + '">' + esc(z.text) + "</div>";
+  }
+
+  /* Die vollstaendige Nachricht: Am LEEREN String trennen: davor steht, was auf
+     dem Umschlag steht, danach der Zettel darin. Genau diese Trennung macht die
+     Leerzeile. */
+  function volleNachricht(n) {
+    var z = n.zeilen, i = z.indexOf("");
+    var umschlag = (i < 0 ? z : z.slice(0, i)).join("\n");
+    var zettel = i < 0 ? "" : z.slice(i + 1).join("\n");
+    var leer = /^\(/.test(zettel.trim());
+    return '<div class="prot__voll">' +
+           '<div class="prot__umschlag">' + esc(umschlag) + "</div>" +
+           (zettel ? '<div class="prot__zettel' + (leer ? " prot__zettel--leer" : "") + '">' + esc(zettel) + "</div>" : "") +
+           '<p class="prot__legende">auf dem Umschlag · im Umschlag</p>' +
+           "</div>";
+  }
+
+  sim.setup({
+    state: start,
+
+    render: function (s, ctx) {
+      var sz = ctx.scenario || "link";
+      var bewegt = !!ctx.animated;
+
+      var adr = document.getElementById(sz + "-adresse");
+      if (adr) {
+        adr.classList.toggle("is-neu", !!s.adresseNeu);
+        adr.innerHTML = '<span class="adresszeile__schloss" aria-hidden="true">🔒</span><span>' + esc(s.adresse) + "</span>";
+      }
+
+      var seite = document.getElementById(sz + "-seite");
+      if (seite) {
+        seite.innerHTML =
+          (s.taste
+            ? '<p class="taste' + (bewegt && s.taste.t === s.t ? " is-gedrueckt" : "") + '">' +
+              '<span class="taste__kappe">' + esc(s.taste.text) + "</span>" +
+              "<span>" + esc(s.taste.was) + "</span></p>"
+            : "") +
+          s.seite.map(function (z) { return zeile(z, bewegt); }).join("") +
+          (s.hinweis ? '<p class="hinweis' + (s.hinweis.art ? " hinweis--" + s.hinweis.art : "") + '">' + s.hinweis.text + "</p>" : "") +
+          (s.marke ? '<div><span class="marke">' + s.marke + "</span></div>" : "");
+      }
+
+      /* Leitung: Protokoll statt Momentaufnahme. */
+      var still = document.getElementById(sz + "-still");
+      if (still) still.style.display = s.leitung.length ? "none" : "";
+      var liste = document.getElementById(sz + "-msg");
+      sim.list(liste, s.leitung, {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: function () {
+          var el = document.createElement("div");
+          el.className = "prot__e";
+          el.innerHTML = '<span class="prot__pfeil"></span><span class="prot__inhalt"></span>';
+          return el;
+        },
+        update: function (el, n) {
+          var aktiv = n.t === s.t;
+          el.className = "prot__e" + (n.rueck ? " prot__e--zurueck" : " prot__e--hin") +
+                         (aktiv ? "" : " prot__e--alt") + (n.warn ? " prot__e--warn" : "") +
+                         (el.classList.contains("is-new") ? " is-new" : "");
+          el.querySelector(".prot__pfeil").textContent = n.rueck ? "◀" : "▶";
+          el.querySelector(".prot__inhalt").innerHTML = aktiv
+            ? volleNachricht(n)
+            : '<span class="prot__kurz">' + esc(n.zeilen[0]) + "</span>";
+        }
+      });
+      if (liste) liste.scrollTop = liste.scrollHeight;
+
+      /* Server: schreibt mit, was er tut. */
+      var sstill = document.getElementById(sz + "-slogstill");
+      if (sstill) sstill.style.display = s.slog.length ? "none" : "";
+      var log = document.getElementById(sz + "-log");
+      sim.list(log, s.slog, {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: function () {
+          var el = document.createElement("div");
+          el.className = "slog__e";
+          el.innerHTML = '<span class="slog__punkt"></span><span class="slog__art"></span><span class="slog__text"></span>';
+          return el;
+        },
+        update: function (el, x) {
+          var aktiv = x.t === s.t;
+          el.className = "slog__e" + (aktiv ? " slog__e--aktiv" : " slog__e--alt") +
+                         (x.fehler ? " slog__e--fehler" : "") +
+                         (el.classList.contains("is-new") ? " is-new" : "");
+          el.querySelector(".slog__art").textContent = x.art;
+          el.querySelector(".slog__text").textContent = x.text;
+        }
+      });
+      if (log) log.scrollTop = log.scrollHeight;
+
+      var btitel = document.getElementById(sz + "-bestandtitel");
+      if (btitel) btitel.style.display = s.bestand.length ? "" : "none";
+      sim.list(document.getElementById(sz + "-bestand"), s.bestand, {
+        animated: ctx.animated,
+        key: function (x) { return x.id; },
+        create: function () {
+          var el = document.createElement("div");
+          el.className = "avd-academy-sim-cell";
+          el.innerHTML = '<span class="avd-academy-sim-cell__label"></span>' +
+                         '<span class="avd-academy-sim-cell__name"></span>' +
+                         '<span class="avd-academy-sim-cell__value"></span>';
+          return el;
+        },
+        update: function (el, x) {
+          el.querySelector(".avd-academy-sim-cell__label").textContent = x.label || "";
+          el.querySelector(".avd-academy-sim-cell__name").textContent = x.name || "";
+          el.querySelector(".avd-academy-sim-cell__value").textContent = x.wert || "";
+          el.classList.toggle("is-error", !!x.fehler);
+        }
+      });
+    }
+  });
+
+  /* ================================================ 1 · Link anklicken (GET) */
+  var GET_PRODUKT = ["GET /produkte/kaffeemuehle HTTP/1.1", "Host: shop.example.com", "", "(kein Body)"];
+  var ANTWORT_SEITE = ["HTTP/1.1 200 OK", "Content-Type: text/html; charset=utf-8", "Content-Length: 1526", "", "<!DOCTYPE html> … "];
+
+  sim.registerScenario({
+    id: "link",
+    title: "Ein Link wird geklickt",
+    description: "Der einfachste Fall: GET holt eine Seite. Die Adresse trägt alles.",
+    state: function () {
+      var s = start();
+      s.adresse = "https://shop.example.com/produkte";
+      s.seite = [
+        { art: "titel", text: "Unsere Produkte" },
+        { art: "link",  text: "Kaffeemühle" },
+        { art: "link",  text: "Milchaufschäumer" }
+      ];
+      return s;
+    },
+    steps: [
+      { title: "Die Ausgangslage",
+        text: "<p>Der Browser zeigt eine Seite. In der Adresszeile steht, woher sie kam.</p><p>Leitung und Serverprotokoll sind leer – <b>der Server spricht nie von sich aus</b>.</p>",
+        apply: function (s) { takt(s); } },
+      { title: "Jemand klickt den Link",
+        text: "<p>Mehr passiert hier nicht: Der Browser liest die Adresse aus dem Link und baut daraus eine Anfrage.</p>",
+        apply: function (s) { takt(s); s.seite[1].geklickt = true; } },
+      { title: "Die Anfrage geht raus",
+        text: "<p>Startzeile, Header, Leerzeile – und kein Body. <code>GET</code> <b>holt</b> etwas, es gibt nichts zu übergeben.</p><p>Die Nachricht steht jetzt im Protokoll der Leitung und bleibt dort stehen.</p>",
+        apply: function (s) { takt(s); sende(s, { zeilen: GET_PRODUKT }); } },
+      { title: "Der Server empfängt sie und arbeitet",
+        text: "<p>Jetzt ist der Server an der Reihe: Er liest die Startzeile, sucht die Produktdaten und baut die Seite.</p><p>Auf der Leitung ist es währenddessen still – die Anfrage ist blass geworden, sie ist Vergangenheit.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "empfangen", "GET /produkte/kaffeemuehle");
+          tut(s, "verarbeitet", "Produktdaten gelesen, Seite gebaut");
+        } },
+      { title: "Der Server antwortet",
+        text: "<p><code>200 OK</code> – hat geklappt. <code>Content-Type</code> sagt dem Browser, <b>was</b> im Body liegt.</p><p>Die Antwort geht in die Gegenrichtung über dieselbe Leitung.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · text/html");
+          sende(s, { rueck: true, zeilen: ANTWORT_SEITE });
+        } },
+      { title: "Der Browser zeigt die Seite",
+        text: "<p>Und die <b>Adresszeile ändert sich mit</b>. Die Adresse beschreibt, was man gerade sieht.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresse = "https://shop.example.com/produkte/kaffeemuehle";
+          s.adresseNeu = true;
+          s.seite = [
+            { art: "titel", text: "Kaffeemühle" },
+            { art: "text",  text: "Kegelmahlwerk, 15 Stufen" },
+            { art: "text",  text: "84,50 €" }
+          ];
+        } },
+      { title: "F5 – dieselbe Anfrage noch einmal",
+        text: "<p>Der Browser schickt die Anfrage erneut, der Server arbeitet erneut.</p><p><b>Lies das Protokoll von oben nach unten</b>: Es wiederholt sich Zeile für Zeile.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresseNeu = false;
+          s.taste = { text: "F5", was: "neu laden", t: s.t };
+          sende(s, { zeilen: GET_PRODUKT });
+          tut(s, "empfangen", "GET /produkte/kaffeemuehle");
+          tut(s, "verarbeitet", "Produktdaten gelesen, Seite gebaut");
+        } },
+      { title: "Und dieselbe Antwort",
+        text: "<p>Gleiche Nachricht, gleiche Seite. Niemand musste vorher fragen, ob das in Ordnung ist.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · text/html");
+          sende(s, { rueck: true, zeilen: ANTWORT_SEITE });
+        } },
+      { title: "GET holt – und verändert nichts",
+        text: "<p><b>Die Adresse trägt alles.</b> Deshalb kannst Du sie verschicken, als Lesezeichen speichern und beliebig oft aufrufen.</p>",
+        apply: function (s) { takt(s); s.taste = null; s.marke = "teilbar · Lesezeichen · beliebig wiederholbar"; },
+        duration: 5000 }
+    ]
+  });
+
+  /* ============================================= 2 · Suchformular (GET+Query) */
+  function suchseite(wert, aktiv, tippt, gedrueckt) {
+    return [
+      { art: "titel", text: "Suche" },
+      { art: "formular", code: '<form method="get" action="/suche">', inhalt: [
+        { art: "eingabe", code: '<input name="q">', wert: wert, aktiv: aktiv, tippt: tippt },
+        { art: "knopf", text: "Suchen", gedrueckt: gedrueckt }
+      ] }
+    ];
+  }
+
+  sim.registerScenario({
+    id: "suche",
+    title: "Ein Suchformular",
+    description: "Auch ein Formular kann GET sein – dann landet die Eingabe in der Adresse.",
+    state: function () {
+      var s = start();
+      s.adresse = "https://shop.example.com/";
+      s.seite = suchseite("", false, false, false);
+      return s;
+    },
+    steps: [
+      { title: "Ein Formular mit method=\"get\"",
+        text: "<p>Grau am Rahmen steht der Quelltext dahinter, innen die Bedienelemente.</p><p>Ein Suchformular <b>holt</b> nur etwas – deshalb <code>method=\"get\"</code>.</p>",
+        apply: function (s) { takt(s); } },
+      { title: "Jemand tippt einen Suchbegriff",
+        text: "<p>Die Eingabe steht im Feld <code>q</code> – noch ist nichts verschickt, die Leitung bleibt leer.</p>",
+        apply: function (s) { takt(s); s.seite = suchseite("kaffee", true, true, false); } },
+      { title: "Absenden",
+        text: "<p>Klick auf „Suchen“. Jetzt baut der Browser die Anfrage.</p>",
+        apply: function (s) { takt(s); s.seite = suchseite("kaffee", false, false, true); } },
+      { title: "Der Browser hängt die Eingabe an die Adresse",
+        text: "<p>Das ist der entscheidende Schritt: Aus dem Feld <code>q</code> wird <code>?q=kaffee</code> <b>in der Adresse</b>. Es gibt keinen Body.</p><p>Bei mehreren Feldern werden sie mit <code>&amp;</code> verkettet.</p>",
+        apply: function (s) {
+          takt(s);
+          s.seite = suchseite("kaffee", false, false, false);
+          sende(s, { zeilen: ["GET /suche?q=kaffee HTTP/1.1", "Host: shop.example.com", "", "(kein Body)"] });
+        } },
+      { title: "Der Server empfängt sie und sucht",
+        text: "<p>Er liest den Wert aus der Adresse und durchsucht seinen Bestand. <b>Nichts wird dabei verändert</b> – Suchen ist Lesen.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "empfangen", "GET /suche?q=kaffee");
+          tut(s, "verarbeitet", "Bestand durchsucht · 3 Treffer");
+        } },
+      { title: "Der Server antwortet",
+        text: "<p><code>200</code> und eine HTML-Seite – diesmal die Trefferliste.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · Trefferliste");
+          sende(s, { rueck: true, zeilen: ["HTTP/1.1 200 OK", "Content-Type: text/html; charset=utf-8", "", "<!DOCTYPE html> … 3 Treffer …"] });
+        } },
+      { title: "Die Suche steht in der Adresszeile",
+        text: "<p>Deshalb kann man sie <b>verschicken</b>, als <b>Lesezeichen</b> speichern und mit <kbd>F5</kbd> neu laden.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresse = "https://shop.example.com/suche?q=kaffee";
+          s.adresseNeu = true;
+          s.seite = [
+            { art: "titel", text: "3 Treffer für „kaffee“" },
+            { art: "link",  text: "Kaffeemühle" },
+            { art: "link",  text: "Kaffeebohnen, 1 kg" },
+            { art: "link",  text: "Kaffeefilter" }
+          ];
+        } },
+      { title: "Was in die Adresse gehört – und was nicht",
+        text: "<p>Ein Suchbegriff darf dort stehen. <b>Ein Passwort nicht.</b> Die Adresse landet im Verlauf, in Lesezeichen und in den Protokollen jedes Servers auf dem Weg.</p><p>Das ist einer der Gründe, warum es <code>POST</code> gibt.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresseNeu = false;
+          s.hinweis = { text: "<b>Nie in die Adresse:</b> Passwörter, Kartennummern, Gesundheitsdaten." };
+        },
+        duration: 5000 }
+    ]
+  });
+
+  /* ========================================= 3 · Eingabeformular (POST) + F5 */
+  function kassenseite(gedrueckt) {
+    return [
+      { art: "titel", text: "Bestellung abschließen" },
+      { art: "formular", code: '<form method="post" action="/bestellungen">', inhalt: [
+        { art: "eingabe", code: '<input name="artikel">', wert: "kaffeemuehle", aktiv: false, tippt: false },
+        { art: "eingabe", code: '<input name="menge">', wert: "1", aktiv: false, tippt: false },
+        { art: "knopf", text: "Kostenpflichtig bestellen", gedrueckt: gedrueckt }
+      ] }
+    ];
+  }
+  var POST_BESTELLUNG = ["POST /bestellungen HTTP/1.1", "Host: shop.example.com",
+                         "Content-Type: application/x-www-form-urlencoded", "Content-Length: 31",
+                         "", "artikel=kaffeemuehle&menge=1"];
+  var DANKE = ["HTTP/1.1 200 OK", "Content-Type: text/html; charset=utf-8", "", "<!DOCTYPE html> … Danke für Deine Bestellung …"];
+  function kasse() {
+    var s = start();
+    s.adresse = "https://shop.example.com/kasse";
+    s.seite = kassenseite(false);
+    return s;
+  }
+
+  sim.registerScenario({
+    id: "formular",
+    title: "Ein Eingabeformular – und dann F5",
+    description: "POST verändert etwas. Was passiert, wenn die Seite neu geladen wird?",
+    state: kasse,
+    steps: [
+      { title: "Ein Formular mit method=\"post\"",
+        text: "<p>Dieses Formular <b>verändert</b> etwas – es legt eine Bestellung an. Deshalb <code>POST</code>.</p><p>Beim Server ist noch nichts angekommen.</p>",
+        apply: function (s) { takt(s); } },
+      { title: "Absenden",
+        text: "<p>Jetzt steht die Eingabe <b>im Body</b>, nicht in der Adresse. <code>Content-Type</code> sagt, in welchem Format.</p><p>Die Nachricht ist unterwegs – beim Server ist sie noch nicht.</p>",
+        apply: function (s) {
+          takt(s);
+          s.seite = kassenseite(true);
+          sende(s, { zeilen: POST_BESTELLUNG });
+        } },
+      { title: "Der Server empfängt sie und legt die Bestellung an",
+        text: "<p>Genau das ist der Unterschied zu vorhin: <b>Es ist etwas passiert.</b> Im Bestand steht jetzt eine Bestellung, die vorher nicht da war.</p><p>Diesen Schritt nimmt niemand zurück, indem er die Nachricht vergisst.</p>",
+        apply: function (s) {
+          takt(s);
+          s.seite = kassenseite(false);
+          tut(s, "empfangen", "POST /bestellungen");
+          tut(s, "verarbeitet", "Bestellung 4711 angelegt");
+          s.bestand.push({ id: "4711", label: "Nr. 4711", name: "Kaffeemühle", wert: "1 Stück" });
+        } },
+      { title: "Die Antwort ist die Dankeseite",
+        text: "<p><code>200 OK</code> mit der Bestätigung im Body. Klingt vernünftig – und ist der Fehler.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · Dankeseite");
+          sende(s, { rueck: true, zeilen: DANKE });
+        } },
+      { title: "Der Browser merkt sich, wie diese Seite entstand",
+        text: "<p>In der Adresszeile steht <code>/bestellungen</code> – aber diese Seite ist die Antwort auf ein <b>POST</b>. Der Browser weiß das und behält die abgeschickten Daten.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresse = "https://shop.example.com/bestellungen";
+          s.adresseNeu = true;
+          s.seite = [
+            { art: "titel", text: "Danke für Deine Bestellung!" },
+            { art: "text",  text: "Bestellnummer 4711" }
+          ];
+        } },
+      { title: "Jemand drückt F5",
+        text: "<p>Aus Gewohnheit, wegen einer schlechten Verbindung, oder weil der Zurück-Knopf danebenlag.</p><p><b>Was soll der Browser jetzt tun?</b> Er kann die Seite nur neu holen, indem er wiederholt, was zu ihr geführt hat.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresseNeu = false;
+          s.taste = { text: "F5", was: "neu laden", t: s.t };
+          s.hinweis = { text: "<b>Formular erneut senden?</b> Die Daten werden noch einmal übertragen." };
+        } },
+      { title: "Der POST geht ein zweites Mal raus",
+        text: "<p>Derselbe Body, dieselbe Adresse. <b>Vergleiche die beiden Einträge im Protokoll</b> – sie sind nicht zu unterscheiden.</p>",
+        apply: function (s) {
+          takt(s);
+          s.hinweis = null;
+          sende(s, { warn: true, zeilen: POST_BESTELLUNG });
+        } },
+      { title: "Der Server legt eine zweite Bestellung an",
+        text: "<p>Er kann nicht erkennen, dass dieselbe Bestellung gemeint ist – für ihn ist es eine neue.</p><p>Das ist kein Fehler des Servers: <b>Die Nachricht sagt ihm nichts anderes.</b></p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "empfangen", "POST /bestellungen");
+          tut(s, "verarbeitet", "Bestellung 4712 angelegt", true);
+          s.bestand.push({ id: "4712", label: "Nr. 4712", name: "Kaffeemühle", wert: "1 Stück", fehler: true });
+        } },
+      { title: "Und die Antwort kommt genauso wie beim ersten Mal",
+        text: "<p><code>200 OK</code>, Dankeseite, neue Bestellnummer. Aus Sicht des Servers ist alles in Ordnung gelaufen – <b>zweimal</b>.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · Dankeseite");
+          sende(s, { rueck: true, warn: true, zeilen: DANKE });
+          s.seite = [
+            { art: "titel", text: "Danke für Deine Bestellung!" },
+            { art: "text",  text: "Bestellnummer 4712" }
+          ];
+        } },
+      { title: "Zwei Bestellungen, eine Absicht",
+        text: "<p><b>POST verändert etwas – Wiederholen ist deshalb nicht harmlos.</b></p><p>Der Browser hat sich korrekt verhalten, der Server auch. Falsch war die Antwort: Wer auf ein Formular mit der Seite antwortet, macht das <kbd>F5</kbd> zur Falle.</p>",
+        apply: function (s) {
+          takt(s);
+          s.taste = null;
+          s.hinweis = { text: "Zwei Bestellungen im Bestand – der Kunde wollte eine." };
+        },
+        duration: 5000 }
+    ]
+  });
+
+  /* ============================================ 4 · Post/Redirect/Get */
+  var GET_BESTELLUNG = ["GET /bestellungen/4711 HTTP/1.1", "Host: shop.example.com", "", "(kein Body)"];
+  var BESTAETIGUNG = ["HTTP/1.1 200 OK", "Content-Type: text/html; charset=utf-8", "", "<!DOCTYPE html> … Bestellung 4711 …"];
+
+  sim.registerScenario({
+    id: "redirect",
+    title: "Dasselbe mit Redirect",
+    description: "Post/Redirect/Get: Der Server antwortet nicht mit der Seite, sondern mit ihrer Adresse.",
+    state: kasse,
+    steps: [
+      { title: "Dasselbe Formular",
+        text: "<p>Gleiche Ausgangslage, gleicher <code>POST</code>. Geändert wird nur <b>die Antwort des Servers</b>.</p>",
+        apply: function (s) { takt(s); } },
+      { title: "Absenden",
+        text: "<p>Unverändert: Die Daten stehen im Body.</p>",
+        apply: function (s) {
+          takt(s);
+          s.seite = kassenseite(true);
+          sende(s, { zeilen: POST_BESTELLUNG });
+        } },
+      { title: "Der Server empfängt sie und legt die Bestellung an",
+        text: "<p>Auch das unverändert – die Bestellung ist in der Welt.</p>",
+        apply: function (s) {
+          takt(s);
+          s.seite = kassenseite(false);
+          tut(s, "empfangen", "POST /bestellungen");
+          tut(s, "verarbeitet", "Bestellung 4711 angelegt");
+          s.bestand.push({ id: "4711", label: "Nr. 4711", name: "Kaffeemühle", wert: "1 Stück" });
+        } },
+      { title: "Und jetzt der Unterschied: ein Redirect",
+        text: "<p>Der Server schickt <b>keine Seite</b>, sondern einen <b>Redirect</b>: <code>302 Found</code> und im Header <code>Location</code> – die Adresse, unter der das Ergebnis zu finden ist.</p><p>Der Body bleibt leer.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "302 Found · Location: /bestellungen/4711");
+          sende(s, { rueck: true, zeilen: ["HTTP/1.1 302 Found", "Location: /bestellungen/4711", "Content-Length: 0", "", "(kein Body)"] });
+        } },
+      { title: "Der Browser liest den Location-Header",
+        text: "<p>Er zeigt diese Antwort <b>nie an</b> – es gibt nichts anzuzeigen. Stattdessen liest er den Header <code>Location</code> aus.</p><p>Beim Server ist in diesem Schritt nichts los: <b>Der Browser ist am Zug.</b></p>",
+        apply: function (s) {
+          takt(s);
+          s.hinweis = { art: "lesen", text: "Location: /bestellungen/4711 → dorthin, mit GET" };
+        } },
+      { title: "Der Browser stellt die zweite Anfrage",
+        text: "<p>Ohne Rückfrage, ohne Zutun des Nutzers – und zwar mit einem <b><code>GET</code></b>. Das ist der ganze Trick.</p><p>Im Protokoll stehen jetzt drei Nachrichten statt einer.</p>",
+        apply: function (s) {
+          takt(s);
+          s.hinweis = null;
+          sende(s, { zeilen: GET_BESTELLUNG });
+        } },
+      { title: "Der Server lädt die Bestellung",
+        text: "<p>Er legt <b>nichts Neues</b> an – er liest, was schon da ist. Der Bestand bleibt bei einer Bestellung.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "empfangen", "GET /bestellungen/4711");
+          tut(s, "verarbeitet", "Bestellung 4711 gelesen");
+        } },
+      { title: "Jetzt kommt die Seite",
+        text: "<p><code>200 OK</code> mit der Bestätigung – als Antwort auf ein <code>GET</code>.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "gesendet", "200 OK · Bestätigung");
+          sende(s, { rueck: true, zeilen: BESTAETIGUNG });
+        } },
+      { title: "Die Adresszeile zeigt das Ergebnis",
+        text: "<p><code>/bestellungen/4711</code> – eine Adresse, die man verschicken und als Lesezeichen speichern kann. Die Bestellung hat jetzt einen Ort.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresse = "https://shop.example.com/bestellungen/4711";
+          s.adresseNeu = true;
+          s.seite = [
+            { art: "titel", text: "Bestellung 4711" },
+            { art: "text",  text: "Kaffeemühle, 1 Stück" },
+            { art: "text",  text: "Status: in Bearbeitung" }
+          ];
+        } },
+      { title: "F5 – und diesmal nur ein GET",
+        text: "<p>Der Browser wiederholt die <b>letzte</b> Nachricht, die zu dieser Seite geführt hat. Das ist der <code>GET</code>, nicht der <code>POST</code>.</p>",
+        apply: function (s) {
+          takt(s);
+          s.adresseNeu = false;
+          s.taste = { text: "F5", was: "neu laden – ohne Rückfrage", t: s.t };
+          sende(s, { zeilen: GET_BESTELLUNG });
+        } },
+      { title: "Der Server liest noch einmal und antwortet",
+        text: "<p>Er arbeitet die Anfrage vollständig ab – <b>lesen, antworten</b>. Nur legt er dabei nichts an.</p><p>Der Bestand zeigt weiterhin <b>eine</b> Bestellung.</p>",
+        apply: function (s) {
+          takt(s);
+          tut(s, "empfangen", "GET /bestellungen/4711");
+          tut(s, "verarbeitet", "Bestellung 4711 gelesen");
+          tut(s, "gesendet", "200 OK · Bestätigung");
+          sende(s, { rueck: true, zeilen: BESTAETIGUNG });
+          s.hinweis = { art: "ok", text: "<b>Neu geladen.</b> Nur ein GET – der Bestand ist unverändert." };
+        } },
+      { title: "Post/Redirect/Get",
+        text: "<p>Drei Nachrichten statt einer – und das <kbd>F5</kbd>-Problem ist weg.</p><p>Denselben Griff sieht man auf Startseiten: <code>/</code> leitet auf <code>/de/start</code> weiter.</p>",
+        apply: function (s) {
+          takt(s);
+          s.taste = null;
+          s.hinweis = null;
+          s.marke = "eine Bestellung · Adresse teilbar · F5 harmlos";
+        },
+        duration: 5000 }
+    ]
+  });
+})();
+</script>
+
+
+    </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
+         data-lead="Vier Abläufe aus einer ganz gewöhnlichen Website. Leitung und Server schreiben mit: Jede Nachricht bleibt stehen, ältere werden nur blass. Die ersten beiden Abläufe holen nur etwas. Der dritte verändert etwas – und geht schief. Der vierte zeigt, wie man das verhindert."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
+      <p class="avd-academy-sim__ost-title" data-avd-academy-sim-ost-title></p>
+      <div class="avd-academy-sim__ost-text" data-avd-academy-sim-ost-text></div>
+    </div>
+    <aside class="avd-academy-sim__aside" aria-label="Erklärung zum aktuellen Schritt">
+      <h2 class="avd-academy-sim__note-title" data-avd-academy-sim-note-title></h2>
+      <div class="avd-academy-sim__note" data-avd-academy-sim-note aria-live="polite"></div>
+    </aside>
+  </main>
+
+  <div class="avd-academy-sim__progress" aria-hidden="true">
+    <div class="avd-academy-sim__progress-fill" data-avd-academy-sim-progress></div>
+  </div>
+
+  <footer class="avd-academy-sim__controls" aria-label="Simulation steuern" data-avd-academy-sim-controls>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-reset
+            title="Zurück auf Anfang (Taste R)" aria-label="Zurück auf Anfang">⟲</button>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-prev
+            title="Schritt zurück (←)" aria-label="Schritt zurück">‹</button><div class="avd-academy-sim__play-group">
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--play" data-avd-academy-sim-play
+              title="Abspielen (Leertaste)" aria-label="Abspielen">
+        <span class="avd-academy-sim__btn-icon" data-avd-academy-sim-play-icon>▶</span>
+        <span class="avd-academy-sim__btn-text" data-avd-academy-sim-play-text>Abspielen</span>
+      </button>
+      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--speed" data-avd-academy-sim-speed-toggle
+              title="Tempo wählen (Taste T)" aria-label="Tempo wählen"
+              aria-haspopup="true" aria-expanded="false">
+        <span data-avd-academy-sim-speed-label>1×</span>
+        <span class="avd-academy-sim__caret" aria-hidden="true">▴</span>
+      </button>
+      <ul class="avd-academy-sim__speed-menu" data-avd-academy-sim-speed-menu hidden role="menu"
+          aria-label="Tempo"><li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="0.5">0,5×<span> langsam</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="true"  data-avd-academy-sim-speed-value="1">1×<span> normal</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="2">2×<span> zügig</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="5">5×<span> im Zeitraffer</span></button></li>
+      </ul>
+    </div>
+    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-next
+            title="Schritt vor (→)" aria-label="Schritt vor">›</button>
+  </footer><p class="avd-academy-sim__capture-hint" data-avd-academy-sim-capture-hint hidden aria-hidden="true">
+    Capture-Modus · <b>C</b> beenden · <b>T</b> Text einblenden
+  </p><p class="avd-academy-sim__print-hint" aria-hidden="true">
+    Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.
+  </p>
+</body>
+</html>

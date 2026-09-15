@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Contract First oder Code First? · ATVANTAGE Academy</title><meta name="description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789382773">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789382773"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789382773">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789382773" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789382773" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789382773">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789382773">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789382773"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -319,7 +319,15 @@ anwendbar.</strong></p>
 .cf__weg h2 { margin-top: 0; font-size: var(--avd-academy-fs-lg, 1.15rem); }
 .cf__weg p { margin-bottom: 0; }
 .cf__svg { width: 100%; max-width: 320px; display: block; margin: 0 auto .8rem; color: var(--avd-academy-color-ink); }
-.cf__h2 { margin-top: var(--avd-academy-space-8, 2rem); }
+/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--avd-academy-space-12`). */
+.cf h2.cf__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
 .cf__lead { color: var(--avd-academy-color-ink-muted); }
 .cf__karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
 .cf__karte { border: 1px solid var(--avd-academy-color-border); border-left: 4px solid var(--avd-academy-color-warning); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg); }
