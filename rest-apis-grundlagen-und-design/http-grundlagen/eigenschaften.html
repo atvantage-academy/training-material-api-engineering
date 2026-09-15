@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>HTTP: Eigenschaften und Nachrichtenaufbau · ATVANTAGE Academy</title><meta name="description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789448922">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789448922">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789448922">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789448922"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789448922">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789448922" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789448922" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789448922">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789449695">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789449695">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789449695">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789449695">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789449695" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789449695" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789449695">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789448922">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789448922"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789449695">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789449695"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -146,7 +146,7 @@ jeder Website, sofort.</p>
     </div>
 </div>
 
-<h2 class="hg__h2">Drei Eigenschaften, aus denen alles Weitere folgt</h2>
+<h2 class="hg__h2">Vier Eigenschaften, aus denen alles Weitere folgt</h2>
 
 <p class="hg__lead">Klick eine Karte an – darunter steht, was daraus folgt.</p>
 
@@ -241,7 +241,20 @@ gehört: Das muss in der Anfrage stehen.</p>
         <p><strong>Deshalb gibt es Cookies.</strong> Der Server schickt eine Kennung mit, der Browser gibt
 sie bei <em>jeder</em> weiteren Anfrage zurück. So entsteht der Zusammenhang <strong>auf</strong> dem
 Protokoll, nicht in ihm.</p>
+
+        <p class="hg__poplink"><button type="button" class="hg__pop" data-hg-pop="zustandslos">Zwei Dinge, die beide „zustandslos“ heißen</button></p>
       </div>
+
+<dialog class="hg__dialog" id="hg-pop-zustandslos" aria-labelledby="hg-pop-zustandslos-t">
+<h4 id="hg-pop-zustandslos-t">Zwei Dinge, die beide „zustandslos“ heißen</h4>
+<p><em>HTTP ist zustandslos</em> heißt: <strong>die Leitung</strong> trägt nichts von
+einem Nachrichtenpaar zum nächsten. Nicht abwählbar – man kann nur etwas darüberbauen,
+wie Cookies es tun.</p>
+<p><em>Ein Service ist zustandslos</em> ist dagegen eine <strong>Entwurfsentscheidung</strong>:
+Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.</p>
+<p><strong>Das Protokoll ist es immer. Der Service ist es, wenn man ihn so baut.</strong></p>
+<button type="button" class="hg__dialog__zu" data-hg-pop-zu="">Schließen</button>
+</dialog>
 </div>
 
 <div class="hg__karte">
@@ -280,16 +293,69 @@ antworten.</p>
       </div>
 </div>
 
+<div class="hg__karte">
+<svg viewBox="0 0 400 230" role="img" aria-label="Zwei Antworten des Servers untereinander: oben eine Weiterleitung 302 Found mit hervorgehobenem Location-Header, unten eine 200-Antwort mit einem hervorgehobenen Link im HTML-Body. Von beiden führt ein gestrichelter Pfeil nach rechts auf die nächste Anfrage des Clients, die genau diese Adresse aufruft.">
+  <title>Hyper: die Antwort trägt den nächsten Schritt mit – im Header oder im Body</title>
+  <defs>
+    <marker id="pf-hy" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker>
+  </defs>
+
+  <text x="6" y="14" font-size="10" fill="var(--avd-academy-color-ink-muted)">im Header</text>
+  <rect x="6" y="20" width="196" height="56" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <rect x="12" y="52" width="184" height="14" rx="3" fill="var(--avd-academy-color-accent-soft)" />
+  <g font-size="9" font-family="monospace" fill="currentColor">
+    <text x="18" y="42">302 Found</text>
+    <text x="18" y="62">Location: /produkte/12345</text>
+  </g>
+
+  <text x="6" y="96" font-size="10" fill="var(--avd-academy-color-ink-muted)">im Body</text>
+  <rect x="6" y="102" width="196" height="74" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <rect x="12" y="152" width="184" height="14" rx="3" fill="var(--avd-academy-color-accent-soft)" />
+  <g font-size="9" font-family="monospace" fill="currentColor">
+    <text x="18" y="124">200 OK</text>
+    <text x="18" y="140">Content-Type: text/html</text>
+    <text x="18" y="162">  &lt;a href="/produkte/12345"&gt;</text>
+  </g>
+
+  <path d="M204 60 C 230 60 234 88 256 94" fill="none" stroke="var(--avd-academy-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)" />
+  <path d="M204 158 C 230 158 234 124 256 116" fill="none" stroke="var(--avd-academy-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)" />
+
+  <rect x="262" y="82" width="132" height="52" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <g font-size="9" font-family="monospace" fill="currentColor">
+    <text x="328" y="106" text-anchor="middle">GET /produkte/12345</text>
+    <text x="328" y="122" text-anchor="middle">Host: shop.example.com</text>
+  </g>
+  <text x="328" y="152" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">nächste Anfrage</text>
+
+  <text x="200" y="212" text-anchor="middle" font-size="11" font-weight="600" fill="var(--avd-academy-color-accent)">Der Client muss die Adresse nicht kennen – sie steht in der Antwort</text>
+</svg>
+<h3>Hyper</h3>
+<p class="hg__karte__kurz">Das <strong>H</strong> in HTTP: Die Antwort bringt die Verweise mit, die den nächsten Aufruf möglich machen.</p>
+<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<div class="hg__karte__detail">
+        <p><strong>Hypertext</strong> ist Text, der Verweise auf anderen Text enthält – klickbar statt
+linear zu lesen. <strong>Hypermedia</strong> ist dasselbe Prinzip für alle Inhaltsarten: Bilder,
+Formulare, Videos.</p>
+
+        <p>Für den Aufrufer heißt das: Er muss die nächste Adresse weder kennen noch selbst
+zusammenbauen – <strong>sie steht in der Antwort.</strong> Mal im <strong>Header</strong>, mal im <strong>Body</strong>.
+Der Client nimmt sie heraus und stellt damit die nächste Anfrage.</p>
+
+        <p>Der Header dafür heißt <code>Location</code>, und er kommt in zwei Lagen vor: bei einer
+<strong>Weiterleitung</strong> (<code>302 Found</code> – „das, was Du suchst, liegt dort“) und beim
+<strong>Anlegen</strong> (<code>201 Created</code> – „das Neue liegt jetzt dort“). Im Body ist es ein Link
+in HTML oder ein Feld in JSON.</p>
+
+        <p>Genau das tut ein Browser den ganzen Tag: Er liest eine Seite, findet darin Adressen
+und holt nach, was er braucht – Bilder, Stylesheets, die nächste Seite.</p>
+
+        <p><strong>Der Punkt für später:</strong> In HTML sind diese Verweise selbstverständlich. In
+JSON-APIs sind sie es <strong>nicht</strong> – dort baut der Aufrufer die Adressen meist selbst
+zusammen und muss sie deshalb kennen.</p>
+      </div>
 </div>
 
-<div class="avd-academy-callout avd-academy-callout--warning">
-    <p><strong>Zwei Dinge, die beide „zustandslos“ heißen.</strong> <em>HTTP ist zustandslos</em> heißt: <strong>die
-Leitung</strong> trägt nichts von einem Nachrichtenpaar zum nächsten. Nicht abwählbar – man
-kann nur etwas darüberbauen, wie Cookies es tun. <em>Ein Service ist zustandslos</em> ist
-dagegen eine <strong>Entwurfsentscheidung</strong>: Die Instanz hält nichts im Speicher, damit
-jede Instanz jede Anfrage beantworten kann.
-<strong>Das Protokoll ist es immer. Der Service ist es, wenn man ihn so baut.</strong></p>
-  </div>
+</div>
 
 <h2 class="hg__h2">Der Aufbau ist in beiden Richtungen derselbe</h2>
 
@@ -442,8 +508,13 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
 .hg__start__text ol { margin-bottom: .6rem; }
 .hg__start__text p:last-child { margin-bottom: 0; }
 
-/* Die drei Eigenschaften */
-.hg__karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: var(--avd-academy-space-4, 1rem); }
+/* Die vier Eigenschaften */
+/* Feste 2x2-Anordnung statt auto-fit: Mit VIER Karten ergab auto-fit je nach
+   Breite 3+1, und die vierte stand allein in einer Reihe. Zwei Spalten sind
+   ausserdem breiter - die Skizzen werden groesser, und genau darauf kommt es an,
+   wenn die Seite projiziert wird. */
+.hg__karten { display: grid; grid-template-columns: 1fr; gap: var(--avd-academy-space-4, 1rem); }
+@media (min-width: 46rem) { .hg__karten { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .hg__karte { border: 1px solid var(--avd-academy-color-border); border-top: 4px solid var(--avd-academy-color-accent);
   border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg); }
 .hg__karte svg { width: 100%; height: auto; display: block; margin-bottom: .6rem; color: var(--avd-academy-color-ink); }
@@ -502,6 +573,53 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
 .hg__ja { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
 .hg__nein { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
 
+/* --- Der Nachtrag hinter einem Klick -----------------------------------------
+   Der Unterschied zwischen „HTTP ist zustandslos" und „der Service ist
+   zustandslos" stand als Warn-Kasten UNTER den Karten - dort ging er unter, weil
+   niemand nach dem Lesen der Karten noch weiterscrollt. Er gehoert zur Karte, ist
+   aber zu lang fuer sie. Deshalb hinter einem Klick; im Ausdruck steht er
+   vollstaendig an genau dieser Stelle.
+
+   <dialog> statt eigenem Overlay: Hintergrund, Esc zum Schliessen und der
+   Fokusfang kommen vom Browser und muessen nicht nachgebaut werden. */
+.hg__poplink { margin: .9rem 0 0; }
+.hg__pop {
+  font: inherit; font-size: var(--avd-academy-fs-sm, .92rem);
+  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  color: var(--avd-academy-color-accent);
+  text-decoration: underline; text-underline-offset: .2em;
+}
+.hg__pop::before { content: "ⓘ\00a0"; text-decoration: none; }
+.hg__pop:hover { text-decoration-thickness: 2px; }
+.hg__pop:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 3px; border-radius: 2px; }
+
+.hg__dialog {
+  /* Mitte ausdruecklich setzen: Die UA-Regel `margin: auto` traegt nur, solange
+     kein Vorfahr einen eigenen Enthaltungsblock aufmacht. Hier tat sie es nicht -
+     der Kasten stand oben links. */
+  position: fixed; inset: 0; margin: auto;
+  max-width: 38rem; width: calc(100% - 2rem); height: fit-content;
+  border: 1px solid var(--avd-academy-color-border);
+  border-top: 4px solid var(--avd-academy-tone-alert);
+  border-radius: var(--avd-academy-radius, 8px);
+  background: var(--avd-academy-color-bg); color: var(--avd-academy-color-ink);
+  padding: var(--avd-academy-space-5, 1.25rem);
+  box-shadow: 0 10px 40px rgb(0 0 0 / .35);
+}
+.hg__dialog::backdrop { background: rgb(0 0 0 / .55); }
+.hg__dialog h4 { margin: 0 0 .7rem; font-size: var(--avd-academy-fs-md, 1.05rem); }
+.hg__dialog p { margin: 0 0 .7rem; }
+.hg__dialog p:last-of-type { margin-bottom: 0; }
+.hg__dialog__zu {
+  margin-top: var(--avd-academy-space-4, 1rem);
+  font: inherit; font-size: var(--avd-academy-fs-sm, .92rem); cursor: pointer;
+  padding: .35em 1.1em; border-radius: var(--avd-academy-radius-sm, 4px);
+  border: 1px solid var(--avd-academy-color-accent);
+  background: var(--avd-academy-color-accent);
+  color: var(--avd-academy-color-accent-contrast);
+}
+.hg__dialog__zu:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 3px; }
+
 /* Nur fuer den Ausdruck: die Erklaerungen, die am Bildschirm im Panel erscheinen. */
 .hg__druck { display: none; }
 
@@ -513,6 +631,14 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
 @media print {
   .hg__mehr { display: none; }
   .hg__karte__detail { display: block !important; }
+  /* Der Nachtrag steht auf dem Papier an seiner Stelle - in der Karte, an die er
+     gehoert - statt hinter einem Klick, den es auf Papier nicht gibt. */
+  .hg__pop, .hg__poplink, .hg__dialog__zu { display: none; }
+  .hg__dialog {
+    display: block; position: static; inset: auto;
+    max-width: none; width: auto; height: auto;
+    margin: .8rem 0 0; padding: .6rem .9rem; box-shadow: none;
+  }
   .hg__detail { display: none; }
   .hg__druck { display: block; }
   .hg__teil { background: none !important; border-left-color: transparent !important; }
@@ -569,7 +695,23 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
   var wurzel = document.querySelector(".hg");
   if (!wurzel) return;
 
-  /* --- Die drei Eigenschaften: aufklappen ---------------------------------- */
+  /* --- Die vier Eigenschaften: aufklappen ---------------------------------- */
+  /* Nachtrag hinter einem Klick. Ohne showModal() waere <dialog> nur ein Kasten
+     im Fluss - erst damit kommen Hintergrund, Esc und Fokusfang vom Browser. */
+  wurzel.querySelectorAll("[data-hg-pop]").forEach(function (knopf) {
+    var dialog = document.getElementById("hg-pop-" + knopf.getAttribute("data-hg-pop"));
+    if (!dialog || typeof dialog.showModal !== "function") { knopf.hidden = true; return; }
+    knopf.addEventListener("click", function () { dialog.showModal(); });
+    var zu = dialog.querySelector("[data-hg-pop-zu]");
+    if (zu) { zu.addEventListener("click", function () { dialog.close(); }); }
+    /* Klick auf den Hintergrund schliesst: Der Klick landet auf dem <dialog>
+       selbst, nicht auf seinem Inhalt. */
+    dialog.addEventListener("click", function (ev) {
+      if (ev.target === dialog) { dialog.close(); }
+    });
+    dialog.addEventListener("close", function () { knopf.focus(); });
+  });
+
   wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
     var detail = knopf.nextElementSibling;
     knopf.addEventListener("click", function () {
