@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Die Kundenverwaltung entwerfen · ATVANTAGE Academy</title><meta name="description" content="Entwirf die komplette API einer Kundenverwaltung – formlos, aber vollständig genug, um sie morgen zu erklären."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789449695">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789449695" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789449695" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789449695">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789450115">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789450115" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789450115" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789450115">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789449695">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789449695"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789450115">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789450115"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -116,12 +116,13 @@
     <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
       <h1 id="die-kundenverwaltung-entwerfen">Die Kundenverwaltung entwerfen</h1>
 
-<p><strong>Als</strong> Team, das den <em>Account Service</em> des Online-Shops baut, <strong>möchten wir</strong> eine
-API entwerfen, mit der andere Teams Kundendaten verwalten können, <strong>damit</strong> Shop,
-Bestellung und Versand nicht mehr direkt in unsere Datenbank greifen müssen.</p>
+<p><strong>Als</strong> Mitglied des Teams, das den <em>Account Service</em> des Online-Shops baut,
+<strong>möchte ich</strong> eine API entwerfen, mit der andere Teams Kundendaten verwalten
+können, <strong>damit</strong> Shop, Bestellung und Versand nicht mehr direkt in unsere
+Datenbank greifen müssen.</p>
 
-<p>Ihr habt heute Morgen den Shop zerlegt. Einer der Kästen war das <strong>Kundenkonto</strong>.
-Jetzt entwerft Ihr die Linie, die dorthin führt.</p>
+<p>Du hast vorhin den Shop zerlegt. Einer der Kästen war das <strong>Kundenkonto</strong>. Jetzt
+entwirfst Du – gemeinsam mit Deiner Gruppe – die Linie, die dorthin führt.</p>
 
 <h2 id="der-fachliche-auftrag">Der fachliche Auftrag</h2>
 
@@ -138,7 +139,7 @@ Jetzt entwerft Ihr die Linie, die dorthin führt.</p>
 <p>Andere Teams müssen Kunden <strong>anlegen, suchen, lesen, ändern und löschen</strong> können.
 Außerdem soll sich ein Kundenkonto <strong>deaktivieren und wieder aktivieren</strong> lassen.</p>
 
-<p>Mehr steht nicht in der Anforderung. Alles Weitere entscheidet Ihr – und schreibt
+<p>Mehr steht nicht in der Anforderung. Alles Weitere entscheidest Du – und schreibst
 es auf.</p>
 
 <h2 id="lernziele">Lernziele</h2>
@@ -151,61 +152,61 @@ die Adressen.</li>
   <li>beschreibst zu jeder Operation Methode, Adresse, Request-Inhalt, Response-Inhalt
 und die möglichen Statuscodes.</li>
   <li>entwirfst eine Modellierung für das Deaktivieren, das keine CRUD-Operation ist.</li>
-  <li>begründest mindestens zwei Eurer Entscheidungen so, dass eine andere Gruppe sie
+  <li>begründest mindestens zwei Deiner Entscheidungen so, dass eine andere Gruppe sie
 nachvollziehen kann.</li>
 </ul>
 
 <h2 id="definition-of-done">Definition of Done</h2>
 
 <ul class="task-list">
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt eine Liste der Ressourcen mit ihren Adressen.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Liste der Ressourcen mit ihren Adressen.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Zu jeder Operation steht: Methode, Adresse, was im Request-Body steht, was in
     der Antwort steht, welche Statuscodes vorkommen.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Für das Deaktivieren habt Ihr eine Lösung – und wisst, warum nicht eine der
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Für das Deaktivieren hast Du eine Lösung – und weißt, warum nicht eine der
     anderen.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt notiert, was Ihr <strong>angenommen</strong> habt, ohne dass es in der Anforderung
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast notiert, was Du <strong>angenommen</strong> hast, ohne dass es in der Anforderung
     stand.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr könnt zwei Entscheidungen benennen, über die Ihr am längsten diskutiert
-    habt.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Euch lesen
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du kannst zwei Entscheidungen benennen, über die Deine Gruppe am längsten
+    diskutiert hat.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Dich lesen
     kann.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
 </ul>
 
 <h2 id="arbeitsschritte">Arbeitsschritte</h2>
 
-<h3 id="findet-die-ressourcen">Findet die Ressourcen</h3>
+<h3 id="finde-die-ressourcen">Finde die Ressourcen</h3>
 
-<p>Geht die Anforderung durch und markiert die <strong>Substantive</strong>. Nicht jedes wird eine
+<p>Geh die Anforderung durch und markier die <strong>Substantive</strong>. Nicht jedes wird eine
 Ressource – aber jede Ressource steckt in einem.</p>
 
-<p>Entscheidet für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
+<p>Entscheide für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
 ein Teil von etwas anderem?</p>
 
 <blockquote>
   <p><strong>Hinweis:</strong> Es gibt hier keine richtige Zahl. Zwei Ressourcen können richtig
-sein, sechs auch. Was zählt, ist, dass Ihr begründen könnt, warum.</p>
+sein, sechs auch. Was zählt, ist, dass Du begründen kannst, warum.</p>
 </blockquote>
 
-<h3 id="schreibt-die-operationen-auf">Schreibt die Operationen auf</h3>
+<h3 id="schreib-die-operationen-auf">Schreib die Operationen auf</h3>
 
-<p>Nehmt Euch jede Ressource vor und geht die Methoden durch – so wie in der
-Kreuzeltabelle vorhin. Für jede Kombination, die Ihr anbietet, notiert:</p>
+<p>Nimm Dir jede Ressource vor und geh die Methoden durch – so wie in der
+Kreuzeltabelle vorhin. Für jede Kombination, die Du anbietest, notier:</p>
 
 <pre><code>### Alle Kunden lesen
 - Request:  GET /customers
 - Response: 200 – Liste der Kundendaten
 </code></pre>
 
-<p>Und für jede, die Ihr <strong>nicht</strong> anbietet, notiert in einem Halbsatz, warum nicht.</p>
+<p>Und für jede, die Du <strong>nicht</strong> anbietest, notier in einem Halbsatz, warum nicht.</p>
 
 <blockquote>
-  <p><strong>Hinweis:</strong> Schreibt es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
-OpenAPI, kein YAML. Das Werkzeug kommt heute Nachmittag; jetzt würde es Euch nur
-vom Entwerfen abhalten.</p>
+  <p><strong>Hinweis:</strong> Schreib es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
+OpenAPI, kein YAML. Das Werkzeug kommt später; jetzt würde es Dich nur vom
+Entwerfen abhalten.</p>
 </blockquote>
 
-<h3 id="vergesst-die-fehlerfälle-nicht">Vergesst die Fehlerfälle nicht</h3>
+<h3 id="vergiss-die-fehlerfälle-nicht">Vergiss die Fehlerfälle nicht</h3>
 
 <p>Zu jeder Operation: Was kann schiefgehen, und was bekommt der Aufrufer dann?</p>
 
@@ -220,36 +221,36 @@ vom Entwerfen abhalten.</p>
 Aufrufer daraus erkennen kann, <strong>was er anders machen soll</strong>.</p>
 </blockquote>
 
-<h3 id="entscheidet-euch-beim-deaktivieren">Entscheidet Euch beim Deaktivieren</h3>
+<h3 id="entscheide-dich-beim-deaktivieren">Entscheide Dich beim Deaktivieren</h3>
 
 <p>Das Deaktivieren ist kein Anlegen, kein Lesen, kein Löschen. Es gibt mehrere Wege,
 und sie sind alle vertretbar.</p>
 
-<p>Findet mindestens <strong>zwei</strong> Varianten, entscheidet Euch für eine – und notiert, was
+<p>Finde mindestens <strong>zwei</strong> Varianten, entscheide Dich für eine – und notier, was
 gegen die andere sprach.</p>
 
 <blockquote>
-  <p><strong>Hinweis:</strong> Fragt Euch bei jeder Variante: Kann man sie zweimal hintereinander
+  <p><strong>Hinweis:</strong> Frag Dich bei jeder Variante: Kann man sie zweimal hintereinander
 ausführen? Sieht man später noch, dass jemand deaktiviert hat? Wie viele Zustände
-müsst Ihr abbilden, wenn „gesperrt“ dazukommt?</p>
+musst Du abbilden, wenn „gesperrt“ dazukommt?</p>
 </blockquote>
 
-<h3 id="schreibt-eure-annahmen-auf">Schreibt Eure Annahmen auf</h3>
+<h3 id="schreib-deine-annahmen-auf">Schreib Deine Annahmen auf</h3>
 
-<p>Ihr habt Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
+<p>Du hast Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
 Kunde zwei Kreditkarten haben? Ist die Anschrift Pflicht? Kommen die Bezahldaten
 mit, wenn jemand die Kundenliste liest?</p>
 
-<p>Sammelt diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – morgen früh
+<p>Sammel diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – beim Vergleich
 wird genau das der Unterschied zu den anderen Gruppen sein.</p>
 
-<h3 id="macht-euch-bereit-fürs-erklären">Macht Euch bereit fürs Erklären</h3>
+<h3 id="mach-dich-bereit-fürs-erklären">Mach Dich bereit fürs Erklären</h3>
 
-<p>Zum Schluss: Sucht die <strong>zwei Entscheidungen</strong> heraus, über die Ihr am längsten
-diskutiert habt. Notiert das Argument beider Seiten.</p>
+<p>Zum Schluss: Such die <strong>zwei Entscheidungen</strong> heraus, über die Deine Gruppe am
+längsten diskutiert hat. Notier das Argument beider Seiten.</p>
 
-<p>Morgen stellt Ihr Euren Entwurf den anderen vor – und diese zwei Stellen sind das,
-was die anderen wirklich interessiert.</p>
+<p>Später stellst Du Deinen Entwurf den anderen vor – und diese zwei Stellen sind das,
+was sie wirklich interessiert.</p>
 
 <blockquote>
   <p><strong>Hinweis:</strong> Unfertig ist völlig in Ordnung. Drei saubere Operationen sind besser
@@ -259,26 +260,27 @@ als zehn halbe.</p>
 <h2 id="reflexionsfragen">Reflexionsfragen</h2>
 
 <ul>
-  <li>Worüber habt Ihr in der Gruppe am längsten diskutiert? Was war das eigentliche
-Thema hinter dem Streit?</li>
-  <li>Welche Entscheidungen habt Ihr getroffen, die nicht in der Anforderung standen?</li>
+  <li>Worüber hast Du mit Deiner Gruppe am längsten diskutiert? Was war das
+eigentliche Thema hinter dem Streit?</li>
+  <li>Welche Entscheidungen hast Du getroffen, die nicht in der Anforderung standen?</li>
   <li>Kommen die Bezahldaten mit, wenn jemand die Kundenliste abruft? Was spricht
 dagegen, was dafür?</li>
-  <li>Ein anderes Team liest Euren Entwurf und fängt an zu programmieren. An welcher
-Stelle wird es Euch anrufen?</li>
+  <li>Ein anderes Team liest Deinen Entwurf und fängt an zu programmieren. An welcher
+Stelle wird es Dich anrufen?</li>
   <li>Der Fachbereich meldet: „Ach ja, ein Kunde kann mehrere Anschriften haben.“ Wie
-viel Eures Entwurfs müsst Ihr ändern?</li>
+viel Deines Entwurfs musst Du ändern?</li>
 </ul>
 
 
 <textarea id="avd-academy-md-source" hidden aria-hidden="true"># Die Kundenverwaltung entwerfen
 
-**Als** Team, das den *Account Service* des Online-Shops baut, **möchten wir** eine
-API entwerfen, mit der andere Teams Kundendaten verwalten können, **damit** Shop,
-Bestellung und Versand nicht mehr direkt in unsere Datenbank greifen müssen.
+**Als** Mitglied des Teams, das den *Account Service* des Online-Shops baut,
+**möchte ich** eine API entwerfen, mit der andere Teams Kundendaten verwalten
+können, **damit** Shop, Bestellung und Versand nicht mehr direkt in unsere
+Datenbank greifen müssen.
 
-Ihr habt heute Morgen den Shop zerlegt. Einer der Kästen war das **Kundenkonto**.
-Jetzt entwerft Ihr die Linie, die dorthin führt.
+Du hast vorhin den Shop zerlegt. Einer der Kästen war das **Kundenkonto**. Jetzt
+entwirfst Du – gemeinsam mit Deiner Gruppe – die Linie, die dorthin führt.
 
 ## Der fachliche Auftrag
 
@@ -293,7 +295,7 @@ Der Account Service verwaltet Kunden. Zu einem Kunden gehören:
 Andere Teams müssen Kunden **anlegen, suchen, lesen, ändern und löschen** können.
 Außerdem soll sich ein Kundenkonto **deaktivieren und wieder aktivieren** lassen.
 
-Mehr steht nicht in der Anforderung. Alles Weitere entscheidet Ihr – und schreibt
+Mehr steht nicht in der Anforderung. Alles Weitere entscheidest Du – und schreibst
 es auf.
 
 ## Lernziele
@@ -305,41 +307,41 @@ Du…
 - beschreibst zu jeder Operation Methode, Adresse, Request-Inhalt, Response-Inhalt
   und die möglichen Statuscodes.
 - entwirfst eine Modellierung für das Deaktivieren, das keine CRUD-Operation ist.
-- begründest mindestens zwei Eurer Entscheidungen so, dass eine andere Gruppe sie
+- begründest mindestens zwei Deiner Entscheidungen so, dass eine andere Gruppe sie
   nachvollziehen kann.
 
 ## Definition of Done
 
-* [ ] Ihr habt eine Liste der Ressourcen mit ihren Adressen.
+* [ ] Du hast eine Liste der Ressourcen mit ihren Adressen.
 * [ ] Zu jeder Operation steht: Methode, Adresse, was im Request-Body steht, was in
       der Antwort steht, welche Statuscodes vorkommen.
-* [ ] Für das Deaktivieren habt Ihr eine Lösung – und wisst, warum nicht eine der
+* [ ] Für das Deaktivieren hast Du eine Lösung – und weißt, warum nicht eine der
       anderen.
-* [ ] Ihr habt notiert, was Ihr **angenommen** habt, ohne dass es in der Anforderung
+* [ ] Du hast notiert, was Du **angenommen** hast, ohne dass es in der Anforderung
       stand.
-* [ ] Ihr könnt zwei Entscheidungen benennen, über die Ihr am längsten diskutiert
-      habt.
-* [ ] Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Euch lesen
+* [ ] Du kannst zwei Entscheidungen benennen, über die Deine Gruppe am längsten
+      diskutiert hat.
+* [ ] Das Ergebnis ist so aufgeschrieben, dass eine andere Gruppe es ohne Dich lesen
       kann.
 * [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
 
 ## Arbeitsschritte
 
-### Findet die Ressourcen
+### Finde die Ressourcen
 
-Geht die Anforderung durch und markiert die **Substantive**. Nicht jedes wird eine
+Geh die Anforderung durch und markier die **Substantive**. Nicht jedes wird eine
 Ressource – aber jede Ressource steckt in einem.
 
-Entscheidet für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
+Entscheide für jedes: Ist das eine eigene Sache mit eigener Adresse, oder ist es
 ein Teil von etwas anderem?
 
 &gt; **Hinweis:** Es gibt hier keine richtige Zahl. Zwei Ressourcen können richtig
-&gt; sein, sechs auch. Was zählt, ist, dass Ihr begründen könnt, warum.
+&gt; sein, sechs auch. Was zählt, ist, dass Du begründen kannst, warum.
 
-### Schreibt die Operationen auf
+### Schreib die Operationen auf
 
-Nehmt Euch jede Ressource vor und geht die Methoden durch – so wie in der
-Kreuzeltabelle vorhin. Für jede Kombination, die Ihr anbietet, notiert:
+Nimm Dir jede Ressource vor und geh die Methoden durch – so wie in der
+Kreuzeltabelle vorhin. Für jede Kombination, die Du anbietest, notier:
 
 ```
 ### Alle Kunden lesen
@@ -347,13 +349,13 @@ Kreuzeltabelle vorhin. Für jede Kombination, die Ihr anbietet, notiert:
 - Response: 200 – Liste der Kundendaten
 ```
 
-Und für jede, die Ihr **nicht** anbietet, notiert in einem Halbsatz, warum nicht.
+Und für jede, die Du **nicht** anbietest, notier in einem Halbsatz, warum nicht.
 
-&gt; **Hinweis:** Schreibt es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
-&gt; OpenAPI, kein YAML. Das Werkzeug kommt heute Nachmittag; jetzt würde es Euch nur
-&gt; vom Entwerfen abhalten.
+&gt; **Hinweis:** Schreib es formlos auf – Stichpunkte, Markdown, eine Tabelle. Kein
+&gt; OpenAPI, kein YAML. Das Werkzeug kommt später; jetzt würde es Dich nur vom
+&gt; Entwerfen abhalten.
 
-### Vergesst die Fehlerfälle nicht
+### Vergiss die Fehlerfälle nicht
 
 Zu jeder Operation: Was kann schiefgehen, und was bekommt der Aufrufer dann?
 
@@ -364,49 +366,49 @@ Zu jeder Operation: Was kann schiefgehen, und was bekommt der Aufrufer dann?
 &gt; **Hinweis:** Der Statuscode ist die halbe Antwort. Die andere Hälfte ist, ob der
 &gt; Aufrufer daraus erkennen kann, **was er anders machen soll**.
 
-### Entscheidet Euch beim Deaktivieren
+### Entscheide Dich beim Deaktivieren
 
 Das Deaktivieren ist kein Anlegen, kein Lesen, kein Löschen. Es gibt mehrere Wege,
 und sie sind alle vertretbar.
 
-Findet mindestens **zwei** Varianten, entscheidet Euch für eine – und notiert, was
+Finde mindestens **zwei** Varianten, entscheide Dich für eine – und notier, was
 gegen die andere sprach.
 
-&gt; **Hinweis:** Fragt Euch bei jeder Variante: Kann man sie zweimal hintereinander
+&gt; **Hinweis:** Frag Dich bei jeder Variante: Kann man sie zweimal hintereinander
 &gt; ausführen? Sieht man später noch, dass jemand deaktiviert hat? Wie viele Zustände
-&gt; müsst Ihr abbilden, wenn „gesperrt“ dazukommt?
+&gt; musst Du abbilden, wenn „gesperrt“ dazukommt?
 
-### Schreibt Eure Annahmen auf
+### Schreib Deine Annahmen auf
 
-Ihr habt Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
+Du hast Entscheidungen getroffen, die nicht in der Anforderung standen. Darf ein
 Kunde zwei Kreditkarten haben? Ist die Anschrift Pflicht? Kommen die Bezahldaten
 mit, wenn jemand die Kundenliste liest?
 
-Sammelt diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – morgen früh
+Sammel diese Annahmen an einer Stelle. Das ist keine Fleißaufgabe – beim Vergleich
 wird genau das der Unterschied zu den anderen Gruppen sein.
 
-### Macht Euch bereit fürs Erklären
+### Mach Dich bereit fürs Erklären
 
-Zum Schluss: Sucht die **zwei Entscheidungen** heraus, über die Ihr am längsten
-diskutiert habt. Notiert das Argument beider Seiten.
+Zum Schluss: Such die **zwei Entscheidungen** heraus, über die Deine Gruppe am
+längsten diskutiert hat. Notier das Argument beider Seiten.
 
-Morgen stellt Ihr Euren Entwurf den anderen vor – und diese zwei Stellen sind das,
-was die anderen wirklich interessiert.
+Später stellst Du Deinen Entwurf den anderen vor – und diese zwei Stellen sind das,
+was sie wirklich interessiert.
 
 &gt; **Hinweis:** Unfertig ist völlig in Ordnung. Drei saubere Operationen sind besser
 &gt; als zehn halbe.
 
 ## Reflexionsfragen
 
-- Worüber habt Ihr in der Gruppe am längsten diskutiert? Was war das eigentliche
-  Thema hinter dem Streit?
-- Welche Entscheidungen habt Ihr getroffen, die nicht in der Anforderung standen?
+- Worüber hast Du mit Deiner Gruppe am längsten diskutiert? Was war das
+  eigentliche Thema hinter dem Streit?
+- Welche Entscheidungen hast Du getroffen, die nicht in der Anforderung standen?
 - Kommen die Bezahldaten mit, wenn jemand die Kundenliste abruft? Was spricht
   dagegen, was dafür?
-- Ein anderes Team liest Euren Entwurf und fängt an zu programmieren. An welcher
-  Stelle wird es Euch anrufen?
+- Ein anderes Team liest Deinen Entwurf und fängt an zu programmieren. An welcher
+  Stelle wird es Dich anrufen?
 - Der Fachbereich meldet: „Ach ja, ein Kunde kann mehrere Anschriften haben.“ Wie
-  viel Eures Entwurfs müsst Ihr ändern?
+  viel Deines Entwurfs musst Du ändern?
 
 ## Weiterführende Informationen
 

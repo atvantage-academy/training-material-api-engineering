@@ -59,15 +59,15 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Eine Million Kunden ausliefern · ATVANTAGE Academy</title><meta name="description" content="Eure Kundenverwaltung ist gewachsen. Baut Paginierung, brauchbare Fehler und eine Suche ein, die nicht in eine URL passt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Eine Million Kunden ausliefern · ATVANTAGE Academy</title><meta name="description" content="Deine Kundenverwaltung ist gewachsen. Bau Paginierung, brauchbare Fehler und eine Suche ein, die nicht in eine URL passt."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789449695">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789449695"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789449695">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789449695" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789449695" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789449695">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789450115">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789450115">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789450115" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789450115" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789450115">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789449695">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789449695"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789450115">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789450115"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -116,14 +116,14 @@
     <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
       <h1 id="eine-million-kunden-ausliefern">Eine Million Kunden ausliefern</h1>
 
-<p><strong>Als</strong> Team, dessen API erfolgreich geworden ist, <strong>möchten wir</strong> große
-Datenmengen und Fehlerfälle so ausliefern, <strong>damit</strong> unsere Aufrufer damit
+<p><strong>Als</strong> Mitglied des Teams, dessen API erfolgreich geworden ist, <strong>möchte ich</strong>
+große Datenmengen und Fehlerfälle so ausliefern, <strong>damit</strong> unsere Aufrufer damit
 arbeiten können, ohne uns anzurufen.</p>
 
-<p>Euer Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
+<p>Dein Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
 Teams greifen zu, und das Support-Postfach füllt sich.</p>
 
-<p>Nehmt Euren Entwurf noch einmal vor.</p>
+<p>Nimm Deinen Entwurf noch einmal vor.</p>
 
 <h2 id="lernziele">Lernziele</h2>
 
@@ -141,19 +141,19 @@ Ressource.</li>
 <h2 id="definition-of-done">Definition of Done</h2>
 
 <ul class="task-list">
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code>GET /customers</code> hat Paginierung – Ihr wisst, welche Art und warum.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Vorgabewert und Obergrenze der Seitengröße stehen fest, und Ihr wisst, was bei
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code>GET /customers</code> hat Paginierung – Du weißt, welche Art und warum.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Vorgabewert und Obergrenze der Seitengröße stehen fest, und Du weißt, was bei
     Überschreitung passiert.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Die Antwort enthält, was ein Aufrufer braucht, um die nächste Seite zu holen.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Ihr habt entschieden, wie die komplexe Suche aussieht – und den Preis Eurer
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast entschieden, wie die komplexe Suche aussieht – und den Preis Deiner
     Entscheidung benannt.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
 </ul>
 
 <h2 id="arbeitsschritte">Arbeitsschritte</h2>
 
-<h3 id="entscheidet-euch-für-eine-paginierungsart">Entscheidet Euch für eine Paginierungsart</h3>
+<h3 id="entscheide-dich-für-eine-paginierungsart">Entscheide Dich für eine Paginierungsart</h3>
 
 <p>Zwei Anwendungsfälle liegen vor:</p>
 
@@ -164,31 +164,31 @@ Die Sachbearbeitung springt zu „Seite 12“.</li>
 System zu übernehmen.</li>
 </ol>
 
-<p>Welche Art passt zu welchem Fall? Entscheidet Euch – und notiert, ob Ihr <strong>beide</strong>
-anbieten wollt.</p>
+<p>Welche Art passt zu welchem Fall? Entscheide Dich – und notier, ob Du <strong>beide</strong>
+anbieten willst.</p>
 
 <blockquote>
   <p><strong>Hinweis:</strong> Beides anzubieten ist erlaubt und kommt vor. Es ist aber auch
-doppelte Arbeit und doppelte Dokumentation. Fragt Euch, ob die zweite Art ihren
+doppelte Arbeit und doppelte Dokumentation. Frag Dich, ob die zweite Art ihren
 Preis wert ist.</p>
 </blockquote>
 
-<h3 id="schreibt-die-operation-auf">Schreibt die Operation auf</h3>
+<h3 id="schreib-die-operation-auf">Schreib die Operation auf</h3>
 
-<p>Notiert die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
+<p>Notier die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
 steht.</p>
 
-<p>Denkt daran, dass der Aufrufer erfahren muss, wie er weiterkommt.</p>
+<p>Denk daran, dass der Aufrufer erfahren muss, wie er weiterkommt.</p>
 
 <blockquote>
   <p><strong>Hinweis:</strong> Genau hier zahlt sich aus, dass die Listenantwort ein Objekt ist und
-kein nacktes Array. Wäre sie ein Array – wo würdet Ihr den Verweis auf die nächste
+kein nacktes Array. Wäre sie ein Array – wo würdest Du den Verweis auf die nächste
 Seite unterbringen?</p>
 </blockquote>
 
-<h3 id="zieht-die-grenzen">Zieht die Grenzen</h3>
+<h3 id="zieh-die-grenzen">Zieh die Grenzen</h3>
 
-<p>Beantwortet drei Fragen und schreibt die Antworten auf:</p>
+<p>Beantworte drei Fragen und schreib die Antworten auf:</p>
 
 <ul>
   <li>Was ist die <strong>Vorgabe</strong>, wenn der Aufrufer nichts angibt?</li>
@@ -201,15 +201,15 @@ Seite unterbringen?</p>
 undokumentierte Obergrenze führt zu genau einem Support-Ticket pro Aufrufer.</p>
 </blockquote>
 
-<h3 id="formuliert-eine-brauchbare-fehlerantwort">Formuliert eine brauchbare Fehlerantwort</h3>
+<h3 id="formulier-eine-brauchbare-fehlerantwort">Formulier eine brauchbare Fehlerantwort</h3>
 
 <p>Jemand legt einen Kunden an. Der Name ist zu kurz <strong>und</strong> das Geburtsdatum liegt in
 der Zukunft.</p>
 
-<p>Schreibt die komplette Antwort auf: Statuscode, <code>Content-Type</code>, Body.</p>
+<p>Schreib die komplette Antwort auf: Statuscode, <code>Content-Type</code>, Body.</p>
 
 <p>Prüfstein: Kann ein Aufrufer allein aus dieser Antwort seinen Aufruf korrigieren –
-ohne bei Euch nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?</p>
+ohne bei Dir nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?</p>
 
 <blockquote>
   <p><strong>Hinweis:</strong> Das Problem-Details-Format erlaubt eigene Felder. Genau dort gehören
@@ -217,50 +217,50 @@ die einzelnen Feldfehler hin.</p>
 </blockquote>
 
 <blockquote>
-  <p><strong>Hinweis:</strong> Prüft zum Schluss, ob in Eurer Antwort etwas steht, das ein
-Fremder nicht wissen sollte.</p>
+  <p><strong>Hinweis:</strong> Prüf zum Schluss, ob in Deiner Antwort etwas steht, das ein Fremder
+nicht wissen sollte.</p>
 </blockquote>
 
-<h3 id="entwerft-die-komplexe-suche">Entwerft die komplexe Suche</h3>
+<h3 id="entwirf-die-komplexe-suche">Entwirf die komplexe Suche</h3>
 
 <p>Der Fachbereich möchte suchen können nach: Namensteil, Statusliste, Anlagezeitraum,
 Wohnort, Bezahlart, Bestellsumme zwischen X und Y – und die Ergebnisse sortiert
 nach zwei Kriterien.</p>
 
-<p>Entwerft den Aufruf. Notiert dazu, was Eure Lösung kostet.</p>
+<p>Entwirf den Aufruf. Notier dazu, was Deine Lösung kostet.</p>
 
 <blockquote>
-  <p><strong>Hinweis:</strong> Versucht ruhig, das zuerst als Query-Parameter zu schreiben. Der
+  <p><strong>Hinweis:</strong> Versuch ruhig, das zuerst als Query-Parameter zu schreiben. Der
 Punkt, an dem es unangenehm wird, ist die eigentliche Erkenntnis.</p>
 </blockquote>
 
 <h2 id="reflexionsfragen">Reflexionsfragen</h2>
 
 <ul>
-  <li>Welche Paginierungsart habt Ihr gewählt, und für welchen der beiden Anwendungsfälle
+  <li>Welche Paginierungsart hast Du gewählt, und für welchen der beiden Anwendungsfälle
 war sie die schlechtere?</li>
   <li>Ein Aufrufer holt Seite 1, jemand legt einen Kunden an, dann holt er Seite 2. Was
-bekommt er zu sehen? Ist Eure Lösung davon betroffen?</li>
+bekommt er zu sehen? Ist Deine Lösung davon betroffen?</li>
   <li>Wie erfährt der Aufrufer, dass es weitere Seiten gibt? Und wie erfährt er, wie
 viele es insgesamt sind – oder erfährt er das gar nicht?</li>
-  <li>Eure Fehlerantwort: Woran erkennt ein <strong>Programm</strong> (nicht ein Mensch), um welchen
+  <li>Deine Fehlerantwort: Woran erkennt ein <strong>Programm</strong> (nicht ein Mensch), um welchen
 Fehler es sich handelt?</li>
-  <li>Habt Ihr die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
-verliert Ihr durch Eure Wahl?</li>
-  <li>Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Euren Entwurf?</li>
+  <li>Hast Du die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
+verlierst Du durch Deine Wahl?</li>
+  <li>Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Deinen Entwurf?</li>
 </ul>
 
 
 <textarea id="avd-academy-md-source" hidden aria-hidden="true"># Eine Million Kunden ausliefern
 
-**Als** Team, dessen API erfolgreich geworden ist, **möchten wir** große
-Datenmengen und Fehlerfälle so ausliefern, **damit** unsere Aufrufer damit
+**Als** Mitglied des Teams, dessen API erfolgreich geworden ist, **möchte ich**
+große Datenmengen und Fehlerfälle so ausliefern, **damit** unsere Aufrufer damit
 arbeiten können, ohne uns anzurufen.
 
-Euer Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
+Dein Entwurf von damals hatte zehn Testkunden. Jetzt sind es 1,2 Millionen, drei
 Teams greifen zu, und das Support-Postfach füllt sich.
 
-Nehmt Euren Entwurf noch einmal vor.
+Nimm Deinen Entwurf noch einmal vor.
 
 ## Lernziele
 
@@ -275,18 +275,18 @@ Du…
 
 ## Definition of Done
 
-* [ ] `GET /customers` hat Paginierung – Ihr wisst, welche Art und warum.
-* [ ] Vorgabewert und Obergrenze der Seitengröße stehen fest, und Ihr wisst, was bei
+* [ ] `GET /customers` hat Paginierung – Du weißt, welche Art und warum.
+* [ ] Vorgabewert und Obergrenze der Seitengröße stehen fest, und Du weißt, was bei
       Überschreitung passiert.
 * [ ] Die Antwort enthält, was ein Aufrufer braucht, um die nächste Seite zu holen.
-* [ ] Ihr habt eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.
-* [ ] Ihr habt entschieden, wie die komplexe Suche aussieht – und den Preis Eurer
+* [ ] Du hast eine Fehlerantwort für „zwei Felder gleichzeitig ungültig“ ausformuliert.
+* [ ] Du hast entschieden, wie die komplexe Suche aussieht – und den Preis Deiner
       Entscheidung benannt.
 * [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
 
 ## Arbeitsschritte
 
-### Entscheidet Euch für eine Paginierungsart
+### Entscheide Dich für eine Paginierungsart
 
 Zwei Anwendungsfälle liegen vor:
 
@@ -295,27 +295,27 @@ Zwei Anwendungsfälle liegen vor:
 2. Das Marketing-Team holt jede Nacht alle Kunden ab, um sie in sein eigenes
    System zu übernehmen.
 
-Welche Art passt zu welchem Fall? Entscheidet Euch – und notiert, ob Ihr **beide**
-anbieten wollt.
+Welche Art passt zu welchem Fall? Entscheide Dich – und notier, ob Du **beide**
+anbieten willst.
 
 &gt; **Hinweis:** Beides anzubieten ist erlaubt und kommt vor. Es ist aber auch
-&gt; doppelte Arbeit und doppelte Dokumentation. Fragt Euch, ob die zweite Art ihren
+&gt; doppelte Arbeit und doppelte Dokumentation. Frag Dich, ob die zweite Art ihren
 &gt; Preis wert ist.
 
-### Schreibt die Operation auf
+### Schreib die Operation auf
 
-Notiert die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
+Notier die vollständige Operation: Adresse, Parameter mit Typen, was in der Antwort
 steht.
 
-Denkt daran, dass der Aufrufer erfahren muss, wie er weiterkommt.
+Denk daran, dass der Aufrufer erfahren muss, wie er weiterkommt.
 
 &gt; **Hinweis:** Genau hier zahlt sich aus, dass die Listenantwort ein Objekt ist und
-&gt; kein nacktes Array. Wäre sie ein Array – wo würdet Ihr den Verweis auf die nächste
+&gt; kein nacktes Array. Wäre sie ein Array – wo würdest Du den Verweis auf die nächste
 &gt; Seite unterbringen?
 
-### Zieht die Grenzen
+### Zieh die Grenzen
 
-Beantwortet drei Fragen und schreibt die Antworten auf:
+Beantworte drei Fragen und schreib die Antworten auf:
 
 - Was ist die **Vorgabe**, wenn der Aufrufer nichts angibt?
 - Was ist die **Obergrenze**?
@@ -324,46 +324,46 @@ Beantwortet drei Fragen und schreibt die Antworten auf:
 &gt; **Hinweis:** Alle drei Antworten gehören in die Dokumentation. Eine
 &gt; undokumentierte Obergrenze führt zu genau einem Support-Ticket pro Aufrufer.
 
-### Formuliert eine brauchbare Fehlerantwort
+### Formulier eine brauchbare Fehlerantwort
 
 Jemand legt einen Kunden an. Der Name ist zu kurz **und** das Geburtsdatum liegt in
 der Zukunft.
 
-Schreibt die komplette Antwort auf: Statuscode, `Content-Type`, Body.
+Schreib die komplette Antwort auf: Statuscode, `Content-Type`, Body.
 
 Prüfstein: Kann ein Aufrufer allein aus dieser Antwort seinen Aufruf korrigieren –
-ohne bei Euch nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?
+ohne bei Dir nachzufragen und ohne einen zweiten Versuch für den zweiten Fehler?
 
 &gt; **Hinweis:** Das Problem-Details-Format erlaubt eigene Felder. Genau dort gehören
 &gt; die einzelnen Feldfehler hin.
 
-&gt; **Hinweis:** Prüft zum Schluss, ob in Eurer Antwort etwas steht, das ein
-&gt; Fremder nicht wissen sollte.
+&gt; **Hinweis:** Prüf zum Schluss, ob in Deiner Antwort etwas steht, das ein Fremder
+&gt; nicht wissen sollte.
 
-### Entwerft die komplexe Suche
+### Entwirf die komplexe Suche
 
 Der Fachbereich möchte suchen können nach: Namensteil, Statusliste, Anlagezeitraum,
 Wohnort, Bezahlart, Bestellsumme zwischen X und Y – und die Ergebnisse sortiert
 nach zwei Kriterien.
 
-Entwerft den Aufruf. Notiert dazu, was Eure Lösung kostet.
+Entwirf den Aufruf. Notier dazu, was Deine Lösung kostet.
 
-&gt; **Hinweis:** Versucht ruhig, das zuerst als Query-Parameter zu schreiben. Der
+&gt; **Hinweis:** Versuch ruhig, das zuerst als Query-Parameter zu schreiben. Der
 &gt; Punkt, an dem es unangenehm wird, ist die eigentliche Erkenntnis.
 
 ## Reflexionsfragen
 
-- Welche Paginierungsart habt Ihr gewählt, und für welchen der beiden Anwendungsfälle
+- Welche Paginierungsart hast Du gewählt, und für welchen der beiden Anwendungsfälle
   war sie die schlechtere?
 - Ein Aufrufer holt Seite 1, jemand legt einen Kunden an, dann holt er Seite 2. Was
-  bekommt er zu sehen? Ist Eure Lösung davon betroffen?
+  bekommt er zu sehen? Ist Deine Lösung davon betroffen?
 - Wie erfährt der Aufrufer, dass es weitere Seiten gibt? Und wie erfährt er, wie
   viele es insgesamt sind – oder erfährt er das gar nicht?
-- Eure Fehlerantwort: Woran erkennt ein **Programm** (nicht ein Mensch), um welchen
+- Deine Fehlerantwort: Woran erkennt ein **Programm** (nicht ein Mensch), um welchen
   Fehler es sich handelt?
-- Habt Ihr die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
-  verliert Ihr durch Eure Wahl?
-- Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Euren Entwurf?
+- Hast Du die Suche als Query-Parameter oder als eigene Ressource gebaut? Was
+  verlierst Du durch Deine Wahl?
+- Die Suche dauert bei manchen Kriterien 40 Sekunden. Ändert das Deinen Entwurf?
 
 ## Weiterführende Informationen
 
