@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Methoden-Matrix · ATVANTAGE Academy</title><meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789450115">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789450115">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789450115">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789450115"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789450115">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789450115" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789450115" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789450115">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789452573">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789452573">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789452573">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789452573"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789452573">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789452573" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789452573" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789452573">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789450115">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789450115"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789452573">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789452573"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -103,8 +103,13 @@
 <p>Vier Ressourcenarten, fünf Methoden, zwanzig Fragen. <strong>Rate zuerst selbst</strong>, dann
 deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begründung.</p>
 
-<p>Die vier Spalten entstehen aus <strong>zwei</strong> Unterscheidungen, und beide tragen unabhängig
-voneinander: Eine <strong>Listenressource</strong> hält beliebig viele gleichartige Einträge, eine
+<p>Die Spaltenköpfe sind <strong>eine einzige Adresse</strong>, die von links nach rechts wächst:
+<code>/products</code> → <code>/products/12345</code> → <code>/products/12345/images</code> →
+<code>/products/12345/images/preview</code>. Jede Spalte hängt unter der davor. Welche Adresse
+gemeint ist, steht beim Aufdecken vollständig über der Begründung.</p>
+
+<p>Die vier Spalten entstehen dabei aus <strong>zwei</strong> Unterscheidungen, und beide tragen
+unabhängig voneinander: Eine <strong>Listenressource</strong> hält beliebig viele gleichartige Einträge, eine
 <strong>Einzelressource</strong> genau einen. Davon unabhängig ist eine <strong>Hauptressource</strong> für sich
 adressierbar, während eine <strong>Unterressource</strong> unter einer anderen hängt und ohne sie
 nicht existiert. Achte beim Aufdecken darauf, welche der beiden Unterscheidungen die
@@ -124,10 +129,10 @@ Zelle entscheidet – es ist öfter die erste, als man erwartet.</p>
   <thead>
     <tr>
       <th scope="col"><span class="mm__corner">Methode ↓ · Ressource →</span></th>
-      <th scope="col"><code>/products</code><small>Listenressource · Hauptressource</small></th>
-      <th scope="col"><code>/products/12345</code><small>Einzelressource · Hauptressource</small></th>
-      <th scope="col"><code>…/12345/images</code><small>Listenressource · Unterressource</small></th>
-      <th scope="col"><code>…/12345/preview</code><small>Einzelressource · Unterressource</small></th>
+      <th scope="col"><code>…/products</code><small>Listenressource · Hauptressource</small></th>
+      <th scope="col"><code>…/12345</code><small>Einzelressource · Hauptressource</small></th>
+      <th scope="col"><code>…/images</code><small>Listenressource · Unterressource</small></th>
+      <th scope="col"><code>…/preview</code><small>Einzelressource · Unterressource</small></th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -306,7 +311,7 @@ und tut es in der Praxis auch.</p>
     { id: "liste",     url: "/products",                 art: "Listenressource · Hauptressource" },
     { id: "einzeln",   url: "/products/12345",           art: "Einzelressource · Hauptressource" },
     { id: "unterliste",url: "/products/12345/images",    art: "Listenressource · Unterressource" },
-    { id: "abgeleitet",url: "/products/12345/preview",   art: "Einzelressource · Unterressource" }
+    { id: "abgeleitet",url: "/products/12345/images/preview", art: "Einzelressource · Unterressource" }
   ];
 
   // ton: ok = tragfähig, warn = geht, will aber begründet sein, no = ergibt keinen Sinn
@@ -325,8 +330,8 @@ und tut es in der Praxis auch.</p>
       bsp: "GET /products/12345/images\n200 OK" },
     "GET|abgeleitet":   { mark: "R", wort: "Read", ton: "ok",
       urteil: "Der klassische Fall für eine abgeleitete Ressource",
-      text: "Eine Vorschau ist nichts Gespeichertes, sondern etwas Berechnetes – und trotzdem eine Ressource: Sie hat eine Adresse, ist lesbar und cachebar. Genau dafür ist REST gut. Der häufige Anfängerfehler wäre <code>POST /products/12345/generatePreview</code>: ein Verb in der URL für etwas, das man einfach lesen kann.",
-      bsp: "GET /products/12345/preview\n200 OK\nContent-Type: image/png" },
+      text: "Das Vorschaubild zu den Bildern dieses Produkts – nichts Gespeichertes, sondern etwas Berechnetes, und trotzdem eine Ressource: Es hat eine Adresse, ist lesbar und cachebar. Genau dafür ist REST gut. Der häufige Anfängerfehler wäre <code>POST /products/12345/images/generatePreview</code>: ein Verb in der URL für etwas, das man einfach lesen kann.<br><br>Beachte, wo sie hängt: <strong>unter</strong> der Bilderliste, nicht neben ihr. Die Vorschau gibt es nur, weil es die Bilder gibt.",
+      bsp: "GET /products/12345/images/preview\n200 OK\nContent-Type: image/png" },
 
     "POST|liste":       { mark: "C", wort: "Create", ton: "ok",
       urteil: "Der Normalfall zum Anlegen",
@@ -343,7 +348,7 @@ und tut es in der Praxis auch.</p>
     "POST|abgeleitet":  { mark: "✗", wort: "ohne Bedeutung", ton: "no",
       urteil: "Es gibt nichts anzulegen",
       text: "Die Vorschau ist berechnet – sie entsteht nicht dadurch, dass jemand sie einreicht. Wer hier POST braucht, hat in Wahrheit eine Aktion gemeint („neu berechnen“). Die gehört dann als eigene Ressource modelliert, oder sie ist gar nicht nötig: Beim nächsten GET ist sie ohnehin aktuell.",
-      bsp: "POST /products/12345/preview\n405 Method Not Allowed" },
+      bsp: "POST /products/12345/images/preview\n405 Method Not Allowed" },
 
     "PUT|liste":        { mark: "U?", wort: "Replace", ton: "warn",
       urteil: "Definiert, aber gefährlich",
@@ -360,7 +365,7 @@ und tut es in der Praxis auch.</p>
     "PUT|abgeleitet":   { mark: "U/C", wort: "Replace / Create", ton: "warn",
       urteil: "Nur, wenn die Vorschau hinterlegbar ist",
       text: "Ist die Vorschau rein berechnet, gibt es nichts zu setzen – dann <code>405</code>. Darf man sie aber überschreiben („nimm dieses Bild statt des automatisch erzeugten“), ist PUT genau richtig: Es gibt <strong>eine</strong> davon, der Client bestimmt den Inhalt, mehrfach gesendet ändert sich nichts.",
-      bsp: "PUT /products/12345/preview\nContent-Type: image/png\n204 No Content" },
+      bsp: "PUT /products/12345/images/preview\nContent-Type: image/png\n204 No Content" },
 
     "PATCH|liste":      { mark: "U", wort: "Update", ton: "warn",
       urteil: "Möglich, aber ungewöhnlich",
@@ -377,7 +382,7 @@ und tut es in der Praxis auch.</p>
     "PATCH|abgeleitet": { mark: "U", wort: "Update", ton: "warn",
       urteil: "Nur, wenn sie überhaupt Felder hat",
       text: "Ein Bild hat keine Teilfelder, die man einzeln ändern könnte – dann ergibt PATCH keinen Sinn. Ist die Vorschau dagegen ein Objekt mit Einstellungen (Ausschnitt, Größe), ist PATCH der übliche Weg.",
-      bsp: "PATCH /products/12345/preview\n{ \"crop\": \"square\" }" },
+      bsp: "PATCH /products/12345/images/preview\n{ \"crop\": \"square\" }" },
 
     "DELETE|liste":     { mark: "✗", wort: "geht nicht", ton: "no",
       urteil: "Löschen und Leeren sind nicht dasselbe",
@@ -389,12 +394,12 @@ und tut es in der Praxis auch.</p>
       bsp: "DELETE /products/12345\n204 No Content" },
     "DELETE|unterliste":{ mark: "✗", wort: "geht nicht", ton: "no",
       urteil: "Unterressource hin oder her – es bleibt eine Liste",
-      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>…/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die drei Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
+      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>/products/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die drei Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
       bsp: "DELETE /products/12345/images\n405 Method Not Allowed\n\nGET /products/12345/images\n200 OK\n[]" },
     "DELETE|abgeleitet":{ mark: "D", wort: "Delete", ton: "warn",
       urteil: "Nur, wenn es etwas zu löschen gibt",
       text: "Bei einer rein berechneten Vorschau: nichts zu löschen, <code>405</code>. Bei einer hinterlegten: „nimm meine hochgeladene Vorschau weg und berechne wieder selbst“ – das ist eine saubere Bedeutung für DELETE.",
-      bsp: "DELETE /products/12345/preview\n204 No Content" }
+      bsp: "DELETE /products/12345/images/preview\n204 No Content" }
   };
 
   var METHODEN = ["GET", "POST", "PUT", "PATCH", "DELETE"];
