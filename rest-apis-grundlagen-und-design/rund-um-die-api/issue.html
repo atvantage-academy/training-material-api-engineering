@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Nachschlagen statt nachfragen · ATVANTAGE Academy</title><meta name="description" content="Eine Frage, 15 Minuten, eine Suchmaschine – und danach fünf Minuten, um die Antwort den anderen zu erklären."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789541302"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789541302">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789541302">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789541302">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789541302"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789541302">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789541302" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789541302" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789541302">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789541565"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789541565">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789541565">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789541565">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789541565"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789541565">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789541565" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789541565" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789541565">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789541302">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789541302"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789541565">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789541565"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -170,14 +170,21 @@ welche Aufgaben übernimmt es?</p>
 wichtig, dass sich der Server strikt daran hält? Welche Arten von Negotiation werden
 noch von HTTP unterstützt?</p>
 
-<h3 id="frage-5-subressource-oder-hauptressource">Frage 5: Subressource oder Hauptressource?</h3>
+<h3 id="frage-5-feld-subressource-oder-eigene-hauptressource">Frage 5: Feld, Subressource oder eigene Hauptressource?</h3>
 
-<p>Ein Blogbeitrag hat einen Autor. Ist der Autor eine <strong>Subressource</strong> des Beitrags
-(<code>/posts/5/author</code>) oder eine eigene <strong>Hauptressource</strong> (<code>/authors/9</code>)?</p>
+<p>Ein Blogbeitrag hat einen Autor. Drei Entwürfe stehen zur Wahl:</p>
 
-<p>Welche Kriterien sprechen dafür, welche dagegen? Darf dieselbe Sache unter <strong>beiden</strong>
-Adressen erreichbar sein? Und wie tief darf man überhaupt schachteln – was sagen
-veröffentlichte Leitlinien dazu?</p>
+<ol>
+  <li>Der Autor steht als <strong>Feld</strong> in <code>/posts/5</code> – notfalls auch nur seine ID.</li>
+  <li>Er ist eine <strong>Subressource</strong> mit eigener Adresse: <code>/posts/5/author</code>.</li>
+  <li>Er ist eine <strong>eigene Hauptressource</strong>: <code>/authors/9</code>.</li>
+</ol>
+
+<p>Wann nimmst Du welchen? Denk dabei an <strong>Berechtigungen</strong>, an das <strong>Medienformat</strong>, an
+das getrennte Setzen per <code>PUT</code> statt eines <code>PATCH</code> auf den ganzen Beitrag – und
+daran, was der Aufrufer jeweils <strong>zu viel oder zu wenig</strong> bekommt.</p>
+
+<p>Und: Darf dieselbe Sache unter <strong>mehreren</strong> Adressen erreichbar sein?</p>
 
 <h3 id="frage-6-caching">Frage 6: Caching</h3>
 
@@ -308,14 +315,19 @@ Was ist Content Negotiation, und wie wird sie mit HTTP umgesetzt? Warum ist es
 wichtig, dass sich der Server strikt daran hält? Welche Arten von Negotiation werden
 noch von HTTP unterstützt?
 
-### Frage 5: Subressource oder Hauptressource?
+### Frage 5: Feld, Subressource oder eigene Hauptressource?
 
-Ein Blogbeitrag hat einen Autor. Ist der Autor eine **Subressource** des Beitrags
-(`/posts/5/author`) oder eine eigene **Hauptressource** (`/authors/9`)?
+Ein Blogbeitrag hat einen Autor. Drei Entwürfe stehen zur Wahl:
 
-Welche Kriterien sprechen dafür, welche dagegen? Darf dieselbe Sache unter **beiden**
-Adressen erreichbar sein? Und wie tief darf man überhaupt schachteln – was sagen
-veröffentlichte Leitlinien dazu?
+1. Der Autor steht als **Feld** in `/posts/5` – notfalls auch nur seine ID.
+2. Er ist eine **Subressource** mit eigener Adresse: `/posts/5/author`.
+3. Er ist eine **eigene Hauptressource**: `/authors/9`.
+
+Wann nimmst Du welchen? Denk dabei an **Berechtigungen**, an das **Medienformat**, an
+das getrennte Setzen per `PUT` statt eines `PATCH` auf den ganzen Beitrag – und
+daran, was der Aufrufer jeweils **zu viel oder zu wenig** bekommt.
+
+Und: Darf dieselbe Sache unter **mehreren** Adressen erreichbar sein?
 
 ### Frage 6: Caching
 
