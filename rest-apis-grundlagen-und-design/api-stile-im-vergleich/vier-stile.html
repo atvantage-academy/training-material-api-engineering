@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander · ATVANTAGE Academy</title><meta name="description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789564233">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789564233" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789564233" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789564233">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789565293">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789565293" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789565293" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789565293">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789564233">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789564233"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789565293">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789565293"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -212,6 +212,12 @@ Bezahlinformationen. Oben den Stil wählen, links die Aufgabe – rechts steht d
 <strong>rohe Nachricht</strong>, so wie sie über die Leitung geht: Anfrage, Antwort
 und der Fehlerfall dazu.</p>
 
+<p class="vs__lead"><strong>Sichtbar ist zunächst nur der Kopf.</strong> Das ist
+genau die Sicht, die ein Proxy, ein Gateway oder ein Zugriffsprotokoll hat: Wer
+nicht in den Body schaut, sieht nicht mehr als das. Die Bodies lassen sich
+aufklappen – und die Frage beim Durchgehen ist jedes Mal dieselbe: <em>Hätte ich
+an dieser Stelle gemerkt, dass etwas schiefgegangen ist?</em></p>
+
 <div class="vs__stile" role="tablist" aria-label="API-Stil">
   <button type="button" class="vs__stil is-aktiv" role="tab" aria-selected="true" data-stil="soap">SOAP</button>
   <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="rest">REST</button>
@@ -237,25 +243,50 @@ und der Fehlerfall dazu.</p>
 
   <div class="vs__buehne" role="tabpanel" aria-live="polite">
     <p class="vs__marke vs__marke--auf">Anfrage</p>
-    <pre class="vs__code" data-vs-anfrage=""></pre>
+    <pre class="vs__code" data-vs-kopf="anfrage"></pre>
+    <details class="vs__falt" data-vs-falt="anfrage">
+      <summary><span data-vs-zahl=""></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
+    </details>
 
     <p class="vs__marke vs__marke--ok">Antwort · Erfolgsfall</p>
-    <pre class="vs__code" data-vs-antwort=""></pre>
+    <pre class="vs__code" data-vs-kopf="antwort"></pre>
+    <details class="vs__falt" data-vs-falt="antwort">
+      <summary><span data-vs-zahl=""></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
+    </details>
 
     <p class="vs__marke vs__marke--fehler" data-vs-fehlertitel=""></p>
-    <pre class="vs__code" data-vs-fehler=""></pre>
+    <pre class="vs__code" data-vs-kopf="fehler"></pre>
+    <details class="vs__falt" data-vs-falt="fehler">
+      <summary><span data-vs-zahl=""></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
+    </details>
 
     <p class="vs__hinweis" data-vs-hinweis=""></p>
   </div>
 </div>
 
-<p class="vs__schluss"><strong>Die dritte Zeile links ist die interessanteste.</strong>
-Der Fehlerfall ist in allen vier Stilen dieselbe fachliche Lage – und man sieht ihn an
-vier verschiedenen Stellen: am Statuscode, in einem <code>Fault</code>-Element hinter
-einer <code>500</code>, in einem Feld <code>errors</code> hinter einer <code>200</code>
-oder in einem Trailer außerhalb von HTTP. <strong>Wer sein Monitoring auf
-HTTP-Statuscodes aufbaut, sieht bei drei von vier Stilen etwas anderes, als
-passiert ist.</strong></p>
+<p class="vs__schluss"><strong>Geh einmal alle vier Stile durch, ohne einen Body
+aufzuklappen.</strong> Die fachliche Lage ist jedes Mal dieselbe: Den Kunden gibt es
+nicht. Im Kopf steht davon:</p>
+
+<ul class="vs__fazit">
+<li><strong>REST</strong> – <code>404 Not Found</code>. Fertig, mehr braucht man nicht
+zu lesen.</li>
+<li><strong>SOAP</strong> – <code>200 OK</code>. Der Fehler ist ein Feld in der
+normalen Antwort.</li>
+<li><strong>GraphQL</strong> – <code>200 OK</code>. Der Fehler steht unter
+<code>errors</code>.</li>
+<li><strong>gRPC</strong> – <code>:status = 200</code>. Der echte Status steht in
+einem <em>Trailer</em>, also hinter dem Body.</li>
+</ul>
+
+<p class="vs__schluss"><strong>Drei von vier Stilen melden einen Fehlschlag als
+Erfolg</strong> – jedenfalls für jeden, der nur den Kopf liest. Und das sind genau die
+Stellen, an denen man im Betrieb hinsieht: Zugriffsprotokoll, Gateway-Metrik,
+Alarm auf <code>5xx</code>. Wer einen dieser drei Stile betreibt, braucht eine
+Auswertung, die in den Body schaut – mit HTTP-Bordmitteln kommt er nicht weit.</p>
 
 </div>
 
@@ -368,8 +399,32 @@ passiert ist.</strong></p>
   .vs__code .hl-kw  { color: #e0be5c; font-weight: 700; }
   .vs__code .hl-c   { color: #94a8ad; font-style: italic; }
 
+  /* Der Body haengt optisch am Kopf - deshalb oben buendig, kein Abstand. */
+  .vs__falt { margin: 0; }
+  .vs__falt > summary {
+    cursor: pointer; list-style: none;
+    font-size: .74rem; letter-spacing: .04em;
+    padding: .3rem .9rem; margin-top: -1px;
+    color: #94a8ad; background: #1d2426;
+    border: 1px solid #2e383b;
+    border-radius: 0 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
+  }
+  .vs__falt > summary::-webkit-details-marker { display: none; }
+  .vs__falt > summary::before { content: "▸ "; }
+  .vs__falt[open] > summary { border-radius: 0; }
+  .vs__falt[open] > summary::before { content: "▾ "; }
+  .vs__falt > summary:hover { color: #e6edf0; }
+  .vs__code--rumpf {
+    border-top: none; margin-top: -1px;
+    border-radius: 0 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
+  }
+  /* Der Kopf allein steht ohne Rundung unten, solange ein Body darunter haengt. */
+  .vs__code:has(+ .vs__falt:not([hidden])) { border-radius: var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) 0 0; }
+
   .vs__hinweis { font-size: .86rem; margin: 1rem 0 0; }
   .vs__schluss { margin-top: 1.5rem; }
+  .vs__fazit { margin: .8rem 0 0; }
+  .vs__fazit li { margin-bottom: .3rem; }
 </style>
 
 <script>
@@ -424,21 +479,20 @@ passiert ist.</strong></p>
           "</soap:Envelope>"),
         fehlertitel: "Antwort · den Kunden gibt es nicht",
         fehler: Z(
-          "HTTP/1.1 500 Internal Server Error",
+          "HTTP/1.1 200 OK",
           "Content-Type: text/xml; charset=utf-8",
           "",
           SOAP_HUELLE,
           "  <soap:Body>",
-          "    <soap:Fault>",
-          "      <faultcode>soap:Client</faultcode>",
-          "      <faultstring>Kunde 4711 unbekannt</faultstring>",
-          "      <detail>",
-          '        <kundeNichtGefunden xmlns="urn:shop:kunden:v1"><id>4711</id></kundeNichtGefunden>',
-          "      </detail>",
-          "    </soap:Fault>",
+          '    <getCustomerResponse xmlns="urn:shop:kunden:v1">',
+          "      <fehler>",
+          "        <code>KUNDE_UNBEKANNT</code>",
+          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
+          "      </fehler>",
+          "    </getCustomerResponse>",
           "  </soap:Body>",
           "</soap:Envelope>"),
-        hinweis: "Die Adresse ist für alle vier Aufgaben dieselbe; was gemeint ist, steht im Umschlag und im Kopf <code>SOAPAction</code>. <strong>Und der Fehler kommt als <code>500</code></strong> – obwohl der Client schuld ist. So schreibt es SOAP 1.1 vor, und so sieht es jedes Monitoring davor."
+        hinweis: "Die Adresse ist für alle vier Aufgaben dieselbe; was gemeint ist, steht im Umschlag und im Kopf <code>SOAPAction</code>. <strong>Und der unbekannte Kunde ist eine <code>200</code></strong> – ein fachliches Ergebnis wird als Feld in der normalen Antwort modelliert, nicht als Protokollfehler. Ein <code>soap:Fault</code> wäre etwas anderes: Der kommt laut SOAP 1.1 mit <code>500</code> und meint, dass die <em>Nachricht</em> nicht verarbeitbar war."
       },
       ohne: {
         anfrage: Z(
@@ -467,20 +521,22 @@ passiert ist.</strong></p>
           "    </getCustomerBasicResponse>",
           "  </soap:Body>",
           "</soap:Envelope>"),
-        fehlertitel: "Antwort · die Operation gibt es nicht",
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
         fehler: Z(
-          "HTTP/1.1 500 Internal Server Error",
+          "HTTP/1.1 200 OK",
           "Content-Type: text/xml; charset=utf-8",
           "",
           SOAP_HUELLE,
           "  <soap:Body>",
-          "    <soap:Fault>",
-          "      <faultcode>soap:Client</faultcode>",
-          "      <faultstring>Unbekannte Operation: getCustomerBasic</faultstring>",
-          "    </soap:Fault>",
+          '    <getCustomerBasicResponse xmlns="urn:shop:kunden:v1">',
+          "      <fehler>",
+          "        <code>KUNDE_UNBEKANNT</code>",
+          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
+          "      </fehler>",
+          "    </getCustomerBasicResponse>",
           "  </soap:Body>",
           "</soap:Envelope>"),
-        hinweis: "<strong>Eine Feldauswahl gibt es nicht.</strong> Wer weniger will, braucht eine <em>zweite Operation</em> im WSDL – und bis jeder Client neu erzeugt ist, kennt sie niemand. Genau das zeigt der Fehlerfall: Ein Client von gestern bekommt einen <code>Fault</code>, keine kürzere Antwort."
+        hinweis: "<strong>Eine Feldauswahl gibt es nicht.</strong> Wer weniger will, braucht eine <em>zweite Operation</em> im WSDL – mit eigenem Typ, eigenem Antwortelement und eigenem Fehlerfeld. Und bis jeder Client neu erzeugt ist, kennt sie niemand. <strong>Zwei Operationen für dieselbe Sache, und ab jetzt für immer beide pflegen.</strong>"
       },
       anlegen: {
         anfrage: Z(
@@ -527,7 +583,7 @@ passiert ist.</strong></p>
           "    </soap:Fault>",
           "  </soap:Body>",
           "</soap:Envelope>"),
-        hinweis: "Die neue Kennung steht im Antwort-Umschlag, nicht in einem <code>Location</code>-Kopf – <strong>es gibt keine Adresse, auf die sie zeigen könnte</strong>. Die Feldfehler stehen sauber strukturiert im <code>detail</code>-Element; das ist die Stärke des Formats."
+        hinweis: "Die neue Kennung steht im Antwort-Umschlag, nicht in einem <code>Location</code>-Kopf – <strong>es gibt keine Adresse, auf die sie zeigen könnte</strong>.<br><br><strong>Hier ist es ein echter <code>Fault</code></strong>, und damit ein <code>500</code>: Die Nachricht war nicht verarbeitbar. Das ist der Unterschied zum unbekannten Kunden weiter oben – der ist ein <em>Ergebnis</em> und steht als Feld in der normalen Antwort. Wo die Grenze verläuft, entscheidet das WSDL, und zwar einmal für alle Aufrufer."
       },
       loeschen: {
         anfrage: Z(
@@ -554,15 +610,17 @@ passiert ist.</strong></p>
           "</soap:Envelope>"),
         fehlertitel: "Antwort · den Kunden gibt es nicht",
         fehler: Z(
-          "HTTP/1.1 500 Internal Server Error",
+          "HTTP/1.1 200 OK",
           "Content-Type: text/xml; charset=utf-8",
           "",
           SOAP_HUELLE,
           "  <soap:Body>",
-          "    <soap:Fault>",
-          "      <faultcode>soap:Client</faultcode>",
-          "      <faultstring>Kunde 4711 unbekannt</faultstring>",
-          "    </soap:Fault>",
+          '    <deleteCustomerResponse xmlns="urn:shop:kunden:v1">',
+          "      <fehler>",
+          "        <code>KUNDE_UNBEKANNT</code>",
+          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
+          "      </fehler>",
+          "    </deleteCustomerResponse>",
           "  </soap:Body>",
           "</soap:Envelope>"),
         hinweis: "Löschen ist hier ein <code>POST</code> wie alles andere. <strong>Ob der Aufruf wiederholbar ist, sieht man der Nachricht nicht an</strong> – das steht allenfalls in der Dokumentation. Bei <code>DELETE</code> wäre es ein Merkmal der Methode."
@@ -1053,20 +1111,24 @@ passiert ist.</strong></p>
       .replace(/(&lt;\/?)([\w:.-]+)/g, '$1<span class="hl-tag">$2</span>');
   }
 
-  function faerbe(text) {
+  /* Trennt am ersten Leerzeilen-Umbruch: davor der Kopf - das, was eine
+     Zwischenstation ohne Hineinschauen sieht -, danach der Rumpf. */
+  function teile(text) {
     var zeilen = text.split("\n");
-    var aus = [], imKopf = true, rumpf = [];
+    var kopf = [], rumpf = [], imKopf = true;
 
     for (var i = 0; i < zeilen.length; i++) {
-      if (imKopf) {
-        if (zeilen[i] === "") { imKopf = false; aus.push(""); }
-        else aus.push(kopfzeile(zeilen[i]));
-      } else {
-        rumpf.push(zeilen[i]);
-      }
+      if (imKopf && zeilen[i] === "") { imKopf = false; continue; }
+      (imKopf ? kopf : rumpf).push(zeilen[i]);
     }
-    if (!rumpf.length) return aus.join("\n");
+    return {
+      kopf: kopf.map(kopfzeile).join("\n"),
+      zeilen: rumpf.length,
+      rumpf: rumpf.length ? faerbeRumpf(rumpf) : ""
+    };
+  }
 
+  function faerbeRumpf(rumpf) {
     var r = rumpf.join("\n"), erstes = r.replace(/^\s+/, "").charAt(0);
     if (erstes === "{" || erstes === "[") r = json(esc(r));
     else if (erstes === "<") r = xml(esc(r));
@@ -1085,7 +1147,7 @@ passiert ist.</strong></p>
         return esc(z);
       }).join("\n");
     }
-    return aus.join("\n") + r;
+    return r;
   }
 
   /* ---------------------------------------------------------- Bedienung */
@@ -1094,21 +1156,28 @@ passiert ist.</strong></p>
   if (!wurzel) return;
 
   var stil = "soap", fall = "alles";
-  var feld = {
-    anfrage:     wurzel.querySelector("[data-vs-anfrage]"),
-    antwort:     wurzel.querySelector("[data-vs-antwort]"),
-    fehler:      wurzel.querySelector("[data-vs-fehler]"),
-    fehlertitel: wurzel.querySelector("[data-vs-fehlertitel]"),
-    hinweis:     wurzel.querySelector("[data-vs-hinweis]")
-  };
+  var fehlertitel = wurzel.querySelector("[data-vs-fehlertitel]");
+  var hinweisFeld = wurzel.querySelector("[data-vs-hinweis]");
+
+  function setze(name, text) {
+    var t = teile(text);
+    wurzel.querySelector('[data-vs-kopf="' + name + '"]').innerHTML = t.kopf;
+
+    var falt = wurzel.querySelector('[data-vs-falt="' + name + '"]');
+    falt.hidden = !t.zeilen;
+    if (!t.zeilen) return;
+    falt.querySelector("[data-vs-zahl]").textContent =
+      "Body · " + t.zeilen + (t.zeilen === 1 ? " Zeile" : " Zeilen");
+    falt.querySelector("[data-vs-rumpf]").innerHTML = t.rumpf;
+  }
 
   function zeichne() {
     var d = DATEN[stil][fall];
-    feld.anfrage.innerHTML     = faerbe(d.anfrage);
-    feld.antwort.innerHTML     = faerbe(d.antwort);
-    feld.fehler.innerHTML      = faerbe(d.fehler);
-    feld.fehlertitel.textContent = d.fehlertitel;
-    feld.hinweis.innerHTML     = d.hinweis;
+    setze("anfrage", d.anfrage);
+    setze("antwort", d.antwort);
+    setze("fehler",  d.fehler);
+    fehlertitel.textContent = d.fehlertitel;
+    hinweisFeld.innerHTML   = d.hinweis;
 
     wurzel.querySelectorAll("[data-stil]").forEach(function (b) {
       var an = b.dataset.stil === stil;

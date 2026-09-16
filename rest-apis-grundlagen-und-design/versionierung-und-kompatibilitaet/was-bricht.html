@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Versionierung: Welche Änderung bricht die API? · ATVANTAGE Academy</title><meta name="description" content="Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789564233">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789564233" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789564233" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789564233">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789565293">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789565293" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789565293" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789565293">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789564233">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789564233"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789565293">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789565293"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -152,6 +152,125 @@ Code nicht anfasst – funktioniert der danach noch?</em></p>
     stillschweigend versprochen.</p>
   </div>
 </div>
+
+<h2 class="wb__h2" id="versionen">Und wenn es doch sein muss: fünf Arten zu versionieren</h2>
+
+<p class="wb__lead">Manche Änderung lässt sich nicht in zwei verträgliche Schritte
+zerlegen. Dann braucht es eine zweite Fassung – und die Frage ist, <strong>woran ein
+Aufrufer sie erkennt</strong>. Fünf Antworten sind in Gebrauch; keine ist umsonst.</p>
+
+<div class="wb__tabelle-scroll">
+<table class="wb__tabelle">
+<thead>
+<tr>
+  <th scope="col">Kriterium</th>
+  <th scope="col">Gar nicht<small>nur verträglich erweitern</small></th>
+  <th scope="col">Ganze API in der URL<small><code>/api/v1/…</code></small></th>
+  <th scope="col">Je Ressource in der URL<small><code>/products/v2</code></small></th>
+  <th scope="col">Im Header<small><code>Accept: …v2+json</code></small></th>
+  <th scope="col">Datumsstand je Aufrufer<small><code>Api-Version: 2026-03-01</code></small></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <th scope="row">Wie der Aufrufer die Fassung wählt</th>
+  <td>gar nicht – es gibt nur eine</td>
+  <td>er baut sie in jede Adresse ein</td>
+  <td>er baut sie in die Adressen ein, die er braucht</td>
+  <td>er schickt einen Kopf mit; ohne Angabe gilt eine Vorgabe</td>
+  <td>einmal beim Onboarding festgelegt, danach unverändert</td>
+</tr>
+<tr>
+  <th scope="row">Was beim Breaking Change passiert</th>
+  <td><span class="wb__m wb__m--bruch">geht nicht</span> die Änderung muss anders gelöst oder verschoben werden</td>
+  <td><span class="wb__m wb__m--praxis">alles zieht mit</span> auch die 40 Ressourcen, an denen sich nichts geändert hat</td>
+  <td><span class="wb__m wb__m--ok">nur die eine Ressource</span> der Rest bleibt, wo er ist</td>
+  <td><span class="wb__m wb__m--ok">nur die eine Darstellung</span> die Adresse bleibt stabil</td>
+  <td><span class="wb__m wb__m--ok">niemand merkt es sofort</span> jeder Aufrufer wechselt, wann er will</td>
+</tr>
+<tr>
+  <th scope="row">Wie viele Fassungen im Betrieb sind</th>
+  <td>eine</td>
+  <td>zwei – und beide vollständig</td>
+  <td>eine je geänderter Ressource, aber schnell unübersichtlich</td>
+  <td>zwei Darstellungen hinter einer Adresse</td>
+  <td><span class="wb__m wb__m--bruch">alle je veröffentlichten</span> bis der letzte Aufrufer umgestellt hat</td>
+</tr>
+<tr>
+  <th scope="row">Im Browser ausprobierbar</th>
+  <td><span class="wb__m wb__m--ok">ja</span></td>
+  <td><span class="wb__m wb__m--ok">ja</span> Adresszeile genügt</td>
+  <td><span class="wb__m wb__m--ok">ja</span></td>
+  <td><span class="wb__m wb__m--bruch">nein</span> ohne Werkzeug kommt immer die Vorgabe</td>
+  <td><span class="wb__m wb__m--bruch">nein</span></td>
+</tr>
+<tr>
+  <th scope="row">Routing im Gateway</th>
+  <td>—</td>
+  <td><span class="wb__m wb__m--ok">trivial</span> nach Pfadpräfix</td>
+  <td><span class="wb__m wb__m--ok">trivial</span></td>
+  <td><span class="wb__m wb__m--praxis">nach Kopf</span> geht, ist aber Konfiguration, die niemand sieht</td>
+  <td><span class="wb__m wb__m--praxis">nach Kopf</span> plus Umrechnung im Service</td>
+</tr>
+<tr>
+  <th scope="row">Caching</th>
+  <td>unproblematisch</td>
+  <td><span class="wb__m wb__m--ok">eigene Adresse = eigener Eintrag</span></td>
+  <td><span class="wb__m wb__m--ok">eigene Adresse = eigener Eintrag</span></td>
+  <td><span class="wb__m wb__m--praxis">nur mit <code>Vary</code></span> wird es vergessen, bekommt der Nächste die falsche Fassung</td>
+  <td><span class="wb__m wb__m--praxis">nur mit <code>Vary</code></span></td>
+</tr>
+<tr>
+  <th scope="row">Verweise zwischen Ressourcen</th>
+  <td>unproblematisch</td>
+  <td>innerhalb einer Fassung eindeutig</td>
+  <td><span class="wb__m wb__m--bruch">die schwierigste Stelle</span> auf welche Fassung zeigt <code>/orders/v2</code> beim Kunden?</td>
+  <td><span class="wb__m wb__m--ok">unproblematisch</span> Adressen sind versionslos</td>
+  <td><span class="wb__m wb__m--ok">unproblematisch</span></td>
+</tr>
+<tr>
+  <th scope="row">Alte Fassung abschalten</th>
+  <td>—</td>
+  <td>ein Termin für alle – hart, aber übersichtlich</td>
+  <td>je Ressource ein eigener Termin</td>
+  <td>je Darstellung ein eigener Termin</td>
+  <td><span class="wb__m wb__m--bruch">praktisch nie</span> jeder Stand hat noch einen Nutzer</td>
+</tr>
+<tr>
+  <th scope="row">Wo man ihm begegnet</th>
+  <td>gut geführte interne APIs</td>
+  <td>der verbreitetste Weg, vor allem nach außen</td>
+  <td>große APIs mit vielen Teams</td>
+  <td>APIs mit Anspruch auf REST-Reinheit</td>
+  <td>Stripe, GitHub – Anbieter mit vielen fremden Aufrufern</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p class="wb__nb"><strong>Zwei Varianten, die es auch gibt</strong> – beide führen wir
+nicht in der Tabelle, weil sie sich verhalten wie eine Spalte oben:
+<code>?version=2</code> als <strong>Query-Parameter</strong> ist die URL-Variante mit
+schlechterem Caching und der Gefahr, dass sie jemand vergisst (dann gilt die
+Vorgabe, und niemand merkt es). Und eine <strong>neue Ressource unter neuem
+Namen</strong> – <code>/customers-neu</code> – ist keine Versionierung, sondern ein
+zweiter Endpunkt; ehrlich benannt ist das manchmal die beste Lösung, weil sie keine
+Migration verspricht, die nie stattfindet.</p>
+
+<h3 class="wb__h3">Die eine Frage, an der sich alles entscheidet</h3>
+
+<p class="wb__schluss"><strong>Wer ruft auf, und kann man ihn erreichen?</strong>
+Kennt man alle Aufrufer und kann einen Termin mit ihnen vereinbaren, ist die
+<em>ganze API in der URL</em> der einfachste Weg – sichtbar, trivial zu routen, ein
+Umstellungstermin für alle. Sind es viele fremde Aufrufer, die man nicht zu etwas
+bewegen kann, führt an einem <em>Datumsstand je Aufrufer</em> kaum etwas vorbei – mit
+dem Preis, dass die alten Stände nie wieder verschwinden.</p>
+
+<p class="wb__schluss"><strong>Und in jedem Fall gilt der Satz aus dem ersten
+Abschnitt:</strong> Eine neue Fassung bedeutet, dass zwei Stände gleichzeitig
+betrieben, getestet und irgendwann abgeschaltet werden müssen. Das ist Aufwand für
+Jahre – deshalb ist sie nicht die erste, sondern die letzte Antwort. <strong>Die
+billigste Versionierung ist die, die nicht stattfindet.</strong></p>
 
 <p class="wb__schluss"><strong>Verträglich heißt nicht „wir haben nichts
 weggenommen“</strong>, sondern „ein Aufrufer, der von der Änderung nichts weiß,
@@ -245,6 +364,27 @@ funktioniert weiter“. Die beiden schlimmsten Fälle oben nehmen nichts weg.</p
   .wb__regel h3 { margin: 0 0 .4rem; font-size: 1rem; }
   .wb__regel p { margin: 0; font-size: .9rem; }
   .wb__schluss { margin-top: 1.5rem; }
+  .wb h3.wb__h3 { margin-top: var(--avd-academy-space-8, 2rem); font-size: var(--avd-academy-fs-md, 1.05rem); }
+  .wb__lead { color: var(--avd-academy-color-ink-muted); }
+  .wb__nb { font-size: .9rem; }
+
+  .wb__tabelle-scroll { overflow-x: auto; margin: 1.2rem 0; }
+  .wb__tabelle { border-collapse: collapse; width: 100%; min-width: 60rem; font-size: .84rem; }
+  .wb__tabelle th, .wb__tabelle td {
+    border: 1px solid var(--avd-academy-color-border);
+    padding: .5rem .65rem; vertical-align: top; text-align: left;
+  }
+  .wb__tabelle thead th { background: var(--avd-academy-color-bg-subtle); font-size: .9rem; }
+  .wb__tabelle thead th small {
+    display: block; font-weight: 400; font-size: .72rem;
+    color: var(--avd-academy-color-ink-muted); margin-top: .15rem;
+  }
+  .wb__tabelle tbody th { background: var(--avd-academy-color-bg-subtle); width: 11rem; font-weight: 600; }
+  .wb__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent); }
+  .wb__m { display: block; font-weight: 700; margin-bottom: .15rem; }
+  .wb__m--ok     { color: var(--wb-ok); }
+  .wb__m--praxis { color: var(--wb-praxis); }
+  .wb__m--bruch  { color: var(--wb-bruch); }
 </style>
 
 <script>

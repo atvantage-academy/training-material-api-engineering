@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Paginierung: Eine Million Zeilen, zwei Arten zu blättern · ATVANTAGE Academy</title><meta name="description" content="Was ohne Paginierung an jeder Station kaputtgeht – und was danach mit Offset und mit Cursor passiert, wenn währenddessen jemand löscht."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789564233">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789564233"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789564233">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789564233" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789564233" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789564233">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789565293">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789565293"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789565293">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789565293" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789565293" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789565293">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -80,8 +80,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789564233"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789564233"></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789564233"></head>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789565293"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789565293"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789565293"></head>
 <body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Paginierung: Eine Million Zeilen, zwei Arten zu blättern"
       data-avd-academy-sim-speed="1"
       data-avd-academy-sim-step-interval="3200">
@@ -134,6 +134,38 @@
   /* ------------------------------------------ Szenario 2+3: das Blättern */
   .spalte { display: flex; flex-direction: column; gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem); }
 
+  /* Eine Frage an die Runde gehoert gross auf die Buehne, nicht klein in die
+     Leitung. Sie liegt als Auflage darueber und veraendert das Raster nicht. */
+  .buehne--blaettern { position: relative; }
+  .frage {
+    position: absolute; inset: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: center; padding: 2rem;
+    background: color-mix(in oklab, var(--avd-academy-color-bg) 82%, transparent);
+    animation: frage-auf .45s ease-out;
+  }
+  .frage[hidden] { display: none; }
+  .frage p {
+    margin: 0; max-width: 44rem; text-align: center;
+    font-size: clamp(1.15rem, .85rem + 1.1vw, 1.9rem);
+    font-weight: 700; line-height: 1.35;
+    background: var(--avd-academy-color-bg);
+    border: 3px solid var(--avd-academy-color-accent);
+    border-radius: var(--avd-academy-radius, 8px);
+    padding: 1.5rem 1.9rem;
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / .2);
+  }
+  @keyframes frage-auf { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .frage { animation: none; } }
+
+  /* Platz ist reserviert, der Rahmen kommt erst mit dem Text - so entsteht
+     beim Einblenden kein Versatz. */
+  .fussnote {
+    min-height: 3.2rem; margin: .5rem 0 0; padding-top: .4rem;
+    font-size: .8rem; color: var(--avd-academy-color-ink-muted);
+  }
+  .fussnote:not(:empty) { border-top: 1px dashed var(--avd-academy-color-border); }
+  .fussnote strong { color: var(--avd-academy-color-danger, #b3402c); }
+
   .zaehler { font-size: .76rem; color: var(--avd-academy-color-ink-muted); padding: .2rem 0 .4rem; min-height: 1.1rem; }
   .sortierung {
     font-size: .74rem; color: var(--avd-academy-color-ink-muted);
@@ -174,18 +206,52 @@
     border-top: 2px dashed var(--avd-academy-color-accent);
   }
 
+  /* ------------------------------------------------- Das laufende Paket
+     Eine Bahn mit einem Punkt darauf. Sie zeigt in einer halben Sekunde,
+     WER gerade WOHIN schickt - das steht sonst nur im Text. */
+  .bahn {
+    position: relative; height: 1.1rem; margin: .1rem 0;
+    border-top: 2px dashed var(--avd-academy-color-border);
+  }
+  .bahn__punkt {
+    position: absolute; top: -.55rem; left: 0;
+    width: 1rem; height: 1rem; border-radius: 50%;
+    background: var(--avd-academy-color-accent);
+    opacity: 0;
+  }
+  .bahn.laeuft .bahn__punkt  { animation: bahn-hin .85s ease-in-out; }
+  .bahn.laeuft.zurueck .bahn__punkt { animation-name: bahn-her; }
+  @keyframes bahn-hin {
+    from { left: 0; opacity: 1; }
+    to   { left: calc(100% - 1rem); opacity: 1; }
+  }
+  @keyframes bahn-her {
+    from { left: calc(100% - 1rem); opacity: 1; }
+    to   { left: 0; opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bahn.laeuft .bahn__punkt { animation: none; opacity: 1; left: calc(50% - .5rem); }
+  }
+
+  /* Ueber der ganzen Kette: das Paket laeuft vom Client bis zur Datenbank. */
+  .bahn--kette { grid-column: 1 / -1; order: -1; margin-bottom: .3rem; }
+
   /* ------------------------------------------------------------ Leitung */
-  .lt { display: flex; flex-direction: column; gap: .5rem; justify-content: center; text-align: center; min-height: 9rem; }
-  .lt__pfeil { font-size: 1.5rem; line-height: 1; min-height: 1.6rem; color: var(--avd-academy-color-accent); }
+  .lt { display: flex; flex-direction: column; gap: .5rem; justify-content: center; text-align: center; min-height: 10.5rem; }
+  .lt__pfeil { font-size: 1.7rem; line-height: 1; min-height: 1.8rem; color: var(--avd-academy-color-accent); }
+  /* Die Anfrage ist das, worauf im Kurs gezeigt wird - sie muss aus der
+     letzten Reihe lesbar sein, nicht nur auf dem eigenen Bildschirm. */
   .lt__url {
-    font-family: var(--avd-academy-font-mono, monospace); font-size: .76rem;
-    padding: .5rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
+    font-family: var(--avd-academy-font-mono, monospace);
+    font-size: clamp(.92rem, .75rem + .45vw, 1.15rem);
+    font-weight: 600; line-height: 1.4;
+    padding: .7rem .7rem; border-radius: var(--avd-academy-radius-sm, 4px);
     border: 1px dashed var(--avd-academy-color-border);
     background: var(--avd-academy-color-bg-subtle);
-    word-break: break-all; min-height: 3.4rem;
+    word-break: break-all; min-height: 4.6rem;
     display: flex; align-items: center; justify-content: center;
   }
-  .lt__notiz { font-size: .78rem; color: var(--avd-academy-color-ink-muted); margin: 0; min-height: 2.4rem; }
+  .lt__notiz { font-size: .84rem; color: var(--avd-academy-color-ink-muted); margin: 0; min-height: 2.6rem; }
   .lt__notiz strong { color: var(--avd-academy-color-ink); }
   .lt.ist-still .lt__url { color: var(--avd-academy-color-ink-muted); font-style: italic; }
 
@@ -203,6 +269,7 @@
 </style>
 
 <div class="buehne buehne--kette" data-avd-academy-sim-scene="ohne">
+  <div class="bahn bahn--kette" id="ohne-bahn"><span class="bahn__punkt"></span></div>
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
     <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">Browser</span></h2>
     <div class="avd-academy-sim-panel__body" id="ohne-client"></div>
@@ -222,16 +289,19 @@
 </div>
 
 <div class="buehne buehne--blaettern" data-avd-academy-sim-scene="offset">
+  <div class="frage" id="offset-frage" hidden=""><p></p></div>
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
     <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was angekommen ist</span></h2>
     <div class="zaehler" id="offset-zaehler-client"></div>
     <div class="avd-academy-sim-panel__body liste" id="offset-client"></div>
+    <p class="fussnote" id="offset-clientnotiz"></p>
   </div>
   <div class="spalte">
     <div class="avd-academy-sim-panel">
       <h2 class="avd-academy-sim-panel__title">Leitung</h2>
       <div class="avd-academy-sim-panel__body lt" id="offset-leitung">
         <p class="lt__pfeil" data-lt-pfeil=""></p>
+        <div class="bahn" data-lt-bahn=""><span class="bahn__punkt"></span></div>
         <p class="lt__url" data-lt-url=""></p>
         <p class="lt__notiz" data-lt-notiz=""></p>
       </div>
@@ -239,6 +309,7 @@
     <div class="avd-academy-sim-panel nb">
       <h2 class="avd-academy-sim-panel__title">Anderer Client <span class="avd-academy-sim-panel__hint">Kundendienst</span></h2>
       <div class="avd-academy-sim-panel__body nb__body" id="offset-nebenbei"></div>
+      <div class="bahn" data-nb-bahn=""><span class="bahn__punkt"></span></div>
     </div>
   </div>
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
@@ -250,16 +321,19 @@
 </div>
 
 <div class="buehne buehne--blaettern" data-avd-academy-sim-scene="cursor">
+  <div class="frage" id="cursor-frage" hidden=""><p></p></div>
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
     <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was angekommen ist</span></h2>
     <div class="zaehler" id="cursor-zaehler-client"></div>
     <div class="avd-academy-sim-panel__body liste" id="cursor-client"></div>
+    <p class="fussnote" id="cursor-clientnotiz"></p>
   </div>
   <div class="spalte">
     <div class="avd-academy-sim-panel">
       <h2 class="avd-academy-sim-panel__title">Leitung</h2>
       <div class="avd-academy-sim-panel__body lt" id="cursor-leitung">
         <p class="lt__pfeil" data-lt-pfeil=""></p>
+        <div class="bahn" data-lt-bahn=""><span class="bahn__punkt"></span></div>
         <p class="lt__url" data-lt-url=""></p>
         <p class="lt__notiz" data-lt-notiz=""></p>
       </div>
@@ -267,6 +341,7 @@
     <div class="avd-academy-sim-panel nb">
       <h2 class="avd-academy-sim-panel__title">Anderer Client <span class="avd-academy-sim-panel__hint">Kundendienst</span></h2>
       <div class="avd-academy-sim-panel__body nb__body" id="cursor-nebenbei"></div>
+      <div class="bahn" data-nb-bahn=""><span class="bahn__punkt"></span></div>
     </div>
   </div>
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
@@ -289,6 +364,17 @@
                    '<span class="avd-academy-sim-cell__name"></span>' +
                    '<span class="avd-academy-sim-cell__value"></span>';
     return el;
+  }
+
+  /* Setzt die Laufanimation neu an. Eine CSS-Animation startet nicht erneut,
+     solange die Klasse dranbleibt - erst Entfernen, Reflow, wieder Setzen. */
+  function starteBahn(bahn, an, rueck) {
+    if (!bahn) return;
+    bahn.classList.remove("laeuft", "zurueck");
+    if (!an) return;
+    void bahn.offsetWidth;
+    bahn.classList.add("laeuft");
+    if (rueck) bahn.classList.add("zurueck");
   }
 
   function grenzzeile() {
@@ -318,7 +404,8 @@
       client:  { wert: "–",         zustand: "wartet auf Antwort",        grenze: "verträgt ein paar tausend DOM-Knoten" },
       gateway: { wert: "–",         zustand: "leitet durch",              grenze: "Antwortpuffer 10 MB · Timeout 30 s" },
       service: { wert: "–",         zustand: "bereit",                    grenze: "Heap 512 MB" },
-      db:      { wert: "1 200 000", zustand: "Bestellungen gespeichert",  grenze: "Ergebnismenge wird im Speicher gehalten" }
+      db:      { wert: "1 200 000", zustand: "Bestellungen gespeichert",  grenze: "Ergebnismenge wird im Speicher gehalten" },
+      laeuft:  null
     };
   }
 
@@ -364,6 +451,7 @@
     state: ketteStart,
     render: function (s, ctx) {
       STATIONEN.forEach(function (id) { zeichneStation(id, s[id], ctx.animated); });
+      starteBahn(document.getElementById("ohne-bahn"), ctx.animated && !!s.laeuft, s.laeuft === "her");
     },
     steps: [
       {
@@ -379,6 +467,7 @@
         apply: function (s) {
           s.client.zustand = "GET /orders abgeschickt";
           s.client.aktiv = true;
+          s.laeuft = "hin";
         }
       },
       {
@@ -387,6 +476,7 @@
               "<p><b>Die Datenbank ist die erste Station, die es merkt</b> – und die einzige, die noch antwortet.</p>",
         apply: function (s) {
           s.client.aktiv = false;
+          s.laeuft = null;
           s.db.zustand = "≈ 2 GB Ergebnismenge";
           s.db.kaputt = true;
         }
@@ -408,6 +498,7 @@
         apply: function (s) {
           s.gateway.wert = "504";
           s.gateway.zustand = "Timeout nach 30 s";
+          s.laeuft = "her";
           s.gateway.kaputt = true;
         }
       },
@@ -416,6 +507,7 @@
         text: "<p>Angenommen, alles davor hätte gehalten: Der Browser müsste mehrere hundert MB JSON <b>parsen</b> und daraus eine Liste bauen. Bei 1,2 Millionen Einträgen sind das Millionen DOM-Knoten.</p>" +
               "<p>Der Tab friert ein. <b>Kein Fehler, keine Meldung</b> – nur ein Fenster, das nicht mehr reagiert.</p>",
         apply: function (s) {
+          s.laeuft = null;
           s.client.wert = "keine Reaktion";
           s.client.zustand = "Skript blockiert den Tab";
           s.client.kaputt = true;
@@ -457,6 +549,8 @@
       client: [1, 2, 3, 4, 5, 6].map(function (n) { return { fach: "f" + n }; }),
       leitung: null,
       notiz: "",
+      clientnotiz: "",
+      frage: "",
       nebenbei: null,
       grenzen: false
     };
@@ -526,13 +620,25 @@
       }
     });
 
+    document.getElementById(sz + "-clientnotiz").innerHTML = s.clientnotiz || "";
+
+    var frage = document.getElementById(sz + "-frage");
+    frage.hidden = !s.frage;
+    if (s.frage) frage.querySelector("p").innerHTML = s.frage;
+
     var lt = document.getElementById(sz + "-leitung");
     lt.classList.toggle("ist-still", !s.leitung);
     lt.querySelector("[data-lt-pfeil]").textContent = s.leitung ? (s.leitung.rueck ? "◀" : "▶") : "";
     lt.querySelector("[data-lt-url]").textContent = s.leitung ? s.leitung.text : "still";
     lt.querySelector("[data-lt-notiz]").innerHTML = s.notiz || "";
 
-    sim.list(document.getElementById(sz + "-nebenbei"), [{ text: s.nebenbei }], {
+    starteBahn(lt.querySelector("[data-lt-bahn]"), ctx.animated && !!s.leitung,
+               !!(s.leitung && s.leitung.rueck));
+
+    var nb = document.getElementById(sz + "-nebenbei");
+    starteBahn(nb.parentNode.querySelector("[data-nb-bahn]"), ctx.animated && !!s.nebenbei, false);
+
+    sim.list(nb, [{ text: s.nebenbei }], {
       animated: ctx.animated,
       key: function () { return "nb"; },
       create: function () {
@@ -632,8 +738,11 @@
           s.leitung = { rueck: true, text: "200 OK · 1 Eintrag" };
           s.bestand[5].markiert = false;
           s.client[4] = { fach: "f5", id: "B-101", betrag: "18,20 €" };
-          s.client[5] = { fach: "f6", id: "B-102", hinweis: "nie geliefert", problem: true };
           s.notiz = "";
+          /* B-102 steht NICHT im Client - es ist nie angekommen. Das leere Fach
+             und der Hinweis daneben sind die ehrliche Darstellung. */
+          s.clientnotiz = "Das sechste Fach bleibt leer: <strong>B-102 ist nie angekommen</strong> – " +
+                          "und der Client weiß nichts davon. Für ihn ist der Bestand vollständig abgeholt.";
         }
       },
       {
@@ -731,7 +840,8 @@
               "<p>Der Client weiß davon nichts und schickt seinen Merkzettel brav zurück. <b>Der Server sucht B-103 und findet es nicht.</b> Und jetzt? Von vorn anfangen, mit einem Fehler antworten, oder raten, wo die Stelle wohl war?</p>",
         apply: function (s) {
           s.leitung = null;
-          s.notiz = "Was, wenn der <strong>Anker</strong> selbst verschwindet?";
+          s.notiz = "";
+          s.frage = "Was, wenn genau <b>B-103</b> gelöscht wird –<br>der Eintrag, auf dem der Cursor steht?";
         }
       },
       {
@@ -740,6 +850,7 @@
               "<p><b>Oder der Cursor trägt den Sortierwert.</b> Nicht „nach dem Eintrag B-103“, sondern „nach dem Zeitstempel 2026-03-14T09:12Z, ID B-103“. Dann ist der Cursor eine <b>Stelle in der Ordnung</b>, und die gibt es auch dann noch, wenn der Eintrag weg ist.</p>",
         apply: function (s) {
           s.notiz = "";
+          s.frage = "";
         }
       },
       {
