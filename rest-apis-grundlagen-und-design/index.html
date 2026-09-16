@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>REST APIs – Grundlagen und Design · ATVANTAGE Academy</title><meta name="description" content="Zwei Tage HTTP, Ressourcenschnitt und OpenAPI – vom ersten Request bis zum fertigen Vertrag."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789534799"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789534799"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789534799">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789534799" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789534799" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789534799">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789536023"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789536023"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789536023">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789536023" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789536023" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789536023">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789534799">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789534799"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789536023">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789536023"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -130,10 +130,11 @@ selben Beispiel: dem <strong>Account Service</strong> eines Online-Shops.</p>
 
 <h2 id="kursmaterial">Kursmaterial</h2>
 
-<p>Die Unterlagen bauen aufeinander auf – so, wie wir sie im Kurs durchgehen. Links
-stehen die <strong>Übungen</strong>, an denen Du selbst arbeitest, rechts das <strong>Material zum
-Nachschlagen</strong>: Folien aus dem Kurs, Nachschlagewerke und Simulationen. Du musst
-rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem Kurs.</p>
+<p>Die Unterlagen sind <strong>nach Themen</strong> gruppiert, nicht nach dem Ablauf – so findest
+Du später wieder, was zusammengehört. Links stehen die <strong>Übungen</strong>, an denen Du
+selbst arbeitest, rechts das <strong>Material zum Nachschlagen</strong>: Folien aus dem Kurs,
+Nachschlagewerke und Simulationen. Du musst rechts nichts „durcharbeiten“ – das ist
+Deine Werkzeugkiste, auch nach dem Kurs.</p>
 
 <div class="avd-academy-topic">
 
@@ -151,6 +152,7 @@ rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/ressourcen-und-methoden/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Eine Ressource anlegen, ändern und löschen</a></li>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Den ältesten Kunden löschen</a></li>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/api-design-kundenverwaltung/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Die Kundenverwaltung entwerfen</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/rund-um-die-api/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Nachschlagen statt nachfragen</a></li>
       </ul>
 
     </div>
@@ -184,7 +186,6 @@ rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem
       <p class="avd-academy-materials__head">Übungen</p>
 
       <ul>
-        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/eigenrecherche-architektur/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Fünf Fragen, fünf Antworten</a></li>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/openapi/issue.html" class="avd-academy-doclink avd-academy-doclink--guide">Den Entwurf als OpenAPI aufschreiben</a></li>
       </ul>
 
@@ -195,7 +196,6 @@ rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem
       <p class="avd-academy-materials__head">Zum Nachschlagen</p>
 
       <ul>
-        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/eigenrecherche-architektur/contract-first-vs-code-first.html" class="avd-academy-doclink avd-academy-doclink--visualization">Contract First oder Code First?</a></li>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/openapi/anatomie.html" class="avd-academy-doclink avd-academy-doclink--visualization">Anatomie eines OpenAPI-Dokuments</a></li>
       </ul>
 
@@ -231,6 +231,7 @@ rechts nichts „durcharbeiten“ – das ist Deine Werkzeugkiste, auch nach dem
       <ul>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/best-practices/simulation.html" class="avd-academy-doclink avd-academy-doclink--simulation">Blättern mit Offset und mit Cursor</a></li>
         <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/hypermedia-und-hal/reifegrad-modell.html" class="avd-academy-doclink avd-academy-doclink--visualization">Das Reifegrad-Modell von Richardson</a></li>
+        <li><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/contract-first-vs-code-first/gegenueberstellung.html" class="avd-academy-doclink avd-academy-doclink--visualization">Contract First oder Code First?</a></li>
       </ul>
 
     </div>

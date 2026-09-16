@@ -59,15 +59,15 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Fünf Fragen, fünf Antworten · ATVANTAGE Academy</title><meta name="description" content="Deine Gruppe bekommt eine Frage. Du hast 25 Minuten, eine Suchmaschine – und danach vier Minuten, um es den anderen zu erklären."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Nachschlagen statt nachfragen · ATVANTAGE Academy</title><meta name="description" content="Eine Frage, 15 Minuten, eine Suchmaschine – und danach fünf Minuten, um die Antwort den anderen zu erklären."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789534799"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789534799">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789534799"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789534799">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789534799" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789534799" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789534799">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789536023"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789536023">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789536023"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789536023">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789536023" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789536023" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789536023">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789534799">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789534799"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789536023">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789536023"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -103,29 +103,36 @@
               aria-label="Farbschema umschalten">◐</button></div>
 </header>
 
-  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Fünf Fragen, fünf Antworten</span></nav><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 30 Minuten</span><span class="avd-academy-tag">CORS</span><span class="avd-academy-tag">API Gateway</span><span class="avd-academy-tag">Content Negotiation</span><span class="avd-academy-tag">Contract First</span><span class="avd-academy-tag">Eigenrecherche</span>
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Nachschlagen statt nachfragen</span></nav><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 20 Minuten</span><span class="avd-academy-tag">CORS</span><span class="avd-academy-tag">API Gateway</span><span class="avd-academy-tag">Content Negotiation</span><span class="avd-academy-tag">Ressourcenschnitt</span><span class="avd-academy-tag">Caching</span><span class="avd-academy-tag">HTTP</span>
       </div>
       <div class="avd-academy-guide-hero__actions">
         <button type="button" class="avd-academy-btn avd-academy-btn--ghost avd-academy-copy-md"
                 data-avd-academy-copy-md="#avd-academy-md-source"
                 title="Markdown kopieren" aria-label="Markdown kopieren"></button>
       </div>
-    </div><h1>Fünf Fragen, fünf Antworten</h1>
+    </div><h1>Nachschlagen statt nachfragen</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
-      <h1 id="fünf-fragen-fünf-antworten">Fünf Fragen, fünf Antworten</h1>
+      <h1 id="nachschlagen-statt-nachfragen">Nachschlagen statt nachfragen</h1>
 
 <p><strong>Als</strong> jemand, der auch nach diesem Kurs noch APIs bauen wird, <strong>möchte ich</strong> eine
 technische Frage selbst klären können, <strong>damit</strong> ich nicht auf jemanden warten muss,
 der es mir erklärt.</p>
 
-<p>Es gibt zu jedem dieser Themen eine Folie, die wir Dir zeigen könnten. Wir tun es
+<p>Zu jeder dieser Fragen gibt es eine Folie, die wir Dir zeigen könnten. Wir tun es
 nicht. Du findest das schneller heraus, als wir es erzählen können – und Du behältst
 es länger.</p>
 
-<p><strong>Deine Gruppe bekommt eine der fünf Fragen.</strong> 25 Minuten Recherche, 5 Minuten
-Vorbereitung – dann erklärst Du sie den anderen in <strong>vier</strong>.</p>
+<p><strong>Welche Frage Du bearbeitest, wird gemeinsam verteilt.</strong> Je nach Gruppengröße
+nimmst Du eine Frage allein, eine zu zweit, oder zwei in einer kleinen Gruppe – das
+klärt ihr am Anfang mit dem Trainer. Am Ende erklärst Du Deine Antwort den anderen.</p>
+
+<p>Es sind mehr Fragen, als in die Zeit passen. <strong>Das ist Absicht:</strong> Was nicht
+vorgetragen wird, bleibt hier stehen und ist nach dem Kurs immer noch da.</p>
+
+<p><strong>Der Takt:</strong> 15 Minuten Recherche · 5 Minuten die Erklärung vorbereiten · dann je
+Frage rund 5 Minuten Vortrag samt Rückfragen.</p>
 
 <h2 id="lernziele">Lernziele</h2>
 
@@ -140,45 +147,45 @@ versteht.</li>
 werden.</li>
 </ul>
 
-<h2 id="die-fünf-fragen">Die fünf Fragen</h2>
+<h2 id="die-fragen">Die Fragen</h2>
 
-<h3 id="frage-1-was-ist-cors">Frage 1: Was ist CORS?</h3>
+<h3 id="frage-1-cors">Frage 1: CORS</h3>
 
-<p>Welches Problem löst es, wer hat es erfunden, und wen schützt es eigentlich? Was hat
-ein <code>OPTIONS</code>-Aufruf damit zu tun? Und: Warum stolpert ein Frontend darüber, <code>curl</code>
-aber nicht?</p>
+<p>Welches Problem löst CORS? Wo wird es umgesetzt? Wie wird es umgesetzt?</p>
 
-<h3 id="frage-2-wann-darf-eine-nachricht-einen-body-haben">Frage 2: Wann darf eine Nachricht einen Body haben?</h3>
+<h3 id="frage-2-bodies-je-methode">Frage 2: Bodies je Methode</h3>
 
-<p>Geht das bei jeder HTTP-Methode? Bau eine Übersicht: je Methode, ob ein Body im
-<strong>Request</strong> notwendig, sinnvoll, optional oder unzulässig ist – und dasselbe für die
-<strong>Antwort</strong>. Finde mindestens einen Fall, in dem die Regel praktisch zu einem
-Problem führt.</p>
+<p>Entscheide jeweils pro HTTP-Request-Methode, ob bei dem Request bzw. der erwarteten
+Response (Erfolgsfall) ein Body <strong>erforderlich</strong>, <strong>optional</strong> oder <strong>unzulässig</strong>
+ist.</p>
 
-<h3 id="frage-3-welche-aufgaben-hat-ein-api-gateway">Frage 3: Welche Aufgaben hat ein API Gateway?</h3>
+<h3 id="frage-3-api-gateway">Frage 3: API Gateway</h3>
 
-<p>Was macht so ein Ding eigentlich, und warum stellt man es überhaupt davor? Sammel
-so viele Aufgaben wie möglich. Und beantworte zum Schluss: Welche davon müsste man
-sonst in <strong>jedem</strong> Service einzeln programmieren?</p>
+<p>Was ist ein API Gateway? Welche Position hat es in der Microservice-Architektur? Und
+welche Aufgaben übernimmt es?</p>
 
-<h3 id="frage-4-was-bedeutet-code-first">Frage 4: Was bedeutet „Code First“?</h3>
+<h3 id="frage-4-content-negotiation">Frage 4: Content Negotiation</h3>
 
-<p>Was ist damit gemeint, was ist das Gegenstück, und wie läuft es jeweils ab? Finde
-mindestens <strong>zwei Argumente für jede</strong> der beiden Seiten – auch für die, die Du
-persönlich für falsch hältst.</p>
+<p>Was ist Content Negotiation, und wie wird sie mit HTTP umgesetzt? Warum ist es
+wichtig, dass sich der Server strikt daran hält? Welche Arten von Negotiation werden
+noch von HTTP unterstützt?</p>
 
-<h3 id="frage-5-was-ist-content-negotiation-und-wie-läuft-sie-ab">Frage 5: Was ist Content Negotiation, und wie läuft sie ab?</h3>
+<h3 id="frage-5-subressource-oder-hauptressource">Frage 5: Subressource oder Hauptressource?</h3>
 
-<p>Du hast vorhin gehört, dass Client und Server sich auf ein Format einigen. <strong>Wie
-genau</strong> tun sie das? Welche Header sind beteiligt, und was steht darin, wenn der
-Client mehrere Formate akzeptiert – aber eines lieber hätte?</p>
+<p>Ein Blogbeitrag hat einen Autor. Ist der Autor eine <strong>Subressource</strong> des Beitrags
+(<code>/posts/5/author</code>) oder eine eigene <strong>Hauptressource</strong> (<code>/authors/9</code>)?</p>
 
-<p>Und dann die beiden Fragen, an denen es interessant wird:</p>
+<p>Welche Kriterien sprechen dafür, welche dagegen? Darf dieselbe Sache unter <strong>beiden</strong>
+Adressen erreichbar sein? Und wie tief darf man überhaupt schachteln – was sagen
+veröffentlichte Leitlinien dazu?</p>
 
-<ul>
-  <li>Was passiert, wenn sie sich <strong>nicht einigen</strong> können?</li>
-  <li>Was passiert, wenn zwischen beiden ein <strong>Cache</strong> sitzt?</li>
-</ul>
+<h3 id="frage-6-caching">Frage 6: Caching</h3>
+
+<p>Wie sagt ein Server, wie lange eine Antwort gültig ist? Was tun <code>Cache-Control</code>,
+<code>ETag</code> und <code>If-None-Match</code>, und was ist ein <code>304</code>?</p>
+
+<p>Warum ist es dafür wichtig, dass <code>GET</code> <strong>sicher</strong> ist? Und was hat <code>Vary</code> damit zu
+tun?</p>
 
 <h2 id="definition-of-done">Definition of Done</h2>
 
@@ -188,7 +195,7 @@ Client mehrere Formate akzeptiert – aber eines lieber hätte?</p>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast ein Beispiel, an dem man die Antwort sieht – nicht nur eine Definition.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast eine Stelle gefunden, an der es „kommt darauf an“ heißt, und weißt,
     worauf.</li>
-  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Die Erklärung dauert <strong>höchstens vier Minuten</strong> und kommt ohne Fachbegriffe
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Die Erklärung dauert <strong>höchstens fünf Minuten</strong> und kommt ohne Fachbegriffe
     aus, die Du nicht erklärst.</li>
   <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Du hast die Reflexionsfragen schriftlich beantwortet.</li>
 </ul>
@@ -197,8 +204,8 @@ Client mehrere Formate akzeptiert – aber eines lieber hätte?</p>
 
 <h3 id="klär-zuerst-was-du-schon-weißt">Klär zuerst, was Du schon weißt</h3>
 
-<p>Zwei Minuten, bevor jemand etwas nachschlägt: Was weiß die Gruppe bereits? Was
-davon ist sicher, was nur eine Vermutung?</p>
+<p>Zwei Minuten, bevor Du etwas nachschlägst: Was weißt Du bereits? Was davon ist
+sicher, was nur eine Vermutung?</p>
 
 <p>Schreib beides auf. Am Ende vergleichst Du – und wirst feststellen, dass einige
 Vermutungen falsch waren. Genau das ist der Lerneffekt.</p>
@@ -239,13 +246,12 @@ lautet. Finde ihn und benenn, wovon es abhängt.</p>
 
 <h3 id="bereite-die-erklärung-vor">Bereite die Erklärung vor</h3>
 
-<p>Vier Minuten, keine Folien nötig. Leg mit Deiner Gruppe fest:</p>
+<p>Fünf Minuten, keine Folien nötig. Leg fest:</p>
 
 <ol>
   <li><strong>den einen Satz</strong>, der die Frage beantwortet,</li>
   <li><strong>das Beispiel</strong>, das dabei gezeigt wird,</li>
-  <li><strong>die Stelle</strong>, an der es „kommt darauf an“ heißt,</li>
-  <li><strong>wer</strong> was sagt – am besten nicht eine Person allein.</li>
+  <li><strong>die Stelle</strong>, an der es „kommt darauf an“ heißt.</li>
 </ol>
 
 <blockquote>
@@ -260,29 +266,36 @@ jemand sie versteht, der in einer anderen Rolle arbeitet als Du.</p>
   <li>Welche Quelle hat Dich am schnellsten weitergebracht – und welche hat Dich in die
 Irre geführt?</li>
   <li>An welcher Stelle Deiner Frage heißt es „kommt darauf an“? Wovon hängt es ab?</li>
-  <li>Hör Dir die Erklärungen der anderen Gruppen an. Welche dieser fünf Sachen wird
-<strong>im Code Deines Services</strong> gelöst – und welche nicht? Was folgt daraus für
-jemanden, der die API aus dem Code erzeugen will?</li>
+  <li>Hör Dir die Erklärungen der anderen an. Welche dieser Sachen wird <strong>im Code Deines
+Services</strong> gelöst – und welche nicht? Was folgt daraus für jemanden, der die API
+aus dem Code erzeugen will?</li>
   <li>Wenn dieselbe Ressource als JSON <strong>und</strong> als XML ausgeliefert werden kann: Wie
 viele Ressourcen sind das? Was sagt Deine Antwort darüber, ob das Format in die
 Adresse gehört?</li>
-  <li>Was hättest Du in den 25 Minuten anders gemacht, wenn Du noch einmal anfangen
+  <li>Was hättest Du in den 15 Minuten anders gemacht, wenn Du noch einmal anfangen
 könntest?</li>
 </ul>
 
 
-<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Fünf Fragen, fünf Antworten
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Nachschlagen statt nachfragen
 
 **Als** jemand, der auch nach diesem Kurs noch APIs bauen wird, **möchte ich** eine
 technische Frage selbst klären können, **damit** ich nicht auf jemanden warten muss,
 der es mir erklärt.
 
-Es gibt zu jedem dieser Themen eine Folie, die wir Dir zeigen könnten. Wir tun es
+Zu jeder dieser Fragen gibt es eine Folie, die wir Dir zeigen könnten. Wir tun es
 nicht. Du findest das schneller heraus, als wir es erzählen können – und Du behältst
 es länger.
 
-**Deine Gruppe bekommt eine der fünf Fragen.** 25 Minuten Recherche, 5 Minuten
-Vorbereitung – dann erklärst Du sie den anderen in **vier**.
+**Welche Frage Du bearbeitest, wird gemeinsam verteilt.** Je nach Gruppengröße
+nimmst Du eine Frage allein, eine zu zweit, oder zwei in einer kleinen Gruppe – das
+klärt ihr am Anfang mit dem Trainer. Am Ende erklärst Du Deine Antwort den anderen.
+
+Es sind mehr Fragen, als in die Zeit passen. **Das ist Absicht:** Was nicht
+vorgetragen wird, bleibt hier stehen und ist nach dem Kurs immer noch da.
+
+**Der Takt:** 15 Minuten Recherche · 5 Minuten die Erklärung vorbereiten · dann je
+Frage rund 5 Minuten Vortrag samt Rückfragen.
 
 ## Lernziele
 
@@ -295,43 +308,45 @@ Du…
 - ordnest ein, welche Aufgaben rund um eine API **nicht** im Service selbst gelöst
   werden.
 
-## Die fünf Fragen
+## Die Fragen
 
-### Frage 1: Was ist CORS?
+### Frage 1: CORS
 
-Welches Problem löst es, wer hat es erfunden, und wen schützt es eigentlich? Was hat
-ein `OPTIONS`-Aufruf damit zu tun? Und: Warum stolpert ein Frontend darüber, `curl`
-aber nicht?
+Welches Problem löst CORS? Wo wird es umgesetzt? Wie wird es umgesetzt?
 
-### Frage 2: Wann darf eine Nachricht einen Body haben?
+### Frage 2: Bodies je Methode
 
-Geht das bei jeder HTTP-Methode? Bau eine Übersicht: je Methode, ob ein Body im
-**Request** notwendig, sinnvoll, optional oder unzulässig ist – und dasselbe für die
-**Antwort**. Finde mindestens einen Fall, in dem die Regel praktisch zu einem
-Problem führt.
+Entscheide jeweils pro HTTP-Request-Methode, ob bei dem Request bzw. der erwarteten
+Response (Erfolgsfall) ein Body **erforderlich**, **optional** oder **unzulässig**
+ist.
 
-### Frage 3: Welche Aufgaben hat ein API Gateway?
+### Frage 3: API Gateway
 
-Was macht so ein Ding eigentlich, und warum stellt man es überhaupt davor? Sammel
-so viele Aufgaben wie möglich. Und beantworte zum Schluss: Welche davon müsste man
-sonst in **jedem** Service einzeln programmieren?
+Was ist ein API Gateway? Welche Position hat es in der Microservice-Architektur? Und
+welche Aufgaben übernimmt es?
 
-### Frage 4: Was bedeutet „Code First“?
+### Frage 4: Content Negotiation
 
-Was ist damit gemeint, was ist das Gegenstück, und wie läuft es jeweils ab? Finde
-mindestens **zwei Argumente für jede** der beiden Seiten – auch für die, die Du
-persönlich für falsch hältst.
+Was ist Content Negotiation, und wie wird sie mit HTTP umgesetzt? Warum ist es
+wichtig, dass sich der Server strikt daran hält? Welche Arten von Negotiation werden
+noch von HTTP unterstützt?
 
-### Frage 5: Was ist Content Negotiation, und wie läuft sie ab?
+### Frage 5: Subressource oder Hauptressource?
 
-Du hast vorhin gehört, dass Client und Server sich auf ein Format einigen. **Wie
-genau** tun sie das? Welche Header sind beteiligt, und was steht darin, wenn der
-Client mehrere Formate akzeptiert – aber eines lieber hätte?
+Ein Blogbeitrag hat einen Autor. Ist der Autor eine **Subressource** des Beitrags
+(`/posts/5/author`) oder eine eigene **Hauptressource** (`/authors/9`)?
 
-Und dann die beiden Fragen, an denen es interessant wird:
+Welche Kriterien sprechen dafür, welche dagegen? Darf dieselbe Sache unter **beiden**
+Adressen erreichbar sein? Und wie tief darf man überhaupt schachteln – was sagen
+veröffentlichte Leitlinien dazu?
 
-- Was passiert, wenn sie sich **nicht einigen** können?
-- Was passiert, wenn zwischen beiden ein **Cache** sitzt?
+### Frage 6: Caching
+
+Wie sagt ein Server, wie lange eine Antwort gültig ist? Was tun `Cache-Control`,
+`ETag` und `If-None-Match`, und was ist ein `304`?
+
+Warum ist es dafür wichtig, dass `GET` **sicher** ist? Und was hat `Vary` damit zu
+tun?
 
 ## Definition of Done
 
@@ -340,7 +355,7 @@ Und dann die beiden Fragen, an denen es interessant wird:
 * [ ] Du hast ein Beispiel, an dem man die Antwort sieht – nicht nur eine Definition.
 * [ ] Du hast eine Stelle gefunden, an der es „kommt darauf an“ heißt, und weißt,
       worauf.
-* [ ] Die Erklärung dauert **höchstens vier Minuten** und kommt ohne Fachbegriffe
+* [ ] Die Erklärung dauert **höchstens fünf Minuten** und kommt ohne Fachbegriffe
       aus, die Du nicht erklärst.
 * [ ] Du hast die Reflexionsfragen schriftlich beantwortet.
 
@@ -348,8 +363,8 @@ Und dann die beiden Fragen, an denen es interessant wird:
 
 ### Klär zuerst, was Du schon weißt
 
-Zwei Minuten, bevor jemand etwas nachschlägt: Was weiß die Gruppe bereits? Was
-davon ist sicher, was nur eine Vermutung?
+Zwei Minuten, bevor Du etwas nachschlägst: Was weißt Du bereits? Was davon ist
+sicher, was nur eine Vermutung?
 
 Schreib beides auf. Am Ende vergleichst Du – und wirst feststellen, dass einige
 Vermutungen falsch waren. Genau das ist der Lerneffekt.
@@ -386,12 +401,11 @@ Das ist der Teil, der Deine Erklärung von einer Definition unterscheidet.
 
 ### Bereite die Erklärung vor
 
-Vier Minuten, keine Folien nötig. Leg mit Deiner Gruppe fest:
+Fünf Minuten, keine Folien nötig. Leg fest:
 
 1. **den einen Satz**, der die Frage beantwortet,
 2. **das Beispiel**, das dabei gezeigt wird,
-3. **die Stelle**, an der es „kommt darauf an“ heißt,
-4. **wer** was sagt – am besten nicht eine Person allein.
+3. **die Stelle**, an der es „kommt darauf an“ heißt.
 
 &gt; **Hinweis:** Du erklärst einer gemischten Runde. Prüf Deine Erklärung daran, ob
 &gt; jemand sie versteht, der in einer anderen Rolle arbeitet als Du.
@@ -402,22 +416,20 @@ Vier Minuten, keine Folien nötig. Leg mit Deiner Gruppe fest:
 - Welche Quelle hat Dich am schnellsten weitergebracht – und welche hat Dich in die
   Irre geführt?
 - An welcher Stelle Deiner Frage heißt es „kommt darauf an“? Wovon hängt es ab?
-- Hör Dir die Erklärungen der anderen Gruppen an. Welche dieser fünf Sachen wird
-  **im Code Deines Services** gelöst – und welche nicht? Was folgt daraus für
-  jemanden, der die API aus dem Code erzeugen will?
+- Hör Dir die Erklärungen der anderen an. Welche dieser Sachen wird **im Code Deines
+  Services** gelöst – und welche nicht? Was folgt daraus für jemanden, der die API
+  aus dem Code erzeugen will?
 - Wenn dieselbe Ressource als JSON **und** als XML ausgeliefert werden kann: Wie
   viele Ressourcen sind das? Was sagt Deine Antwort darüber, ob das Format in die
   Adresse gehört?
-- Was hättest Du in den 25 Minuten anders gemacht, wenn Du noch einmal anfangen
+- Was hättest Du in den 15 Minuten anders gemacht, wenn Du noch einmal anfangen
   könntest?
 
 ## Weiterführende Informationen
 
-- [MDN: Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/de/docs/Web/HTTP/CORS)
-- [MDN: HTTP-Anfragemethoden](https://developer.mozilla.org/de/docs/Web/HTTP/Methods)
+- [MDN: HTTP](https://developer.mozilla.org/de/docs/Web/HTTP)
 - [RFC 9110 – HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html)
 - [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/)
-- [MDN: Content Negotiation](https://developer.mozilla.org/de/docs/Web/HTTP/Content_negotiation)
 </textarea>
     </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
                data-avd-academy-toc-grenze="12" open hidden>
@@ -430,7 +442,7 @@ Vier Minuten, keine Folien nötig. Leg mit Deiner Gruppe fest:
       </div>
       <div class="avd-academy-guide-side avd-academy-guide-side--bordered">
         <div class="avd-academy-guide-side__label">Weiterführende Informationen</div>
-        <div class="avd-academy-guide-side__links"><a href="https://developer.mozilla.org/de/docs/Web/HTTP/CORS" target="_blank" rel="noopener"><span>MDN: Cross-Origin Resource Sharing (CORS)</span></a><a href="https://developer.mozilla.org/de/docs/Web/HTTP/Methods" target="_blank" rel="noopener"><span>MDN: HTTP-Anfragemethoden</span></a><a href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener"><span>RFC 9110 – HTTP Semantics</span></a><a href="https://opensource.zalando.com/restful-api-guidelines/" target="_blank" rel="noopener"><span>Zalando RESTful API Guidelines</span></a><a href="https://developer.mozilla.org/de/docs/Web/HTTP/Content_negotiation" target="_blank" rel="noopener"><span>MDN: Content Negotiation</span></a>
+        <div class="avd-academy-guide-side__links"><a href="https://developer.mozilla.org/de/docs/Web/HTTP" target="_blank" rel="noopener"><span>MDN: HTTP</span></a><a href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener"><span>RFC 9110 – HTTP Semantics</span></a><a href="https://opensource.zalando.com/restful-api-guidelines/" target="_blank" rel="noopener"><span>Zalando RESTful API Guidelines</span></a>
         </div></div>
     </aside>
   </div><div class="avd-academy-print-contact" aria-hidden="true">
