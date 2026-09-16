@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Wissens-Check: HTTP, Ressourcen, Methoden · ATVANTAGE Academy</title><meta name="description" content="Fünfzehn Fragen zum Selbstprüfen – REST, HTTP, Methoden, Idempotenz und die Anforderungen an eine Ressourcen-ID. Mit Begründung zu jeder Antwort."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789539776"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789539776">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789539776">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789539776">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789539776"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789539776">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789539776" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789539776" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789539776">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789539776">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789539776"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>Wissens-Check: HTTP, Ressourcen, Methoden</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="wissens-check-http-ressourcen-methoden">Wissens-Check: HTTP, Ressourcen, Methoden</h1>
+
+<p class="qz__intro">Fünfzehn Fragen. Zu <strong>jeder</strong> Antwort steht,
+warum sie richtig oder falsch ist – auch zu der, die Du angeklickt hast. Das ist der
+eigentliche Zweck: Nicht der Punktestand zählt, sondern die Begründung.</p>
+
+<div class="qz" data-qz="">
+
+<div class="qz__leiste">
+  <span data-qz-zaehler="">Frage 1 von 15</span>
+  <span data-qz-punkte="">0 richtig</span>
+</div>
+<div class="qz__balken"><div class="qz__balken-fuell" data-qz-balken=""></div></div>
+
+<div class="qz__karte" data-qz-karte="">
+  <p class="qz__kontext" data-qz-kontext=""></p>
+  <h2 class="qz__frage" data-qz-frage=""></h2>
+  <div class="qz__optionen" data-qz-optionen=""></div>
+  <div class="qz__feedback" data-qz-feedback="" hidden=""></div>
+  <button type="button" class="qz__weiter" data-qz-weiter="" hidden="">Weiter</button>
+</div>
+
+<div class="qz__ende" data-qz-ende="" hidden="">
+  <h2 data-qz-ende-titel=""></h2>
+  <p class="qz__ergebnis" data-qz-ergebnis=""></p>
+  <p class="qz__deutung" data-qz-deutung=""></p>
+  <button type="button" class="qz__weiter" data-qz-neu="">Noch einmal</button>
+</div>
+
+</div>
+
+<style>
+  /* Wissens-Check. Bewusst ohne fremdes CSS-Framework: Die Seite lebt von den
+     Design-Tokens des Themes, damit sie in beiden Farbschemata trägt und beim
+     nächsten Theme-Update mitwandert. */
+  .qz__intro { max-width: 46rem; }
+  .qz { max-width: 46rem; margin-block: var(--avd-academy-space-6, 1.5rem); }
+
+  .qz__leiste {
+    display: flex; justify-content: space-between; gap: 1rem;
+    font-size: var(--avd-academy-fs-sm, .92rem);
+    color: var(--avd-academy-color-ink-muted);
+    margin-bottom: .4rem;
+  }
+  .qz__balken {
+    height: 6px; border-radius: 3px; overflow: hidden;
+    background: var(--avd-academy-color-bg-subtle);
+    margin-bottom: var(--avd-academy-space-5, 1.25rem);
+  }
+  .qz__balken-fuell {
+    height: 100%; width: 0;
+    background: var(--avd-academy-color-accent);
+    transition: width .35s ease;
+  }
+
+  .qz__karte, .qz__ende {
+    border: 1px solid var(--avd-academy-color-border);
+    border-top: 4px solid var(--avd-academy-color-accent);
+    border-radius: var(--avd-academy-radius, 8px);
+    background: var(--avd-academy-color-bg-subtle);
+    padding: var(--avd-academy-space-5, 1.25rem);
+  }
+  .qz__kontext { margin: 0 0 .4rem; color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .92rem); }
+  .qz__kontext:empty { display: none; }
+  .qz h2.qz__frage { margin: 0 0 var(--avd-academy-space-4, 1rem); font-size: var(--avd-academy-fs-md, 1.1rem); }
+
+  .qz__optionen { display: grid; gap: .6rem; }
+  .qz__opt {
+    font: inherit; text-align: left; cursor: pointer;
+    padding: .7rem .9rem;
+    border: 2px solid var(--avd-academy-color-border);
+    border-radius: var(--avd-academy-radius-sm, 6px);
+    background: var(--avd-academy-color-bg);
+    color: var(--avd-academy-color-ink);
+    transition: var(--avd-academy-transition, all .15s ease);
+  }
+  .qz__opt:hover:not(:disabled) { border-color: var(--avd-academy-color-accent); }
+  .qz__opt:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
+  .qz__opt:disabled { cursor: default; }
+
+  /* Die Flächen sind schwach getönt, damit die Schrift die Fließtextfarbe behalten
+     kann: `--avd-academy-color-danger` trägt als Schrift in keinem Schema (A-004). */
+  .qz__opt.is-richtig {
+    border-color: var(--avd-academy-color-success);
+    background: color-mix(in srgb, var(--avd-academy-color-success) 14%, var(--avd-academy-color-bg));
+  }
+  .qz__opt.is-falsch {
+    border-color: var(--avd-academy-color-danger);
+    background: color-mix(in srgb, var(--avd-academy-color-danger) 12%, var(--avd-academy-color-bg));
+  }
+  .qz__opt-marke { font-weight: var(--avd-academy-fw-bold, 700); margin-right: .45rem; }
+
+  .qz__feedback {
+    margin-top: var(--avd-academy-space-4, 1rem);
+    padding: .7rem .9rem;
+    border-left: 3px solid var(--avd-academy-color-accent);
+    background: color-mix(in srgb, var(--avd-academy-color-accent) 8%, transparent);
+  }
+  .qz__feedback[hidden] { display: none; }
+  .qz__feedback p { margin: 0 0 .5rem; }
+  .qz__feedback p:last-child { margin-bottom: 0; }
+  .qz__feedback-kopf { font-weight: var(--avd-academy-fw-bold, 700); }
+
+  .qz__weiter {
+    margin-top: var(--avd-academy-space-4, 1rem);
+    font: inherit; cursor: pointer;
+    padding: .45em 1.3em;
+    border-radius: var(--avd-academy-radius-sm, 6px);
+    border: 1px solid var(--avd-academy-color-accent);
+    background: var(--avd-academy-color-accent);
+    color: var(--avd-academy-color-accent-contrast);
+    font-weight: var(--avd-academy-fw-medium, 500);
+  }
+  .qz__weiter[hidden] { display: none; }
+  .qz__weiter:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 3px; }
+
+  .qz__ende[hidden] { display: none; }
+  .qz__ende h2 { margin-top: 0; }
+  .qz__ergebnis { font-size: var(--avd-academy-fs-lg, 1.3rem); font-weight: var(--avd-academy-fw-bold, 700); margin: 0 0 .6rem; }
+  .qz__deutung { margin: 0; color: var(--avd-academy-color-ink-muted); }
+
+  @media (prefers-reduced-motion: reduce) { .qz * { transition: none !important; } }
+
+  /* Auf Papier nützt ein Quiz wenig – aber die Fragen als Liste schon. */
+  @media print {
+    .qz__leiste, .qz__balken, .qz__weiter, .qz__ende { display: none; }
+  }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  /* Je Frage: `kontext` (optional, stellt die Lage her), `frage`, und vier
+     `optionen`. Genau eine ist richtig. Das `feedback` haengt an der EINZELNEN
+     Option, nicht an der Frage – wer daneben greift, soll erfahren, warum SEINE
+     Antwort nicht traegt, nicht nur welche gestimmt haette. */
+  var FRAGEN = [
+    {
+      kontext: "Der Begriff fällt in jedem zweiten Satz – und wird selten sauber eingeordnet.",
+      frage: "Was ist REST?",
+      optionen: [
+        { text: "Ein Architekturstil – eine Sammlung von Bedingungen für den Umgang mit HTTP.", ok: true,
+          fb: "Eine Sammlung von Bedingungen dafür, wie man HTTP benutzt – kein Protokoll, keine Bibliothek und kein Standard mit Prüfsiegel. Ein Stil, den man einhalten kann oder nicht." },
+        { text: "Ein eigenes Protokoll oberhalb von TCP, das HTTP bei Schnittstellen ablöst.", ok: false,
+          fb: "Das Protokoll ist HTTP. REST liegt darüber und sagt, wie man es benutzt – es ersetzt nichts." },
+        { text: "Ein Datenformat: JSON, das über HTTP zwischen Systemen übertragen wird.", ok: false,
+          fb: "Die häufigste Verwechslung. Man kann JSON über HTTP schicken und meilenweit von REST entfernt sein." },
+        { text: "Eine Spezifikation der IETF, gegen die man eine API zertifizieren lassen kann.", ok: false,
+          fb: "Es gibt kein Prüfsiegel. REST stammt aus einer Dissertation (Roy Fielding, 2000), nicht aus einem RFC." }
+      ]
+    },
+    {
+      kontext: "Ein System wird in mehrere Teile zerlegt, die getrennt betrieben werden (Microservices).",
+      frage: "Was passiert dabei mit den Herausforderungen?",
+      optionen: [
+        { text: "Sie verschieben sich aus der Anwendung in die Infrastruktur – dort gibt es jetzt alles mehrfach.", ok: true,
+          fb: "Der Satz, auf den es hinausläuft: Sie verschwinden nicht. Aus Methodenaufrufen werden Schnittstellen, und alles gibt es jetzt mehrfach – Build, Deployment, Monitoring." },
+        { text: "Sie verschwinden weitgehend, weil jeder einzelne Teil für sich einfacher zu verstehen ist.", ok: false,
+          fb: "Der einzelne Teil wird einfacher – das Ganze nicht. Die Komplexität wandert nach außen, sie löst sich nicht auf." },
+        { text: "Sie bleiben unverändert, denn die Aufteilung ist eine organisatorische Entscheidung.", ok: false,
+          fb: "Sobald Teile über das Netz miteinander reden, kommen Latenz, Teilausfälle und verteilte Daten dazu. Das ist nicht organisatorisch." },
+        { text: "Sie verdoppeln sich, weil man die alte und die neue Architektur eine Zeit lang parallel betreibt.", ok: false,
+          fb: "Mischformen sind zwar der Normalfall – aber das ist nicht der Kern. Die Herausforderungen verlagern sich, sie verdoppeln sich nicht." }
+      ]
+    },
+    {
+      kontext: "",
+      frage: "Wie viele Arten von Nachrichten kennt HTTP, und wer fängt an?",
+      optionen: [
+        { text: "Zwei – Anfrage und Antwort, immer paarweise, und den Anfang macht immer der Client.", ok: true,
+          fb: "Jeder Austausch geht vom Client aus: Er fragt, der Server antwortet – genau einmal je Anfrage. Wer eine Meldung ohne vorherige Frage braucht, braucht etwas anderes: WebSockets oder Server-Sent Events." },
+        { text: "Zwei – Anfrage und Antwort, wobei beide Seiten einen Austausch beginnen dürfen.", ok: false,
+          fb: "Die Zahl stimmt, die Richtung nicht. In HTTP beginnt immer der Client, nie der Server." },
+        { text: "Drei – Anfrage, Antwort und die Benachrichtigung, die der Server von sich aus schickt.", ok: false,
+          fb: "Eine Benachrichtigung vom Server kennt HTTP nicht. Genau deshalb gibt es WebSockets und Server-Sent Events." },
+        { text: "Eine – dieselbe Struktur in beide Richtungen, unterschieden nur durch die Richtung.", ok: false,
+          fb: "Der Aufbau ist tatsächlich derselbe, aber die Startzeile unterscheidet sich: Methode und Pfad gegen Version und Statuscode." }
+      ]
+    },
+    {
+      kontext: "Eine HTTP-Nachricht ist lesbarer Text: Startzeile, Header, Leerzeile, Body.",
+      frage: "Welche Rolle hat die Leerzeile?",
+      optionen: [
+        { text: "Sie trennt die Header vom Body – und ist das einzige Trennzeichen dafür.", ok: true,
+          fb: "Und zwar als <em>einziges</em> Trennzeichen – deshalb wichtiger, als sie aussieht. Der Empfänger liest Zeile für Zeile, bis eine leer ist; alles danach ist Inhalt." },
+        { text: "Sie ist reine Formatierung und darf zur besseren Lesbarkeit entfallen.", ok: false,
+          fb: "Ohne sie weiß der Empfänger nicht, wo die Header aufhören. Die Nachricht ist dann kaputt." },
+        { text: "Sie trennt die Startzeile von den Headern, die danach Zeile für Zeile folgen.", ok: false,
+          fb: "Startzeile und Header stehen direkt untereinander. Die Leerzeile kommt erst nach den Headern." },
+        { text: "Sie zeigt an, dass die Nachricht keinen Body hat und hier zu Ende ist.", ok: false,
+          fb: "Sie steht auch dann, wenn ein Body folgt. Ob einer da ist, sagt unter anderem <code>Content-Length</code>." }
+      ]
+    },
+    {
+      kontext: "„Zustandslos“ wird im Kurs für zwei verschiedene Dinge benutzt.",
+      frage: "Was heißt „HTTP ist zustandslos“?",
+      optionen: [
+        { text: "Das Protokoll verknüpft zwei Nachrichtenpaare nicht – jede Anfrage steht für sich.", ok: true,
+          fb: "Deshalb muss jede Anfrage aus sich heraus verständlich sein. Das ist nicht abwählbar – man kann nur etwas darüberbauen, und genau das tun Cookies." },
+        { text: "Der Server darf sich zwischen zwei Anfragen nichts über den Client merken.", ok: false,
+          fb: "Doch, darf er – in einer Datenbank, einem Cache, einem Sitzungsspeicher. Er erfährt nur nicht von allein, zu wem eine Anfrage gehört." },
+        { text: "Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.", ok: false,
+          fb: "Das ist die andere Bedeutung: <em>ein Service ist zustandslos</em> – eine Entwurfsentscheidung. Die Protokolleigenschaft gilt immer, die Entwurfsentscheidung trifft man." },
+        { text: "Zwei aufeinanderfolgende Anfragen desselben Clients landen bei derselben Instanz.", ok: false,
+          fb: "Das Gegenteil ist der Fall – und darin liegt der Nutzen: Weil die Leitung nichts von einer Anfrage zur nächsten trägt, kann <em>jede</em> Instanz <em>jede</em> Anfrage beantworten. Erst dadurch lassen sich Instanzen dazustellen, wegnehmen und neu starten." }
+      ]
+    },
+    {
+      kontext: "Ein Suchformular wird abgeschickt, ein Bestellformular auch.",
+      frage: "Worin unterscheiden sich GET und POST für den Browser-Nutzer sichtbar?",
+      optionen: [
+        { text: "Eine GET-Adresse lässt sich verschicken, als Lesezeichen speichern und neu laden.", ok: true,
+          fb: "Weil die Daten bei GET in der Adresse stehen und bei POST im Body – und der Body ist nicht Teil der Adresse. Deshalb fragt der Browser beim Neuladen nach, ob er die Anfrage wiederholen soll." },
+        { text: "GET ist spürbar schneller, weil dabei deutlich weniger Daten übertragen werden müssen.", ok: false,
+          fb: "Die Menge entscheidet nicht. Der Unterschied ist, <em>wo</em> die Daten stehen – und was das für Adresse und Wiederholung bedeutet." },
+        { text: "POST wird verschlüsselt übertragen, GET geht im Klartext über die Leitung.", ok: false,
+          fb: "Verschlüsselt wird durch TLS – beide gleichermaßen, und die Adresse ist dabei ebenfalls geschützt." },
+        { text: "GET darf am Server nichts verändern, POST muss dagegen immer etwas verändern.", ok: false,
+          fb: "Der erste Teil stimmt, der zweite nicht: POST <em>darf</em> ändern, muss aber nicht." }
+      ]
+    },
+    {
+      kontext: "Eine neue Ressource soll angelegt werden. Beide Methoden können das.",
+      frage: "Wann nimmt man PUT zum Anlegen, und wann POST?",
+      optionen: [
+        { text: "PUT auf die Einzelressource, wenn der Client die ID bestimmt – das ist idempotent.", ok: true,
+          fb: "Der Client kennt die ID – etwa einen fachlichen Schlüssel wie Kundennummer oder ISBN – und schickt sie in der Adresse mit: <code>PUT /customers/4711</code>. Zweimal gesendet entsteht derselbe Zustand, nicht zwei Kunden.<br><br><strong>POST</strong> ist der Weg, wenn der <em>Server</em> die ID vergibt: <code>POST /customers</code>, Antwort <code>201</code> mit <code>Location</code> – und eben <em>nicht</em> idempotent." },
+        { text: "Immer POST, weil ausschließlich der Server IDs vergeben und Kollisionen verhindern darf.", ok: false,
+          fb: "Der Server <em>darf</em> IDs vergeben, muss aber nicht. Kennt der Client einen stabilen fachlichen Schlüssel, ist PUT der bessere Weg – und der einzige, bei dem ein zweiter Versuch keinen zweiten Datensatz anlegt." },
+        { text: "Immer PUT, weil POST nichts anlegt, sondern nur Formulardaten an den Server überträgt.", ok: false,
+          fb: "POST legt sehr wohl an – es ist der Normalfall, wenn der Server die ID vergibt. Formulardaten sind die Herkunft der Methode, nicht ihre Bedeutung." },
+        { text: "Das ist Geschmackssache – beide legen an, der Unterschied ist rein stilistischer Natur.", ok: false,
+          fb: "Der Unterschied ist nicht stilistisch, sondern beobachtbar: Zweimal POST legt zwei Ressourcen an, zweimal PUT nicht. Genau das heißt <em>idempotent</em>." }
+      ]
+    },
+    {
+      kontext: "Kunde 5 heißt „Maier“ mit Vorname „Tom“. Du schickst einen Body, in dem <em>nur</em> <code>name</code> steht.",
+      frage: "Was steht danach im Vornamen – bei PUT, und bei PATCH?",
+      optionen: [
+        { text: "Bei PUT ist der Vorname danach weg, bei PATCH bleibt er unverändert stehen.", ok: true,
+          fb: "Der Unterschied in einem Satz: <strong>PUT ersetzt, PATCH ändert.</strong> Was Du bei PUT nicht mitschickst, ist danach weg." },
+        { text: "In beiden Fällen bleibt der Vorname stehen, nicht genannte Felder bleiben unberührt.", ok: false,
+          fb: "Das gilt für PATCH. PUT ersetzt die Ressource vollständig durch das Mitgeschickte." },
+        { text: "In beiden Fällen ist der Vorname danach weg, denn beide ersetzen die Ressource.", ok: false,
+          fb: "Bei PUT ja. PATCH ändert aber nur das, was im Body steht." },
+        { text: "Bei PUT bleibt der Vorname stehen, bei PATCH ist er danach verschwunden.", ok: false,
+          fb: "Andersherum: PUT ist das Ersetzen, PATCH das Ändern." }
+      ]
+    },
+    {
+      kontext: "",
+      frage: "Was heißt „idempotent“?",
+      optionen: [
+        { text: "Mehrfach ausgeführt hinterlässt die Anfrage denselben Zustand wie einmal ausgeführt.", ok: true,
+          fb: "Es geht um den <strong>Zustand</strong>, nicht um die Antwort. DELETE darf beim zweiten Mal <code>404</code> antworten und ist trotzdem idempotent." },
+        { text: "Mehrfach ausgeführt liefert die Anfrage jedes Mal exakt dieselbe Antwort an den Client.", ok: false,
+          fb: "Die häufigste Verwechslung. Der Statuscode darf sich unterscheiden – der Zustand nicht." },
+        { text: "Die Anfrage verändert am Server überhaupt nichts, sie liest ausschließlich.", ok: false,
+          fb: "Das heißt <em>sicher</em>. Jede sichere Methode ist idempotent, aber DELETE ist idempotent und nicht sicher." },
+        { text: "Die Anfrage lässt sich nur ein einziges Mal ausführen, danach wird sie abgelehnt.", ok: false,
+          fb: "Im Gegenteil – gerade weil sie idempotent ist, darf der Aufrufer sie gefahrlos wiederholen." }
+      ]
+    },
+    {
+      kontext: "Zum Vergleich: <code>DELETE /customers/5</code> ist idempotent.",
+      frage: "Warum ist <code>DELETE /customers/oldest</code> nicht idempotent?",
+      optionen: [
+        { text: "Weil die Adresse nach dem ersten Löschen bereits jemand anderen bezeichnet.", ok: true,
+          fb: "Zweimal gesendet löscht zwei verschiedene Kunden. Das ist der Grund, warum ein Superlativ in der Adresse ein Entwurfsfehler ist." },
+        { text: "Weil ohne eine Zahl als Bezeichner überhaupt kein DELETE idempotent sein kann.", ok: false,
+          fb: "Es liegt nicht an der Schreibweise des Bezeichners, sondern daran, ob die Adresse <em>dauerhaft dieselbe Sache</em> meint. <code>DELETE /customers/john-maier</code> wäre ebenso idempotent – <code>oldest</code> ist es nicht, weil damit jedes Mal jemand anderes gemeint ist." },
+        { text: "Weil der Server dafür erst alle Kunden durchsuchen und sortieren muss.", ok: false,
+          fb: "Die Dauer spielt keine Rolle. Es geht darum, <em>was</em> die Adresse beim zweiten Aufruf bezeichnet." },
+        { text: "Gar nicht – DELETE ist grundsätzlich idempotent, auch in diesem Fall.", ok: false,
+          fb: "DELETE ist es nur, solange die Adresse stabil dieselbe Ressource meint. <code>oldest</code> tut das nicht – deshalb trägt die Garantie hier nicht." }
+      ]
+    },
+    {
+      kontext: "<code>/playlists/7/titles</code> ist die Titelliste einer Wiedergabeliste.",
+      frage: "Was ist von <code>DELETE /playlists/7/titles</code> zu halten?",
+      optionen: [
+        { text: "Es geht, ist aber semantisch falsch: Die Titelliste bleibt bestehen, nur leer.", ok: true,
+          fb: "Der Server <em>kann</em> das umsetzen, und HTTP verbietet es nicht. Nur bedeutet DELETE „die Ressource ist danach weg“ – ein anschließendes GET müsste <code>404</code> antworten. Es antwortet aber <code>200</code> mit <code>[]</code>: Die Titelliste ist noch da, nur leer. Gemeint war <strong>leeren</strong>, und dafür ist DELETE die falsche Methode.<br><br>Zum Vergleich: <code>DELETE /playlists/7</code> ist sauber – danach gibt es die Wiedergabeliste wirklich nicht mehr." },
+        { text: "Es löscht sämtliche Titel der Liste – sauber definiert, in der Praxis gefährlich.", ok: false,
+          fb: "So wird es oft gelesen, trifft die Sache aber nicht: Die Listenressource selbst überlebt. Es wäre ein Leeren, kein Löschen." },
+        { text: "Es ist verboten, HTTP lässt DELETE auf einer Listenressource gar nicht zu.", ok: false,
+          fb: "Verboten ist es nicht. Es ergibt nur keine saubere Bedeutung." },
+        { text: "Bei einer Unterliste wie dieser geht es, bei einer Hauptliste dagegen nicht.", ok: false,
+          fb: "Die Verschachtelung ändert nichts. Auch <code>/playlists</code> wäre nach einem DELETE noch da – nur leer." }
+      ]
+    },
+    {
+      kontext: "Die Titelliste einer Wiedergabeliste soll geleert werden.",
+      frage: "Welcher Entwurf trifft die Bedeutung am genauesten und vergibt das geringste Recht?",
+      optionen: [
+        { text: "PATCH auf die Titelliste, mit einer Anweisung im Body, sie zu leeren.", ok: true,
+          fb: "PATCH ändert etwas an der Ressource, ohne sie zu ersetzen – der Body sagt genau das eine, was geschehen soll. Preis: Es braucht ein vereinbartes Änderungsformat." },
+        { text: "PUT auf die Titelliste, mit einer leeren Liste im Body als neuem Inhalt.", ok: false,
+          fb: "Funktioniert und ist idempotent – aber wer leeren darf, darf damit <em>jede beliebige</em> Liste setzen. Viel mehr Recht als nötig." },
+        { text: "POST auf /playlists/7/titles/actions/empty, ganz ohne Inhalt im Body.", ok: false,
+          fb: "Eine gute Variante: Die Absicht steht in der Adresse. Der Preis ist ein Verb in der URL, also bewusst außerhalb des CRUD-Rasters." },
+        { text: "DELETE auf die Titelliste, mit dem Query-Parameter all=true als Zusatz.", ok: false,
+          fb: "Ein Query-Parameter macht aus dem Löschen kein Leeren. Die Bedeutung von DELETE bleibt falsch." }
+      ]
+    },
+    {
+      kontext: "Die Bilder eines Produkts werden durchnummeriert: <code>…/images/0</code>, <code>/1</code>, <code>/2</code>.",
+      frage: "Wie sollte sich das System verhalten, wenn <code>…/images/1</code> gelöscht wird?",
+      optionen: [
+        { text: "Die Bilder behalten ihren Index, die 1 bleibt dauerhaft eine Lücke.", ok: true,
+          fb: "Eine einmal vergebene ID wird nach dem Löschen <strong>nicht wieder ausgegeben</strong>. Die Lücke ist kein Schönheitsfehler, sondern der Beleg dafür, dass die Adresse eine <em>Identität</em> bezeichnet und keine Position. Wer <code>…/images/1</code> später aufruft, bekommt <code>404</code> – und das ist die richtige Antwort." },
+        { text: "Die Bilder behalten ihren Index, die 1 wird beim nächsten Upload neu vergeben.", ok: false,
+          fb: "Der erste Teil stimmt – die Lücke ist richtig. Das Neuvergeben ist der Fehler: Wer die 1 irgendwann wieder ausgibt, liefert jedem alten Verweis wortlos ein <em>anderes</em> Bild. Genau deshalb heißt das Kriterium „eindeutig – dauerhaft“." },
+        { text: "Die folgenden Bilder rutschen im Index jeweils um eine Stelle nach vorn.", ok: false,
+          fb: "Dann wird aus dem alten <code>/2</code> das neue <code>/1</code>. Jeder gespeicherte Verweis zeigt ab da auf ein anderes Bild, und nirgendwo tritt ein Fehler auf – die Adresse bleibt ja gültig. Ein Index ist eine Position, keine Identität." },
+        { text: "Das Löschen wird abgelehnt, einzelne Einträge einer Liste bleiben stehen.", ok: false,
+          fb: "Einzelne Einträge lassen sich sehr wohl löschen – DELETE auf die Einzelressource ist genau dafür da. Die Frage ist nur, was danach mit ihrer Adresse geschieht." }
+      ]
+    },
+    {
+      kontext: "Eine Einzelressource wird über ihre ID adressiert.",
+      frage: "Welche Anforderung muss eine gute Ressourcen-ID erfüllen?",
+      optionen: [
+        { text: "Sie muss dauerhaft eindeutig und über ihre Lebensdauer unveränderlich sein.", ok: true,
+          fb: "<strong>Eindeutig</strong>, damit sie genau eine Ressource bezeichnet – und zwar dauerhaft, also auch nach dem Löschen. <strong>Unveränderlich</strong>, weil sonst jeder gespeicherte Verweis bricht: Lesezeichen, Caches, Fremdsysteme." },
+        { text: "Sie muss sich anpassen lassen, sobald sich die Daten der Ressource verändern.", ok: false,
+          fb: "Dann bricht jeder gespeicherte Verweis, und zwar lautlos. Genau deshalb ist die E-Mail-Adresse als ID verführerisch und meist falsch – Menschen wechseln sie." },
+        { text: "Sie muss fortlaufend und ohne Lücken vergeben werden, damit nichts fehlt.", ok: false,
+          fb: "Eine Lücke ist harmlos. Das Fortlaufende ist sogar eher schädlich: Ein Zähler verrät die Menge (<code>/customers/8</code> – es gibt also acht) und lädt zum Durchzählen ein." },
+        { text: "Sie muss für Menschen lesbar und leicht zu merken und zu diktieren sein.", ok: false,
+          fb: "Ein Komfortwunsch, keine Anforderung. Eine UUID erfüllt alle echten Kriterien und ist trotzdem nicht vorlesbar." }
+      ]
+    },
+    {
+      kontext: "Ein Aufruf schlägt fehl, weil der Kunde nicht existiert.",
+      frage: "Was ist von <code>200 OK</code> mit <code>{\"error\": \"not found\"}</code> im Body zu halten?",
+      optionen: [
+        { text: "Es schadet, weil Proxy, Cache, Gateway und Monitoring Erfolg annehmen.", ok: true,
+          fb: "Cache, Gateway, Monitoring und Retry-Logik lesen den Statuscode, nicht den Body. Der Fehler wird für alle unsichtbar, die den Body nicht lesen. Richtig wäre <code>404</code>." },
+        { text: "Es ist in Ordnung, solange der Fehler im Body ausführlich beschrieben wird.", ok: false,
+          fb: "Der Body hilft nur dem, der ihn liest. Der Statuscode ist die Zusage an alle anderen." },
+        { text: "Es ist sogar besser, weil der Client dann nur eine Fehlerbehandlung braucht.", ok: false,
+          fb: "Er braucht sie dann an der falschen Stelle – und alle Zwischenstationen bekommen nichts mit." },
+        { text: "Es ist falsch, weil der Code 200 ausschließlich bei GET erlaubt ist.", ok: false,
+          fb: "<code>200</code> ist bei vielen Methoden richtig. Falsch ist hier, dass ein Fehler als Erfolg gemeldet wird." }
+      ]
+    }
+  ];
+  var wurzel = document.querySelector("[data-qz]");
+  if (!wurzel) { return; }
+
+  var elKontext  = wurzel.querySelector("[data-qz-kontext]");
+  var elFrage    = wurzel.querySelector("[data-qz-frage]");
+  var elOptionen = wurzel.querySelector("[data-qz-optionen]");
+  var elFeedback = wurzel.querySelector("[data-qz-feedback]");
+  var elWeiter   = wurzel.querySelector("[data-qz-weiter]");
+  var elKarte    = wurzel.querySelector("[data-qz-karte]");
+  var elEnde     = wurzel.querySelector("[data-qz-ende]");
+  var elZaehler  = wurzel.querySelector("[data-qz-zaehler]");
+  var elPunkte   = wurzel.querySelector("[data-qz-punkte]");
+  var elBalken   = wurzel.querySelector("[data-qz-balken]");
+
+  var reihenfolge = [];
+  var aktuell = 0;
+  var punkte = 0;
+
+  /* Die Optionen werden je Frage gemischt. Sonst steht die richtige Antwort
+     zweimal hintereinander an derselben Stelle, und man raet die Position statt
+     der Sache. Die FRAGEN bleiben in ihrer Reihenfolge – sie bauen aufeinander auf. */
+  function mischen(feld) {
+    var kopie = feld.slice();
+    for (var i = kopie.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = kopie[i]; kopie[i] = kopie[j]; kopie[j] = t;
+    }
+    return kopie;
+  }
+
+  function starten() {
+    reihenfolge = FRAGEN.map(function (f) {
+      return { frage: f, optionen: mischen(f.optionen) };
+    });
+    aktuell = 0;
+    punkte = 0;
+    elEnde.hidden = true;
+    elKarte.hidden = false;
+    zeigen();
+  }
+
+  function zeigen() {
+    var eintrag = reihenfolge[aktuell];
+    elKontext.innerHTML = eintrag.frage.kontext || "";
+    elFrage.innerHTML = eintrag.frage.frage;
+    elFeedback.hidden = true;
+    elFeedback.innerHTML = "";
+    elWeiter.hidden = true;
+    elOptionen.innerHTML = "";
+
+    eintrag.optionen.forEach(function (opt, i) {
+      var knopf = document.createElement("button");
+      knopf.type = "button";
+      knopf.className = "qz__opt";
+      knopf.innerHTML = '<span class="qz__opt-marke">' +
+        String.fromCharCode(65 + i) + "</span>" + opt.text;
+      knopf.addEventListener("click", function () { antworten(opt, knopf); });
+      elOptionen.appendChild(knopf);
+    });
+
+    elZaehler.textContent = "Frage " + (aktuell + 1) + " von " + reihenfolge.length;
+    elPunkte.textContent = punkte + " richtig";
+    elBalken.style.width = (aktuell / reihenfolge.length * 100) + "%";
+  }
+
+  function antworten(gewaehlt, knopf) {
+    var knoepfe = Array.prototype.slice.call(elOptionen.querySelectorAll(".qz__opt"));
+    var eintrag = reihenfolge[aktuell];
+
+    knoepfe.forEach(function (k, i) {
+      k.disabled = true;
+      /* Die richtige Antwort wird IMMER markiert – auch wenn daneben gegriffen
+         wurde. Wer nur sieht, dass er falsch lag, lernt nichts. */
+      if (eintrag.optionen[i].ok) { k.classList.add("is-richtig"); }
+    });
+    if (!gewaehlt.ok) { knopf.classList.add("is-falsch"); }
+    if (gewaehlt.ok) { punkte++; }
+
+    var richtige = eintrag.optionen.filter(function (o) { return o.ok; })[0];
+    var html = '<p class="qz__feedback-kopf">' +
+      (gewaehlt.ok ? "Richtig." : "Nicht ganz.") + "</p>" +
+      "<p>" + gewaehlt.fb + "</p>";
+    if (!gewaehlt.ok) {
+      html += "<p><strong>Richtig wäre gewesen:</strong> " + richtige.text + " " + richtige.fb + "</p>";
+    }
+    elFeedback.innerHTML = html;
+    elFeedback.hidden = false;
+    elPunkte.textContent = punkte + " richtig";
+    elWeiter.hidden = false;
+    elWeiter.textContent = (aktuell + 1 < reihenfolge.length) ? "Weiter" : "Auswertung";
+    elWeiter.focus();
+  }
+
+  elWeiter.addEventListener("click", function () {
+    aktuell++;
+    if (aktuell < reihenfolge.length) { zeigen(); return; }
+    beenden();
+  });
+
+  function beenden() {
+    elKarte.hidden = true;
+    elEnde.hidden = false;
+    elBalken.style.width = "100%";
+    elZaehler.textContent = "Fertig";
+    elPunkte.textContent = punkte + " von " + reihenfolge.length + " richtig";
+
+    var anteil = punkte / reihenfolge.length;
+    var titel, deutung;
+    if (anteil >= 0.85) {
+      titel = "Sitzt.";
+      deutung = "Die Grundlagen tragen. Die interessanten Fragen sind ab jetzt Entwurfsfragen – und die haben mehr als eine vertretbare Antwort.";
+    } else if (anteil >= 0.6) {
+      titel = "Trägt im Großen und Ganzen.";
+      deutung = "Geh die Fragen durch, bei denen Du danebenlagst, und lies die Begründung. Meist steckt dahinter eine einzelne Unterscheidung – zustandslos gegen zustandslos, Löschen gegen Leeren, Zustand gegen Antwort.";
+    } else {
+      titel = "Noch Luft.";
+      deutung = "Kein Grund zur Sorge – das ist der Zweck der Übung. Nimm Dir die Visualisierungen zur Methoden-Matrix und zu den HTTP-Eigenschaften noch einmal vor; sie beantworten die meisten dieser Fragen.";
+    }
+    wurzel.querySelector("[data-qz-ende-titel]").textContent = titel;
+    wurzel.querySelector("[data-qz-ergebnis]").textContent =
+      punkte + " von " + reihenfolge.length + " Fragen richtig";
+    wurzel.querySelector("[data-qz-deutung]").textContent = deutung;
+  }
+
+  wurzel.querySelector("[data-qz-neu]").addEventListener("click", starten);
+  starten();
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>ATVANTAGE Academy</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>
