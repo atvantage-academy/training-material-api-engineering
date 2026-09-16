@@ -59,15 +59,15 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Blättern mit Offset und mit Cursor · ATVANTAGE Academy</title><meta name="description" content="Was passiert, wenn jemand einen Datensatz anlegt, während ein Client gerade blättert – einmal mit Seitenzahl, einmal mit Cursor."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Paginierung: Eine Million Zeilen, zwei Arten zu blättern · ATVANTAGE Academy</title><meta name="description" content="Was ohne Paginierung an jeder Station kaputtgeht – und was danach mit Offset und mit Cursor passiert, wenn währenddessen jemand löscht."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789551194">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789551194" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789551194" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789551194">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789560597">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789560597" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789560597" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789560597">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -80,15 +80,15 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789551194"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789551194"></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789551194"></head>
-<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Blättern mit Offset und mit Cursor"
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1789560597"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1789560597"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789560597"></head>
+<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Paginierung: Eine Million Zeilen, zwei Arten zu blättern"
       data-avd-academy-sim-speed="1"
-      data-avd-academy-sim-step-interval="3000">
+      data-avd-academy-sim-step-interval="3200">
   <a class="avd-academy-skip-link" href="#avd-academy-sim-stage">Zum Inhalt springen</a>
 
   <header class="avd-academy-sim__bar">
-    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__title">Blättern mit Offset und mit Cursor</span>
+    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__title">Paginierung: Eine Million Zeilen, zwei Arten zu blättern</span>
     <span class="avd-academy-sim__counter" data-avd-academy-sim-counter aria-live="off"></span>
     <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
               title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
@@ -102,62 +102,178 @@
 
   <main class="avd-academy-sim__main"><div class="avd-academy-sim__stage" id="avd-academy-sim-stage" data-avd-academy-sim-stage>
       <style>
+  /* Alle Flächen sind von Anfang an so groß wie in ihrem größten Zustand.
+     Es wird nichts hinzugefügt und nichts entfernt – Einträge ändern nur
+     ihren Inhalt und ihre Markierung. Sonst wackelt die ganze Spalte. */
   .buehne {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
-    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
-    align-items: start;
+    gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem);
+    align-items: stretch;
     align-content: center;
     min-height: 100%;
   }
-  .buehne .avd-academy-sim-panel__body { min-height: 13rem; }
-  .anfrage {
-    display: flex; flex-direction: column; gap: .6rem; justify-content: center;
-    min-height: 13rem; text-align: center;
+  .buehne--kette { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+  .buehne--blaettern { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+
+  .buehne .avd-academy-sim-panel { display: flex; flex-direction: column; }
+  .buehne--kette .avd-academy-sim-panel__body { min-height: 13rem; }
+
+  /* ---------------------------------------------- Szenario 1: die Kette */
+  .st { display: flex; flex-direction: column; gap: .6rem; justify-content: center; height: 100%; }
+  .st__wert {
+    text-align: center; font-family: var(--avd-academy-font-mono, monospace);
+    font-size: 1.05rem; font-weight: 600; min-height: 1.6rem;
   }
-  .anfrage__pfeil { font-size: 1.5rem; line-height: 1; color: var(--avd-academy-color-accent); }
-  .anfrage__url {
-    font-family: var(--avd-academy-font-mono, monospace); font-size: .8rem;
+  .st .avd-academy-sim-cell { min-height: 3.4rem; align-items: center; }
+  .st__grenze {
+    font-size: .74rem; color: var(--avd-academy-color-ink-muted);
+    border-top: 1px dashed var(--avd-academy-color-border);
+    padding-top: .4rem; text-align: center; min-height: 3.2rem; margin: 0;
+  }
+
+  /* ------------------------------------------ Szenario 2+3: das Blättern */
+  .spalte { display: flex; flex-direction: column; gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem); }
+
+  .zaehler { font-size: .76rem; color: var(--avd-academy-color-ink-muted); padding: .2rem 0 .4rem; min-height: 1.1rem; }
+  .sortierung {
+    font-size: .74rem; color: var(--avd-academy-color-ink-muted);
+    border-top: 1px dashed var(--avd-academy-color-border);
+    margin: .5rem 0 0; padding-top: .4rem;
+  }
+
+  .liste { display: flex; flex-direction: column; gap: .35rem; min-height: 19.5rem; }
+  .liste .avd-academy-sim-cell { min-height: 2.5rem; transition: opacity .35s ease; }
+
+  /* Ein Eintrag verschwindet nicht – er wird durchgestrichen. */
+  .avd-academy-sim-cell.ist-weg { opacity: .45; }
+  .avd-academy-sim-cell.ist-weg .avd-academy-sim-cell__name { text-decoration: line-through; }
+  .avd-academy-sim-cell.ist-leer {
+    border-style: dashed; opacity: .5;
+  }
+  /* Der Cursor steht dauerhaft auf einem Eintrag - is-pulse allein wäre nach
+     einer halben Sekunde wieder weg. */
+  .avd-academy-sim-cell.ist-anker {
+    border-color: var(--avd-academy-color-accent);
+    box-shadow: inset .25rem 0 0 var(--avd-academy-color-accent);
+  }
+  .avd-academy-sim-cell.ist-anker .avd-academy-sim-cell__value::after {
+    content: " ◂ Cursor";
+    color: var(--avd-academy-color-accent);
+    font-weight: 700; font-size: .72rem; letter-spacing: .04em;
+  }
+
+  /* Die Seitengrenze ist ein eigenes Element in der Liste und wandert mit. */
+  .grenze {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .7rem; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--avd-academy-color-accent); font-weight: 700;
+    min-height: 1.1rem;
+  }
+  .grenze::before, .grenze::after {
+    content: ""; flex: 1 1 auto; height: 0;
+    border-top: 2px dashed var(--avd-academy-color-accent);
+  }
+
+  /* ------------------------------------------------------------ Leitung */
+  .lt { display: flex; flex-direction: column; gap: .5rem; justify-content: center; text-align: center; min-height: 9rem; }
+  .lt__pfeil { font-size: 1.5rem; line-height: 1; min-height: 1.6rem; color: var(--avd-academy-color-accent); }
+  .lt__url {
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .76rem;
     padding: .5rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
     border: 1px dashed var(--avd-academy-color-border);
     background: var(--avd-academy-color-bg-subtle);
-    word-break: break-all;
+    word-break: break-all; min-height: 3.4rem;
+    display: flex; align-items: center; justify-content: center;
   }
-  .anfrage__still { color: var(--avd-academy-color-ink-muted); font-size: .85rem; font-style: italic; }
-  .anfrage__notiz { font-size: .82rem; color: var(--avd-academy-color-ink-muted); }
-  .anfrage__notiz strong { color: var(--avd-academy-color-ink); }
-  .zaehler { font-size: .78rem; color: var(--avd-academy-color-ink-muted); padding: .2rem 0 .4rem; }
+  .lt__notiz { font-size: .78rem; color: var(--avd-academy-color-ink-muted); margin: 0; min-height: 2.4rem; }
+  .lt__notiz strong { color: var(--avd-academy-color-ink); }
+  .lt.ist-still .lt__url { color: var(--avd-academy-color-ink-muted); font-style: italic; }
+
+  /* -------------------------------------------- Der andere Client (klein) */
+  .nb { min-height: 6.5rem; }
+  .nb__body { display: flex; flex-direction: column; gap: .4rem; justify-content: center; min-height: 3.6rem; }
+  .nb__zeile {
+    font-family: var(--avd-academy-font-mono, monospace); font-size: .74rem;
+    text-align: center; padding: .45rem .5rem;
+    border-radius: var(--avd-academy-radius-sm, 4px);
+    border: 1px solid var(--avd-academy-color-border);
+    background: var(--avd-academy-color-bg-subtle);
+  }
+  .nb__zeile.ist-still { color: var(--avd-academy-color-ink-muted); font-style: italic; font-family: inherit; }
 </style>
 
-<div class="buehne" data-avd-academy-sim-scene="seitenbasiert">
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
-    <h2 class="avd-academy-sim-panel__title">Bestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
-    <div class="zaehler" id="seitenbasiert-zaehler"></div>
-    <div class="avd-academy-sim-panel__body" id="seitenbasiert-bestand"></div>
-  </div>
-  <div class="avd-academy-sim-panel">
-    <h2 class="avd-academy-sim-panel__title">Anfrage</h2>
-    <div class="avd-academy-sim-panel__body anfrage" id="seitenbasiert-anfrage"></div>
-  </div>
+<div class="buehne buehne--kette" data-avd-academy-sim-scene="ohne">
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
-    <h2 class="avd-academy-sim-panel__title">Beim Client angekommen</h2>
-    <div class="avd-academy-sim-panel__body" id="seitenbasiert-empfangen"></div>
+    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">Browser</span></h2>
+    <div class="avd-academy-sim-panel__body" id="ohne-client"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Gateway</h2>
+    <div class="avd-academy-sim-panel__body" id="ohne-gateway"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
+    <h2 class="avd-academy-sim-panel__title">Service</h2>
+    <div class="avd-academy-sim-panel__body" id="ohne-service"></div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Datenbestand <span class="avd-academy-sim-panel__hint">Datenbank</span></h2>
+    <div class="avd-academy-sim-panel__body" id="ohne-db"></div>
   </div>
 </div>
 
-<div class="buehne" data-avd-academy-sim-scene="cursor">
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
-    <h2 class="avd-academy-sim-panel__title">Bestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
-    <div class="zaehler" id="cursor-zaehler"></div>
-    <div class="avd-academy-sim-panel__body" id="cursor-bestand"></div>
-  </div>
-  <div class="avd-academy-sim-panel">
-    <h2 class="avd-academy-sim-panel__title">Anfrage</h2>
-    <div class="avd-academy-sim-panel__body anfrage" id="cursor-anfrage"></div>
-  </div>
+<div class="buehne buehne--blaettern" data-avd-academy-sim-scene="offset">
   <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
-    <h2 class="avd-academy-sim-panel__title">Beim Client angekommen</h2>
-    <div class="avd-academy-sim-panel__body" id="cursor-empfangen"></div>
+    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was angekommen ist</span></h2>
+    <div class="zaehler" id="offset-zaehler-client"></div>
+    <div class="avd-academy-sim-panel__body liste" id="offset-client"></div>
+  </div>
+  <div class="spalte">
+    <div class="avd-academy-sim-panel">
+      <h2 class="avd-academy-sim-panel__title">Leitung</h2>
+      <div class="avd-academy-sim-panel__body lt" id="offset-leitung">
+        <p class="lt__pfeil" data-lt-pfeil=""></p>
+        <p class="lt__url" data-lt-url=""></p>
+        <p class="lt__notiz" data-lt-notiz=""></p>
+      </div>
+    </div>
+    <div class="avd-academy-sim-panel nb">
+      <h2 class="avd-academy-sim-panel__title">Anderer Client <span class="avd-academy-sim-panel__hint">Kundendienst</span></h2>
+      <div class="avd-academy-sim-panel__body nb__body" id="offset-nebenbei"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Datenbestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
+    <div class="zaehler" id="offset-zaehler"></div>
+    <div class="avd-academy-sim-panel__body liste" id="offset-bestand"></div>
+    <p class="sortierung">Sortiert nach Bestelldatum, absteigend – ohne feste Sortierung gibt es keine „Position 3“.</p>
+  </div>
+</div>
+
+<div class="buehne buehne--blaettern" data-avd-academy-sim-scene="cursor">
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
+    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was angekommen ist</span></h2>
+    <div class="zaehler" id="cursor-zaehler-client"></div>
+    <div class="avd-academy-sim-panel__body liste" id="cursor-client"></div>
+  </div>
+  <div class="spalte">
+    <div class="avd-academy-sim-panel">
+      <h2 class="avd-academy-sim-panel__title">Leitung</h2>
+      <div class="avd-academy-sim-panel__body lt" id="cursor-leitung">
+        <p class="lt__pfeil" data-lt-pfeil=""></p>
+        <p class="lt__url" data-lt-url=""></p>
+        <p class="lt__notiz" data-lt-notiz=""></p>
+      </div>
+    </div>
+    <div class="avd-academy-sim-panel nb">
+      <h2 class="avd-academy-sim-panel__title">Anderer Client <span class="avd-academy-sim-panel__hint">Kundendienst</span></h2>
+      <div class="avd-academy-sim-panel__body nb__body" id="cursor-nebenbei"></div>
+    </div>
+  </div>
+  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
+    <h2 class="avd-academy-sim-panel__title">Datenbestand <span class="avd-academy-sim-panel__hint">neueste zuerst</span></h2>
+    <div class="zaehler" id="cursor-zaehler"></div>
+    <div class="avd-academy-sim-panel__body liste" id="cursor-bestand"></div>
+    <p class="sortierung">Sortiert nach Bestelldatum, absteigend – ohne feste Sortierung gibt es kein „danach“.</p>
   </div>
 </div>
 
@@ -165,21 +281,6 @@
 (function () {
   "use strict";
   var sim = window.AvdSimulation;
-
-  function bestellungen() {
-    return [
-      { id: "B-106", betrag: "84,50 €" },
-      { id: "B-105", betrag: "12,00 €" },
-      { id: "B-104", betrag: "239,90 €" },
-      { id: "B-103", betrag: "7,99 €" },
-      { id: "B-102", betrag: "56,40 €" },
-      { id: "B-101", betrag: "18,20 €" }
-    ];
-  }
-
-  function startzustand() {
-    return { bestand: bestellungen(), empfangen: [], anfrage: null, notiz: "" };
-  }
 
   function zelle() {
     var el = document.createElement("div");
@@ -190,123 +291,357 @@
     return el;
   }
 
-  sim.setup({
-    state: startzustand,
+  function grenzzeile() {
+    var el = document.createElement("div");
+    el.className = "grenze";
+    el.innerHTML = "<span></span>";
+    return el;
+  }
 
-    render: function (s, ctx) {
-      var sz = ctx.scenario || "seitenbasiert";
+  function beschrifteGrenze(el, nr) {
+    el.querySelector("span").textContent = "Seite " + nr + " │ Seite " + (nr + 1);
+  }
 
-      var zaehler = document.getElementById(sz + "-zaehler");
-      if (zaehler) zaehler.textContent = s.bestand.length + " Bestellungen";
+  function fuelle(el, label, name, wert) {
+    el.querySelector(".avd-academy-sim-cell__label").textContent = label;
+    el.querySelector(".avd-academy-sim-cell__name").textContent = name;
+    el.querySelector(".avd-academy-sim-cell__value").textContent = wert;
+  }
 
-      sim.list(document.getElementById(sz + "-bestand"), s.bestand, {
-        animated: ctx.animated,
-        key: function (x) { return x.id; },
-        create: zelle,
-        update: function (el, x, i) {
-          el.querySelector(".avd-academy-sim-cell__label").textContent = "Pos. " + (i + 1);
-          el.querySelector(".avd-academy-sim-cell__name").textContent = x.id;
-          el.querySelector(".avd-academy-sim-cell__value").textContent = x.betrag;
-          el.classList.toggle("is-active", !!x.markiert);
-          el.classList.toggle("is-pulse", !!x.neu);
+  /* ============================================================ Szenario 1
+     Ohne Paginierung – die Kette von links nach rechts.                    */
+
+  var STATIONEN = ["client", "gateway", "service", "db"];
+
+  function ketteStart() {
+    return {
+      client:  { wert: "–",         zustand: "wartet auf Antwort",        grenze: "verträgt ein paar tausend DOM-Knoten" },
+      gateway: { wert: "–",         zustand: "leitet durch",              grenze: "Antwortpuffer 10 MB · Timeout 30 s" },
+      service: { wert: "–",         zustand: "bereit",                    grenze: "Heap 512 MB" },
+      db:      { wert: "1 200 000", zustand: "Bestellungen gespeichert",  grenze: "Ergebnismenge wird im Speicher gehalten" }
+    };
+  }
+
+  function zeichneStation(id, st, animated) {
+    var ziel = document.getElementById("ohne-" + id);
+    if (!ziel) return;
+    var panel = ziel.closest(".avd-academy-sim-panel");
+    if (panel) panel.classList.toggle("avd-academy-sim-panel--ton-alert", !!st.kaputt);
+
+    /* Schlüssel ist NUR die Station: Der Kasten bleibt stehen und ändert
+       seinen Inhalt. Ein Schlüssel mit dem Zustand darin würde ihn bei
+       jedem Schritt neu anlegen – und die Spalte damit zum Springen bringen. */
+    sim.list(ziel, [st], {
+      animated: animated,
+      key: function () { return id; },
+      create: function () {
+        var el = document.createElement("div");
+        el.className = "st";
+        el.innerHTML = '<p class="st__wert"></p>' +
+                       '<div class="avd-academy-sim-cell"><span class="avd-academy-sim-cell__name"></span></div>' +
+                       '<p class="st__grenze"></p>';
+        return el;
+      },
+      update: function (el, x) {
+        el.querySelector(".st__wert").textContent = x.wert;
+        var kasten = el.querySelector(".avd-academy-sim-cell");
+        var name = kasten.querySelector(".avd-academy-sim-cell__name");
+        if (name.textContent !== x.zustand) {
+          name.textContent = x.zustand;
+          if (animated) sim.pulse(kasten);
         }
-      });
-
-      sim.list(document.getElementById(sz + "-empfangen"), s.empfangen, {
-        animated: ctx.animated,
-        key: function (x) { return x.schluessel; },
-        create: zelle,
-        update: function (el, x) {
-          el.querySelector(".avd-academy-sim-cell__label").textContent = x.seite;
-          el.querySelector(".avd-academy-sim-cell__name").textContent = x.id;
-          el.querySelector(".avd-academy-sim-cell__value").textContent = x.hinweis || x.betrag;
-          el.classList.toggle("is-error", !!x.doppelt);
-        }
-      });
-
-      var anfrage = document.getElementById(sz + "-anfrage");
-      if (!anfrage) return;
-      anfrage.innerHTML = s.anfrage
-        ? '<div class="anfrage__pfeil">◀</div><div class="anfrage__url">' +
-          s.anfrage.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>" +
-          (s.notiz ? '<p class="anfrage__notiz">' + s.notiz + "</p>" : "")
-        : '<p class="anfrage__still">still</p>' +
-          (s.notiz ? '<p class="anfrage__notiz">' + s.notiz + "</p>" : "");
-    }
-  });
+        kasten.classList.toggle("is-error", !!x.kaputt);
+        kasten.classList.toggle("is-active", !!x.aktiv);
+        el.querySelector(".st__grenze").textContent = x.grenze || "";
+      }
+    });
+  }
 
   sim.registerScenario({
-    id: "seitenbasiert",
-    title: "Blättern mit Seitenzahl",
-    description: "?page=2&size=3 – und dazwischen legt jemand eine Bestellung an.",
+    id: "ohne",
+    title: "Ohne Paginierung",
+    description: "Ein GET auf die Liste, keine Obergrenze – und vier Stationen, die nacheinander umfallen.",
+    state: ketteStart,
+    render: function (s, ctx) {
+      STATIONEN.forEach(function (id) { zeichneStation(id, s[id], ctx.animated); });
+    },
     steps: [
       {
         title: "Die Ausgangslage",
-        text: "<p>Sechs Bestellungen, neueste zuerst. Ein Programm soll alle abholen – drei auf einmal.</p><p>Beim Client ist noch nichts angekommen.</p>",
+        text: "<p>Ein Online-Shop, drei Jahre im Betrieb: <b>1,2 Millionen Bestellungen</b> in der Datenbank. Dazwischen liegen ein Service und ein Gateway, ganz links sitzt ein Browser.</p>" +
+              "<p>Jede dieser vier Stationen hat eine Grenze – unten in jeder Tafel steht, welche.</p>",
         apply: function () {}
       },
       {
-        title: "Der Client holt die erste Seite",
-        text: "<p><code>page=1</code>, <code>size=3</code> heißt für den Server: <b>überspringe 0, nimm 3</b>. Die Seitenzahl zeigt auf eine <b>Position</b> in der Liste – nicht auf einen bestimmten Eintrag.</p>",
+        title: "GET /orders – ohne alles",
+        text: "<p>Der Aufruf ist vollkommen harmlos formuliert: <code>GET /orders</code>. <b>Keine Seite, kein Limit, keine Obergrenze.</b></p>" +
+              "<p>Genau so steht er in den meisten APIs am ersten Tag – als es zehn Bestellungen waren, war daran auch nichts falsch.</p>",
         apply: function (s) {
-          s.anfrage = "GET /orders?page=1&size=3";
+          s.client.zustand = "GET /orders abgeschickt";
+          s.client.aktiv = true;
+        }
+      },
+      {
+        title: "Die Datenbank liefert alles",
+        text: "<p><code>SELECT * FROM orders</code> – die Abfrage ist korrekt und der Index greift. Nur ist die Ergebnismenge eben <b>1,2 Millionen Zeilen</b>, rund 2 GB, und sie wird gehalten, bis der Service sie abgeholt hat.</p>" +
+              "<p><b>Die Datenbank ist die erste Station, die es merkt</b> – und die einzige, die noch antwortet.</p>",
+        apply: function (s) {
+          s.client.aktiv = false;
+          s.db.zustand = "≈ 2 GB Ergebnismenge";
+          s.db.kaputt = true;
+        }
+      },
+      {
+        title: "Der Service macht Objekte daraus",
+        text: "<p>Aus jeder Zeile wird ein Objekt, aus jedem Objekt wird JSON. <b>512 MB Heap gegen 1,2 Millionen Objekte</b> – der Garbage Collector läuft durchgehend, und dann ist Schluss.</p>" +
+              "<p>Der Ausfall trifft <b>nicht nur diesen einen Aufruf</b>: Der Service bedient währenddessen niemanden mehr.</p>",
+        apply: function (s) {
+          s.service.wert = "OutOfMemory";
+          s.service.zustand = "Heap voll – Instanz weg";
+          s.service.kaputt = true;
+        }
+      },
+      {
+        title: "Das Gateway gibt vorher auf",
+        text: "<p>Das Gateway hat auf den Service gewartet und wartet weiter. Nach <b>30 Sekunden</b> bricht es ab und schickt dem Client, was es hat: einen <code>504 Gateway Timeout</code>.</p>" +
+              "<p>Wäre die Antwort gekommen, hätte es sie auch nicht durchgelassen – <b>10 MB Puffer</b> gegen mehrere hundert MB JSON.</p>",
+        apply: function (s) {
+          s.gateway.wert = "504";
+          s.gateway.zustand = "Timeout nach 30 s";
+          s.gateway.kaputt = true;
+        }
+      },
+      {
+        title: "Und der Client hätte es auch nicht überlebt",
+        text: "<p>Angenommen, alles davor hätte gehalten: Der Browser müsste mehrere hundert MB JSON <b>parsen</b> und daraus eine Liste bauen. Bei 1,2 Millionen Einträgen sind das Millionen DOM-Knoten.</p>" +
+              "<p>Der Tab friert ein. <b>Kein Fehler, keine Meldung</b> – nur ein Fenster, das nicht mehr reagiert.</p>",
+        apply: function (s) {
+          s.client.wert = "keine Reaktion";
+          s.client.zustand = "Skript blockiert den Tab";
+          s.client.kaputt = true;
+        }
+      },
+      {
+        title: "Vier Grenzen, keine davon in der API",
+        text: "<p><b>Jede Station hat eine Obergrenze – nur die API hatte keine.</b> Wer sie nicht hineinschreibt, bekommt die Grenze der schwächsten Station, und zwar als Ausfall statt als Fehlermeldung.</p>" +
+              "<p>Deshalb ist die Obergrenze <b>Sache des Servers</b>: Auch <code>?limit=1000000</code> muss er auf sein Maximum kürzen. Ein Limit, über das der Aufrufer allein entscheidet, ist keines.</p>",
+        apply: function (s) {
+          s.client.wert  = "40";  s.client.zustand  = "zwei Seiten à 20 gezeichnet";
+          s.gateway.wert = "200"; s.gateway.zustand = "wenige KB durchgereicht";
+          s.service.wert = "20";  s.service.zustand = "20 Objekte im Speicher";
+          s.db.wert      = "20";  s.db.zustand      = "LIMIT 20 – Index reicht";
+          STATIONEN.forEach(function (id) { s[id].kaputt = false; s[id].aktiv = true; });
+        },
+        duration: 6000
+      }
+    ]
+  });
+
+  /* ============================================================ Szenario 2+3
+     Blättern: Client links, Leitung und der andere Client in der Mitte,
+     Datenbestand rechts. Die Zahl der Zeilen ändert sich NIE.              */
+
+  var SEITE = 2;
+
+  function blaetternStart() {
+    return {
+      bestand: [
+        { id: "B-106", betrag: "84,50 €" },
+        { id: "B-105", betrag: "12,00 €" },
+        { id: "B-104", betrag: "239,90 €" },
+        { id: "B-103", betrag: "7,99 €" },
+        { id: "B-102", betrag: "56,40 €" },
+        { id: "B-101", betrag: "18,20 €" }
+      ],
+      /* Sechs feste Fächer – der Client füllt sie der Reihe nach auf. */
+      client: [1, 2, 3, 4, 5, 6].map(function (n) { return { fach: "f" + n }; }),
+      leitung: null,
+      notiz: "",
+      nebenbei: null,
+      grenzen: false
+    };
+  }
+
+  function lebende(s) { return s.bestand.filter(function (x) { return !x.geloescht; }); }
+
+  function zeichneBlaettern(s, ctx) {
+    var sz = ctx.scenario;
+
+    document.getElementById(sz + "-zaehler").textContent =
+      lebende(s).length + " Bestellungen" + (lebende(s).length < s.bestand.length ? " · 1 gelöscht" : "");
+    document.getElementById(sz + "-zaehler-client").textContent =
+      s.client.filter(function (f) { return f.id && !f.problem; }).length + " von 6 abgeholt";
+
+    /* Einträge und Seitengrenzen in EINER Liste – die Grenzen haben feste
+       Schlüssel und wandern beim Löschen mit, statt neu zu entstehen. */
+    var posten = [], pos = 0;
+    s.bestand.forEach(function (x) {
+      if (!x.geloescht) pos++;
+      posten.push({ art: "eintrag", key: x.id, x: x, pos: x.geloescht ? null : pos });
+      if (s.grenzen && !x.geloescht && pos % SEITE === 0 && pos < s.bestand.length) {
+        posten.push({ art: "grenze", key: "grenze-" + (pos / SEITE), nr: pos / SEITE });
+      }
+    });
+
+    sim.list(document.getElementById(sz + "-bestand"), posten, {
+      animated: ctx.animated,
+      key: function (p) { return p.key; },
+      create: function (p) { return p.art === "grenze" ? grenzzeile() : zelle(); },
+      update: function (el, p) {
+        if (p.art === "grenze") { beschrifteGrenze(el, p.nr); return; }
+        fuelle(el, p.pos ? "Pos. " + p.pos : "gelöscht", p.x.id, p.x.betrag);
+        el.classList.toggle("is-active", !!p.x.markiert);
+        el.classList.toggle("ist-weg", !!p.x.geloescht);
+        el.classList.toggle("is-error", !!p.x.geloescht);
+        el.classList.toggle("ist-anker", !!p.x.anker);
+        el.classList.toggle("is-pulse", !!p.x.anker);
+      }
+    });
+
+    /* Beim Offset zeigt auch der Client seine Seitengrenzen - in derselben
+       Form wie rechts. Sie stehen fest nach Fach 2 und 4, weil sich die
+       Reihenfolge der Abrufe nicht mehr aendert. Genau das ist die Pointe:
+       Rechts wandern die Linien, links nicht. */
+    var cposten = [];
+    s.client.forEach(function (f, i) {
+      cposten.push({ art: "eintrag", key: f.fach, f: f, nr: i + 1 });
+      if (s.grenzen && (i + 1) % SEITE === 0 && i + 1 < s.client.length) {
+        cposten.push({ art: "grenze", key: "cgrenze-" + ((i + 1) / SEITE), nr: (i + 1) / SEITE });
+      }
+    });
+
+    sim.list(document.getElementById(sz + "-client"), cposten, {
+      animated: ctx.animated,
+      key: function (p) { return p.key; },
+      create: function (p) { return p.art === "grenze" ? grenzzeile() : zelle(); },
+      update: function (el, p) {
+        if (p.art === "grenze") { beschrifteGrenze(el, p.nr); return; }
+        var f = p.f;
+        var label = s.grenzen
+          ? (f.problem ? "fehlt" : (f.id ? "Pos. " + p.nr : ""))
+          : (f.abruf || "");
+        fuelle(el, label, f.id || "·····", f.hinweis || f.betrag || "");
+        el.classList.toggle("ist-leer", !f.id);
+        el.classList.toggle("is-error", !!f.problem);
+      }
+    });
+
+    var lt = document.getElementById(sz + "-leitung");
+    lt.classList.toggle("ist-still", !s.leitung);
+    lt.querySelector("[data-lt-pfeil]").textContent = s.leitung ? (s.leitung.rueck ? "◀" : "▶") : "";
+    lt.querySelector("[data-lt-url]").textContent = s.leitung ? s.leitung.text : "still";
+    lt.querySelector("[data-lt-notiz]").innerHTML = s.notiz || "";
+
+    sim.list(document.getElementById(sz + "-nebenbei"), [{ text: s.nebenbei }], {
+      animated: ctx.animated,
+      key: function () { return "nb"; },
+      create: function () {
+        var el = document.createElement("div");
+        el.className = "nb__zeile";
+        return el;
+      },
+      update: function (el, x) {
+        var neu = x.text || "tut gerade nichts";
+        if (el.textContent !== neu && ctx.animated && x.text) sim.pulse(el);
+        el.textContent = neu;
+        el.classList.toggle("ist-still", !x.text);
+        el.classList.toggle("is-error", !!x.text);
+      }
+    });
+  }
+
+  sim.registerScenario({
+    id: "offset",
+    title: "Blättern mit Offset",
+    description: "Drei Seiten à zwei – und dazwischen löscht ein anderer Client den obersten Eintrag.",
+    state: function () { var s = blaetternStart(); s.grenzen = true; return s; },
+    render: zeichneBlaettern,
+    steps: [
+      {
+        title: "Die Ausgangslage",
+        text: "<p>Sechs Bestellungen, <b>neueste zuerst</b>. Ein Programm soll alle abholen – zwei auf einmal. Die gestrichelten Linien rechts zeigen, <b>wo die Seiten enden</b>.</p>" +
+              "<p>Dieselben gestrichelten Linien stehen auch links: Das ist die Sicht des Clients darauf, <b>was in welchem Abruf kam</b>. Noch liegen beide Seiten gleich – merk Dir das für später.</p>" +
+              "<p><b>Die Sortierung ist die Voraussetzung, nicht die Verzierung:</b> Ohne feste Reihenfolge gibt es keine „Position 3“, auf die sich zwei Anfragen einigen könnten.</p>",
+        apply: function () {}
+      },
+      {
+        title: "Die erste Seite",
+        text: "<p><code>offset=0&amp;limit=2</code> heißt für den Server: <b>überspringe 0, nimm 2</b>. Der Offset zeigt auf eine <b>Position</b> in der sortierten Liste – nicht auf einen bestimmten Eintrag.</p>",
+        apply: function (s) {
+          s.leitung = { text: "GET /orders?offset=0&limit=2" };
           s.bestand[0].markiert = true;
           s.bestand[1].markiert = true;
+        }
+      },
+      {
+        title: "B-106 und B-105 kommen an",
+        text: "<p>Zwei Bestellungen im Client. Er verarbeitet sie – das dauert ein paar Sekunden.</p>",
+        apply: function (s) {
+          s.leitung = { rueck: true, text: "200 OK · 2 Einträge" };
+          s.bestand[0].markiert = s.bestand[1].markiert = false;
+          s.client[0] = { fach: "f1", id: "B-106", betrag: "84,50 €" };
+          s.client[1] = { fach: "f2", id: "B-105", betrag: "12,00 €" };
+        }
+      },
+      {
+        title: "Die zweite Seite",
+        text: "<p><code>offset=2&amp;limit=2</code>: <b>überspringe 2, nimm 2</b> – die Positionen 3 und 4. Bis hierhin stimmt alles.</p>",
+        apply: function (s) {
+          s.leitung = { text: "GET /orders?offset=2&limit=2" };
           s.bestand[2].markiert = true;
-        }
-      },
-      {
-        title: "Drei Bestellungen kommen an",
-        text: "<p>B-106, B-105, B-104. Der Client verarbeitet sie – das dauert ein paar Sekunden.</p>",
-        apply: function (s) {
-          s.anfrage = null;
-          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = false;
-          s.empfangen = [
-            { schluessel: "s1-106", seite: "Seite 1", id: "B-106", betrag: "84,50 €" },
-            { schluessel: "s1-105", seite: "Seite 1", id: "B-105", betrag: "12,00 €" },
-            { schluessel: "s1-104", seite: "Seite 1", id: "B-104", betrag: "239,90 €" }
-          ];
-        }
-      },
-      {
-        title: "Und jetzt bestellt jemand",
-        text: "<p>Ein Kunde schließt seine Bestellung ab. <b>B-107</b> rutscht ganz nach oben – alles andere verschiebt sich um eine Position nach unten.</p><p>Der Client weiß davon nichts. Er holt gleich <code>page=2</code>. <b>Was bekommt er?</b></p>",
-        apply: function (s) {
-          s.bestand.unshift({ id: "B-107", betrag: "45,00 €", neu: true });
-          s.notiz = "Alles rutscht <strong>eine Position</strong> nach unten.";
-        }
-      },
-      {
-        title: "Der Client holt die zweite Seite",
-        text: "<p><code>page=2</code>, <code>size=3</code> heißt: <b>überspringe 3, nimm 3</b>. Das sind jetzt die Positionen 4, 5 und 6 – und die sind nicht mehr dieselben Einträge wie eben.</p>",
-        apply: function (s) {
-          s.bestand[0].neu = false;
-          s.anfrage = "GET /orders?page=2&size=3";
           s.bestand[3].markiert = true;
-          s.bestand[4].markiert = true;
-          s.bestand[5].markiert = true;
-          s.notiz = "Positionen 4–6: <strong>B-104, B-103, B-102</strong>";
         }
       },
       {
-        title: "B-104 zum zweiten Mal – und B-107 nie",
-        text: "<p><b>B-104</b> war schon auf Seite 1 dabei und kommt jetzt noch einmal. <b>B-107</b> stand beim zweiten Abruf auf Position 1 – die hat der Client längst hinter sich.</p><p>Ein Eintrag doppelt, ein Eintrag verloren. Beide Anfragen waren korrekt beantwortet.</p>",
+        title: "B-104 und B-103 kommen an",
+        text: "<p>Vier von sechs abgeholt. Der Client wird gleich die dritte Seite anfordern.</p>",
         apply: function (s) {
-          s.anfrage = null;
-          s.bestand[3].markiert = s.bestand[4].markiert = s.bestand[5].markiert = false;
-          s.empfangen = s.empfangen.concat([
-            { schluessel: "s2-104", seite: "Seite 2", id: "B-104", hinweis: "doppelt!", doppelt: true },
-            { schluessel: "s2-103", seite: "Seite 2", id: "B-103", betrag: "7,99 €" },
-            { schluessel: "s2-102", seite: "Seite 2", id: "B-102", betrag: "56,40 €" }
-          ]);
-          s.notiz = "<strong>B-107 hat der Client nie gesehen.</strong>";
+          s.leitung = { rueck: true, text: "200 OK · 2 Einträge" };
+          s.bestand[2].markiert = s.bestand[3].markiert = false;
+          s.client[2] = { fach: "f3", id: "B-104", betrag: "239,90 €" };
+          s.client[3] = { fach: "f4", id: "B-103", betrag: "7,99 €" };
         }
       },
       {
-        title: "Die Seitenzahl zeigt auf eine Position",
-        text: "<p><b>Nicht auf einen Eintrag.</b> Sobald sich der Bestand zwischen zwei Abrufen ändert, zeigt dieselbe Seitenzahl auf etwas anderes.</p><p>Für eine Oberfläche mit Seitenzahlen ist das meist verkraftbar. Für ein Programm, das einen Bestand vollständig abholen soll, ist es ein Datenfehler.</p>",
-        apply: function (s) { s.anfrage = null; s.notiz = ""; },
-        duration: 5000
+        title: "Ein anderer Client löscht B-106",
+        text: "<p>Im Kundendienst storniert jemand die oberste Bestellung – der kleine Kasten in der Mitte. <b>Ein völlig anderer Aufrufer</b>, der von unserem Abholvorgang nichts weiß.</p>" +
+              "<p>B-106 bleibt zur Anschauung stehen, ist aber weg: <b>Alles darunter rückt eine Position nach oben, und die Seitengrenzen wandern mit.</b> Was bekommt der Client gleich auf Seite 3?</p>",
+        apply: function (s) {
+          s.leitung = null;
+          s.nebenbei = "DELETE /orders/B-106";
+          s.bestand[0].geloescht = true;
+          s.notiz = "Position 3 ist jetzt <strong>B-103</strong> statt B-104.";
+        }
+      },
+      {
+        title: "Die dritte Seite",
+        text: "<p><code>offset=4&amp;limit=2</code>: <b>überspringe 4, nimm 2</b>. Übrig sind nur noch fünf Einträge – also bleibt genau einer.</p>" +
+              "<p>Und das ist <b>B-101</b>, nicht B-102. B-102 steht seit dem Löschen auf Position 4, und die hat der Client längst hinter sich.</p>",
+        apply: function (s) {
+          s.nebenbei = null;
+          s.leitung = { text: "GET /orders?offset=4&limit=2" };
+          s.bestand[5].markiert = true;
+          s.notiz = "Position 5 – mehr gibt es nicht.";
+        }
+      },
+      {
+        title: "B-102 hat der Client nie gesehen",
+        text: "<p>Fünf Einträge abgeholt, einer fehlt – und <b>nichts an diesem Ablauf sieht nach einem Fehler aus</b>. Jede der drei Anfragen war korrekt gestellt und korrekt beantwortet, jede bekam <code>200 OK</code>.</p>" +
+              "<p>Legt stattdessen jemand etwas <b>an</b>, passiert das Gegenteil: Dann rutscht alles nach unten und ein Eintrag kommt <b>zweimal</b>.</p>",
+        apply: function (s) {
+          s.leitung = { rueck: true, text: "200 OK · 1 Eintrag" };
+          s.bestand[5].markiert = false;
+          s.client[4] = { fach: "f5", id: "B-101", betrag: "18,20 €" };
+          s.client[5] = { fach: "f6", id: "B-102", hinweis: "nie geliefert", problem: true };
+          s.notiz = "";
+        }
+      },
+      {
+        title: "Der Offset zeigt auf eine Position",
+        text: "<p><b>Nicht auf einen Eintrag.</b> Links und rechts stehen dieselben drei Seitengrenzen – aber sie liegen nicht mehr zwischen denselben Bestellungen. <b>Rechts sind die Linien gewandert, links nicht</b>, und die Lücke dazwischen ist B-102.</p>" +
+              "<p>Für eine Oberfläche mit Seitenzahlen ist das verkraftbar – da sieht ein Mensch hin. Für ein Programm, das einen Bestand <b>vollständig</b> abholen soll, ist es ein stiller Datenverlust.</p>",
+        apply: function (s) { s.leitung = null; s.notiz = ""; },
+        duration: 6000
       }
     ]
   });
@@ -314,73 +649,105 @@
   sim.registerScenario({
     id: "cursor",
     title: "Blättern mit Cursor",
-    description: "?after=… – der Merkzettel zeigt auf einen Eintrag, nicht auf eine Position.",
-    state: startzustand,
+    description: "Derselbe Ablauf, dieselbe Löschung – und am Ende die Frage, was passiert, wenn der Anker selbst verschwindet.",
+    state: blaetternStart,
+    render: zeichneBlaettern,
     steps: [
       {
         title: "Dieselbe Ausgangslage",
-        text: "<p>Derselbe Bestand, dieselbe Aufgabe: alles abholen, drei auf einmal. Diesmal aber ohne Seitenzahl.</p>",
+        text: "<p>Derselbe Bestand, dieselbe Aufgabe: alles abholen, zwei auf einmal. Diesmal ohne Seitenposition – <b>und deshalb auch ohne Seitengrenzen</b>.</p>" +
+              "<p><b>Die Sortierung bleibt Voraussetzung.</b> Ein Cursor bedeutet „die Stelle in genau dieser Reihenfolge“ – ohne Reihenfolge gibt es kein „danach“.</p>",
         apply: function () {}
       },
       {
-        title: "Der Client holt die ersten drei",
-        text: "<p>Nur <code>limit=3</code>, keine Seite. Der Client sagt nicht, <i>wo</i> er anfangen will – er fängt am Anfang an.</p>",
+        title: "Der erste Abruf",
+        text: "<p>Nur <code>limit=2</code>, keine Position. Der Client sagt nicht, <i>wo</i> er anfangen will – er fängt am Anfang an.</p>",
         apply: function (s) {
-          s.anfrage = "GET /orders?limit=3";
-          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = true;
+          s.leitung = { text: "GET /orders?limit=2" };
+          s.bestand[0].markiert = s.bestand[1].markiert = true;
         }
       },
       {
-        title: "Drei Bestellungen – und ein Merkzettel",
-        text: "<p>Die Antwort enthält zusätzlich einen <b>Cursor</b>: ein undurchsichtiges Merkzeichen, das auf den <b>letzten gelieferten Eintrag</b> zeigt. Der Client muss es nicht verstehen – nur zurückgeben.</p>",
+        title: "Zwei Bestellungen – und ein Merkzettel",
+        text: "<p>Die Antwort enthält zusätzlich einen <b>Cursor</b>: ein undurchsichtiges Merkzeichen auf den <b>letzten gelieferten Eintrag</b>, hier B-105. Der Client muss es nicht verstehen – nur zurückschicken.</p>",
         apply: function (s) {
-          s.anfrage = null;
-          s.bestand[0].markiert = s.bestand[1].markiert = s.bestand[2].markiert = false;
-          s.empfangen = [
-            { schluessel: "c-106", seite: "1. Abruf", id: "B-106", betrag: "84,50 €" },
-            { schluessel: "c-105", seite: "1. Abruf", id: "B-105", betrag: "12,00 €" },
-            { schluessel: "c-104", seite: "1. Abruf", id: "B-104", betrag: "239,90 €" }
-          ];
-          s.notiz = "Antwort enthält <strong>nextCursor: „eyJpZCI6IkItMTA0In0“</strong> – das ist B-104.";
+          s.leitung = { rueck: true, text: "200 OK · nextCursor: eyJpZCI6IkItMTA1In0" };
+          s.bestand[0].markiert = s.bestand[1].markiert = false;
+          s.bestand[1].anker = true;
+          s.client[0] = { fach: "f1", abruf: "1. Abruf", id: "B-106", betrag: "84,50 €" };
+          s.client[1] = { fach: "f2", abruf: "1. Abruf", id: "B-105", betrag: "12,00 €" };
+          s.notiz = "Der Cursor steht auf <strong>B-105</strong>.";
         }
       },
       {
-        title: "Und wieder bestellt jemand",
-        text: "<p><b>B-107</b> rutscht nach oben, alles verschiebt sich – genau wie vorhin.</p><p>Nur interessiert das den Cursor nicht: Er zeigt auf <b>B-104</b>, und B-104 ist immer noch B-104.</p>",
+        title: "Der zweite Abruf",
+        text: "<p><code>cursor=…</code> heißt: <b>gib mir, was nach B-105 kommt</b>. Der Server sucht den Anker in der sortierten Liste und liefert die zwei danach.</p>",
         apply: function (s) {
-          s.bestand.unshift({ id: "B-107", betrag: "45,00 €", neu: true });
-          s.notiz = "Der Cursor zeigt auf <strong>einen Eintrag</strong>, nicht auf Position 3.";
-        }
-      },
-      {
-        title: "Der Client holt weiter",
-        text: "<p><code>after=…</code> heißt: <b>gib mir, was nach B-104 kommt</b>. Der Server sucht B-104 und liefert die drei danach – unabhängig davon, wie viele vorne dazugekommen sind.</p>",
-        apply: function (s) {
-          s.bestand[0].neu = false;
-          s.anfrage = "GET /orders?limit=3&after=eyJpZCI6IkItMTA0In0";
-          s.bestand[4].markiert = s.bestand[5].markiert = s.bestand[6].markiert = true;
+          s.leitung = { text: "GET /orders?limit=2&cursor=eyJpZCI6IkItMTA1In0" };
+          s.bestand[2].markiert = s.bestand[3].markiert = true;
           s.notiz = "";
         }
       },
       {
-        title: "Kein Eintrag doppelt, keiner übersprungen",
-        text: "<p>B-103, B-102, B-101 – sauber angeschlossen. <b>B-107 fehlt auch hier</b>, aber aus einem anderen Grund: Es gab die Bestellung noch nicht, als der Abruf begann.</p><p>Das ist kein Fehler, sondern ein sauberer Schnitt. Beim nächsten Lauf ist B-107 dabei.</p>",
+        title: "B-104 und B-103 – Cursor rückt nach",
+        text: "<p>Vier von sechs abgeholt, der Cursor steht jetzt auf <b>B-103</b>. Merk Dir diesen Eintrag – auf ihn kommen wir gleich zurück.</p>",
         apply: function (s) {
-          s.anfrage = null;
-          s.bestand[4].markiert = s.bestand[5].markiert = s.bestand[6].markiert = false;
-          s.empfangen = s.empfangen.concat([
-            { schluessel: "c-103", seite: "2. Abruf", id: "B-103", betrag: "7,99 €" },
-            { schluessel: "c-102", seite: "2. Abruf", id: "B-102", betrag: "56,40 €" },
-            { schluessel: "c-101", seite: "2. Abruf", id: "B-101", betrag: "18,20 €" }
-          ]);
+          s.leitung = { rueck: true, text: "200 OK · nextCursor: eyJpZCI6IkItMTAzIn0" };
+          s.bestand[2].markiert = s.bestand[3].markiert = false;
+          s.bestand[1].anker = false;
+          s.bestand[3].anker = true;
+          s.client[2] = { fach: "f3", abruf: "2. Abruf", id: "B-104", betrag: "239,90 €" };
+          s.client[3] = { fach: "f4", abruf: "2. Abruf", id: "B-103", betrag: "7,99 €" };
+          s.notiz = "Der Cursor steht auf <strong>B-103</strong>.";
+        }
+      },
+      {
+        title: "Wieder löscht jemand B-106",
+        text: "<p>Dieselbe Störung wie eben, derselbe Kundendienst: <code>DELETE /orders/B-106</code>. Alles rückt eine Position nach oben.</p>" +
+              "<p>Nur interessiert das den Cursor nicht. Er zeigt auf <b>B-103</b>, und B-103 ist immer noch B-103 – <b>egal, an welcher Position</b> der Eintrag inzwischen steht.</p>",
+        apply: function (s) {
+          s.leitung = null;
+          s.nebenbei = "DELETE /orders/B-106";
+          s.bestand[0].geloescht = true;
+          s.notiz = "Der Cursor zeigt auf <strong>einen Eintrag</strong>, nicht auf eine Position.";
+        }
+      },
+      {
+        title: "Der dritte Abruf – vollständig",
+        text: "<p><b>B-102 und B-101</b>, sauber angeschlossen. Kein Eintrag doppelt, keiner übersprungen.</p>" +
+              "<p>Dass B-106 unterwegs verschwunden ist, hat der Client trotzdem nicht mitbekommen – er hatte es ja bereits. <b>Ein Cursor hält die Reihenfolge stabil, nicht den Bestand.</b></p>",
+        apply: function (s) {
+          s.nebenbei = null;
+          s.leitung = { rueck: true, text: "200 OK · nextCursor: null" };
+          s.bestand[3].anker = false;
+          s.client[4] = { fach: "f5", abruf: "3. Abruf", id: "B-102", betrag: "56,40 €" };
+          s.client[5] = { fach: "f6", abruf: "3. Abruf", id: "B-101", betrag: "18,20 €" };
           s.notiz = "Sechs Einträge, jeder <strong>genau einmal</strong>.";
         }
       },
       {
+        title: "Eine Frage bleibt offen",
+        text: "<p>Gelöscht wurde hier ein Eintrag, den der Client schon hatte. <b>Was aber, wenn es B-103 getroffen hätte</b> – genau den Eintrag, auf dem der Cursor steht?</p>" +
+              "<p>Der Client weiß davon nichts und schickt seinen Merkzettel brav zurück. <b>Der Server sucht B-103 und findet es nicht.</b> Und jetzt? Von vorn anfangen, mit einem Fehler antworten, oder raten, wo die Stelle wohl war?</p>",
+        apply: function (s) {
+          s.leitung = null;
+          s.notiz = "Was, wenn der <strong>Anker</strong> selbst verschwindet?";
+        }
+      },
+      {
+        title: "Zwei Auswege",
+        text: "<p><b>Soft Delete.</b> Der Datensatz bleibt stehen und wird nur als gelöscht markiert – genau so, wie B-106 hier rechts durchgestrichen steht. Der Anker bleibt auflösbar, der Eintrag wird beim Ausliefern übersprungen. Preis: Der Bestand wächst ewig, und irgendjemand muss die Leichen später aufräumen.</p>" +
+              "<p><b>Oder der Cursor trägt den Sortierwert.</b> Nicht „nach dem Eintrag B-103“, sondern „nach dem Zeitstempel 2026-03-14T09:12Z, ID B-103“. Dann ist der Cursor eine <b>Stelle in der Ordnung</b>, und die gibt es auch dann noch, wenn der Eintrag weg ist.</p>",
+        apply: function (s) {
+          s.notiz = "";
+        }
+      },
+      {
         title: "Der Preis: kein Sprung auf Seite 7",
-        text: "<p><b>Der Cursor zeigt auf einen Eintrag, die Seitenzahl auf eine Position.</b> Deshalb ist er stabil – und deshalb kann er nicht springen.</p><p>Blättert ein <b>Mensch</b> mit Seitenzahlen, nimm die Seitenzahl. Holt ein <b>Programm</b> einen Bestand ab oder scrollt eine Oberfläche endlos, nimm den Cursor.</p>",
-        apply: function (s) { s.anfrage = null; s.notiz = ""; },
-        duration: 5000
+        text: "<p><b>Der Cursor zeigt auf einen Eintrag, der Offset auf eine Position.</b> Deshalb ist er stabil – und deshalb kann er nicht springen. „Seite 7“ gibt es nicht, nur „weiter“.</p>" +
+              "<p>Blättert ein <b>Mensch</b> durch nummerierte Seiten, nimm den Offset. Holt ein <b>Programm</b> einen Bestand ab oder scrollt eine Oberfläche endlos, nimm den Cursor.</p>",
+        apply: function (s) { s.leitung = null; s.notiz = ""; },
+        duration: 6000
       }
     ]
   });
@@ -389,7 +756,7 @@
 
 
     </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
-         data-lead="Derselbe Bestand, dieselbe Störung, zwei Arten zu blättern. Einmal sieht der Client einen Eintrag doppelt und einen gar nicht."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
+         data-lead="Drei Abläufe an demselben Bestand: einmal ohne Grenze, einmal mit Seitenposition, einmal mit Cursor. In allen dreien steht der Client links und der Datenbestand rechts."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
       <p class="avd-academy-sim__ost-title" data-avd-academy-sim-ost-title></p>
       <div class="avd-academy-sim__ost-text" data-avd-academy-sim-ost-text></div>
     </div>

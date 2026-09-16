@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander · ATVANTAGE Academy</title><meta name="description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789560597">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789560597" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789560597" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789560597">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789560597">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789560597"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="api-stile-soap-rest-graphql-und-grpc-nebeneinander">API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander</h1>
+
+<p>Oben die <strong>Kreuzeltabelle</strong>: dieselben Fragen an alle vier Stile. Darunter
+<strong>dieselben vier Aufgaben viermal</strong> – oben den Stil umschalten, links die Aufgabe
+wählen.</p>
+
+<div class="avd-academy-callout avd-academy-callout--info">
+  <p><strong>Die Tabelle beantwortet nicht, welcher Stil besser ist.</strong> Sie zeigt, <em>worin</em> sie
+sich unterscheiden – und fast jede Zeile ist zugleich ein Vorteil und ein Preis.
+Die Entscheidung fällt an den Zeilen, die im konkreten Fall wehtun.</p>
+</div>
+
+<div class="vs">
+
+<div class="vs__tabelle-scroll">
+<table class="vs__tabelle">
+<thead>
+<tr>
+  <th scope="col">Kriterium</th>
+  <th scope="col">SOAP</th>
+  <th scope="col">REST</th>
+  <th scope="col">GraphQL</th>
+  <th scope="col">gRPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <th scope="row">Was es im Kern ist</th>
+  <td>ein Nachrichtenformat mit Umschlag</td>
+  <td>ein Baukasten aus HTTP, angewandt auf Ressourcen</td>
+  <td>eine Abfragesprache über einem Typgraphen</td>
+  <td>entfernte Funktionsaufrufe über HTTP/2</td>
+</tr>
+<tr>
+  <th scope="row">Wie HTTP genutzt wird</th>
+  <td><span class="vs__k vs__k--nein">nur Transport</span> alles per <code>POST</code></td>
+  <td><span class="vs__k vs__k--ja">als Vokabular</span> Methoden, Status, Caching</td>
+  <td><span class="vs__k vs__k--nein">nur Transport</span> alles per <code>POST</code></td>
+  <td><span class="vs__k vs__k--nein">nur Transport</span> HTTP/2, alles per <code>POST</code></td>
+</tr>
+<tr>
+  <th scope="row">Adressen</th>
+  <td>eine je Dienst</td>
+  <td>viele – eine je Ressource</td>
+  <td>genau eine: <code>/graphql</code></td>
+  <td>eine je Methode, aus dem Dienstnamen erzeugt</td>
+</tr>
+<tr>
+  <th scope="row">Schema-/Beschreibungs&shy;sprache</th>
+  <td><span class="vs__k vs__k--ja">verpflichtend</span> WSDL + XSD</td>
+  <td><span class="vs__k vs__k--teils">freiwillig</span> OpenAPI, danebengelegt</td>
+  <td><span class="vs__k vs__k--ja">verpflichtend</span> SDL, im Server eingebaut</td>
+  <td><span class="vs__k vs__k--ja">verpflichtend</span> <code>.proto</code></td>
+</tr>
+<tr>
+  <th scope="row">Datenformat</th>
+  <td>XML im SOAP-Umschlag</td>
+  <td>frei – in der Praxis JSON</td>
+  <td>JSON</td>
+  <td>Protobuf, binär</td>
+</tr>
+<tr>
+  <th scope="row">Wer bestimmt, welche Felder kommen</th>
+  <td>der Server – je Operation festgelegt</td>
+  <td>der Server – der Client kann bitten</td>
+  <td><span class="vs__k vs__k--ja">der Client</span> Feld für Feld</td>
+  <td>der Server – Feldmaske vorgesehen, aber selbst umzusetzen</td>
+</tr>
+<tr>
+  <th scope="row">Zwischenstationen können cachen</th>
+  <td><span class="vs__k vs__k--nein">nein</span> für einen Proxy ist alles ein POST</td>
+  <td><span class="vs__k vs__k--ja">ja</span> GET, <code>ETag</code>, <code>Cache-Control</code></td>
+  <td><span class="vs__k vs__k--nein">nein</span> Caching baut der Client selbst</td>
+  <td><span class="vs__k vs__k--nein">nein</span></td>
+</tr>
+<tr>
+  <th scope="row">Aus dem Browser heraus nutzbar</th>
+  <td><span class="vs__k vs__k--teils">mühsam</span></td>
+  <td><span class="vs__k vs__k--ja">unmittelbar</span> Adresszeile genügt</td>
+  <td><span class="vs__k vs__k--ja">ja</span></td>
+  <td><span class="vs__k vs__k--nein">nein</span> nur über gRPC-Web und einen Proxy</td>
+</tr>
+<tr>
+  <th scope="row">Mit bloßem Auge lesbar</th>
+  <td><span class="vs__k vs__k--teils">theoretisch</span></td>
+  <td><span class="vs__k vs__k--ja">ja</span></td>
+  <td><span class="vs__k vs__k--ja">ja</span></td>
+  <td><span class="vs__k vs__k--nein">nein</span> ohne <code>.proto</code> nur Bytes</td>
+</tr>
+<tr>
+  <th scope="row">Wo man ihm begegnet</th>
+  <td>Bestandssysteme, Banken, Behörden, SAP</td>
+  <td>öffentliche Web-APIs, Schnittstellen zwischen Teams</td>
+  <td>Oberflächen mit vielen Ansichten, mobile Clients</td>
+  <td>Dienst zu Dienst im eigenen Rechenzentrum</td>
+</tr>
+<tr>
+  <th scope="row">Was es kostet</th>
+  <td>Umfang und Werkzeugzwang</td>
+  <td>viele Entscheidungen bleiben offen – Disziplin nötig</td>
+  <td>Server-Aufwand: Tiefe, Kosten, Berechtigungen je Feld</td>
+  <td>nicht browsertauglich, schwer von Hand zu prüfen</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 class="vs__h2" id="aufgaben">Dieselben vier Aufgaben, viermal</h2>
+
+<p class="vs__lead">Ein Kunde mit Name, Geburtsdatum, <strong>Anschriften</strong> und
+Bezahlinformationen. Oben den Stil wählen, links die Aufgabe – rechts steht die
+<strong>rohe Nachricht</strong>, so wie sie über die Leitung geht: Anfrage, Antwort
+und der Fehlerfall dazu.</p>
+
+<div class="vs__stile" role="tablist" aria-label="API-Stil">
+  <button type="button" class="vs__stil is-aktiv" role="tab" aria-selected="true" data-stil="soap">SOAP</button>
+  <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="rest">REST</button>
+  <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="graphql">GraphQL</button>
+  <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="grpc">gRPC</button>
+</div>
+
+<div class="vs__werk">
+  <div class="vs__faelle" role="tablist" aria-orientation="vertical" aria-label="Anwendungsfall">
+    <button type="button" class="vs__fall is-aktiv" role="tab" aria-selected="true" data-fall="alles">
+      <strong>Kundendaten abfragen</strong><small>mit allem</small>
+    </button>
+    <button type="button" class="vs__fall" role="tab" aria-selected="false" data-fall="ohne">
+      <strong>Kundendaten abfragen</strong><small>ohne Anschriften</small>
+    </button>
+    <button type="button" class="vs__fall" role="tab" aria-selected="false" data-fall="anlegen">
+      <strong>Einen Kunden anlegen</strong><small></small>
+    </button>
+    <button type="button" class="vs__fall" role="tab" aria-selected="false" data-fall="loeschen">
+      <strong>Einen Kunden löschen</strong><small></small>
+    </button>
+  </div>
+
+  <div class="vs__buehne" role="tabpanel" aria-live="polite">
+    <p class="vs__marke vs__marke--auf">Anfrage</p>
+    <pre class="vs__code" data-vs-anfrage=""></pre>
+
+    <p class="vs__marke vs__marke--ok">Antwort · Erfolgsfall</p>
+    <pre class="vs__code" data-vs-antwort=""></pre>
+
+    <p class="vs__marke vs__marke--fehler" data-vs-fehlertitel=""></p>
+    <pre class="vs__code" data-vs-fehler=""></pre>
+
+    <p class="vs__hinweis" data-vs-hinweis=""></p>
+  </div>
+</div>
+
+<p class="vs__schluss"><strong>Die dritte Zeile links ist die interessanteste.</strong>
+Der Fehlerfall ist in allen vier Stilen dieselbe fachliche Lage – und man sieht ihn an
+vier verschiedenen Stellen: am Statuscode, in einem <code>Fault</code>-Element hinter
+einer <code>500</code>, in einem Feld <code>errors</code> hinter einer <code>200</code>
+oder in einem Trailer außerhalb von HTTP. <strong>Wer sein Monitoring auf
+HTTP-Statuscodes aufbaut, sieht bei drei von vier Stilen etwas anderes, als
+passiert ist.</strong></p>
+
+</div>
+
+<style>
+  .vs { --vs-ja: #1a7f5a; --vs-nein: #b3402c; --vs-teils: #8a6d1f; }
+  [data-avd-academy-theme="dark"] .vs,
+  .vs:where([data-avd-academy-theme="dark"] *) { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-avd-academy-theme="light"]) .vs { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+  }
+
+  .vs__tabelle-scroll { overflow-x: auto; margin: 1.5rem 0 2.5rem; }
+  .vs__tabelle { border-collapse: collapse; width: 100%; min-width: 52rem; font-size: .88rem; }
+  .vs__tabelle th, .vs__tabelle td {
+    border: 1px solid var(--avd-academy-color-border);
+    padding: .55rem .7rem; vertical-align: top; text-align: left;
+  }
+  .vs__tabelle thead th {
+    background: var(--avd-academy-color-bg-subtle);
+    font-size: 1rem; text-align: center;
+  }
+  .vs__tabelle tbody th {
+    background: var(--avd-academy-color-bg-subtle);
+    width: 12rem; font-weight: 600;
+  }
+  .vs__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent); }
+  .vs__k { display: block; font-weight: 700; margin-bottom: .15rem; }
+  .vs__k--ja    { color: var(--vs-ja); }
+  .vs__k--nein  { color: var(--vs-nein); }
+  .vs__k--teils { color: var(--vs-teils); }
+  .vs__k--ja::before    { content: "✓ "; }
+  .vs__k--nein::before  { content: "✗ "; }
+  .vs__k--teils::before { content: "~ "; }
+
+  .vs__h2 { margin-top: 2.5rem; }
+  .vs__lead { color: var(--avd-academy-color-ink-muted); }
+
+  .vs__stile { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0 0; }
+  .vs__stil {
+    font: inherit; font-weight: 600; cursor: pointer;
+    padding: .55rem 1.2rem; border-radius: var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) 0 0;
+    border: 1px solid var(--avd-academy-color-border); border-bottom: none;
+    background: var(--avd-academy-color-bg-subtle); color: var(--avd-academy-color-ink-muted);
+  }
+  .vs__stil.is-aktiv {
+    background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
+    border-color: var(--avd-academy-color-accent);
+  }
+
+  .vs__werk {
+    display: grid; grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+    border: 1px solid var(--avd-academy-color-border);
+    border-radius: 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
+    overflow: hidden;
+  }
+  @media (max-width: 40rem) { .vs__werk { grid-template-columns: minmax(0, 1fr); } }
+
+  .vs__faelle { display: flex; flex-direction: column; border-right: 1px solid var(--avd-academy-color-border); }
+  .vs__fall {
+    font: inherit; cursor: pointer; text-align: left;
+    padding: .8rem 1rem; border: none; border-bottom: 1px solid var(--avd-academy-color-border);
+    background: transparent; color: inherit;
+    border-left: 4px solid transparent;
+  }
+  .vs__fall:last-child { border-bottom: none; }
+  .vs__fall strong { display: block; font-size: .92rem; }
+  .vs__fall small { color: var(--avd-academy-color-ink-muted); font-size: .78rem; }
+  .vs__fall.is-aktiv { border-left-color: var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); }
+
+  .vs__buehne { padding: 1rem 1.2rem 1.2rem; min-width: 0; }
+  .vs__marke {
+    margin: 0 0 .35rem; font-size: .7rem; font-weight: 700;
+    letter-spacing: .09em; text-transform: uppercase;
+  }
+  .vs__marke--auf    { color: var(--avd-academy-color-ink-muted); }
+  .vs__marke--ok     { color: var(--vs-ja); margin-top: 1rem; }
+  .vs__marke--fehler { color: var(--vs-nein); margin-top: 1rem; text-transform: none; letter-spacing: .02em; font-size: .78rem; }
+
+  /* Rohe Nachricht: das Theme faerbt nur Java, also faerbt die Seite selbst. */
+  /* Ein Mitschnitt sieht in beiden Farbschemata gleich aus - deshalb traegt der
+     Block seine Farben selbst statt sie aus den Tokens zu ziehen. Alle Werte
+     unten liegen auf #1d2426 ueber 6:1. */
+  .vs__code {
+    margin: 0; padding: .7rem .9rem; overflow-x: auto;
+    font-family: var(--avd-academy-font-mono, monospace);
+    font-size: .76rem; line-height: 1.55; white-space: pre;
+    background: #1d2426; color: #e6edf0;
+    border: 1px solid #2e383b;
+    border-radius: var(--avd-academy-radius-sm, 4px);
+  }
+  .vs__code .hl-m   { color: #4fd1a5; font-weight: 700; }
+  .vs__code .hl-p   { color: #ffffff; font-weight: 700; }
+  .vs__code .hl-v   { color: #94a8ad; }
+  .vs__code .hl-s2  { color: #4fd1a5; font-weight: 700; }
+  .vs__code .hl-s4,
+  .vs__code .hl-s5  { color: #ff8a70; font-weight: 700; }
+  .vs__code .hl-h   { color: #e0be5c; }
+  .vs__code .hl-k   { color: #8dc0ff; }
+  .vs__code .hl-str { color: #a5e075; }
+  .vs__code .hl-num { color: #e0be5c; }
+  .vs__code .hl-tag { color: #8dc0ff; }
+  .vs__code .hl-kw  { color: #e0be5c; font-weight: 700; }
+  .vs__code .hl-c   { color: #94a8ad; font-style: italic; }
+
+  .vs__hinweis { font-size: .86rem; margin: 1rem 0 0; }
+  .vs__schluss { margin-top: 1.5rem; }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  function Z() { return Array.prototype.join.call(arguments, "\n"); }
+
+  var SOAP_HUELLE = '<soap:Envelope\n    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
+
+  /* ------------------------------------------------------------------ Daten
+     Je Stil und Aufgabe die rohe Nachricht: Anfrage, Erfolgsantwort und der
+     Fehlerfall dazu - in derselben Form, in der sie ueber die Leitung geht. */
+
+  var DATEN = {
+
+    /* =============================================================== SOAP */
+    soap: {
+      alles: {
+        anfrage: Z(
+          "POST /CustomerService HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: text/xml; charset=utf-8",
+          'SOAPAction: "getCustomer"',
+          "Content-Length: 231",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <getCustomerRequest xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "    </getCustomerRequest>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <getCustomerResponse xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "      <name>Meier</name>",
+          "      <geburtsdatum>1984-03-02</geburtsdatum>",
+          "      <anschriften>",
+          "        <anschrift><strasse>Hauptstr. 1</strasse><ort>Köln</ort></anschrift>",
+          "      </anschriften>",
+          "      <zahlungsarten>",
+          "        <zahlungsart><art>KREDITKARTE</art><letzte4>4242</letzte4></zahlungsart>",
+          "      </zahlungsarten>",
+          "    </getCustomerResponse>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 500 Internal Server Error",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          "    <soap:Fault>",
+          "      <faultcode>soap:Client</faultcode>",
+          "      <faultstring>Kunde 4711 unbekannt</faultstring>",
+          "      <detail>",
+          '        <kundeNichtGefunden xmlns="urn:shop:kunden:v1"><id>4711</id></kundeNichtGefunden>',
+          "      </detail>",
+          "    </soap:Fault>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        hinweis: "Die Adresse ist für alle vier Aufgaben dieselbe; was gemeint ist, steht im Umschlag und im Kopf <code>SOAPAction</code>. <strong>Und der Fehler kommt als <code>500</code></strong> – obwohl der Client schuld ist. So schreibt es SOAP 1.1 vor, und so sieht es jedes Monitoring davor."
+      },
+      ohne: {
+        anfrage: Z(
+          "POST /CustomerService HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: text/xml; charset=utf-8",
+          'SOAPAction: "getCustomerBasic"',
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <getCustomerBasicRequest xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "    </getCustomerBasicRequest>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <getCustomerBasicResponse xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "      <name>Meier</name>",
+          "      <geburtsdatum>1984-03-02</geburtsdatum>",
+          "    </getCustomerBasicResponse>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        fehlertitel: "Antwort · die Operation gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 500 Internal Server Error",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          "    <soap:Fault>",
+          "      <faultcode>soap:Client</faultcode>",
+          "      <faultstring>Unbekannte Operation: getCustomerBasic</faultstring>",
+          "    </soap:Fault>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        hinweis: "<strong>Eine Feldauswahl gibt es nicht.</strong> Wer weniger will, braucht eine <em>zweite Operation</em> im WSDL – und bis jeder Client neu erzeugt ist, kennt sie niemand. Genau das zeigt der Fehlerfall: Ein Client von gestern bekommt einen <code>Fault</code>, keine kürzere Antwort."
+      },
+      anlegen: {
+        anfrage: Z(
+          "POST /CustomerService HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: text/xml; charset=utf-8",
+          'SOAPAction: "createCustomer"',
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <createCustomerRequest xmlns="urn:shop:kunden:v1">',
+          "      <name>Meier</name>",
+          "      <geburtsdatum>1984-03-02</geburtsdatum>",
+          "    </createCustomerRequest>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <createCustomerResponse xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "    </createCustomerResponse>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        fehlertitel: "Antwort · die Daten sind nicht gültig",
+        fehler: Z(
+          "HTTP/1.1 500 Internal Server Error",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          "    <soap:Fault>",
+          "      <faultcode>soap:Client</faultcode>",
+          "      <faultstring>Validierung fehlgeschlagen</faultstring>",
+          "      <detail>",
+          '        <validierungsFehler xmlns="urn:shop:kunden:v1">',
+          "          <feld name=\"geburtsdatum\">Pflichtangabe fehlt</feld>",
+          "          <feld name=\"name\">darf nicht leer sein</feld>",
+          "        </validierungsFehler>",
+          "      </detail>",
+          "    </soap:Fault>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        hinweis: "Die neue Kennung steht im Antwort-Umschlag, nicht in einem <code>Location</code>-Kopf – <strong>es gibt keine Adresse, auf die sie zeigen könnte</strong>. Die Feldfehler stehen sauber strukturiert im <code>detail</code>-Element; das ist die Stärke des Formats."
+      },
+      loeschen: {
+        anfrage: Z(
+          "POST /CustomerService HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: text/xml; charset=utf-8",
+          'SOAPAction: "deleteCustomer"',
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <deleteCustomerRequest xmlns="urn:shop:kunden:v1">',
+          "      <id>4711</id>",
+          "    </deleteCustomerRequest>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          '    <deleteCustomerResponse xmlns="urn:shop:kunden:v1"/>',
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 500 Internal Server Error",
+          "Content-Type: text/xml; charset=utf-8",
+          "",
+          SOAP_HUELLE,
+          "  <soap:Body>",
+          "    <soap:Fault>",
+          "      <faultcode>soap:Client</faultcode>",
+          "      <faultstring>Kunde 4711 unbekannt</faultstring>",
+          "    </soap:Fault>",
+          "  </soap:Body>",
+          "</soap:Envelope>"),
+        hinweis: "Löschen ist hier ein <code>POST</code> wie alles andere. <strong>Ob der Aufruf wiederholbar ist, sieht man der Nachricht nicht an</strong> – das steht allenfalls in der Dokumentation. Bei <code>DELETE</code> wäre es ein Merkmal der Methode."
+      }
+    },
+
+    /* =============================================================== REST */
+    rest: {
+      alles: {
+        anfrage: Z(
+          "GET /customers/4711 HTTP/1.1",
+          "Host: api.shop.example",
+          "Accept: application/json"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          'ETag: "a1b2c3"',
+          "Cache-Control: max-age=60",
+          "",
+          "{",
+          '  "id": "4711",',
+          '  "name": "Meier",',
+          '  "geburtsdatum": "1984-03-02",',
+          '  "anschriften": [',
+          '    { "strasse": "Hauptstr. 1", "ort": "Köln" }',
+          "  ],",
+          '  "zahlungsarten": [',
+          '    { "art": "KREDITKARTE", "letzte4": "4242" }',
+          "  ]",
+          "}"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 404 Not Found",
+          "Content-Type: application/problem+json",
+          "",
+          "{",
+          '  "type": "https://api.shop.example/probleme/kunde-unbekannt",',
+          '  "title": "Kunde nicht gefunden",',
+          '  "status": 404,',
+          '  "detail": "Es gibt keinen Kunden mit der Kennung 4711.",',
+          '  "instance": "/customers/4711"',
+          "}"),
+        hinweis: "Ein <code>GET</code> auf eine eigene Adresse: im Browser aufrufbar, für jede Zwischenstation cachebar (<code>ETag</code>, <code>Cache-Control</code>), und der <strong>Statuscode allein sagt schon, was los ist</strong>. Das Fehlerformat ist standardisiert – <strong>RFC 9457</strong>, Medientyp <code>application/problem+json</code>."
+      },
+      ohne: {
+        anfrage: Z(
+          "GET /customers/4711?fields=id,name,geburtsdatum HTTP/1.1",
+          "Host: api.shop.example",
+          "Accept: application/json"),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "id": "4711",',
+          '  "name": "Meier",',
+          '  "geburtsdatum": "1984-03-02"',
+          "}"),
+        fehlertitel: "Antwort · das Feld kennt der Server nicht",
+        fehler: Z(
+          "HTTP/1.1 400 Bad Request",
+          "Content-Type: application/problem+json",
+          "",
+          "{",
+          '  "type": "https://api.shop.example/probleme/unbekanntes-feld",',
+          '  "title": "Unbekanntes Feld in fields",',
+          '  "status": 400,',
+          '  "detail": "telefon ist kein Feld von Customer.",',
+          '  "erlaubt": [ "id", "name", "geburtsdatum", "anschriften", "zahlungsarten" ]',
+          "}"),
+        hinweis: "<strong>Hier hat REST keine Antwort von der Stange.</strong> <code>?fields=</code> ist verbreitet, aber nicht standardisiert – jede API erfindet es neu, und jede erfindet auch den Fehlerfall dazu neu.<br><br><strong>Und es hat eine Folge, die fast immer übersehen wird:</strong> Es gibt nur <em>ein</em> Schema für diese Antwort, und das wird im Gateway gegen jede Antwort validiert. Steht dort <code>required: [id, name, geburtsdatum]</code>, dann ist eine gefilterte Antwort <strong>schemawidrig</strong> – das Gateway wirft die eigene Antwort weg. Wer <code>fields=</code> anbietet, muss also entweder alle Felder außer der Kennung optional machen – <em>und damit die Zusage aufgeben, dass ein Name kommt</em> – oder je Feldkombination ein eigenes Schema pflegen. Genau deshalb ist der saubere Weg meist ein anderer: die Anschriften gar nicht erst einbetten und <code>GET /customers/4711/addresses</code> als eigene Subressource anbieten. Zwei Ressourcen, zwei Schemata, beide vollständig."
+      },
+      anlegen: {
+        anfrage: Z(
+          "POST /customers HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "name": "Meier",',
+          '  "geburtsdatum": "1984-03-02"',
+          "}"),
+        antwort: Z(
+          "HTTP/1.1 201 Created",
+          "Location: /customers/4711",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "id": "4711",',
+          '  "name": "Meier",',
+          '  "geburtsdatum": "1984-03-02"',
+          "}"),
+        fehlertitel: "Antwort · die Daten sind nicht gültig",
+        fehler: Z(
+          "HTTP/1.1 422 Unprocessable Content",
+          "Content-Type: application/problem+json",
+          "",
+          "{",
+          '  "type": "https://api.shop.example/probleme/validierung",',
+          '  "title": "Eingabe nicht verarbeitbar",',
+          '  "status": 422,',
+          '  "fehler": [',
+          '    { "feld": "geburtsdatum", "grund": "Pflichtangabe fehlt" },',
+          '    { "feld": "name", "grund": "darf nicht leer sein" }',
+          "  ]",
+          "}"),
+        hinweis: "<code>201</code> und <code>Location</code> gehören zusammen: Die Kennung vergibt der Server und <strong>nennt die Adresse, unter der die neue Ressource ab jetzt liegt</strong>. Deshalb ist <code>POST</code> hier nicht idempotent – zweimal abgeschickt, zwei Kunden. Und <strong>beide</strong> Feldfehler kommen in <em>einer</em> Antwort; sonst braucht der Aufrufer mehrere Anläufe für dasselbe Formular."
+      },
+      loeschen: {
+        anfrage: Z(
+          "DELETE /customers/4711 HTTP/1.1",
+          "Host: api.shop.example"),
+        antwort: Z(
+          "HTTP/1.1 204 No Content"),
+        fehlertitel: "Antwort · beim zweiten Mal",
+        fehler: Z(
+          "HTTP/1.1 404 Not Found",
+          "Content-Type: application/problem+json",
+          "",
+          "{",
+          '  "type": "https://api.shop.example/probleme/kunde-unbekannt",',
+          '  "title": "Kunde nicht gefunden",',
+          '  "status": 404,',
+          '  "instance": "/customers/4711"',
+          "}"),
+        hinweis: "<strong>Die ganze Erfolgsantwort ist eine Zeile.</strong> Kein Body, kein Format, keine Absprache – der Statuscode <em>ist</em> die Antwort. Und der Aufruf ist idempotent: Der Zustand danach ist derselbe, egal wie oft er ankommt. Dass beim zweiten Mal <code>404</code> kommt, ändert daran nichts – der Zustand ist gemeint, nicht die Antwort."
+      }
+    },
+
+    /* ============================================================ GraphQL */
+    graphql: {
+      alles: {
+        anfrage: Z(
+          "POST /graphql HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: application/json",
+          "Accept: application/json",
+          "",
+          '{"query":"query { customer(id: \\"4711\\") { id name geburtsdatum' +
+            ' anschriften { strasse ort } zahlungsarten { art letzte4 } } }"}'),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": {',
+          '    "customer": {',
+          '      "id": "4711",',
+          '      "name": "Meier",',
+          '      "geburtsdatum": "1984-03-02",',
+          '      "anschriften": [ { "strasse": "Hauptstr. 1", "ort": "Köln" } ],',
+          '      "zahlungsarten": [ { "art": "KREDITKARTE", "letzte4": "4242" } ]',
+          "    }",
+          "  }",
+          "}"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": { "customer": null },',
+          '  "errors": [',
+          "    {",
+          '      "message": "Kunde 4711 unbekannt",',
+          '      "path": [ "customer" ],',
+          '      "extensions": { "code": "NOT_FOUND" }',
+          "    }",
+          "  ]",
+          "}"),
+        hinweis: "So sieht die Abfrage <strong>wirklich</strong> aus: ein JSON-Objekt mit der Query als Zeichenkette, Anführungszeichen maskiert. Lesbar formatiert wäre das <code>query { customer(id: \"4711\") { id name … } }</code> – aber über die Leitung geht die Zeile oben. <strong>Und der Fehler ist eine <code>200</code></strong>: Ob es geklappt hat, steht im Feld <code>errors</code>."
+      },
+      ohne: {
+        anfrage: Z(
+          "POST /graphql HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: application/json",
+          "",
+          '{"query":"query { customer(id: \\"4711\\") { id name geburtsdatum } }"}'),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": {',
+          '    "customer": {',
+          '      "id": "4711",',
+          '      "name": "Meier",',
+          '      "geburtsdatum": "1984-03-02"',
+          "    }",
+          "  }",
+          "}"),
+        fehlertitel: "Antwort · das Feld gibt es im Schema nicht",
+        fehler: Z(
+          "HTTP/1.1 400 Bad Request",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "errors": [',
+          "    {",
+          '      "message": "Cannot query field \\"telefon\\" on type \\"Customer\\".",',
+          '      "locations": [ { "line": 1, "column": 42 } ],',
+          '      "extensions": { "code": "GRAPHQL_VALIDATION_FAILED" }',
+          "    }",
+          "  ]",
+          "}"),
+        hinweis: "<strong>Das ist der Grund, warum es GraphQL gibt.</strong> Dieselbe Adresse, dieselbe Signatur – der Client lässt zwei Felder weg und bekommt weniger. Ohne zweite Operation, ohne neue Adresse, ohne Release. Interessant ist der Fehlerfall: Ein <em>Schreibfehler im Feldnamen</em> wird vor der Ausführung bemerkt und kommt hier sogar mit <code>400</code> – das ist die eine Stelle, an der GraphQL den Statuscode benutzt."
+      },
+      anlegen: {
+        anfrage: Z(
+          "POST /graphql HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: application/json",
+          "",
+          '{"query":"mutation($e: CustomerInput!) { createCustomer(input: $e) { id } }",',
+          ' "variables":{"e":{"name":"Meier","geburtsdatum":"1984-03-02"}}}'),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": {',
+          '    "createCustomer": { "id": "4711" }',
+          "  }",
+          "}"),
+        fehlertitel: "Antwort · die Daten sind nicht gültig",
+        fehler: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": { "createCustomer": null },',
+          '  "errors": [',
+          "    {",
+          '      "message": "geburtsdatum ist eine Pflichtangabe",',
+          '      "path": [ "createCustomer" ],',
+          '      "extensions": {',
+          '        "code": "BAD_USER_INPUT",',
+          '        "feld": "geburtsdatum"',
+          "      }",
+          "    }",
+          "  ]",
+          "}"),
+        hinweis: "Lesen und Ändern unterscheidet nur das Schlüsselwort <code>mutation</code>; Eingaben gehören in <code>variables</code>, nicht in die Query-Zeichenkette. Welche Felder zurückkommen, sagt auch hier der Client – hier nur die neue Kennung. <strong>Einen <code>Location</code>-Kopf gibt es nicht</strong>, und es gäbe auch keine Adresse dafür."
+      },
+      loeschen: {
+        anfrage: Z(
+          "POST /graphql HTTP/1.1",
+          "Host: api.shop.example",
+          "Content-Type: application/json",
+          "",
+          '{"query":"mutation { deleteCustomer(id: \\"4711\\") { erfolg } }"}'),
+        antwort: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": {',
+          '    "deleteCustomer": { "erfolg": true }',
+          "  }",
+          "}"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/1.1 200 OK",
+          "Content-Type: application/json",
+          "",
+          "{",
+          '  "data": { "deleteCustomer": null },',
+          '  "errors": [',
+          '    { "message": "Kunde 4711 unbekannt",',
+          '      "path": [ "deleteCustomer" ],',
+          '      "extensions": { "code": "NOT_FOUND" } }',
+          "  ]",
+          "}"),
+        hinweis: "Beide Antworten sind <code>200 OK</code> – die erfolgreiche und die gescheiterte. <strong>Ein Proxy, ein Log oder ein Alarm auf <code>5xx</code> sieht hier ausschließlich Erfolge.</strong> Wer GraphQL betreibt, braucht eine Auswertung, die in den Body schaut; mit HTTP-Bordmitteln kommt er nicht weit."
+      }
+    },
+
+    /* =============================================================== gRPC */
+    grpc: {
+      alles: {
+        anfrage: Z(
+          "HTTP/2 · Stream 1 · HEADERS",
+          "",
+          ":method = POST",
+          ":scheme = https",
+          ":authority = api.shop.example",
+          ":path = /kunden.v1.CustomerService/GetCustomer",
+          "content-type = application/grpc+proto",
+          "te = trailers",
+          "",
+          "DATA (Protobuf, binär):",
+          "00 00 00 00 06  0a 04 34 37 31 31",
+          "",
+          "00           unkomprimiert",
+          "00 00 00 06  Länge der Nachricht: 6 Bytes",
+          "0a           Feld 1 (id), Typ \"Bytes\"",
+          "04           4 Zeichen folgen",
+          "34 37 31 31  \"4711\""),
+        antwort: Z(
+          "HTTP/2 · Stream 1 · HEADERS",
+          "",
+          ":status = 200",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA (Protobuf, binär):",
+          "00 00 00 00 2b  0a 04 34 37 31 31  12 05 4d 65 69 65 72",
+          "1a 0a 31 39 38 34 2d 30 33 2d 30 32  22 12 0a 0b 48 ...",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 0",
+          "grpc-message ="),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/2 · Stream 1 · HEADERS",
+          "",
+          ":status = 200",
+          "content-type = application/grpc+proto",
+          "",
+          "(kein DATA-Frame)",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 5",
+          "grpc-message = Kunde 4711 unbekannt",
+          "",
+          "5 = NOT_FOUND"),
+        hinweis: "Die Adresse entsteht aus Dienst- und Methodennamen; niemand tippt das von Hand, der Client wird aus der <code>.proto</code> erzeugt. <strong>Und jetzt die Pointe: Auch der Fehler ist auf HTTP-Ebene eine <code>200</code>.</strong> Der eigentliche Status steht in einem <em>Trailer</em> – der kommt <em>nach</em> dem Body, und die meisten Werkzeuge zwischen Client und Server lesen ihn gar nicht."
+      },
+      ohne: {
+        anfrage: Z(
+          "HTTP/2 · Stream 3 · HEADERS",
+          "",
+          ":method = POST",
+          ":path = /kunden.v1.CustomerService/GetCustomer",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – GetCustomerRequest mit FieldMask:",
+          "  id         = \"4711\"",
+          "  field_mask = { paths: [\"id\", \"name\", \"birth_date\"] }",
+          "",
+          "(hier lesbar dargestellt – über die Leitung geht Protobuf)"),
+        antwort: Z(
+          "HTTP/2 · Stream 3 · HEADERS",
+          "",
+          ":status = 200",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – Customer:",
+          "  id         = \"4711\"",
+          "  name       = \"Meier\"",
+          "  birth_date = \"1984-03-02\"",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 0"),
+        fehlertitel: "Antwort · der Pfad in der Maske stimmt nicht",
+        fehler: Z(
+          "HTTP/2 · Stream 3 · HEADERS",
+          "",
+          ":status = 200",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 3",
+          "grpc-message = field_mask: unbekannter Pfad \"telefon\"",
+          "",
+          "3 = INVALID_ARGUMENT"),
+        hinweis: "<code>FieldMask</code> ist standardisiert (<code>google.protobuf.FieldMask</code>) – aber <strong>der Server muss sie selbst auswerten</strong>. Tut er es nicht, kommt trotzdem alles zurück, und niemand merkt es. Anders als bei GraphQL erzwingt das Format nichts; die Maske ist ein Wunsch, kein Vertrag."
+      },
+      anlegen: {
+        anfrage: Z(
+          "HTTP/2 · Stream 5 · HEADERS",
+          "",
+          ":method = POST",
+          ":path = /kunden.v1.CustomerService/CreateCustomer",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – CreateCustomerRequest:",
+          "  name          = \"Meier\"",
+          "  geburtsdatum  = \"1984-03-02\""),
+        antwort: Z(
+          "HTTP/2 · Stream 5 · HEADERS",
+          "",
+          ":status = 200",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – Customer:",
+          "  id            = \"4711\"",
+          "  name          = \"Meier\"",
+          "  geburtsdatum  = \"1984-03-02\"",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 0"),
+        fehlertitel: "Antwort · die Daten sind nicht gültig",
+        fehler: Z(
+          "HTTP/2 · Stream 5 · HEADERS",
+          "",
+          ":status = 200",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 3",
+          "grpc-message = Validierung fehlgeschlagen",
+          "grpc-status-details-bin = CAMSFVZhbGlkaWVydW5nIGZlaGxnZXNj...",
+          "",
+          "3 = INVALID_ARGUMENT · die Feldfehler stecken base64-kodiert",
+          "im Trailer grpc-status-details-bin (google.rpc.Status)"),
+        hinweis: "Der neue Kunde kommt als vollständige Nachricht zurück; einen <code>Location</code>-Kopf gibt es nicht. <strong>Und die Feldfehler stehen base64-kodiert in einem Trailer</strong> – lesbar erst, wenn man sie dekodiert und gegen die <code>.proto</code> hält. Das ist der Preis für die Kompaktheit."
+      },
+      loeschen: {
+        anfrage: Z(
+          "HTTP/2 · Stream 7 · HEADERS",
+          "",
+          ":method = POST",
+          ":path = /kunden.v1.CustomerService/DeleteCustomer",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – DeleteCustomerRequest:",
+          "  id = \"4711\""),
+        antwort: Z(
+          "HTTP/2 · Stream 7 · HEADERS",
+          "",
+          ":status = 200",
+          "content-type = application/grpc+proto",
+          "",
+          "DATA – google.protobuf.Empty (0 Bytes Nutzlast)",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 0"),
+        fehlertitel: "Antwort · den Kunden gibt es nicht",
+        fehler: Z(
+          "HTTP/2 · Stream 7 · HEADERS",
+          "",
+          ":status = 200",
+          "",
+          "TRAILERS",
+          "",
+          "grpc-status = 5",
+          "grpc-message = Kunde 4711 unbekannt",
+          "",
+          "5 = NOT_FOUND"),
+        hinweis: "<strong>Der Status ist ein gRPC-Status, kein HTTP-Status.</strong> Die beiden haben nichts miteinander zu tun: <code>grpc-status = 5</code> steht in einem Trailer, auf HTTP-Ebene war die Antwort eine <code>200</code>. Wer zwischen Client und Server ein Gateway stellt, muss ihm das beibringen."
+      }
+    }
+  };
+
+  /* --------------------------------------------------- Syntaxhervorhebung
+     Das Theme faerbt nur Java. Rohe HTTP-Nachrichten faerbt die Seite
+     deshalb selbst: Kopfzeilen zeilenweise, den Rumpf nach seiner Art.   */
+
+  function esc(t) {
+    return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function kopfzeile(zeile) {
+    var m;
+    if ((m = zeile.match(/^([A-Z]+) (\S+) (HTTP\/[\d.]+)$/))) {
+      return '<span class="hl-m">' + m[1] + '</span> ' +
+             '<span class="hl-p">' + esc(m[2]) + '</span> ' +
+             '<span class="hl-v">' + m[3] + "</span>";
+    }
+    if ((m = zeile.match(/^(HTTP\/[\d.]+) (\d)(\d\d)(.*)$/))) {
+      return '<span class="hl-v">' + m[1] + '</span> ' +
+             '<span class="hl-s' + m[2] + '">' + m[2] + m[3] + esc(m[4]) + "</span>";
+    }
+    if ((m = zeile.match(/^(:?[a-zA-Z][a-zA-Z0-9-]*)(\s*[:=]\s*)(.*)$/))) {
+      return '<span class="hl-h">' + m[1] + "</span>" + m[2] + esc(m[3]);
+    }
+    return esc(zeile);
+  }
+
+  function json(t) {
+    return t
+      .replace(/"([^"\\]*(?:\\.[^"\\]*)*)"(\s*:)/g, '<span class="hl-k">"$1"</span>$2')
+      .replace(/([:\[,]\s*)"([^"\\]*(?:\\.[^"\\]*)*)"/g, '$1<span class="hl-str">"$2"</span>')
+      .replace(/([:\[,]\s*)(-?\d+(?:\.\d+)?|true|false|null)\b/g, '$1<span class="hl-num">$2</span>');
+  }
+
+  function xml(t) {
+    /* Reihenfolge ist wichtig: erst die Zeichenketten, dann die Tags. Umgekehrt
+       faerbt die Zeichenketten-Regel das eben eingefuegte class="hl-tag" mit. */
+    return t
+      .replace(/"([^"]*)"/g, '<span class="hl-str">"$1"</span>')
+      .replace(/(&lt;\/?)([\w:.-]+)/g, '$1<span class="hl-tag">$2</span>');
+  }
+
+  function faerbe(text) {
+    var zeilen = text.split("\n");
+    var aus = [], imKopf = true, rumpf = [];
+
+    for (var i = 0; i < zeilen.length; i++) {
+      if (imKopf) {
+        if (zeilen[i] === "") { imKopf = false; aus.push(""); }
+        else aus.push(kopfzeile(zeilen[i]));
+      } else {
+        rumpf.push(zeilen[i]);
+      }
+    }
+    if (!rumpf.length) return aus.join("\n");
+
+    var r = rumpf.join("\n"), erstes = r.replace(/^\s+/, "").charAt(0);
+    if (erstes === "{" || erstes === "[") r = json(esc(r));
+    else if (erstes === "<") r = xml(esc(r));
+    else {
+      /* Gemischter Rumpf (gRPC): Kopfzeilen faerben, Erklaerzeilen daempfen. */
+      r = rumpf.map(function (z) {
+        if (/^\(|^\d = |^[0-9a-f]{2}[\s0-9a-f]*(\.\.\.)?$/.test(z))
+          return '<span class="hl-c">' + esc(z) + "</span>";
+        if (/^(HTTP\/2|DATA|TRAILERS)/.test(z))
+          return '<span class="hl-kw">' + esc(z) + "</span>";
+        if (/^[0-9a-f]{2}[0-9a-f\s]*\s{2}\S/.test(z))
+          return '<span class="hl-c">' + esc(z) + "</span>";
+        if (/^(:?[a-zA-Z][a-zA-Z0-9-]*)(\s*[:=]\s*)/.test(z)) return kopfzeile(z);
+        if (/^\s+\w+\s*=/.test(z))
+          return z.replace(/^(\s+)(\w+)(\s*=\s*)(.*)$/, '$1<span class="hl-k">$2</span>$3<span class="hl-str">$4</span>');
+        return esc(z);
+      }).join("\n");
+    }
+    return aus.join("\n") + r;
+  }
+
+  /* ---------------------------------------------------------- Bedienung */
+
+  var wurzel = document.querySelector(".vs");
+  if (!wurzel) return;
+
+  var stil = "soap", fall = "alles";
+  var feld = {
+    anfrage:     wurzel.querySelector("[data-vs-anfrage]"),
+    antwort:     wurzel.querySelector("[data-vs-antwort]"),
+    fehler:      wurzel.querySelector("[data-vs-fehler]"),
+    fehlertitel: wurzel.querySelector("[data-vs-fehlertitel]"),
+    hinweis:     wurzel.querySelector("[data-vs-hinweis]")
+  };
+
+  function zeichne() {
+    var d = DATEN[stil][fall];
+    feld.anfrage.innerHTML     = faerbe(d.anfrage);
+    feld.antwort.innerHTML     = faerbe(d.antwort);
+    feld.fehler.innerHTML      = faerbe(d.fehler);
+    feld.fehlertitel.textContent = d.fehlertitel;
+    feld.hinweis.innerHTML     = d.hinweis;
+
+    wurzel.querySelectorAll("[data-stil]").forEach(function (b) {
+      var an = b.dataset.stil === stil;
+      b.classList.toggle("is-aktiv", an);
+      b.setAttribute("aria-selected", an ? "true" : "false");
+    });
+    wurzel.querySelectorAll("[data-fall]").forEach(function (b) {
+      var an = b.dataset.fall === fall;
+      b.classList.toggle("is-aktiv", an);
+      b.setAttribute("aria-selected", an ? "true" : "false");
+    });
+  }
+
+  wurzel.addEventListener("click", function (e) {
+    var s = e.target.closest("[data-stil]");
+    if (s) { stil = s.dataset.stil; zeichne(); return; }
+    var f = e.target.closest("[data-fall]");
+    if (f) { fall = f.dataset.fall; zeichne(); }
+  });
+
+  zeichne();
+})();
+</script>
+
+<blockquote>
+  <p><strong>Merksatz:</strong> Die Frage ist nicht, welcher Stil der beste ist, sondern <strong>wer den
+Client baut</strong>. Kennt man ihn und sitzt er im selben Rechenzentrum, ist gRPC
+schwer zu schlagen. Kennt man ihn nicht, ist alles, was ein Browser ohne
+Vorbereitung versteht, jede Menge wert.</p>
+</blockquote>
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>ATVANTAGE Academy</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

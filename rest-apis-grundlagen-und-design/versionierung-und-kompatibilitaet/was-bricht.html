@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<!--
+  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
+  --------------------------------------------------
+  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
+  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
+  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
+  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
+
+  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
+  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
+
+  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
+  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
+  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
+  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
+  eigenständige Visualisierungen/Simulationen.
+
+  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
+  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
+
+    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
+    description: "…"                → Meta-Description
+    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
+                                       (ungefähre LESEDAUER; bei Guides/Übungen die
+                                       Dauer der Übung, bei Visualisierungen die
+                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
+    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
+    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
+                                       title und/oder icon (Bildpfad); icon erscheint
+                                       rechts und wird kreisrund dargestellt.
+    breadcrumb:                     → Brotkrumen anpassen (beides optional):
+      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
+                                       in der Ordner-`index.md` gesetzt gilt es für
+                                       ALLE Seiten im Ordner und in Unterordnern.
+      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
+                                       Seite (diese wird automatisch angehängt); in
+                                       der `index.md` gesetzt wird sie vererbt.
+
+  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
+  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
+  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
+  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
+  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
+
+  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
+  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
+
+    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
+    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
+
+  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
+  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
+  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
+  Ansicht aber keinen anderen Weg aufs Papier hat.
+
+  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
+  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
+--><html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Versionierung: Welche Änderung bricht die API? · ATVANTAGE Academy</title><meta name="description" content="Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis."><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789560597">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789560597" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789560597" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789560597">
+<script type="module">
+  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
+  Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
+    .then(([core, java]) => {
+      const hljs = core.default;
+      hljs.registerLanguage("java", java.default);
+      document.querySelectorAll("pre code.language-java").forEach((el) => hljs.highlightElement(el));
+    });
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789560597">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789560597"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
+  <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
+      <div class="avd-academy-guide-hero__tags">
+      </div>
+      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print avd-academy-print-btn"
+                data-avd-academy-print
+                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+      </div>
+    </div><h1>Versionierung: Welche Änderung bricht die API?</h1>
+  </section><div class="avd-academy-guide-layout">
+    <main class="avd-academy-guide-main" id="avd-academy-content">
+      <h1 id="versionierung-welche-änderung-bricht-die-api">Versionierung: Welche Änderung bricht die API?</h1>
+
+<p>Die Kundenverwaltung läuft seit einem Jahr. <strong>Drei Teams</strong> rufen sie auf, eines
+davon in einer anderen Programmiersprache, und eines kennt niemand persönlich.
+Jetzt liegen zehn Änderungswünsche auf dem Tisch.</p>
+
+<div class="avd-academy-callout avd-academy-callout--info">
+  <p><strong>Erst schätzen, dann aufdecken.</strong> Jede Karte ist zugeklappt. Die Frage ist bei
+allen zehn dieselbe: <em>Ein Aufrufer, der von dieser Änderung nichts weiß und seinen
+Code nicht anfasst – funktioniert der danach noch?</em></p>
+
+  <p>Ob die Änderung fachlich sinnvoll ist, steht hier <strong>nicht</strong> zur Debatte.</p>
+</div>
+
+<div class="wb">
+
+<p class="wb__steuer">
+  <button type="button" class="wb__alle" data-wb-alle="">Alle aufdecken</button>
+  <button type="button" class="wb__alle" data-wb-zu="">Alle zuklappen</button>
+  <span class="wb__legende">
+    <span class="wb__marke wb__marke--ok">bricht nicht</span>
+    <span class="wb__marke wb__marke--praxis">bricht in der Praxis</span>
+    <span class="wb__marke wb__marke--bruch">bricht</span>
+  </span>
+</p>
+
+<ol class="wb__liste" data-wb-liste=""></ol>
+
+<h2 class="wb__h2">Die Faustregel dahinter</h2>
+
+<div class="wb__regeln">
+  <div class="wb__regel">
+    <h3>In der <em>Antwort</em></h3>
+    <p><strong>Hinzufügen ja, wegnehmen nein.</strong> Ein Feld mehr stört
+    niemanden, der es nicht liest. Ein Feld weniger bricht jeden, der es liest.</p>
+  </div>
+  <div class="wb__regel">
+    <h3>Im <em>Request</em></h3>
+    <p><strong>Lockern ja, verschärfen nein.</strong> Was bisher erlaubt war, muss
+    erlaubt bleiben. Eine neue Pflichtangabe ist immer ein Bruch.</p>
+  </div>
+  <div class="wb__regel">
+    <h3>Bei <em>Wertebereichen</em></h3>
+    <p><strong>Was wachsen kann, muss angekündigt sein.</strong> Steht nicht in der
+    Doku, dass die Liste wächst, hat jeder Aufrufer das Recht, sie für vollständig
+    zu halten.</p>
+  </div>
+  <div class="wb__regel">
+    <h3>Beim <em>Verhalten</em></h3>
+    <p><strong>Zugesichert ist nur, was aufgeschrieben ist.</strong> Sortierung,
+    Vollständigkeit, Statuscodes – wer sie nicht ausdrücklich offenlässt, hat sie
+    stillschweigend versprochen.</p>
+  </div>
+</div>
+
+<p class="wb__schluss"><strong>Verträglich heißt nicht „wir haben nichts
+weggenommen“</strong>, sondern „ein Aufrufer, der von der Änderung nichts weiß,
+funktioniert weiter“. Die beiden schlimmsten Fälle oben nehmen nichts weg.</p>
+
+</div>
+
+<style>
+  .wb { --wb-ok: #1a7f5a; --wb-praxis: #8a6d1f; --wb-bruch: #b3402c; }
+  [data-avd-academy-theme="dark"] .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-avd-academy-theme="light"]) .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+  }
+
+  .wb__steuer { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1.5rem 0 1rem; }
+  .wb__alle {
+    font: inherit; font-size: .85rem; cursor: pointer;
+    padding: .4rem .9rem; border-radius: var(--avd-academy-radius-sm, 4px);
+    border: 1px solid var(--avd-academy-color-border);
+    background: var(--avd-academy-color-bg-subtle); color: inherit;
+  }
+  .wb__legende { margin-left: auto; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .wb__marke {
+    font-size: .74rem; font-weight: 700; letter-spacing: .02em;
+    padding: .15rem .5rem; border-radius: 999px;
+    border: 1px solid currentColor;
+  }
+  .wb__marke--ok     { color: var(--wb-ok); }
+  .wb__marke--praxis { color: var(--wb-praxis); }
+  .wb__marke--bruch  { color: var(--wb-bruch); }
+
+  .wb__liste { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+  .wb__karte {
+    border: 1px solid var(--avd-academy-color-border);
+    border-left: 5px solid var(--avd-academy-color-border);
+    border-radius: var(--avd-academy-radius-sm, 4px);
+    background: var(--avd-academy-color-bg-subtle);
+    transition: border-left-color .3s ease;
+  }
+  .wb__karte.ist-ok     { border-left-color: var(--wb-ok); }
+  .wb__karte.ist-praxis { border-left-color: var(--wb-praxis); }
+  .wb__karte.ist-bruch  { border-left-color: var(--wb-bruch); }
+
+  .wb__kopf {
+    width: 100%; font: inherit; text-align: left; cursor: pointer;
+    display: flex; align-items: baseline; gap: .8rem;
+    padding: .85rem 1rem; background: transparent; border: none; color: inherit;
+  }
+  .wb__nr {
+    flex: none; width: 1.7rem; height: 1.7rem; line-height: 1.7rem; text-align: center;
+    border-radius: 50%; font-size: .82rem; font-weight: 700;
+    background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
+  }
+  .wb__was { flex: 1 1 auto; }
+  .wb__was code { font-size: .88em; }
+  .wb__pfeil { flex: none; color: var(--avd-academy-color-ink-muted); transition: transform .25s ease; }
+  .wb__karte.ist-offen .wb__pfeil { transform: rotate(90deg); }
+
+  .wb__auf { display: none; padding: 0 1rem 1rem 3.5rem; }
+  .wb__karte.ist-offen .wb__auf { display: block; animation: wb-auf .3s ease-out; }
+  @keyframes wb-auf { from { opacity: 0; transform: translateY(-.3rem); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .wb__karte.ist-offen .wb__auf { animation: none; } }
+
+  .wb__urteil { font-weight: 700; margin: 0 0 .4rem; }
+  .ist-ok     .wb__urteil { color: var(--wb-ok); }
+  .ist-praxis .wb__urteil { color: var(--wb-praxis); }
+  .ist-bruch  .wb__urteil { color: var(--wb-bruch); }
+  .wb__warum { margin: 0 0 .6rem; }
+  .wb__weg {
+    margin: 0; font-size: .88rem; padding: .55rem .8rem;
+    border-left: 3px solid var(--avd-academy-color-accent);
+    background: var(--avd-academy-color-bg);
+  }
+  .wb__weg strong { display: block; font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; color: var(--avd-academy-color-ink-muted); }
+
+  .wb__h2 { margin-top: 2.5rem; }
+  .wb__regeln { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1rem; }
+  .wb__regel {
+    border: 1px solid var(--avd-academy-color-border);
+    border-radius: var(--avd-academy-radius-sm, 4px);
+    padding: .9rem 1.1rem; background: var(--avd-academy-color-bg-subtle);
+  }
+  .wb__regel h3 { margin: 0 0 .4rem; font-size: 1rem; }
+  .wb__regel p { margin: 0; font-size: .9rem; }
+  .wb__schluss { margin-top: 1.5rem; }
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  var FAELLE = [
+    {
+      was: "Das Feld <code>telefon</code> kommt neu in der Kundenantwort dazu.",
+      art: "ok", urteil: "Bricht nicht – wenn es eine Zusicherung gibt",
+      warum: "Wer das Feld nicht kennt, liest es nicht. Das gilt aber nur, solange die Aufrufer unbekannte Felder wirklich ignorieren. Ein streng validierender Client (<code>additionalProperties: false</code>) fliegt genau hier auf die Nase – und das sind oft die erzeugten.",
+      weg: "Schreib in die Dokumentation: „Felder, die Du nicht kennst, ignoriere.“ Ein Satz, der über Jahre Ärger spart."
+    },
+    {
+      was: "Das Feld <code>fax</code> wird aus der Kundenantwort entfernt.",
+      art: "bruch", urteil: "Bricht",
+      warum: "Jeder Aufrufer, der es liest, bekommt ab sofort nichts mehr – in typisierten Clients meist gleich eine Ausnahme beim Deserialisieren.",
+      weg: "In drei Schritten: als veraltet kennzeichnen (<code>Deprecation</code>-Kopf, OpenAPI <code>deprecated</code>), messen, wer es noch liest, und erst entfernen, wenn niemand mehr zugreift."
+    },
+    {
+      was: "<code>name</code> wird in <code>fullName</code> umbenannt.",
+      art: "bruch", urteil: "Bricht – das ist Fall 2 und Fall 1 in einem",
+      warum: "Umbenennen ist kein eigener Vorgang: Es ist ein Feld weggenommen und ein neues hinzugefügt. Der Bruch steckt in der ersten Hälfte.",
+      weg: "Eine Zeit lang <strong>beide</strong> Felder ausliefern und beim Schreiben beide annehmen, <code>name</code> als veraltet kennzeichnen. Die Frage ist nicht, ob es geht, sondern wie lange man beides betreibt."
+    },
+    {
+      was: "<code>birthdate</code> war beim Anlegen optional und wird zur Pflicht.",
+      art: "bruch", urteil: "Bricht",
+      warum: "Ein Aufrufer, der es bisher weggelassen hat, bekommt ab sofort <code>400</code>. <strong>Im Request darf man lockern, nie verschärfen</strong> – das ist die Spiegelregel zur Antwort.",
+      weg: "Entweder einen fachlich vertretbaren Standardwert setzen, oder die Pflicht nur in einer neuen Version verlangen und die alte weiter betreiben."
+    },
+    {
+      was: "<code>kundennummer</code> war eine Zahl und wird zu einer Zeichenkette.",
+      art: "bruch", urteil: "Bricht",
+      warum: "Ein Typwechsel ist immer ein Bruch. Erzeugte Clients werfen beim Deserialisieren; handgeschriebene rechnen irgendwo mit dem Wert und bekommen etwas Absurdes heraus.",
+      weg: "Ein <strong>neues Feld daneben</strong> (<code>kundennummerText</code>), das alte unverändert weiterliefern – und dann denselben Dreischritt wie beim Entfernen."
+    },
+    {
+      was: "Der Status kann neben <code>aktiv</code>, <code>deaktiviert</code> und <code>gesperrt</code> künftig auch <code>in_pruefung</code> sein.",
+      art: "praxis", urteil: "Formal verträglich – und trotzdem einer der gefährlichsten Fälle",
+      warum: "Es wird nichts weggenommen und nichts umbenannt. Aber jeder Aufrufer, der daraus ein Aufzählungsobjekt gemacht hat, bekommt beim Einlesen eine Ausnahme – und jedes <code>switch</code> ohne <code>default</code> läuft ins Leere. <strong>Die Aufrufer haben die Werteliste für vollständig gehalten, weil nirgends stand, dass sie wächst.</strong>",
+      weg: "Von Anfang an zusichern: „Diese Liste kann wachsen. Behandle unbekannte Werte wie <em>X</em>.“ Danach ist derselbe Schritt harmlos."
+    },
+    {
+      was: "<code>GET /customers</code> liefert künftig nach Nachname sortiert statt nach Anlagedatum.",
+      art: "praxis", urteil: "Formal verträglich – bricht still",
+      warum: "Dieselben Felder, dieselben Typen, derselbe Statuscode. Nur holt sich jemand mit <code>?limit=10</code> seit einem Jahr „die zehn neuesten Kunden“ – und bekommt jetzt zehn Kunden, deren Nachname mit A beginnt. <strong>Es gibt keinen Fehler, nur falsche Daten.</strong>",
+      weg: "Die Sortierung gehört in den Vertrag – entweder als Zusicherung oder ausdrücklich als <em>nicht</em> zugesichert. Schweigen ist hier ein Versprechen."
+    },
+    {
+      was: "<code>GET /customers</code> liefert künftig nur noch die ersten 100 Einträge.",
+      art: "bruch", urteil: "Bricht – und zwar unsichtbar",
+      warum: "Wer bisher alles bekam, bekommt jetzt stillschweigend weniger und hält es für alles. Das ist schlimmer als ein Fehler, weil es wie Erfolg aussieht. Fachlich ist die Änderung trotzdem richtig – ohne Obergrenze fällt irgendwann der Service um.",
+      weg: "Paginierung einführen, aber die Grenze <strong>ankündigen und beziffern</strong>: Antwort mit <code>next</code>-Verweis und Gesamtzahl, Übergangsfrist, und erst danach die Obergrenze schärfen."
+    },
+    {
+      was: "Beim Anlegen eines doppelten Kunden kommt statt <code>400</code> künftig <code>409</code>.",
+      art: "bruch", urteil: "Bricht, wenn jemand auf den Code prüft",
+      warum: "Wer <code>=== 400</code> abfragt, landet ab sofort im allgemeinen Fehlerzweig und zeigt dem Nutzer etwas Falsches. Wer nur <code>>= 400</code> prüft, merkt nichts – <strong>der Bruch hängt daran, wie sorgfältig der Aufrufer gebaut ist</strong>.",
+      weg: "Die Fehlerursache <em>im Body</em> transportieren (Problem Details, Feld <code>type</code>) statt im Statuscode. Dann darf der Code sich ändern, ohne dass jemand nachzieht."
+    },
+    {
+      was: "Es gibt eine neue Operation <code>GET /customers/{id}/orders</code>.",
+      art: "ok", urteil: "Bricht nicht",
+      warum: "Eine neue Adresse kennt bisher niemand, also ruft sie auch niemand auf. <strong>Hinzufügen an einer neuen Stelle ist der einzige risikofreie Fall in dieser Liste.</strong>",
+      weg: "Nichts zu tun – außer die Frage, ob die Operation später wieder wegkann. Was einmal veröffentlicht ist, muss betrieben werden."
+    }
+  ];
+
+  var liste = document.querySelector("[data-wb-liste]");
+  if (!liste) return;
+
+  FAELLE.forEach(function (f, i) {
+    var li = document.createElement("li");
+    li.className = "wb__karte";
+    li.dataset.art = f.art;
+    li.innerHTML =
+      '<button type="button" class="wb__kopf" aria-expanded="false">' +
+        '<span class="wb__nr">' + (i + 1) + '</span>' +
+        '<span class="wb__was">' + f.was + '</span>' +
+        '<span class="wb__pfeil" aria-hidden="true">▸</span>' +
+      '</button>' +
+      '<div class="wb__auf">' +
+        '<p class="wb__urteil">' + f.urteil + '</p>' +
+        '<p class="wb__warum">' + f.warum + '</p>' +
+        '<p class="wb__weg"><strong>Verträglicher Weg</strong>' + f.weg + '</p>' +
+      '</div>';
+    liste.appendChild(li);
+  });
+
+  function schalte(karte, auf) {
+    karte.classList.toggle("ist-offen", auf);
+    /* Die Farbe kommt erst mit dem Aufdecken - sonst verrät der Rand das Urteil. */
+    karte.classList.toggle("ist-" + karte.dataset.art, auf);
+    karte.querySelector(".wb__kopf").setAttribute("aria-expanded", auf ? "true" : "false");
+  }
+
+  liste.addEventListener("click", function (e) {
+    var kopf = e.target.closest(".wb__kopf");
+    if (!kopf) return;
+    var karte = kopf.parentNode;
+    schalte(karte, !karte.classList.contains("ist-offen"));
+  });
+
+  document.querySelector("[data-wb-alle]").addEventListener("click", function () {
+    liste.querySelectorAll(".wb__karte").forEach(function (k) { schalte(k, true); });
+  });
+  document.querySelector("[data-wb-zu]").addEventListener("click", function () {
+    liste.querySelectorAll(".wb__karte").forEach(function (k) { schalte(k, false); });
+  });
+})();
+</script>
+
+
+
+    </main>
+  </div><div class="avd-academy-print-contact" aria-hidden="true">
+    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
+    <span>academy@atvantage.com</span>
+  </div>
+
+  <footer class="avd-academy-footer">
+  <div class="avd-academy-footer__grid">
+    <div><strong>ATVANTAGE Academy</strong>
+      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
+    </div><div>
+      <strong>Kontakt</strong>
+      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
+      </p>
+    </div></div>
+  <div class="avd-academy-footer__legal">
+    © <span data-avd-academy-year>2026</span> ATVANTAGE
+  </div>
+</footer>
+
+</body>
+</html>

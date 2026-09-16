@@ -59,15 +59,15 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Den Entwurf als OpenAPI aufschreiben · ATVANTAGE Academy</title><meta name="description" content="Übersetze Deinen Entwurf in ein OpenAPI-Dokument – so weit Du kommst."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>OpenAPI: Den Entwurf aufschreiben · ATVANTAGE Academy</title><meta name="description" content="Übersetze Deinen Entwurf in ein OpenAPI-Dokument – so weit Du kommst."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789551194">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789551194" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789551194" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789551194">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789560597">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789560597" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789560597" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789560597">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789551194">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789551194"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789560597">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789560597"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -103,7 +103,7 @@
               aria-label="Farbschema umschalten">◐</button></div>
 </header>
 
-  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Den Entwurf als OpenAPI aufschreiben</span></nav><div class="avd-academy-guide-hero__meta">
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">OpenAPI: Den Entwurf aufschreiben</span></nav><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 70 Minuten</span><span class="avd-academy-tag">OpenAPI</span><span class="avd-academy-tag">Contract First</span><span class="avd-academy-tag">YAML</span>
       </div>
       <div class="avd-academy-guide-hero__actions">
@@ -111,10 +111,10 @@
                 data-avd-academy-copy-md="#avd-academy-md-source"
                 title="Markdown kopieren" aria-label="Markdown kopieren"></button>
       </div>
-    </div><h1>Den Entwurf als OpenAPI aufschreiben</h1>
+    </div><h1>OpenAPI: Den Entwurf aufschreiben</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
-      <h1 id="den-entwurf-als-openapi-aufschreiben">Den Entwurf als OpenAPI aufschreiben</h1>
+      <h1 id="openapi-den-entwurf-aufschreiben">OpenAPI: Den Entwurf aufschreiben</h1>
 
 <p><strong>Als</strong> Mitglied des Teams, das eine API herausgibt, <strong>möchte ich</strong> unseren
 Entwurf in einem maschinenlesbaren Format festhalten, <strong>damit</strong> andere Teams damit
@@ -315,7 +315,7 @@ plötzlich richtig gut aussieht.</li>
 </ul>
 
 
-<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Den Entwurf als OpenAPI aufschreiben
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># OpenAPI: Den Entwurf aufschreiben
 
 **Als** Mitglied des Teams, das eine API herausgibt, **möchte ich** unseren
 Entwurf in einem maschinenlesbaren Format festhalten, **damit** andere Teams damit

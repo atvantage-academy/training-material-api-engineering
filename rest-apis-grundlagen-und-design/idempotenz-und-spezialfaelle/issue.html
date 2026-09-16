@@ -59,15 +59,15 @@
 --><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Den ältesten Kunden löschen · ATVANTAGE Academy</title><meta name="description" content="Ein Satz aus dem Fachbereich, vier mögliche APIs – und die Frage, was passiert, wenn die Anfrage zweimal ankommt."><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Idempotenz: Den ältesten Kunden löschen · ATVANTAGE Academy</title><meta name="description" content="Ein Satz aus dem Fachbereich, vier mögliche APIs – und die Frage, was passiert, wenn die Anfrage zweimal ankommt."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789551194">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789551194"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789551194">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789551194" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789551194" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789551194">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789560597">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789560597"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789560597">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789560597" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789560597" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789560597">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789551194">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789551194"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789560597">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789560597"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -103,7 +103,7 @@
               aria-label="Farbschema umschalten">◐</button></div>
 </header>
 
-  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Den ältesten Kunden löschen</span></nav><div class="avd-academy-guide-hero__meta">
+  <section class="avd-academy-guide-hero"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Start</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Idempotenz: Den ältesten Kunden löschen</span></nav><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags"><span class="avd-academy-tag avd-academy-tag--time">ca. 20 Minuten</span><span class="avd-academy-tag">Idempotenz</span><span class="avd-academy-tag">Ressourcenentwurf</span>
       </div>
       <div class="avd-academy-guide-hero__actions">
@@ -111,10 +111,10 @@
                 data-avd-academy-copy-md="#avd-academy-md-source"
                 title="Markdown kopieren" aria-label="Markdown kopieren"></button>
       </div>
-    </div><h1>Den ältesten Kunden löschen</h1>
+    </div><h1>Idempotenz: Den ältesten Kunden löschen</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main avd-academy-guide-main--numbered" id="avd-academy-content">
-      <h1 id="den-ältesten-kunden-löschen">Den ältesten Kunden löschen</h1>
+      <h1 id="idempotenz-den-ältesten-kunden-löschen">Idempotenz: Den ältesten Kunden löschen</h1>
 
 <p><strong>Als</strong> Betreiber eines Online-Shops <strong>möchte ich</strong> den ältesten Kundenaccount
 löschen können, <strong>damit</strong> wir Datenbestände aufräumen können, die wir nicht mehr
@@ -231,7 +231,7 @@ mehr bestellt haben.“ Welche Deiner Varianten trägt das noch, welche nicht?</
 </ul>
 
 
-<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Den ältesten Kunden löschen
+<textarea id="avd-academy-md-source" hidden aria-hidden="true"># Idempotenz: Den ältesten Kunden löschen
 
 **Als** Betreiber eines Online-Shops **möchte ich** den ältesten Kundenaccount
 löschen können, **damit** wir Datenbestände aufräumen können, die wir nicht mehr
