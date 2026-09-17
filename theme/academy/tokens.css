@@ -204,6 +204,26 @@
   --avd-academy-accent-from-base:  var(--avd-academy-accent-base);
   --avd-academy-hero-bg-from-base: color-mix(in oklab, var(--avd-academy-accent-base) 12%, var(--avd-academy-color-bg));
 
+
+  /* --- Vertikaler Rhythmus, gemeinsam fuer BEIDE Inhaltsspalten -----------
+     Das Theme fuehrte dafuer zwei Systeme: Die gewoehnliche Seite hat eine
+     Hierarchie (Abstand vor einem Abschnitt, kleiner Abstand zwischen Bloecken,
+     fast keiner NACH einer Ueberschrift - dadurch bindet sie an ihren Text). Die
+     Guide-Spalte hatte `display: flex; gap: 3.5rem` und damit gar keine: Ein
+     `gap` behandelt alle Bloecke gleich.
+
+     Gemessen an einer Guide-Seite ergab das 60px zwischen einer Ueberschrift und
+     ihrem eigenen ersten Absatz - und ebenso 60px zum vorigen Absatz. Die
+     Ueberschrift gehoerte optisch zu nichts. Zwischen zwei Ueberschriften ohne
+     Text dazwischen waren es 84px.
+
+     Beide Spalten lesen jetzt dieselben drei Masse. Wer den Rhythmus einer
+     Unterlage anpassen will, setzt sie um - und muss nicht mehr die Klassen des
+     Themes ueberschreiben, was bei jeder Aenderung hier bricht. */
+  --avd-academy-rhythm-block:   1.1rem;   /* zwischen zwei Bloecken im Fluss */
+  --avd-academy-rhythm-section: 2.75rem;  /* vor einer neuen Abschnitts-Ueberschrift */
+  --avd-academy-rhythm-heading: 0.25rem;  /* NACH einer Ueberschrift - bindet sie an ihren Text */
+
   --avd-academy-transition: 160ms ease;
 }
 

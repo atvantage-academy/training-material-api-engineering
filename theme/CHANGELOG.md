@@ -15,6 +15,63 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.15.0
+
+### Beide Inhaltsspalten haben jetzt denselben Rhythmus
+
+Gemeldet aus einem Schulungs-Repo (dort A-002). Das Theme führte für seine beiden
+Inhaltsspalten zwei verschiedene Systeme:
+
+- Die **gewöhnliche Seite** hat eine Hierarchie – Abstand vor einem Abschnitt, kleiner
+  Abstand zwischen Blöcken, und fast keiner **nach** einer Überschrift.
+- Die **Guide-Spalte** war ein Flex-Container mit `gap: 3.5rem`. Ein `gap` behandelt alle
+  Blöcke gleich; eine Überschrift bekommt nach oben denselben Abstand wie nach unten und
+  lässt sich nicht an ihren Abschnitt binden.
+
+**An einer echten Guide-Seite gemessen** – der Seiteninhalt läuft unverändert in die
+Spalte, die direkten Kinder sind also die einzelnen Markdown-Blöcke:
+
+| Übergang | vorher | nachher |
+| -------- | ------ | ------- |
+| Absatz → Überschrift | 56 px | **44 px** |
+| Überschrift → ihr erster Absatz | **60 px** | **18 px** |
+| Überschrift → Überschrift | **84 px** | **28 px** |
+| Absatz → Liste | 76 px | **20 px** |
+
+60 px zwischen einer Überschrift und ihrem eigenen Text – sie gehörte optisch zu nichts.
+
+**Neu sind drei Tokens, die beide Spalten lesen:**
+
+```css
+--avd-academy-rhythm-block:   1.1rem;   /* zwischen zwei Blöcken */
+--avd-academy-rhythm-section: 2.75rem;  /* vor einer Abschnitts-Überschrift */
+--avd-academy-rhythm-heading: 0.25rem;  /* NACH einer Überschrift */
+```
+
+Die Guide-Spalte steht dafür auf `display: block` statt `flex`. Ausdrücklich `block` und
+nicht `unset`: `display` erbt nicht, `unset` wäre `initial` und damit `inline`.
+
+Listen trugen `margin: 0`, weil den Abstand vorher der `gap` machte; ohne ihn bringen sie
+ihn selbst mit. Die Maße stehen in den **bestehenden** `h2`/`h3`-Regeln statt in neuen
+`> h2`-Regeln daneben – gleiche Spezifität, und die späteren gewinnen. Beim ersten Anlauf
+ist genau das passiert: Die Abschnittsabstände waren gemessen **0 px**.
+
+**Was sich sichtbar ändert:** Jede Unterlage in jedem Repo wird kompakter, und
+Überschriften stehen bei ihrem Text. Das ist die deutlichste Änderung dieser Reihe.
+
+**Nicht übernommen** wurde aus der Meldung die dortige Überschreibung von
+`--paragraph-spacing` (20px → 1.5rem). Das ist ein Token des ATVANTAGE-Fundaments und
+speist **jeden** Absatz der Site, nicht nur die Guide-Spalte – eine eigene Entscheidung,
+die nicht in diese gehört.
+
+### Einstufung
+
+**Minor.** Drei neue Tokens; kein Token entfernt oder umbenannt, keine Klasse, kein Pfad.
+Es ändern sich Werte mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung
+wie 2.6.0, 2.7.0, 2.9.0 und 2.12.0.
+
+---
+
 ## 2.14.0
 
 ### Die Wortmarke kann die Schulungsfarbe tragen
