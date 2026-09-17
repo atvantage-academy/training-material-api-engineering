@@ -44,13 +44,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>REST: Von einem System zu vielen · ATVANTAGE Academy</title><meta name="description" content="Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789570765">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789570765" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789570765" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789570765">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789622251">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789622251" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789622251" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789622251">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -63,9 +63,9 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/presentation.css?v=1789570765">
-  <script src="/training-material-api-engineering/theme/jekyll/presentation.js?v=1789570765" defer></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789570765"></head>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/presentation.css?v=1789622251">
+  <script src="/training-material-api-engineering/theme/jekyll/presentation.js?v=1789622251" defer></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789622251"></head>
 <body class="avd-academy-present" data-avd-academy-present data-avd-academy-present-title="REST: Von einem System zu vielen">
   <a class="avd-academy-skip-link" href="#avd-academy-deck">Zum Inhalt springen</a>
 
@@ -165,8 +165,8 @@
     <text x="1105" y="210" text-anchor="middle" font-size="22" font-weight="600" fill="currentColor">1 Team</text>
     <rect x="1000" y="254" width="210" height="66" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
     <text x="1105" y="294" text-anchor="middle" font-size="22" font-weight="600" fill="currentColor">1 Release</text>
-    <text x="1105" y="358" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger)">jede Änderung</text>
-    <text x="1105" y="380" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger)">betrifft alle</text>
+    <text x="1105" y="358" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger-ink)">jede Änderung</text>
+    <text x="1105" y="380" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger-ink)">betrifft alle</text>
   </g>
 </svg>
 <figcaption>Vierzig Entwickler, ein Kalender: Jedes Release ist ein Termin, auf den alle warten.</figcaption>
@@ -335,8 +335,8 @@
   <text x="299" y="232" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-accent)">Antwort</text>
   <rect x="30" y="300" width="540" height="96" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="1.5" />
   <text x="300" y="332" text-anchor="middle" font-size="17" fill="currentColor">Die Bestellung wartet auf die Antwort.</text>
-  <text x="300" y="360" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger)">Ist die Zahlung nicht erreichbar,</text>
-  <text x="300" y="382" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger)">scheitert auch die Bestellung.</text>
+  <text x="300" y="360" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger-ink)">Ist die Zahlung nicht erreichbar,</text>
+  <text x="300" y="382" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger-ink)">scheitert auch die Bestellung.</text>
 
   <line x1="612" y1="60" x2="612" y2="470" stroke="var(--avd-academy-color-border)" stroke-width="2" />
 
@@ -507,7 +507,7 @@ davon entfernt.</p>
   </g>
   <text x="620" y="232" text-anchor="middle" font-size="21" fill="currentColor">Alle dazwischen verstehen HTTP schon – <tspan font-weight="600">ohne dass jemand sie anpasst.</tspan></text>
   <rect x="200" y="268" width="840" height="104" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-danger)" stroke-width="2" />
-  <text x="620" y="304" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger)">Aber nur, wenn man die <tspan font-weight="700">Semantik</tspan> einhält.</text>
+  <text x="620" y="304" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger-ink)">Aber nur, wenn man die <tspan font-weight="700">Semantik</tspan> einhält.</text>
   <text x="620" y="334" text-anchor="middle" font-size="17" fill="currentColor">Die Syntax macht eine Nachricht <tspan font-style="italic">gültig</tspan>.</text>
   <text x="620" y="358" text-anchor="middle" font-size="17" fill="currentColor">Die Semantik entscheidet, ob sie das <tspan font-style="italic">Richtige</tspan> bedeutet.</text>
 </svg>
@@ -585,7 +585,7 @@ davon entfernt.</p>
   <!-- Was es NICHT gibt -->
   <g>
     <rect x="270" y="318" width="190" height="56" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-danger)" stroke-width="2" />
-    <text x="365" y="354" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger)">Session</text>
+    <text x="365" y="354" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger-ink)">Session</text>
     <line x1="274" y1="370" x2="456" y2="322" stroke="var(--avd-academy-color-danger)" stroke-width="4" stroke-linecap="round" />
   </g>
   <text x="365" y="400" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">keine Sitzung im Speicher</text>

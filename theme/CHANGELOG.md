@@ -15,6 +15,111 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.12.2
+
+### Drei tote Verweise – in jedem Schulungs-Repo, nicht hier
+
+Gefunden beim Aufnehmen der Verweisprüfung in die Pipeline eines Schulungs-Repos. Dort
+meldete `links.rb` drei Befunde, alle auf **einer** Seite: `/theme/CHANGELOG.html`.
+
+`theme/CHANGELOG.md` liegt im npm-Paket (bewusst – es wird mit ausgeliefert und dem
+Release beigelegt). Projekte laden das Paket **unterhalb ihrer Jekyll-Source** nach
+`theme/`, und Jekyll rendert jede `.md` darunter zu einer Seite. Drei Einträge in diesem
+CHANGELOG verwiesen relativ auf die Doku **dieses** Repos:
+
+```
+../docs/verwendung/einbindung.md#mehr-host
+../github-pages/#verweise-pruefen
+../docs/theme/mehrsprachigkeit.md
+```
+
+Im eigenen Repo zeigen die ins Ziel. In einem Schulungs-Repo gibt es weder `docs/` noch
+`github-pages/` – dort waren es drei tote Verweise, und zwar **in jedem** Repo, das das
+Paket bezieht.
+
+**Genau der blinde Fleck, vor dem der Kopf von `links.rb` selbst warnt:** Im eigenen
+Repo ist jeder Verweis heil, also entsteht der interessante Fall dort nicht. Diesmal war
+es kein fehlender Selbsttest – der Fall lässt sich im eigenen Repo gar nicht erzeugen,
+weil er erst durch das **Ausliefern** entsteht.
+
+**Behoben:** Die drei Verweise sind absolut auf dieses Repo umgestellt, wie es die
+übrigen Verweise im CHANGELOG ohnehin halten. `theme/README.md` ist gegengeprüft: Sein
+einziger relativer Verweis (`jekyll/starter/`) ist **paket**relativ und löst in einer
+Consumer-Site richtig auf.
+
+**Für Projekte:** Nach dem Update meldet die Verweisprüfung diese drei Befunde nicht
+mehr. Wer sie vorher schon in der Pipeline hatte, konnte sie nur mit `--ignore /theme/`
+umgehen – was weiterhin sinnvoll ist, denn die Seiten des Themes gehören nicht dem Repo,
+das sie ausliefert.
+
+### Einstufung
+
+**Patch.** Drei Verweise in einer Doku-Datei. Kein Token, keine Klasse, kein Pfad, kein
+Verhalten ändert sich.
+
+---
+
+## 2.12.1
+
+### Die Kontrastprüfung erfand Befunde, wo eine Fläche durchscheinend war
+
+Aufgefallen beim ersten Einsatz in einem **fremden** Repo. Dort meldete
+`theme/jekyll/contrast.rb` sechs Gruppen mit Werten um 1,07:1 – Text auf einer Fläche
+`#6B6B6B`. Diese Fläche gibt es dort gar nicht: Die Regel lautet
+`background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent)`,
+und `#EDEDED` bei 45 % **über Schwarz gemessen** ergibt genau `#6B6B6B`.
+
+**Zwei Fehler, einer hinter dem anderen.**
+
+1. **Die Deckkraft wurde geraten statt gemessen.** Die Sonde las den Alpha-Wert per
+   regulärem Ausdruck aus `rgba(…)`. Chrome gibt für `color-mix(…, transparent)` aber
+   `color(srgb r g b / 0.45)` zurück – der Ausdruck griff nicht, die Fläche galt als
+   deckend und wurde über dem schwarzen Canvas-Grund gemessen. Jetzt wird die Farbe
+   über **zwei** Gründe gemessen, schwarz und weiß: Stimmen beide überein, ist sie
+   deckend; weichen sie ab, ist sie durchscheinend. Das ist unabhängig von der
+   Schreibweise.
+
+2. **Durchscheinende Schichten wurden übersprungen statt aufgetragen.** Die Sonde
+   griff zum ersten deckenden Vorfahren durch. Das ist eine Näherung, und sie ist
+   falsch: Eine helle 45-%-Tönung über dunklem Grund ergibt eine mitteldunkle Fläche,
+   und genau darauf steht der Text. Jetzt wird der deckende Grund gemalt und die
+   durchscheinenden Schichten von außen nach innen darübergelegt – so, wie es der
+   Browser tut.
+
+**Warum das mehr ist als ein Rechenfehler.** Ein Prüfer, der verlässlich Fehlalarme
+liefert, wird weggeklickt und schützt dann gar nichts mehr. Genau mit dieser Begründung
+steht die Prüfung nicht in `make check`; ein Werkzeug, das beim ersten Einsatz in einem
+fremden Repo sechs Gruppen erfindet, hätte sie bestätigt.
+
+**Der Selbsttest deckt den Fall jetzt ab** – eine durchscheinende Fläche über dem
+Seitengrund, die in **beiden** Schemata trägt und deshalb **kein** Befund sein darf.
+
+### Zwei echte Befunde, die der korrigierte Prüfer sofort fand
+
+In der Simulations-Vorlage standen zwei weitere fest weiße Flächen – als
+`rgba(255, 255, 255, …)` geschrieben und deshalb von der `#fff`-Suche in 2.9.0 nicht
+erfasst:
+
+| Regel | Dark-Theme, vorher |
+| ----- | ------------------ |
+| `.stage-info` (`rgba(255,255,255,0.94)`) | **1,05:1** |
+| `.vgrid .cell` (`rgba(255,255,255,0.6)`) | **2,01:1** |
+
+Beide nehmen jetzt `color-mix(in srgb, var(--ci-bg) …%, transparent)` – dieselbe
+Deckkraft, aber theme-fähig. `.voverlay` bleibt unverändert: feste dunkle Fläche mit
+fester weißer Schrift, in beiden Schemata richtig.
+
+Danach meldet der Prüfer im eigenen Repo wieder **19 Gruppen**, und alle 19 sind die
+offene Markenfrage.
+
+### Einstufung
+
+**Patch.** Eine Korrektur an einer Prüfung, die Fehlalarme lieferte, plus zwei
+Korrekturen an einer Vorlage, die nicht im npm-Paket liegt. Kein Token, keine Klasse,
+kein Pfad ändert sich; für Autoren gibt es nichts Neues zu nutzen.
+
+---
+
 ## 2.12.0
 
 ### Der Alarmton trug als Schrift nicht – gefunden vom eigenen neuen Werkzeug
@@ -707,7 +812,7 @@ unter mehreren Hosts ausgeliefert – lokal, im Container, in der Cloud, alles a
 Image –, kann der Build die Adresse gar nicht kennen; `url` ist dort die falsche Antwort.
 Die Doku benennt den Fall jetzt und beschreibt das Muster dafür (Platzhalter zur Bauzeit,
 den der ausliefernde Dienst je Anfrage ersetzt):
-[Einbindung → Eine Site unter mehreren Adressen](../docs/verwendung/einbindung.md#mehr-host).
+[Einbindung → Eine Site unter mehreren Adressen](https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/verwendung/einbindung.md).
 
 ## 2.5.4
 
@@ -784,7 +889,7 @@ Blindheit hat 2.5.1 grün durchlaufen lassen.
 **Für Konsumenten:** Beide Workflow-Vorlagen (`github-pages/deploy.example.yml`,
 `theme/jekyll/starter/pages.yml`, Vorlagenversion **10**) rufen die Prüfung nach dem
 Build auf. Wer eine ältere Kopie hat, zieht den Schritt nach – nötig ist er nicht.
-Doku: [GitHub Pages → Tote Verweise finden](../github-pages/#verweise-pruefen).
+Doku: [GitHub Pages → Tote Verweise finden](https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/github-pages/index.md).
 
 ### Behoben: die automatische Brotkrume verlinkte Ordner, die es nicht gibt
 
@@ -1046,7 +1151,7 @@ Screenshots das müssen.
 
 Neu: `theme/jekyll/_includes/avd-i18n.html` (Sprache, Sprachfassungen, Wörterbuch),
 `theme/jekyll/_includes/avd-lang-value.html` (Sprachkarten auflösen), die Klasse
-`avd-academy-tool--lang`. Doku: [Mehrsprachigkeit](../docs/theme/mehrsprachigkeit.md).
+`avd-academy-tool--lang`. Doku: [Mehrsprachigkeit](https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/theme/mehrsprachigkeit.md).
 
 ---
 

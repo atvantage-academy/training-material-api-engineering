@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Änderungen am ATVANTAGE Academy Theme · ATVANTAGE Academy</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789570765">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789570765" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789570765" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789570765">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789622251">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789622251" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789622251" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789622251">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789570765">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789570765"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789622251">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789622251"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -146,6 +146,129 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2122">2.12.2</h2>
+
+<h3 id="drei-tote-verweise--in-jedem-schulungs-repo-nicht-hier">Drei tote Verweise – in jedem Schulungs-Repo, nicht hier</h3>
+
+<p>Gefunden beim Aufnehmen der Verweisprüfung in die Pipeline eines Schulungs-Repos. Dort
+meldete <code>links.rb</code> drei Befunde, alle auf <strong>einer</strong> Seite: <code>/theme/CHANGELOG.html</code>.</p>
+
+<p><code>theme/CHANGELOG.md</code> liegt im npm-Paket (bewusst – es wird mit ausgeliefert und dem
+Release beigelegt). Projekte laden das Paket <strong>unterhalb ihrer Jekyll-Source</strong> nach
+<code>theme/</code>, und Jekyll rendert jede <code>.md</code> darunter zu einer Seite. Drei Einträge in diesem
+CHANGELOG verwiesen relativ auf die Doku <strong>dieses</strong> Repos:</p>
+
+<pre><code>../docs/verwendung/einbindung.md#mehr-host
+../github-pages/#verweise-pruefen
+../docs/theme/mehrsprachigkeit.md
+</code></pre>
+
+<p>Im eigenen Repo zeigen die ins Ziel. In einem Schulungs-Repo gibt es weder <code>docs/</code> noch
+<code>github-pages/</code> – dort waren es drei tote Verweise, und zwar <strong>in jedem</strong> Repo, das das
+Paket bezieht.</p>
+
+<p><strong>Genau der blinde Fleck, vor dem der Kopf von <code>links.rb</code> selbst warnt:</strong> Im eigenen
+Repo ist jeder Verweis heil, also entsteht der interessante Fall dort nicht. Diesmal war
+es kein fehlender Selbsttest – der Fall lässt sich im eigenen Repo gar nicht erzeugen,
+weil er erst durch das <strong>Ausliefern</strong> entsteht.</p>
+
+<p><strong>Behoben:</strong> Die drei Verweise sind absolut auf dieses Repo umgestellt, wie es die
+übrigen Verweise im CHANGELOG ohnehin halten. <code>theme/README.md</code> ist gegengeprüft: Sein
+einziger relativer Verweis (<code>jekyll/starter/</code>) ist <strong>paket</strong>relativ und löst in einer
+Consumer-Site richtig auf.</p>
+
+<p><strong>Für Projekte:</strong> Nach dem Update meldet die Verweisprüfung diese drei Befunde nicht
+mehr. Wer sie vorher schon in der Pipeline hatte, konnte sie nur mit <code>--ignore /theme/</code>
+umgehen – was weiterhin sinnvoll ist, denn die Seiten des Themes gehören nicht dem Repo,
+das sie ausliefert.</p>
+
+<h3 id="einstufung">Einstufung</h3>
+
+<p><strong>Patch.</strong> Drei Verweise in einer Doku-Datei. Kein Token, keine Klasse, kein Pfad, kein
+Verhalten ändert sich.</p>
+
+<hr />
+
+<h2 id="2121">2.12.1</h2>
+
+<h3 id="die-kontrastprüfung-erfand-befunde-wo-eine-fläche-durchscheinend-war">Die Kontrastprüfung erfand Befunde, wo eine Fläche durchscheinend war</h3>
+
+<p>Aufgefallen beim ersten Einsatz in einem <strong>fremden</strong> Repo. Dort meldete
+<code>theme/jekyll/contrast.rb</code> sechs Gruppen mit Werten um 1,07:1 – Text auf einer Fläche
+<code>#6B6B6B</code>. Diese Fläche gibt es dort gar nicht: Die Regel lautet
+<code>background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent)</code>,
+und <code>#EDEDED</code> bei 45 % <strong>über Schwarz gemessen</strong> ergibt genau <code>#6B6B6B</code>.</p>
+
+<p><strong>Zwei Fehler, einer hinter dem anderen.</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Die Deckkraft wurde geraten statt gemessen.</strong> Die Sonde las den Alpha-Wert per
+regulärem Ausdruck aus <code>rgba(…)</code>. Chrome gibt für <code>color-mix(…, transparent)</code> aber
+<code>color(srgb r g b / 0.45)</code> zurück – der Ausdruck griff nicht, die Fläche galt als
+deckend und wurde über dem schwarzen Canvas-Grund gemessen. Jetzt wird die Farbe
+über <strong>zwei</strong> Gründe gemessen, schwarz und weiß: Stimmen beide überein, ist sie
+deckend; weichen sie ab, ist sie durchscheinend. Das ist unabhängig von der
+Schreibweise.</p>
+  </li>
+  <li>
+    <p><strong>Durchscheinende Schichten wurden übersprungen statt aufgetragen.</strong> Die Sonde
+griff zum ersten deckenden Vorfahren durch. Das ist eine Näherung, und sie ist
+falsch: Eine helle 45-%-Tönung über dunklem Grund ergibt eine mitteldunkle Fläche,
+und genau darauf steht der Text. Jetzt wird der deckende Grund gemalt und die
+durchscheinenden Schichten von außen nach innen darübergelegt – so, wie es der
+Browser tut.</p>
+  </li>
+</ol>
+
+<p><strong>Warum das mehr ist als ein Rechenfehler.</strong> Ein Prüfer, der verlässlich Fehlalarme
+liefert, wird weggeklickt und schützt dann gar nichts mehr. Genau mit dieser Begründung
+steht die Prüfung nicht in <code>make check</code>; ein Werkzeug, das beim ersten Einsatz in einem
+fremden Repo sechs Gruppen erfindet, hätte sie bestätigt.</p>
+
+<p><strong>Der Selbsttest deckt den Fall jetzt ab</strong> – eine durchscheinende Fläche über dem
+Seitengrund, die in <strong>beiden</strong> Schemata trägt und deshalb <strong>kein</strong> Befund sein darf.</p>
+
+<h3 id="zwei-echte-befunde-die-der-korrigierte-prüfer-sofort-fand">Zwei echte Befunde, die der korrigierte Prüfer sofort fand</h3>
+
+<p>In der Simulations-Vorlage standen zwei weitere fest weiße Flächen – als
+<code>rgba(255, 255, 255, …)</code> geschrieben und deshalb von der <code>#fff</code>-Suche in 2.9.0 nicht
+erfasst:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Regel</th>
+      <th>Dark-Theme, vorher</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>.stage-info</code> (<code>rgba(255,255,255,0.94)</code>)</td>
+      <td><strong>1,05:1</strong></td>
+    </tr>
+    <tr>
+      <td><code>.vgrid .cell</code> (<code>rgba(255,255,255,0.6)</code>)</td>
+      <td><strong>2,01:1</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Beide nehmen jetzt <code>color-mix(in srgb, var(--ci-bg) …%, transparent)</code> – dieselbe
+Deckkraft, aber theme-fähig. <code>.voverlay</code> bleibt unverändert: feste dunkle Fläche mit
+fester weißer Schrift, in beiden Schemata richtig.</p>
+
+<p>Danach meldet der Prüfer im eigenen Repo wieder <strong>19 Gruppen</strong>, und alle 19 sind die
+offene Markenfrage.</p>
+
+<h3 id="einstufung-1">Einstufung</h3>
+
+<p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Fehlalarme lieferte, plus zwei
+Korrekturen an einer Vorlage, die nicht im npm-Paket liegt. Kein Token, keine Klasse,
+kein Pfad ändert sich; für Autoren gibt es nichts Neues zu nutzen.</p>
 
 <hr />
 
@@ -213,7 +336,7 @@ danach suchte.</p>
 <p>Nach der Korrektur meldet es 19 statt 22 Gruppen. Die verbleibenden 19 sind ausnahmslos
 die offene Markenfrage – der Akzent des Fundaments als Schrift auf hellen Flächen.</p>
 
-<h3 id="einstufung">Einstufung</h3>
+<h3 id="einstufung-2">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; ein Farbwert mit
 sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0, 2.7.0 und 2.9.0.</p>
@@ -312,7 +435,7 @@ Gegenproben, die ein vertauschtes oder verschlucktes Farbschema auffliegen lasse
 <p><strong>Laufzeit</strong> rund anderthalb Minuten für 70 Seiten × 2 Schemata mit acht parallelen
 Browsern (<code>--jobs</code>).</p>
 
-<h3 id="einstufung-1">Einstufung</h3>
+<h3 id="einstufung-3">Einstufung</h3>
 
 <p><strong>Minor.</strong> Eine neue Datei im Paket, rein ergänzend. Kein Token, keine Klasse, kein
 Pfad, kein Front-Matter-Feld ändert sich; nichts Bestehendes verhält sich anders, und
@@ -403,7 +526,7 @@ liegt – in der Kopiervorlage <code>github-pages/deploy.example.yml</code>, die
 <p>Der Selbsttest deckt die neuen Fälle ab: vier gültige Laufzeit-Anker, die <strong>kein</strong>
 Befund sein dürfen, und zwei ungültige, die einer sein müssen.</p>
 
-<h3 id="einstufung-2">Einstufung</h3>
+<h3 id="einstufung-4">Einstufung</h3>
 
 <p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Fehlalarme lieferte. Kein Token, keine
 Klasse, kein Pfad, kein Front-Matter-Feld ändert sich; für Autoren gibt es nichts Neues
@@ -561,7 +684,7 @@ Dark-Wert war nie betroffen (6,88:1) und bleibt.</p>
 <p>Anders als die beiden anderen Befunde kann ein Projekt diesen weder auslösen noch
 vermeiden.</p>
 
-<h3 id="einstufung-3">Einstufung</h3>
+<h3 id="einstufung-5">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; die neuen
 <code>-ink</code>-Tokens sind rein ergänzend, die geänderten Werte sind sichtbar, verlangen aber
@@ -649,7 +772,7 @@ hängt an ihm, nicht an der Überschrift – die Zuordnung bleibt also sichtbar.
 gedämpfter als bisher. Das ist eine sichtbare Änderung am Ergebnis bestehender Simulationen –
 deshalb <strong>Minor</strong>, nicht Patch. Ungetönte Tafeln bleiben unverändert.</p>
 
-<h3 id="einstufung-4">Einstufung</h3>
+<h3 id="einstufung-6">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; es ändert sich ein
 Farbwert mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0 und
@@ -722,7 +845,7 @@ color: color-mix(in srgb, var(--ci-accent) 12%, #fff);
 <code>simulation-erstellen</code>, ab Plugin 2.5.2) – aber auch das erneuert nur die Vorlage, nicht
 eine bereits abgeleitete Datei im Schulungs-Repo.</p>
 
-<h3 id="einstufung-5">Einstufung</h3>
+<h3 id="einstufung-7">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt; es ändert sich ein Wert, und zwar nur für
 Projekte, die den Akzent überschreiben. Im Auslieferungszustand ist das Ergebnis identisch.</p>
@@ -840,7 +963,7 @@ das Skript <strong>eine Variable je Zeile</strong> liest und <code>--avd-academy
 Dark-Block werden sie jetzt gefunden. Das Artefakt ist nachgezogen; damit sind diese
 Namen ab sofort auch gegen stilles Wegfallen geschützt.</p>
 
-<h3 id="einstufung-6">Einstufung</h3>
+<h3 id="einstufung-8">Einstufung</h3>
 
 <p><strong>Minor.</strong> Keines der Major-Kriterien greift: kein Token entfernt, keines umbenannt, kein
 Pfad und kein Front-Matter-Feld geändert. Es ändern sich <strong>Werte</strong> – sichtbar, aber ohne
@@ -988,7 +1111,7 @@ unter mehreren Hosts ausgeliefert – lokal, im Container, in der Cloud, alles a
 Image –, kann der Build die Adresse gar nicht kennen; <code>url</code> ist dort die falsche Antwort.
 Die Doku benennt den Fall jetzt und beschreibt das Muster dafür (Platzhalter zur Bauzeit,
 den der ausliefernde Dienst je Anfrage ersetzt):
-<a href="../docs/verwendung/einbindung.md#mehr-host">Einbindung → Eine Site unter mehreren Adressen</a>.</p>
+<a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/verwendung/einbindung.md">Einbindung → Eine Site unter mehreren Adressen</a>.</p>
 
 <h2 id="254">2.5.4</h2>
 
@@ -1066,7 +1189,7 @@ Blindheit hat 2.5.1 grün durchlaufen lassen.</p>
 <p><strong>Für Konsumenten:</strong> Beide Workflow-Vorlagen (<code>github-pages/deploy.example.yml</code>,
 <code>theme/jekyll/starter/pages.yml</code>, Vorlagenversion <strong>10</strong>) rufen die Prüfung nach dem
 Build auf. Wer eine ältere Kopie hat, zieht den Schritt nach – nötig ist er nicht.
-Doku: <a href="../github-pages/#verweise-pruefen">GitHub Pages → Tote Verweise finden</a>.</p>
+Doku: <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/github-pages/index.md">GitHub Pages → Tote Verweise finden</a>.</p>
 
 <h3 id="behoben-die-automatische-brotkrume-verlinkte-ordner-die-es-nicht-gibt">Behoben: die automatische Brotkrume verlinkte Ordner, die es nicht gibt</h3>
 
@@ -1327,7 +1450,7 @@ Screenshots das müssen.</p>
 
 <p>Neu: <code>theme/jekyll/_includes/avd-i18n.html</code> (Sprache, Sprachfassungen, Wörterbuch),
 <code>theme/jekyll/_includes/avd-lang-value.html</code> (Sprachkarten auflösen), die Klasse
-<code>avd-academy-tool--lang</code>. Doku: <a href="../docs/theme/mehrsprachigkeit.md">Mehrsprachigkeit</a>.</p>
+<code>avd-academy-tool--lang</code>. Doku: <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/docs/theme/mehrsprachigkeit.md">Mehrsprachigkeit</a>.</p>
 
 <hr />
 

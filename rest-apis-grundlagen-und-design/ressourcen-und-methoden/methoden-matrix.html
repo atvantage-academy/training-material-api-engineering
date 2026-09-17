@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Ressourcen und Methoden: welches Verb auf welche Ressource? · ATVANTAGE Academy</title><meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen."><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789570765">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789570765"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789570765">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789570765" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789570765" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789570765">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789622251">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789622251"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789622251">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789622251" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789622251" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789622251">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,8 +81,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789570765">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789570765"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789622251">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789622251"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -338,7 +338,7 @@ und tut es in der Praxis auch.</p>
 .mm__cell:not(.is-open) .mm__mark { color: var(--avd-academy-color-ink-muted); font-weight: var(--avd-academy-fw-normal, 400); }
 .mm__cell.is-open.t-ok .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
 .mm__cell.is-open.t-warn .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-warning) 72%, var(--avd-academy-color-ink)); }
-.mm__cell.is-open.t-no .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
+.mm__cell.is-open.t-no .mm__mark { color: var(--avd-academy-color-danger-ink); }
 .mm__cell.is-open.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 8%, transparent); }
 .mm__cell.is-open.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 10%, transparent); }
 .mm__cell.is-open.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 8%, transparent); }
@@ -357,7 +357,7 @@ und tut es in der Praxis auch.</p>
 .mm__verdict { display: inline-block; font-weight: var(--avd-academy-fw-bold, 700); padding: .1em .6em; border-radius: var(--avd-academy-radius-sm, 4px); margin-bottom: .5rem; }
 .mm__verdict.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 18%, transparent); color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
 .mm__verdict.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 20%, transparent); color: var(--avd-academy-color-warning); }
-.mm__verdict.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 18%, transparent); color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
+.mm__verdict.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 18%, transparent); color: var(--avd-academy-color-danger-ink); }
 .mm__ex { font-family: var(--avd-academy-font-mono, monospace); font-size: .88em; background: var(--avd-academy-code-bg, rgba(127,127,127,.12)); padding: .5rem .7rem; border-radius: var(--avd-academy-radius-sm, 4px); display: block; white-space: pre-wrap; }
 
 /* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
@@ -380,7 +380,7 @@ und tut es in der Praxis auch.</p>
 .mm__props--wort tbody th small { display: block; font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); font-size: .85em; margin-top: .15rem; }
 .mm__props--wort tbody th small code { font-family: var(--avd-academy-font-mono, monospace); }
 .mm__yes { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
-.mm__no { color: color-mix(in srgb, var(--avd-academy-color-danger) 72%, var(--avd-academy-color-ink)); }
+.mm__no { color: var(--avd-academy-color-danger-ink); }
 .mm__maybe { color: color-mix(in srgb, var(--avd-academy-color-warning) 48%, var(--avd-academy-color-ink)); }
 .mm__foot { color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); margin-top: var(--avd-academy-space-3, .75rem); }
 

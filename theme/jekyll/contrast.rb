@@ -165,32 +165,60 @@ SONDE = <<~'JS'
     var ctx = cv.getContext("2d", { willReadFrequently: true });
     /* Ueber einen Canvas-Pixel, weil getComputedStyle je nach Farbraum
        `color(srgb …)` oder `oklch(…)` zurueckgibt - beides ist keine Zahl,
-       die man direkt rechnen kann. */
+       die man direkt rechnen kann.
+
+       Gemessen wird ueber ZWEI Gruende, schwarz und weiss. Stimmen beide
+       Ergebnisse ueberein, ist die Farbe deckend; weichen sie ab, ist sie
+       durchscheinend. Das ersetzt die fruehere Alpha-Erkennung per Regex auf
+       `rgba(…)`: Die griff bei `color-mix(… , transparent)` nicht, weil Chrome
+       daraus `color(srgb r g b / 0.45)` macht. Eine 45 % deckende Flaeche galt
+       damit als deckend und wurde ueber SCHWARZ gemessen - aus #EDEDED wurde
+       #6B6B6B, und die Prueferei meldete reihenweise Text, der in Wahrheit
+       traegt. Ein Prueferi mit Fehlalarmen wird weggeklickt; deshalb ist das
+       hier kein Randfall, sondern der Kern. */
     function px(css) {
       ctx.fillStyle = "#000"; ctx.fillRect(0, 0, 1, 1);
       ctx.fillStyle = css; ctx.fillRect(0, 0, 1, 1);
-      var d = ctx.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]];
+      var b = ctx.getImageData(0, 0, 1, 1).data;
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 1, 1);
+      ctx.fillStyle = css; ctx.fillRect(0, 0, 1, 1);
+      var w = ctx.getImageData(0, 0, 1, 1).data;
+      var deckend = Math.abs(b[0] - w[0]) < 2 && Math.abs(b[1] - w[1]) < 2 && Math.abs(b[2] - w[2]) < 2;
+      return { farbe: [b[0], b[1], b[2]], deckend: deckend };
     }
     function lum(c) {
       var f = function (v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
       return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
     }
     function ratio(a, b) { var A = lum(a), B = lum(b); return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05); }
-    function alpha(css) { var m = String(css).match(/rgba?\([^)]*?,\s*([\d.]+)\s*\)/); return m ? parseFloat(m[1]) : 1; }
     var hex = function (c) { return "#" + c.map(function (v) { return ("0" + v.toString(16)).slice(-2); }).join("").toUpperCase(); };
 
     /* Die wirksame Flaeche: nach oben laufen, bis eine DECKENDE Hintergrundfarbe
        kommt. Liegt unterwegs ein Bild oder Verlauf, ist die Farbe kein einzelner
        Wert mehr - dann wird nicht geraten, sondern uebersprungen und gezaehlt. */
+    /* Die wirksame Flaeche ist das, was der Browser tatsaechlich zeigt: der
+       erste DECKENDE Grund im Baum, und darauf alle durchscheinenden Schichten
+       darueber - von aussen nach innen aufgetragen. Einfach zum deckenden
+       Vorfahren durchzugreifen waere falsch: Eine helle 45-%-Tintung ueber
+       dunklem Grund ergibt eine mitteldunkle Flaeche, und genau darauf steht
+       der Text. */
     function flaeche(el) {
-      var n = el, bild = false;
+      var n = el, bild = false, grund = [255, 255, 255], schichten = [];
       while (n && n.nodeType === 1) {
         var cs = getComputedStyle(n);
         if (cs.backgroundImage && cs.backgroundImage !== "none") bild = true;
-        if (alpha(cs.backgroundColor) >= 0.99) return { farbe: px(cs.backgroundColor), bild: bild };
+        var g = px(cs.backgroundColor);
+        if (g.deckend) { grund = g.farbe; break; }
+        schichten.push(cs.backgroundColor);
         n = n.parentElement;
       }
-      return { farbe: [255, 255, 255], bild: bild };
+      ctx.fillStyle = "rgb(" + grund[0] + "," + grund[1] + "," + grund[2] + ")";
+      ctx.fillRect(0, 0, 1, 1);
+      for (var i = schichten.length - 1; i >= 0; i--) {
+        ctx.fillStyle = schichten[i]; ctx.fillRect(0, 0, 1, 1);
+      }
+      var d = ctx.getImageData(0, 0, 1, 1).data;
+      return { farbe: [d[0], d[1], d[2]], bild: bild };
     }
 
     /* Die Signatur ist die CSS-HERKUNFT, nicht das Element: Aus einer Regel
@@ -221,14 +249,15 @@ SONDE = <<~'JS'
       if (parseFloat(cs.opacity) < 0.6) { uebersprungen.unsichtbar++; continue; }
       var r = el.getBoundingClientRect();
       if (r.width < 2 || r.height < 2) { uebersprungen.unsichtbar++; continue; }
-      if (alpha(cs.color) < 0.99) { uebersprungen.transparent++; continue; }
+      var vgm = px(cs.color);
+      if (!vgm.deckend) { uebersprungen.transparent++; continue; }
       var fs = parseFloat(cs.fontSize), fw = parseInt(cs.fontWeight, 10) || 400;
       if (!fs) { uebersprungen.unsichtbar++; continue; }
       var f = flaeche(el);
       if (f.bild) { uebersprungen.bild++; continue; }
       var gross = fs >= 24 || (fs >= 18.66 && fw >= 700);
       var noetig = gross ? 3.0 : 4.5;
-      var vg = px(cs.color);
+      var vg = vgm.farbe;
       var wert = ratio(vg, f.farbe);
       if (wert + 0.005 < noetig) {
         befunde.push({
@@ -522,6 +551,13 @@ SELBSTTEST_SEITE = <<~'HTML'
     .durchsichtig { background: #ffffff; color: rgba(17,17,17,0.5); }
     /* KEIN Befund: nicht gerendert. */
     .weg { display: none; color: #f4f4f4; background: #ffffff; }
+    /* KEIN Befund: eine DURCHSCHEINENDE Flaeche ist nicht die wirksame Flaeche -
+       wirksam ist das Weiss darunter. Solange die Deckkraft per Regex auf
+       `rgba(…)` geraten wurde, galt diese Mischung als deckend und wurde ueber
+       Schwarz gemessen; aus #ededed wurde #6B6B6B und der Text ein Fehlalarm.
+       Genau dieser Fall hat in einem Schulungs-Repo sechs Gruppen erfunden. */
+    .durchscheinend { background: color-mix(in oklab, #ededed 45%, transparent); }
+    :root[data-avd-academy-theme="dark"] .durchscheinend { background: color-mix(in oklab, #2a2a2a 45%, transparent); }
   </style></head><body>
     <p class="fest">feste Flaeche, kippende Schrift</p>
     <p class="nurhell">nur im Light-Theme zu schwach</p>
@@ -531,6 +567,7 @@ SELBSTTEST_SEITE = <<~'HTML'
     <p class="verlauf">ueber einem Verlauf</p>
     <p class="durchsichtig">halbdurchsichtig</p>
     <p class="weg">nicht gerendert</p>
+    <p class="durchscheinend">durchscheinende Flaeche ueber Weiss</p>
   </body></html>
 HTML
 
@@ -571,7 +608,7 @@ def selbsttest(browser, jobs, frist)
       fehler << '.fest wurde faelschlich auch im Light-Theme gemeldet.'
     end
 
-    %w[heil gross gedaempft verlauf durchsichtig weg].each do |k|
+    %w[heil gross gedaempft verlauf durchsichtig weg durchscheinend].each do |k|
       fehler << "„.#{k}“ ist faelschlich ein Befund (#{je[k]}x)." if je[k].to_i.positive?
     end
 
