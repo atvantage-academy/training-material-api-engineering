@@ -307,8 +307,14 @@ def sondenseiten_anlegen(site, arbeit, ignorieren)
         %(<html#{attr} data-avd-academy-theme="#{schema}">)
       end
       skript = "<script>#{SONDE}</script>"
-      inhalt = if inhalt.include?('</body>')
-                 inhalt.sub('</body>', "#{skript}</body>")
+      # Vor das LETZTE `</body>`, nicht vor das erste. Eine Seite darf `</body>`
+      # im Text fuehren - etwa ein HTML-Codebeispiel in einem JavaScript-String.
+      # Vor dem ersten eingefuegt landet die Sonde in diesem String, laeuft nie,
+      # und die Seite wird STILL uebersprungen. Gefunden an einer echten
+      # Visualisierung, gemeldet von der eigenen "Sonde ohne Antwort"-Warnung.
+      stelle = inhalt.rindex('</body>')
+      inhalt = if stelle
+                 inhalt[0...stelle] + skript + inhalt[stelle..]
                else
                  inhalt + skript
                end
@@ -568,6 +574,10 @@ SELBSTTEST_SEITE = <<~'HTML'
     <p class="durchsichtig">halbdurchsichtig</p>
     <p class="weg">nicht gerendert</p>
     <p class="durchscheinend">durchscheinende Flaeche ueber Weiss</p>
+    <!-- Eine Seite darf `</body>` im TEXT fuehren. Steht die Sonde vor dem ersten
+         statt vor dem letzten, landet sie in diesem String und laeuft nie - die
+         Seite waere dann still ungeprueft. -->
+    <script>var beispiel = "<html><body><h1>Hallo</h1></body></html>";</script>
   </body></html>
 HTML
 

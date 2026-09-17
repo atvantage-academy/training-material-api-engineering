@@ -15,6 +15,83 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.15.2
+
+### Die Kontrastprüfung übersprang Seiten still, die `</body>` im Text führen
+
+Die Sonde wurde vor das **erste** `</body>` gesetzt. Eine Seite darf das aber im Text
+führen – etwa ein HTML-Codebeispiel in einem JavaScript-String. Dort eingefügt landet die
+Sonde **innerhalb** des Strings, läuft nie, und die Seite wird **still** übergangen.
+
+Gefunden an einer echten Visualisierung eines Schulungs-Repos: zwei Seiten ohne Antwort
+bei sonst sauberem Lauf. Gemeldet hat es die eigene „Sonde ohne Antwort“-Warnung – ohne
+sie wäre die Seite als geprüft durchgegangen.
+
+Die Sonde steht jetzt vor dem **letzten** `</body>`. Der Selbsttest führt dafür eine Seite,
+die `</body>` in einem Skript-String enthält.
+
+### Richtigstellung zur Tabelle in 2.13.0
+
+Dort stand eine dritte Zeile `#7A3FB0` mit 2,52:1 im Dark-Theme, als wäre sie die Farbe
+eines dritten Schulungs-Repos. **Das war falsch.** Der Wert stammte aus einem
+Streuungstest über erfundene Farben und ist nie in einem Repo verwendet worden;
+tatsächlich nutzen **zwei** der drei Repos dieselbe Farbe `#0E7C66`.
+
+Die Aussage darüber bleibt richtig – jedes der drei Repos lag in einem der beiden Modi
+unter AA –, aber es sind zwei Farben und nicht drei. Die Tabelle ist korrigiert.
+
+### Einstufung
+
+**Patch.** Eine Korrektur an einer Prüfung, die Seiten still übersprang, plus eine
+Richtigstellung im CHANGELOG. Kein Token, keine Klasse, kein Pfad, kein Verhalten der
+ausgelieferten Seiten ändert sich.
+
+---
+
+## 2.15.1
+
+### Klarstellung: Fließtext-Links brauchen eine zweite Zeile
+
+Die Doku zu `--avd-academy-accent-base` (2.13.0) war **falsch**. Dort stand, eine Zeile
+genüge und „Akzent (Links, Hover, Icons, aktive Zustände)“ folge daraus.
+
+**Links folgen nicht.** Sie hängen nicht am Academy-Akzent, sondern am **Fundament**:
+`a { color: var(--color-link) }` in `theme/atvantage/tokens/base.css`, und das löst über
+`--color-orange` auf `--avd-orange` auf. Ein Repo, das nur `--avd-academy-accent-base`
+setzt, bekommt also **orange Links bei sonst durchgängiger Schulungsfarbe** – und weil
+beide Farben für sich stimmig aussehen, fällt das beim Durchblättern nicht auf.
+
+Aufgefallen beim Übernehmen in ein Schulungs-Repo: Die Kontrastprüfung meldete dort
+weiterhin `#FF5401` auf Kartenflächen, obwohl der Akzent nachweislich abgeleitet war.
+
+Richtig ist:
+
+```css
+:root {
+  --avd-academy-accent-base: #0198FF;
+  --avd-orange: var(--avd-academy-color-accent);
+}
+```
+
+Die zweite Zeile trägt **keine** eigene Farbe – sie hängt das Fundament an den bereits
+abgeleiteten Akzent. Von Hand gepflegt wird weiterhin genau ein Wert.
+
+**Warum das Theme es nicht selbst tut:** `--avd-orange` innerhalb der Academy-Schicht auf
+einen Ausdruck zu setzen, der wieder `--avd-orange` als Rückfall liest, wäre ein Zyklus –
+CSS erklärt dann beide Eigenschaften für ungültig. Ein Schnappschuss in ein Zwischentoken
+hilft nicht, er erzeugt denselben Zyklus. Die Zeile gehört deshalb dorthin, wo die
+Entscheidung fällt: in die Customization des Repos.
+
+Nach der Korrektur meldet die Kontrastprüfung im betroffenen Repo über beide Schemata
+**keine Paarung unter der Schwelle** – vorher lag dessen Akzent auf Weiß bei 3,03:1.
+
+### Einstufung
+
+**Patch.** Nur Doku und CHANGELOG; kein Token, keine Klasse, kein Verhalten ändert sich.
+Die Korrektur beschreibt, was seit 2.13.0 gilt.
+
+---
+
 ## 2.15.0
 
 ### Beide Inhaltsspalten haben jetzt denselben Rhythmus
@@ -140,7 +217,14 @@ lag **jede** in einem der beiden Modi unter AA, ohne dass es irgendjemand wusste
 | ----- | ---------- | --------- | ----------------- | ---------------- |
 | `#0198FF` | **3,03:1** | 5,52:1 | **5,38:1** | **7,54:1** |
 | `#0E7C66` | 5,13:1 | **3,26:1** | **6,10:1** | **7,33:1** |
-| `#7A3FB0` | 6,63:1 | **2,52:1** | **8,06:1** | **4,92:1** |
+
+<!-- Korrektur (2.15.2): Hier stand ursprünglich eine dritte Zeile `#7A3FB0` mit
+     2,52:1 im Dark-Theme, als wäre sie die Farbe eines dritten Repos. Das war
+     falsch: Der Wert stammte aus einem Streuungstest über erfundene Farben und
+     ist nie in einem Repo verwendet worden. Tatsächlich nutzen zwei der drei
+     Repos dieselbe Farbe `#0E7C66`. Die Aussage darüber bleibt richtig – jedes
+     der drei Repos lag in einem der beiden Modi unter AA –, aber es sind zwei
+     Farben und nicht drei. -->
 
 Neu: `--avd-academy-accent-base`. Ein Repo setzt **eine Zeile** –
 

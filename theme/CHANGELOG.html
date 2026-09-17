@@ -61,13 +61,13 @@
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Änderungen am ATVANTAGE Academy Theme · ATVANTAGE Academy</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789642077"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789642077">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789642077">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789642077">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789642077"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789642077">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789642077" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789642077" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789642077">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789644533"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789644533">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789644533">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789644533">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789644533"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789644533">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789644533" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789644533" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789644533">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   Promise.all([import(_hlbase + "core.min.js"), import(_hlbase + "java.min.js")])
@@ -81,12 +81,13 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789642077">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789642077"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789644533">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789644533"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
-  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite"><img class="avd-academy-header__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"></a>
+  <header class="avd-academy-header"><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite"><img class="avd-academy-header__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-header__logo-mask" role="img" aria-label="ATVANTAGE Academy"
+          style="--avd-academy-logo-src: url('/training-material-api-engineering/assets/logo-schulung.svg'); --avd-academy-logo-ratio: 300 / 34;"></span></a>
   <button class="avd-academy-btn avd-academy-btn--ghost avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
           aria-label="Navigation umschalten" aria-expanded="false">☰</button>
   <nav class="avd-academy-header__nav" id="avd-academy-main-nav">
@@ -142,6 +143,82 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2152">2.15.2</h2>
+
+<h3 id="die-kontrastprüfung-übersprang-seiten-still-die-body-im-text-führen">Die Kontrastprüfung übersprang Seiten still, die <code>&lt;/body&gt;</code> im Text führen</h3>
+
+<p>Die Sonde wurde vor das <strong>erste</strong> <code>&lt;/body&gt;</code> gesetzt. Eine Seite darf das aber im Text
+führen – etwa ein HTML-Codebeispiel in einem JavaScript-String. Dort eingefügt landet die
+Sonde <strong>innerhalb</strong> des Strings, läuft nie, und die Seite wird <strong>still</strong> übergangen.</p>
+
+<p>Gefunden an einer echten Visualisierung eines Schulungs-Repos: zwei Seiten ohne Antwort
+bei sonst sauberem Lauf. Gemeldet hat es die eigene „Sonde ohne Antwort“-Warnung – ohne
+sie wäre die Seite als geprüft durchgegangen.</p>
+
+<p>Die Sonde steht jetzt vor dem <strong>letzten</strong> <code>&lt;/body&gt;</code>. Der Selbsttest führt dafür eine Seite,
+die <code>&lt;/body&gt;</code> in einem Skript-String enthält.</p>
+
+<h3 id="richtigstellung-zur-tabelle-in-2130">Richtigstellung zur Tabelle in 2.13.0</h3>
+
+<p>Dort stand eine dritte Zeile <code>#7A3FB0</code> mit 2,52:1 im Dark-Theme, als wäre sie die Farbe
+eines dritten Schulungs-Repos. <strong>Das war falsch.</strong> Der Wert stammte aus einem
+Streuungstest über erfundene Farben und ist nie in einem Repo verwendet worden;
+tatsächlich nutzen <strong>zwei</strong> der drei Repos dieselbe Farbe <code>#0E7C66</code>.</p>
+
+<p>Die Aussage darüber bleibt richtig – jedes der drei Repos lag in einem der beiden Modi
+unter AA –, aber es sind zwei Farben und nicht drei. Die Tabelle ist korrigiert.</p>
+
+<h3 id="einstufung">Einstufung</h3>
+
+<p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Seiten still übersprang, plus eine
+Richtigstellung im CHANGELOG. Kein Token, keine Klasse, kein Pfad, kein Verhalten der
+ausgelieferten Seiten ändert sich.</p>
+
+<hr />
+
+<h2 id="2151">2.15.1</h2>
+
+<h3 id="klarstellung-fließtext-links-brauchen-eine-zweite-zeile">Klarstellung: Fließtext-Links brauchen eine zweite Zeile</h3>
+
+<p>Die Doku zu <code>--avd-academy-accent-base</code> (2.13.0) war <strong>falsch</strong>. Dort stand, eine Zeile
+genüge und „Akzent (Links, Hover, Icons, aktive Zustände)“ folge daraus.</p>
+
+<p><strong>Links folgen nicht.</strong> Sie hängen nicht am Academy-Akzent, sondern am <strong>Fundament</strong>:
+<code>a { color: var(--color-link) }</code> in <code>theme/atvantage/tokens/base.css</code>, und das löst über
+<code>--color-orange</code> auf <code>--avd-orange</code> auf. Ein Repo, das nur <code>--avd-academy-accent-base</code>
+setzt, bekommt also <strong>orange Links bei sonst durchgängiger Schulungsfarbe</strong> – und weil
+beide Farben für sich stimmig aussehen, fällt das beim Durchblättern nicht auf.</p>
+
+<p>Aufgefallen beim Übernehmen in ein Schulungs-Repo: Die Kontrastprüfung meldete dort
+weiterhin <code>#FF5401</code> auf Kartenflächen, obwohl der Akzent nachweislich abgeleitet war.</p>
+
+<p>Richtig ist:</p>
+
+<pre><code class="language-css">:root {
+  --avd-academy-accent-base: #0198FF;
+  --avd-orange: var(--avd-academy-color-accent);
+}
+</code></pre>
+
+<p>Die zweite Zeile trägt <strong>keine</strong> eigene Farbe – sie hängt das Fundament an den bereits
+abgeleiteten Akzent. Von Hand gepflegt wird weiterhin genau ein Wert.</p>
+
+<p><strong>Warum das Theme es nicht selbst tut:</strong> <code>--avd-orange</code> innerhalb der Academy-Schicht auf
+einen Ausdruck zu setzen, der wieder <code>--avd-orange</code> als Rückfall liest, wäre ein Zyklus –
+CSS erklärt dann beide Eigenschaften für ungültig. Ein Schnappschuss in ein Zwischentoken
+hilft nicht, er erzeugt denselben Zyklus. Die Zeile gehört deshalb dorthin, wo die
+Entscheidung fällt: in die Customization des Repos.</p>
+
+<p>Nach der Korrektur meldet die Kontrastprüfung im betroffenen Repo über beide Schemata
+<strong>keine Paarung unter der Schwelle</strong> – vorher lag dessen Akzent auf Weiß bei 3,03:1.</p>
+
+<h3 id="einstufung-1">Einstufung</h3>
+
+<p><strong>Patch.</strong> Nur Doku und CHANGELOG; kein Token, keine Klasse, kein Verhalten ändert sich.
+Die Korrektur beschreibt, was seit 2.13.0 gilt.</p>
 
 <hr />
 
@@ -220,7 +297,7 @@ ist genau das passiert: Die Abschnittsabstände waren gemessen <strong>0 px</str
 speist <strong>jeden</strong> Absatz der Site, nicht nur die Guide-Spalte – eine eigene Entscheidung,
 die nicht in diese gehört.</p>
 
-<h3 id="einstufung">Einstufung</h3>
+<h3 id="einstufung-2">Einstufung</h3>
 
 <p><strong>Minor.</strong> Drei neue Tokens; kein Token entfernt oder umbenannt, keine Klasse, kein Pfad.
 Es ändern sich Werte mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung
@@ -269,7 +346,7 @@ muss das Verhältnis von aussen kommen. Es steht jetzt als Datum neben dem Logo-
 als Zahlenpaar in einer Style-Datei – aber <strong>ändert sich die <code>viewBox</code>, muss <code>logo_ratio</code>
 mit</strong>, sonst wird die Marke verzerrt.</p>
 
-<h3 id="einstufung-1">Einstufung</h3>
+<h3 id="einstufung-3">Einstufung</h3>
 
 <p><strong>Minor.</strong> Ein neues, optionales Feld und eine neue Klasse
 (<code>avd-academy-header__logo-mask</code>). Ohne <code>brand.logo_ratio</code> ändert sich nichts: Die
@@ -316,15 +393,16 @@ lag <strong>jede</strong> in einem der beiden Modi unter AA, ohne dass es irgend
       <td><strong>6,10:1</strong></td>
       <td><strong>7,33:1</strong></td>
     </tr>
-    <tr>
-      <td><code>#7A3FB0</code></td>
-      <td>6,63:1</td>
-      <td><strong>2,52:1</strong></td>
-      <td><strong>8,06:1</strong></td>
-      <td><strong>4,92:1</strong></td>
-    </tr>
   </tbody>
 </table>
+
+<!-- Korrektur (2.15.2): Hier stand ursprünglich eine dritte Zeile `#7A3FB0` mit
+     2,52:1 im Dark-Theme, als wäre sie die Farbe eines dritten Repos. Das war
+     falsch: Der Wert stammte aus einem Streuungstest über erfundene Farben und
+     ist nie in einem Repo verwendet worden. Tatsächlich nutzen zwei der drei
+     Repos dieselbe Farbe `#0E7C66`. Die Aussage darüber bleibt richtig – jedes
+     der drei Repos lag in einem der beiden Modi unter AA –, aber es sind zwei
+     Farben und nicht drei. -->
 
 <p>Neu: <code>--avd-academy-accent-base</code>. Ein Repo setzt <strong>eine Zeile</strong> –</p>
 
@@ -357,7 +435,7 @@ Mischung auch den Farbwinkel interpoliert und die Farbe Richtung Textfarbe zieht
 einer Engine die relative Farbsyntax, bleibt es per <code>@supports</code> bei der rohen Basisfarbe –
 dem Zustand, den die Repos heute ohnehin haben.</p>
 
-<h3 id="einstufung-2">Einstufung</h3>
+<h3 id="einstufung-4">Einstufung</h3>
 
 <p><strong>Minor.</strong> Zwei neue Tokens, rein ergänzend; kein bestehendes Repo ändert sein Aussehen,
 solange es <code>--avd-academy-accent-base</code> nicht setzt.</p>
@@ -400,7 +478,7 @@ mehr. Wer sie vorher schon in der Pipeline hatte, konnte sie nur mit <code>--ign
 umgehen – was weiterhin sinnvoll ist, denn die Seiten des Themes gehören nicht dem Repo,
 das sie ausliefert.</p>
 
-<h3 id="einstufung-3">Einstufung</h3>
+<h3 id="einstufung-5">Einstufung</h3>
 
 <p><strong>Patch.</strong> Drei Verweise in einer Doku-Datei. Kein Token, keine Klasse, kein Pfad, kein
 Verhalten ändert sich.</p>
@@ -479,7 +557,7 @@ fester weißer Schrift, in beiden Schemata richtig.</p>
 <p>Danach meldet der Prüfer im eigenen Repo wieder <strong>19 Gruppen</strong>, und alle 19 sind die
 offene Markenfrage.</p>
 
-<h3 id="einstufung-4">Einstufung</h3>
+<h3 id="einstufung-6">Einstufung</h3>
 
 <p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Fehlalarme lieferte, plus zwei
 Korrekturen an einer Vorlage, die nicht im npm-Paket liegt. Kein Token, keine Klasse,
@@ -551,7 +629,7 @@ danach suchte.</p>
 <p>Nach der Korrektur meldet es 19 statt 22 Gruppen. Die verbleibenden 19 sind ausnahmslos
 die offene Markenfrage – der Akzent des Fundaments als Schrift auf hellen Flächen.</p>
 
-<h3 id="einstufung-5">Einstufung</h3>
+<h3 id="einstufung-7">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; ein Farbwert mit
 sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0, 2.7.0 und 2.9.0.</p>
@@ -650,7 +728,7 @@ Gegenproben, die ein vertauschtes oder verschlucktes Farbschema auffliegen lasse
 <p><strong>Laufzeit</strong> rund anderthalb Minuten für 70 Seiten × 2 Schemata mit acht parallelen
 Browsern (<code>--jobs</code>).</p>
 
-<h3 id="einstufung-6">Einstufung</h3>
+<h3 id="einstufung-8">Einstufung</h3>
 
 <p><strong>Minor.</strong> Eine neue Datei im Paket, rein ergänzend. Kein Token, keine Klasse, kein
 Pfad, kein Front-Matter-Feld ändert sich; nichts Bestehendes verhält sich anders, und
@@ -741,7 +819,7 @@ liegt – in der Kopiervorlage <code>github-pages/deploy.example.yml</code>, die
 <p>Der Selbsttest deckt die neuen Fälle ab: vier gültige Laufzeit-Anker, die <strong>kein</strong>
 Befund sein dürfen, und zwei ungültige, die einer sein müssen.</p>
 
-<h3 id="einstufung-7">Einstufung</h3>
+<h3 id="einstufung-9">Einstufung</h3>
 
 <p><strong>Patch.</strong> Eine Korrektur an einer Prüfung, die Fehlalarme lieferte. Kein Token, keine
 Klasse, kein Pfad, kein Front-Matter-Feld ändert sich; für Autoren gibt es nichts Neues
@@ -899,7 +977,7 @@ Dark-Wert war nie betroffen (6,88:1) und bleibt.</p>
 <p>Anders als die beiden anderen Befunde kann ein Projekt diesen weder auslösen noch
 vermeiden.</p>
 
-<h3 id="einstufung-8">Einstufung</h3>
+<h3 id="einstufung-10">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; die neuen
 <code>-ink</code>-Tokens sind rein ergänzend, die geänderten Werte sind sichtbar, verlangen aber
@@ -987,7 +1065,7 @@ hängt an ihm, nicht an der Überschrift – die Zuordnung bleibt also sichtbar.
 gedämpfter als bisher. Das ist eine sichtbare Änderung am Ergebnis bestehender Simulationen –
 deshalb <strong>Minor</strong>, nicht Patch. Ungetönte Tafeln bleiben unverändert.</p>
 
-<h3 id="einstufung-9">Einstufung</h3>
+<h3 id="einstufung-11">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt, keine Klasse, kein Pfad; es ändert sich ein
 Farbwert mit sichtbarer Wirkung auf bestehende Seiten – dieselbe Einstufung wie 2.6.0 und
@@ -1060,7 +1138,7 @@ color: color-mix(in srgb, var(--ci-accent) 12%, #fff);
 <code>simulation-erstellen</code>, ab Plugin 2.5.2) – aber auch das erneuert nur die Vorlage, nicht
 eine bereits abgeleitete Datei im Schulungs-Repo.</p>
 
-<h3 id="einstufung-10">Einstufung</h3>
+<h3 id="einstufung-12">Einstufung</h3>
 
 <p><strong>Minor.</strong> Kein Token entfernt oder umbenannt; es ändert sich ein Wert, und zwar nur für
 Projekte, die den Akzent überschreiben. Im Auslieferungszustand ist das Ergebnis identisch.</p>
@@ -1178,7 +1256,7 @@ das Skript <strong>eine Variable je Zeile</strong> liest und <code>--avd-academy
 Dark-Block werden sie jetzt gefunden. Das Artefakt ist nachgezogen; damit sind diese
 Namen ab sofort auch gegen stilles Wegfallen geschützt.</p>
 
-<h3 id="einstufung-11">Einstufung</h3>
+<h3 id="einstufung-13">Einstufung</h3>
 
 <p><strong>Minor.</strong> Keines der Major-Kriterien greift: kein Token entfernt, keines umbenannt, kein
 Pfad und kein Front-Matter-Feld geändert. Es ändern sich <strong>Werte</strong> – sichtbar, aber ohne
