@@ -15,6 +15,115 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.14.0
+
+### Die Wortmarke kann die Schulungsfarbe tragen
+
+Gemeldet aus einem Schulungs-Repo (dort A-003). Die Vorgabe verlangt von jedem Repo ein
+eigenes Logo **und** eine eigene Akzentfarbe – zusammenbringen liessen sie sich nicht:
+Ein `<img>` lädt sein SVG als **eigenes Dokument**, und dort sind weder die Tokens der
+Seite noch `currentColor` noch `data-avd-academy-theme` sichtbar.
+
+Neu: `brand.logo_ratio` in der `_config.yml`. Ist es gesetzt, färbt das Theme die
+Wortmarke in `--avd-academy-color-accent` – und folgt damit auch der Ableitung aus
+2.13.0, ohne dass die Farbe ein zweites Mal gepflegt wird.
+
+```yaml
+brand:
+  logo: /assets/logo-schulung.svg
+  logo_ratio: 260 / 24        # exakt die viewBox der SVG-Datei
+```
+
+**Warum nicht inline.** Der naheliegende Weg – das SVG inline rendern, dann genügt
+`fill: currentColor` – ist in diesem Aufbau verbaut: `includes_dir` zeigt bei jedem Repo
+in das Theme-Verzeichnis, ein Repo kann also keinen eigenen Include beisteuern, und eine
+beliebige Datei zur Bauzeit einzulesen bräuchte ein Jekyll-Plugin. Das Paket bleibt
+abhängigkeitsfrei.
+
+**Warum ein eigenes Element und nicht das Bild.** Der gemeldete Workaround setzt
+`content: ""` auf das `<img>` und legt eine Maske darüber. **Gemessen trägt das nicht** –
+weder `content: ""` noch `content: none` noch `-webkit-mask` entfernen den Bildinhalt in
+aktuellem Chrome; das Original malt über die eingefärbte Fläche. Auf einem nicht
+ersetzten Element trägt die Maske. Das Theme gibt die eingefärbte Fassung deshalb als
+`<span>` **neben** dem Bild aus.
+
+**Der Rückfall ist der Normalfall.** Der `<span>` ist voreingestellt unsichtbar und das
+`<img>` sichtbar; erst innerhalb von `@supports` tauschen sie. Kann eine Engine keine
+Masken, bleibt es beim unveränderten Bild – ein fehlendes Logo sieht man nicht im Build,
+sondern beim Kunden.
+
+**Der Preis, ausdrücklich benannt:** Ein maskiertes Element hat keine Eigengröße, deshalb
+muss das Verhältnis von aussen kommen. Es steht jetzt als Datum neben dem Logo-Pfad statt
+als Zahlenpaar in einer Style-Datei – aber **ändert sich die `viewBox`, muss `logo_ratio`
+mit**, sonst wird die Marke verzerrt.
+
+### Einstufung
+
+**Minor.** Ein neues, optionales Feld und eine neue Klasse
+(`avd-academy-header__logo-mask`). Ohne `brand.logo_ratio` ändert sich nichts: Die
+Kopfzeile rendert unverändert ein `<img>`.
+
+---
+
+## 2.13.0
+
+### Die Schulungsfarbe kommt jetzt aus **einem** Wert
+
+Gemeldet aus einem Schulungs-Repo (Register A-001 dort). Die Vorgabe liess jedes Repo
+**vier** Farbwerte von Hand pflegen – Akzent und Hero-Band, je für Light und Dark, den
+Dark-Wert doppelt (Attribut- und `prefers-color-scheme`-Block). Dort ist genau das
+passiert, was dabei passieren muss: Ein Wert wurde geändert und drei nicht, und die
+Unterlage trug **Blau im Light- und Grün im Dark-Modus**. Der Build zeigt immer nur einen
+Modus, also meldet ihn nichts.
+
+**Beim Nachmessen kam Schlimmeres heraus.** Von den drei frei gewählten Schulungsfarben
+lag **jede** in einem der beiden Modi unter AA, ohne dass es irgendjemand wusste:
+
+| Basis | roh, Light | roh, Dark | abgeleitet, Light | abgeleitet, Dark |
+| ----- | ---------- | --------- | ----------------- | ---------------- |
+| `#0198FF` | **3,03:1** | 5,52:1 | **5,38:1** | **7,54:1** |
+| `#0E7C66` | 5,13:1 | **3,26:1** | **6,10:1** | **7,33:1** |
+| `#7A3FB0` | 6,63:1 | **2,52:1** | **8,06:1** | **4,92:1** |
+
+Neu: `--avd-academy-accent-base`. Ein Repo setzt **eine Zeile** –
+
+```css
+:root { --avd-academy-accent-base: #0198FF; }
+```
+
+– und Akzent wie Hero-Band folgen in **beiden** Schemata. Angegeben wird der **Farbton**,
+die **Helligkeit** kommt aus `--avd-academy-color-ink` bzw. `-bg`; weil die mit dem
+Farbschema kippen, fallen Light und Dark aus derselben Formel und der Kontrast hängt an
+der Konstruktion statt am Zufall.
+
+**Ohne das Token ändert sich nichts.** Akzent und Hero-Band stehen auf
+`var(--…-from-base, «bisher»)`: Der Rückfall greift, solange keine Basis gesetzt ist.
+Repos, die heute `--avd-orange` überschreiben, bleiben ebenfalls unberührt.
+
+**Die ATVANTAGE-Marke wird ausdrücklich nicht abgeleitet.** Auf das Orange angewandt macht
+die Formel es *schlechter* (5,19 → 4,18:1 im Dark) und zu reinem Rot – der Farbwinkel
+verträgt den Buntheits-Anschlag nicht.
+
+**Die Regel, die man nicht sieht,** steht in der Doku und damit auch im Plugin: Wer neben
+der Basis einen `[data-avd-academy-theme="dark"]`- oder `prefers-color-scheme`-Block für
+diese Farben schreibt, **hebelt die Ableitung aus** – ein solcher Block gewinnt gegen die
+Formel und friert einen Modus auf einen Handwert ein.
+
+Technisch zwei Schritte, weil eine relative Farbe nur **eine** Ursprungsfarbe hat, hier
+aber zwei Quellen gebraucht werden: `color-mix(in oklab, …)` setzt die modusrichtige
+Helligkeit und nimmt dabei Buntheit (die Textfarbe ist fast neutral), `oklch(from …)
+calc(c * 3)` dreht sie wieder auf. `in oklab` und nicht `in oklch`, weil die polare
+Mischung auch den Farbwinkel interpoliert und die Farbe Richtung Textfarbe zieht. Fehlt
+einer Engine die relative Farbsyntax, bleibt es per `@supports` bei der rohen Basisfarbe –
+dem Zustand, den die Repos heute ohnehin haben.
+
+### Einstufung
+
+**Minor.** Zwei neue Tokens, rein ergänzend; kein bestehendes Repo ändert sein Aussehen,
+solange es `--avd-academy-accent-base` nicht setzt.
+
+---
+
 ## 2.12.2
 
 ### Drei tote Verweise – in jedem Schulungs-Repo, nicht hier

@@ -24,7 +24,8 @@
   --avd-academy-color-primary-light:   var(--avd-gray-mid);    /* Rahmen/neutrale Linien */
   --avd-academy-color-primary-tint:    var(--avd-blue-light);  /* abgesetzte Flächen */
   --avd-academy-color-primary-contrast:var(--avd-white);
-  --avd-academy-color-accent:          var(--avd-orange);      /* aktive Elemente, Signale */
+  /* Schalter: mit `--avd-academy-accent-base` die Ableitung, sonst wie bisher. */
+  --avd-academy-color-accent:          var(--avd-academy-accent-from-base, var(--avd-orange));
   /* Weiche Akzentfläche. Hängt am AKZENT, nicht an --avd-orange: Ein Projekt
      mit eigenem Akzent bekam sonst eine orange getönte Fläche zu einer Farbe,
      die gar nicht mehr orange ist. Im Auslieferungszustand ändert das nichts –
@@ -48,7 +49,7 @@
   --avd-academy-color-bg-subtle:  var(--avd-gray-card);        /* Karten/erhöhte Flächen */
   --avd-academy-color-border:     color-mix(in srgb, var(--avd-slate) 18%, #fff);
   --avd-academy-border-soft:      #e6e8ea;                     /* Hairlines */
-  --avd-academy-hero-bg:          var(--color-surface-blue);   /* Hero-Band */
+  --avd-academy-hero-bg:          var(--avd-academy-hero-bg-from-base, var(--color-surface-blue));
   --avd-academy-topbar-bg:        var(--avd-white);            /* Kopfzeile */
   --avd-academy-metanav-bg:       var(--avd-gray-metanav);     /* Meta-Nav */
   /* Nicht gray-metatext: auf der Metanav-Fläche (#F4F4F4) sind das 4,44:1 und
@@ -157,7 +158,66 @@
   --avd-academy-tone-4-ink:       color-mix(in srgb, var(--avd-academy-tone-4) 45%, var(--avd-academy-color-ink));
   --avd-academy-tone-alert-ink:   color-mix(in srgb, var(--avd-academy-tone-alert) 45%, var(--avd-academy-color-ink));
 
+
+  /* --- Schulungsfarbe aus EINEM Wert ------------------------------------
+     Ein Schulungs-Repo trägt laut Vorgabe eine eigene Akzentfarbe. Bisher hiess
+     das VIER Handwerte: Akzent und Hero-Band, je für Light und Dark, wobei der
+     Dark-Wert doppelt steht (Attribut- und `prefers-color-scheme`-Block). Das
+     geht schief, und zwar unbemerkt: In einem Repo wurde ein Wert geändert und
+     drei nicht – die Unterlage trug Blau im Light- und Grün im Dark-Modus. Der
+     Build zeigt immer nur einen Modus, also meldet ihn nichts.
+
+     Schlimmer noch: Von drei frei gewählten Schulungsfarben lag JEDE in einem
+     der beiden Modi unter AA, ohne dass es jemand wusste – gemessen 3,03:1
+     (Blau, Light), 3,26:1 (Grün, Dark) und 2,52:1 (Violett, Dark).
+
+     Deshalb: Das Repo gibt nur noch den FARBTON an, die HELLIGKEIT kommt aus
+     dem Theme. `--avd-academy-color-ink` und `-bg` kippen mit dem Farbschema,
+     also fallen Light und Dark aus DERSELBEN Formel – und der Kontrast hängt am
+     Mischanteil statt am Zufall. Nach der Ableitung: 5,38 / 6,10 / 8,06:1 im
+     Light- und 7,54 / 7,33 / 4,92:1 im Dark-Theme.
+
+     Zwei Schritte, weil eine relative Farbe nur EINE Ursprungsfarbe hat, wir
+     aber aus zweien etwas brauchen: `color-mix` setzt die modusrichtige
+     Helligkeit und nimmt dabei Buntheit (die Textfarbe ist fast neutral),
+     `oklch(from …) calc(c * 3)` dreht sie wieder auf. `in oklab`, NICHT
+     `in oklch`: Die polare Mischung interpoliert auch den Farbwinkel und zieht
+     die Farbe Richtung Textfarbe.
+
+     NICHT auf das ATVANTAGE-Orange anwenden. Gemessen wird es dadurch
+     SCHLECHTER (5,19 → 4,18:1 im Dark) und zu reinem Rot – der Farbwinkel des
+     Orange verträgt den Buntheits-Anschlag nicht. Die Marke wird nicht
+     abgeleitet; ohne `--avd-academy-accent-base` bleibt alles wie bisher.
+
+     Angeschlossen ist es hier, nicht im Repo. Ein Ausdruck, der ein NICHT
+     gesetztes Token liest, wird beim Rechnen ungültig – und genau das nutzen
+     Akzent und Hero-Band als Schalter: `var(--…-from-base, «bisher»)` nimmt den
+     Rückfall, solange keine Basis gesetzt ist. Ein Repo schreibt deshalb nur:
+
+       :root { --avd-academy-accent-base: «hex»; }
+
+     Und die Regel, die man nicht sieht: WER DANEBEN EINEN
+     `[data-avd-academy-theme="dark"]`- ODER `prefers-color-scheme`-BLOCK
+     SCHREIBT, HEBELT DIE ABLEITUNG AUS. Ein solcher Block gewinnt gegen die
+     Formel und friert genau einen Modus auf einen Handwert ein. Farbe ändern
+     heisst: `--avd-academy-accent-base` ändern, sonst nichts. */
+  --avd-academy-accent-from-base:  var(--avd-academy-accent-base);
+  --avd-academy-hero-bg-from-base: color-mix(in oklab, var(--avd-academy-accent-base) 12%, var(--avd-academy-color-bg));
+
   --avd-academy-transition: 160ms ease;
+}
+
+/* Die Buntheits-Korrektur braucht relative Farbsyntax. Fehlt sie, bleibt es bei
+   der rohen Basisfarbe – das ist der Zustand, den die Repos heute ohnehin haben,
+   und damit ein Rückfall und kein Bruch. Warum @supports und nicht zwei
+   Deklarationen: Custom Properties nehmen beim Parsen jede Zeichenfolge an, die
+   zweite gewinnt immer, und eine Engine ohne die Syntax lässt die Farbe erst
+   beim Rechnen ungültig werden – das Ergebnis wäre Schwarz, nicht der Rückfall. */
+@supports (color: oklch(from red l c h)) {
+  :root {
+    --avd-academy-accent-from-base:
+      oklch(from color-mix(in oklab, var(--avd-academy-accent-base) 55%, var(--avd-academy-color-ink)) l calc(c * 3) h);
+  }
 }
 
 /* -----------------------------------------------------------------------------
@@ -176,7 +236,7 @@
     --avd-academy-color-bg-subtle: #1f2c2b;
     --avd-academy-color-border:    color-mix(in srgb, #fff 14%, #1f2c2b);
     --avd-academy-border-soft:     color-mix(in srgb, #fff 12%, #1f2c2b);
-    --avd-academy-hero-bg:         var(--avd-slate);
+    --avd-academy-hero-bg:         var(--avd-academy-hero-bg-from-base, var(--avd-slate));
     --avd-academy-topbar-bg:       #16211f;
     --avd-academy-metanav-bg:      #101a18;
     --avd-academy-metanav-text:    #93a5a2;
@@ -228,7 +288,7 @@
   --avd-academy-color-bg-subtle: #1f2c2b;
   --avd-academy-color-border:    color-mix(in srgb, #fff 14%, #1f2c2b);
   --avd-academy-border-soft:     color-mix(in srgb, #fff 12%, #1f2c2b);
-  --avd-academy-hero-bg:         var(--avd-slate);
+  --avd-academy-hero-bg:         var(--avd-academy-hero-bg-from-base, var(--avd-slate));
   --avd-academy-topbar-bg:       #16211f;
   --avd-academy-metanav-bg:      #101a18;
   --avd-academy-metanav-text:    #93a5a2;
