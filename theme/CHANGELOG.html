@@ -64,13 +64,13 @@
 
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789768633"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789768633">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789768633">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789768633">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789768633"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789768633">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789768633" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789768633" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789768633">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789770315"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789770315">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789770315">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789770315">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789770315"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789770315">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789770315" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789770315" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789770315">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -98,8 +98,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789768633">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789768633"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789770315">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789770315"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -159,6 +159,59 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2271">2.27.1</h2>
+
+<h3 id="behoben-die-reiter-sahen-nicht-aus-wie-reiter">Behoben: Die Reiter sahen nicht aus wie Reiter</h3>
+
+<p>Aus der Praxis gemeldet: „Ich sehe nur die Titel, untereinander statt nebeneinander, keinen
+Hintergrund bei den Tabs und im Inhalt.”</p>
+
+<p><strong>Die Mechanik war in Ordnung</strong> – nachgewiesen gegen die deployten Dateien: Leiste gebaut,
+fünf Reiter, <code>--enhanced</code> gesetzt. Die Gestaltung taugte nicht:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Befund</th>
+      <th>Ursache</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>untereinander statt nebeneinander</td>
+      <td><code>flex-wrap: wrap</code> – fünf Beschriftungen passen nicht in eine Inhaltsspalte und <strong>brachen um</strong></td>
+    </tr>
+    <tr>
+      <td>kein Hintergrund bei den Tabs</td>
+      <td>nur ein Unterstrich, keine Fläche</td>
+    </tr>
+    <tr>
+      <td>kein Hintergrund im Inhalt</td>
+      <td>das offene Panel hatte gar keine</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Ein umgebrochener Streifen ohne Fläche liest sich als Liste von Titeln – also genau als
+das, was er ersetzen sollte.</p>
+
+<p><strong>Die Leiste rollt jetzt, statt umzubrechen</strong> (<code>flex-wrap: nowrap</code> + <code>overflow-x: auto</code>).
+Das ist die einzige Form, die bei jeder Breite ein Streifen bleibt; die frühere
+Sonderregel für schmale Bildschirme entfällt damit, weil sie zur Regel geworden ist.</p>
+
+<p><strong>Reiter und Inhalt bekommen Flächen.</strong> Der gewählte Reiter trägt den Seitenhintergrund
+und sitzt optisch vor der Trennlinie, die übrigen dahinter; die Inhaltsfläche schließt
+<strong>unmittelbar</strong> an die Leiste an. Ein Abstand dazwischen ließe beide als getrennte Dinge
+erscheinen.</p>
+
+<h3 id="nebenbei-ein-token-das-es-nicht-gibt">Nebenbei: ein Token, das es nicht gibt</h3>
+
+<p><code>--avd-academy-space-5</code> wurde verwendet, ist aber nirgends definiert (die Skala geht
+1, 2, 3, 4, 6, 8, 12, 16). Dank Rückfallwert wirkte es trotzdem – ein erfundenes Token
+gehört trotzdem nicht ins Theme. Ersetzt durch <code>--avd-academy-space-6</code>.</p>
 
 <hr />
 

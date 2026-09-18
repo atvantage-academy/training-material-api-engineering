@@ -15,6 +15,42 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.27.1
+
+### Behoben: Die Reiter sahen nicht aus wie Reiter
+
+Aus der Praxis gemeldet: „Ich sehe nur die Titel, untereinander statt nebeneinander, keinen
+Hintergrund bei den Tabs und im Inhalt."
+
+**Die Mechanik war in Ordnung** – nachgewiesen gegen die deployten Dateien: Leiste gebaut,
+fünf Reiter, `--enhanced` gesetzt. Die Gestaltung taugte nicht:
+
+| Befund | Ursache |
+| ------ | ------- |
+| untereinander statt nebeneinander | `flex-wrap: wrap` – fünf Beschriftungen passen nicht in eine Inhaltsspalte und **brachen um** |
+| kein Hintergrund bei den Tabs | nur ein Unterstrich, keine Fläche |
+| kein Hintergrund im Inhalt | das offene Panel hatte gar keine |
+
+Ein umgebrochener Streifen ohne Fläche liest sich als Liste von Titeln – also genau als
+das, was er ersetzen sollte.
+
+**Die Leiste rollt jetzt, statt umzubrechen** (`flex-wrap: nowrap` + `overflow-x: auto`).
+Das ist die einzige Form, die bei jeder Breite ein Streifen bleibt; die frühere
+Sonderregel für schmale Bildschirme entfällt damit, weil sie zur Regel geworden ist.
+
+**Reiter und Inhalt bekommen Flächen.** Der gewählte Reiter trägt den Seitenhintergrund
+und sitzt optisch vor der Trennlinie, die übrigen dahinter; die Inhaltsfläche schließt
+**unmittelbar** an die Leiste an. Ein Abstand dazwischen ließe beide als getrennte Dinge
+erscheinen.
+
+### Nebenbei: ein Token, das es nicht gibt
+
+`--avd-academy-space-5` wurde verwendet, ist aber nirgends definiert (die Skala geht
+1, 2, 3, 4, 6, 8, 12, 16). Dank Rückfallwert wirkte es trotzdem – ein erfundenes Token
+gehört trotzdem nicht ins Theme. Ersetzt durch `--avd-academy-space-6`.
+
+---
+
 ## 2.27.0
 
 ### Neu: Tabs – ein langer Leitfaden in schaltbaren Abschnitten
