@@ -638,9 +638,23 @@
         var summary = panel.querySelector(":scope > summary");
         if (!summary) return null;
 
-        /* Eine ID je Panel - fuer aria-controls und fuer tiefe Verweise. Eine
-           vorhandene ID bleibt: Sie steht womoeglich schon in einem Link. */
-        if (!panel.id) { panel.id = "avd-tabs-" + nr + "-" + i; }
+        /* EINE LESBARE ID JE PANEL. Sie landet in der Adresse, sobald jemand
+           einen Reiter waehlt - `#tag-1` ist ein brauchbares Lesezeichen,
+           `#avd-tabs-0-3` nicht. Eine vorhandene ID bleibt unangetastet: Sie
+           steht womoeglich schon in einem Link.
+
+           Kollidiert der Name mit etwas anderem auf der Seite (eine Ueberschrift
+           heisst leicht genauso), gewinnt das Vorhandene und der Reiter bekommt
+           den technischen Namen - zwei gleiche IDs waeren schlimmer als eine
+           haessliche. */
+        if (!panel.id) {
+          var wunsch = summary.textContent.toLowerCase()
+            .replace(/\u00e4/g, "ae").replace(/\u00f6/g, "oe")
+            .replace(/\u00fc/g, "ue").replace(/\u00df/g, "ss")
+            .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+          panel.id = (wunsch && !document.getElementById(wunsch))
+            ? wunsch : ("avd-tabs-" + nr + "-" + i);
+        }
 
         var knopf = document.createElement("button");
         knopf.type = "button";
@@ -648,7 +662,17 @@
         knopf.setAttribute("role", "tab");
         knopf.setAttribute("aria-controls", panel.id);
         knopf.innerHTML = summary.innerHTML;
-        knopf.addEventListener("click", function () { panel.open = true; });
+        knopf.addEventListener("click", function () {
+          panel.open = true;
+          /* DIE ADRESSE FUEHRT DEN ZUSTAND MIT, damit sie sich als Lesezeichen
+             eignet. `replaceState` und nicht `location.hash`: Letzteres SPRINGT
+             zum Ziel - der Browser scrollt also bei jedem Reiterwechsel - und
+             legt je Klick einen Verlaufseintrag an. Wer fuenfmal umschaltet,
+             muesste fuenfmal zurueck, um die Seite zu verlassen. */
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, "", "#" + panel.id);
+          }
+        });
         leiste.appendChild(knopf);
         return knopf;
       });
