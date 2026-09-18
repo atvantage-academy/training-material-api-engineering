@@ -974,3 +974,78 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
    die Seite selbst bekommt niemals einen waagerechten Balken. */
 .avd-academy-tablescroll { overflow-x: auto; }
 .avd-academy-tablescroll > table { margin: 0; }
+
+/* ===========================================================================
+   TABS – ein langer Leitfaden in schaltbaren Abschnitten
+   ---------------------------------------------------------------------------
+   GRUNDLAGE IST `<details name="…">`, nicht ein Klick-Handler. Der Browser
+   schaltet damit von sich aus exklusiv: Oeffnet man eines, schliessen die
+   anderen. Ohne JavaScript ist es ein Akkordeon, in dem jeder Inhalt erreichbar
+   bleibt - dieselbe Zusage wie beim Reveal-Baustein.
+
+   `atvantage.js` ERGAENZT den Tab-Streifen: Es baut aus den `<summary>` eine
+   Leiste und blendet die Zusammenfassungen aus. Fehlt das Skript, sieht man das
+   Akkordeon; es fehlt nichts.
+
+   WARUM NICHT REIN MIT CSS: Ein echter Tab-Streifen braucht die Beschriftungen
+   getrennt von den Inhalten - eine Leiste oben, darunter eine gemeinsame
+   Flaeche. In `<details>` steckt jede Beschriftung in ihrem eigenen Element.
+   `display: contents` am `<details>` wuerde sie herausloesen, zerlegt aber in
+   mehreren Browsern die Auf-/Zu-Mechanik selbst.
+   =========================================================================== */
+
+.avd-academy-tabs { margin: var(--avd-academy-space-6, 1.5rem) 0; }
+
+/* --- Ohne JavaScript: Akkordeon ------------------------------------------- */
+.avd-academy-tabs__panel { border-top: 1px solid var(--avd-academy-color-border); }
+.avd-academy-tabs__panel:last-of-type { border-bottom: 1px solid var(--avd-academy-color-border); }
+.avd-academy-tabs__panel > summary {
+  cursor: pointer; list-style: none;
+  padding: var(--avd-academy-space-3, 0.75rem) 0;
+  font-weight: var(--avd-academy-fw-bold, 700);
+}
+.avd-academy-tabs__panel > summary::-webkit-details-marker { display: none; }
+.avd-academy-tabs__panel > summary::before {
+  content: "▸"; display: inline-block; width: 1.2em;
+  color: var(--avd-academy-color-accent);
+  transition: transform var(--avd-academy-transition, 160ms ease);
+}
+.avd-academy-tabs__panel[open] > summary::before { transform: rotate(90deg); }
+
+/* --- Mit JavaScript: Tab-Streifen ----------------------------------------- */
+/* Die Klasse setzt das Skript, erst wenn die Leiste steht. Ohne sie greift
+   nichts hiervon - die Seite faellt also nicht in einen halben Zustand. */
+.avd-academy-tabs--enhanced > .avd-academy-tabs__panel { border: 0; }
+.avd-academy-tabs--enhanced > .avd-academy-tabs__panel > summary { display: none; }
+
+.avd-academy-tabs__bar {
+  display: flex; flex-wrap: wrap; gap: var(--avd-academy-space-1, 0.25rem);
+  border-bottom: 2px solid var(--avd-academy-color-border);
+  margin-bottom: var(--avd-academy-space-5, 1.25rem);
+}
+.avd-academy-tabs__tab {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  padding: var(--avd-academy-space-3, 0.75rem) var(--avd-academy-space-4, 1rem);
+  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+  color: var(--avd-academy-color-ink-muted);
+  font: inherit; font-weight: var(--avd-academy-fw-bold, 700);
+  white-space: nowrap;
+  transition: color var(--avd-academy-transition, 160ms ease),
+              border-color var(--avd-academy-transition, 160ms ease);
+}
+.avd-academy-tabs__tab:hover { color: var(--avd-academy-color-ink); }
+.avd-academy-tabs__tab[aria-selected="true"] {
+  color: var(--avd-academy-color-accent);
+  border-bottom-color: var(--avd-academy-color-accent);
+}
+/* Sichtbarer Fokus - die Leiste wird mit den Pfeiltasten bedient. */
+.avd-academy-tabs__tab:focus-visible {
+  outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px;
+}
+
+/* Schmale Bildschirme: Die Leiste rollt waagerecht, statt umzubrechen und die
+   halbe Seite zu fuellen. */
+@media (max-width: 40rem) {
+  .avd-academy-tabs__bar { flex-wrap: nowrap; overflow-x: auto; }
+}

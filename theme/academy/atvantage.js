@@ -563,9 +563,29 @@
        Ausdruck, der die Musterlösung mitbringt, nimmt der Übung den Sinn.
        Nach dem Druck wird der vorherige Zustand wiederhergestellt. */
     var fuerDruckGeoeffnet = [];
+    /* EXKLUSIVITAET VORUEBERGEHEND AUFHEBEN. Ein `<details name="…">` schliesst
+       beim Oeffnen seine Geschwister - das ist am Bildschirm der Zweck und beim
+       Drucken der Fehler: Die Schleife unten oeffnet reihum und liesse am Ende
+       GENAU EINEN Reiter offen, der Rest waere auf dem Papier verschwunden.
+       Der Name wird deshalb kurz entfernt und danach zurueckgesetzt. */
+    var namenGemerkt = [];
+    function nameAus() {
+      namenGemerkt = [];
+      document.querySelectorAll("details.avd-academy-tabs__panel[name]").forEach(function (d) {
+        namenGemerkt.push([d, d.getAttribute("name")]);
+        d.removeAttribute("name");
+      });
+    }
+    function nameAn() {
+      namenGemerkt.forEach(function (e) { e[0].setAttribute("name", e[1]); });
+      namenGemerkt = [];
+    }
     function vorDemDruck() {
+      nameAus();
       fuerDruckGeoeffnet = [];
-      document.querySelectorAll("details.avd-academy-reveal").forEach(function (d) {
+      document.querySelectorAll(
+        "details.avd-academy-reveal, details.avd-academy-tabs__panel"
+      ).forEach(function (d) {
         if (d.classList.contains("avd-academy-reveal--screen-only")) return;
         if (d.open) return;
         d.open = true;
@@ -575,6 +595,10 @@
     function nachDemDruck() {
       fuerDruckGeoeffnet.forEach(function (d) { d.open = false; });
       fuerDruckGeoeffnet = [];
+      /* Erst schliessen, dann die Namen zurueck: Andersherum schloesse der
+         Browser beim Setzen des Namens selbst Geschwister und der Zustand von
+         vor dem Druck waere nicht wiederhergestellt, sondern geraten. */
+      nameAn();
     }
     window.addEventListener("beforeprint", vorDemDruck);
     window.addEventListener("afterprint", nachDemDruck);
@@ -588,6 +612,106 @@
     }
   }
 
+  /* ==========================================================================
+     TABS – aus dem Akkordeon einen Reiterstreifen machen
+     --------------------------------------------------------------------------
+     DIE SEITE FUNKTIONIERT OHNE DIESE FUNKTION. Grundlage ist
+     `<details name="…">`; der Browser schaltet damit von sich aus exklusiv, und
+     jeder Inhalt ist erreichbar. Was hier passiert, ist reine Zugabe: die
+     `<summary>` wandern in eine Leiste, die Panels verlieren ihre Rahmen.
+
+     Erst WENN die Leiste steht, wird `--enhanced` gesetzt. Bricht etwas vorher
+     ab, bleibt das Akkordeon sichtbar statt einer halben Oberflaeche.
+     ========================================================================== */
+  function initTabs() {
+    document.querySelectorAll(".avd-academy-tabs").forEach(function (box, nr) {
+      var panels = Array.prototype.slice.call(
+        box.querySelectorAll(":scope > details.avd-academy-tabs__panel")
+      );
+      if (panels.length < 2) return;   /* ein einzelner Reiter ist keiner */
+
+      var leiste = document.createElement("div");
+      leiste.className = "avd-academy-tabs__bar";
+      leiste.setAttribute("role", "tablist");
+
+      var knoepfe = panels.map(function (panel, i) {
+        var summary = panel.querySelector(":scope > summary");
+        if (!summary) return null;
+
+        /* Eine ID je Panel - fuer aria-controls und fuer tiefe Verweise. Eine
+           vorhandene ID bleibt: Sie steht womoeglich schon in einem Link. */
+        if (!panel.id) { panel.id = "avd-tabs-" + nr + "-" + i; }
+
+        var knopf = document.createElement("button");
+        knopf.type = "button";
+        knopf.className = "avd-academy-tabs__tab";
+        knopf.setAttribute("role", "tab");
+        knopf.setAttribute("aria-controls", panel.id);
+        knopf.innerHTML = summary.innerHTML;
+        knopf.addEventListener("click", function () { panel.open = true; });
+        leiste.appendChild(knopf);
+        return knopf;
+      });
+      if (knoepfe.indexOf(null) !== -1) return;  /* ein Panel ohne summary: Finger weg */
+
+      /* Den ausgewaehlten Reiter markieren. `toggle` feuert auch, wenn der
+         Browser wegen `name` ein anderes Panel SCHLIESST - eine Funktion fuer
+         beide Richtungen. */
+      function nachfuehren() {
+        panels.forEach(function (panel, i) {
+          var offen = panel.open;
+          knoepfe[i].setAttribute("aria-selected", offen ? "true" : "false");
+          knoepfe[i].tabIndex = offen ? 0 : -1;
+        });
+      }
+      panels.forEach(function (panel) {
+        panel.addEventListener("toggle", nachfuehren);
+      });
+
+      /* Pfeiltasten in der Leiste - ohne sie ist ein Reiterstreifen mit der
+         Tastatur nur ueber Tab-Sprünge erreichbar, und `tabIndex = -1` an den
+         nicht gewaehlten macht ihn dann ganz unerreichbar. */
+      leiste.addEventListener("keydown", function (event) {
+        var i = knoepfe.indexOf(document.activeElement);
+        if (i === -1) return;
+        var ziel = null;
+        if (event.key === "ArrowRight") { ziel = (i + 1) % knoepfe.length; }
+        else if (event.key === "ArrowLeft") { ziel = (i - 1 + knoepfe.length) % knoepfe.length; }
+        else if (event.key === "Home") { ziel = 0; }
+        else if (event.key === "End") { ziel = knoepfe.length - 1; }
+        if (ziel === null) return;
+        event.preventDefault();
+        panels[ziel].open = true;
+        knoepfe[ziel].focus();
+      });
+
+      box.insertBefore(leiste, box.firstChild);
+      box.classList.add("avd-academy-tabs--enhanced");
+
+      /* Keines offen? Dann das erste - sonst stuende die Leiste ueber einer
+         leeren Flaeche. Im Akkordeon waere das in Ordnung, als Reiterstreifen
+         sieht es kaputt aus. */
+      if (!panels.some(function (p) { return p.open; })) { panels[0].open = true; }
+      nachfuehren();
+    });
+
+    /* TIEFE VERWEISE: `#…` auf ein Panel oder auf etwas DARIN muss den
+       zugehoerigen Reiter oeffnen - sonst springt der Browser an eine Stelle,
+       die gerade zu ist, und die Seite ruehrt sich nicht. */
+    function ausHash() {
+      var id = location.hash.slice(1);
+      if (!id) return;
+      var ziel = document.getElementById(id);
+      if (!ziel) return;
+      var panel = ziel.closest(".avd-academy-tabs__panel");
+      if (!panel) return;
+      panel.open = true;
+      ziel.scrollIntoView();
+    }
+    window.addEventListener("hashchange", ausHash);
+    ausHash();
+  }
+
   function init() {
     initBackButtons();
     initThemeToggle();
@@ -596,6 +720,7 @@
     initNavDropdown();
     initCopyMarkdown();
     initPrintButtons();
+    initTabs();
     initPageQr();
     initGuideProgress();
     initGuideToc();

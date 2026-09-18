@@ -15,6 +15,138 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.27.0
+
+### Neu: Tabs – ein langer Leitfaden in schaltbaren Abschnitten
+
+Eine Seite, die zu lang zum Scrollen ist, bekommt Reiter. Dokumentiert unter
+[Bausteine → Tabs](https://timetoact.ghe.com/pages/AVD-Academy-Tools/academy-theme/docs/theme/bausteine.html#tabs).
+
+```html
+<div class="avd-academy-tabs" markdown="1">
+<details class="avd-academy-tabs__panel" name="leitfaden" open markdown="1">
+<summary>Tag 1</summary>
+…
+</details>
+</div>
+```
+
+**Grundlage ist `<details name="…">`, kein Klick-Handler.** Der Browser schaltet damit von
+sich aus exklusiv. Das ist dieselbe Entscheidung wie beim aufdeckbaren Inhalt und aus
+demselben Grund: Ein Umschalter, der nur mit JavaScript existiert, **verliert im
+Fehlerfall Schulungsinhalt**.
+
+| | ohne JavaScript | mit JavaScript |
+| --- | --------------- | -------------- |
+| Darstellung | Akkordeon | Reiterstreifen oben |
+| Umschalten | nativ über `name` | Klick auf den Reiter |
+| Strg+F | findet alles | findet alles |
+| Tiefe Verweise | Browser springt | öffnet zusätzlich den Reiter |
+
+`atvantage.js` baut die Leiste aus den `<summary>` und setzt erst **danach**
+`--enhanced`. Bricht etwas vorher ab, steht das Akkordeon – nie eine halbe Oberfläche.
+
+**Warum nicht rein mit CSS:** Ein echter Reiterstreifen braucht die Beschriftungen getrennt
+von den Inhalten – eine Leiste oben, darunter eine gemeinsame Fläche. In `<details>` steckt
+jede Beschriftung in ihrem eigenen Element. `display: contents` würde sie herauslösen,
+zerlegt aber in mehreren Browsern die Auf-/Zu-Mechanik selbst.
+
+### Zwei Feinheiten, die sonst stillschweigend schiefgingen
+
+**Im Ausdruck** entfällt die Leiste (sie ist eine Bedienung), und die Zusammenfassungen
+kommen als Zwischenüberschriften zurück. Beim Aufklappen steckt die Falle: Ein
+`<details name="…">` **schließt beim Öffnen seine Geschwister** – eine Schleife, die reihum
+öffnet, ließe am Ende genau einen Reiter offen und der Rest fehlte auf dem Papier.
+`atvantage.js` entfernt den Namen deshalb vor dem Druck und setzt ihn danach zurück.
+
+**Mit der Tastatur** wechseln Pfeiltasten den Reiter, `Home`/`End` springen an den Rand.
+Ohne das wäre der Streifen unerreichbar: Nicht gewählte Reiter tragen `tabindex="-1"`,
+damit die Leiste ein Tab-Stopp ist und nicht sechs.
+
+### Für Konsumenten
+
+Rein ergänzend. Geschrieben werden nur `avd-academy-tabs` und
+`avd-academy-tabs__panel`; Leiste und Reiter legt das Skript an.
+
+---
+
+## 2.26.0
+
+### Behoben: `folder_slug` ging beim Zielgruppenfilter verloren
+
+`folder_slug` benennt einen Ordner in der **Adresse** um – der typische Fall ist eine
+Nummer im Dateisystem (`03-http/`), die in der URL nichts verloren hat (`/http/`). Das
+Schema verlangt die Angabe in der `index.md` des Ordners.
+
+Genau die gehört in einer Schulungsunterlage aber oft **nur einer Zielgruppe** (das
+Trainer-Thema eines Moduls). Der Filter entfernte sie – und mit ihr die Adressangabe. Der
+Ordner behielt dann seinen Dateinamen, also die Nummer, **ausgerechnet in der öffentlichen
+Ausgabe**, während die übrigen Seiten weiter auf die Slug-Adresse zeigten.
+
+**Gemessen** an einem Schulungsrepo mit zwölf nummerierten Modulen: In der Trainer-Ausgabe
+stimmten alle Adressen, in der Lernenden-Ausgabe hieß **jeder** Ordner wieder `NN-…` – ein
+toter Verweis je Modul. Der Linkcheck fängt das erst nach dem Build; ohne ihn wäre es
+unbemerkt deployt worden.
+
+Die Baukomponente verschiebt die Angabe jetzt auf eine Seite, die **bleibt**, und meldet es
+sichtbar:
+
+```
+==> folder_slug gerettet: 12 Ordner, deren Index-Seite der Filter entfernt hat
+```
+
+**Warum das geht:** Das Adressen-Plugin liest `folder_slug` von **jeder** Seite eines
+Ordners, nicht nur von der Index-Datei. Die Beschränkung im Schema ist eine Konvention für
+Autoren – sie hält die Angabe an einer auffindbaren Stelle –, keine technische Bedingung.
+Zwei Angaben mit gleichem Wert sind zulässig; nur verschiedene brechen ab.
+
+Bleibt keine Seite übrig, ist der Ordner ohnehin weg und es gibt nichts zu retten.
+
+---
+
+## 2.25.0
+
+### Behoben: In Callouts, Zitaten und Zellen klebten die Absätze aneinander
+
+`base.css` räumt mit `* { margin: 0 }` alle Abstände ab; zurück holte sie **eine** Regel:
+
+```css
+.avd-academy-guide-main > * + * { margin-top: var(--avd-academy-rhythm-block); }
+```
+
+Der Selektor greift nur bei **direkten Kindern**. Alles, was in einem Container steckte,
+blieb ohne Abstand – und das ist auf einer Unterlage nicht der Randfall, sondern der
+Normalfall: Callout, Zitat, aufdeckbarer Block, Listeneintrag, Tabellenzelle.
+
+**Gemessen am Trainerleitfaden eines echten Schulungsrepos:** 2 von 3 `blockquote` und der
+einzige Callout hatten je zwei Absätze **ohne einen Pixel dazwischen** – sieben
+Absatzübergänge allein auf dieser Seite. Am Bildschirm liest sich das wie ein einziger
+Block, und es traf jede Seite jedes Repos.
+
+Der Rhythmus gilt jetzt auch **innerhalb** dieser Container:
+
+```css
+.avd-academy-guide-main :where(blockquote, li, td, th, figure,
+  .avd-academy-callout, .avd-academy-reveal__body, .avd-academy-fold__body) > * + * {
+  margin-top: var(--avd-academy-rhythm-block);
+}
+```
+
+Dieselbe Ergänzung in `site.css` für die gewöhnliche Seite (`.avd-academy-doc-main`) –
+beide Spalten lesen denselben Rhythmus, also müssen sie ihn auch gleich anwenden.
+
+**`:where()` hält die Spezifität bei null.** Ein Repo, das in seiner `custom.css` einen
+dieser Container eigens setzt, gewinnt weiterhin ohne `!important`.
+
+### Warum Minor und nicht Patch
+
+Die Korrektur **ändert das Aussehen jeder Seite** – dort, wo bisher nichts war, steht
+jetzt ein Abstand. Das ist mehr als eine stille Korrektur, aber kein Bruch: Kein Repo muss
+etwas tun, und wer den Abstand irgendwo nicht will, setzt ihn in seiner `custom.css`
+zurück.
+
+---
+
 ## 2.24.0
 
 ### Behoben: Eine Klasse des Regie-Decks hieß das Gegenteil von dem, was sie tut
