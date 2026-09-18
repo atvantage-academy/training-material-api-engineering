@@ -15,6 +15,73 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.24.0
+
+### Behoben: Eine Klasse des Regie-Decks hieß das Gegenteil von dem, was sie tut
+
+`avd-academy-regie__handlung` heißt jetzt **`avd-academy-regie__material`**.
+
+Die Vorlage, aus der der Baustein entstand, nennt die Klasse `.r--hand` – kurz für
+**„zur Hand"**, also die **rechte** Spalte mit den Verweisen aufs Material. Beim Übertragen
+wurde daraus „Handlung" gelesen und benannt. Das CSS tat von Anfang an das Richtige, aber
+der Name sagte das Gegenteil, und die Dokumentation beschrieb damit die falsche Spalte
+(„die linke Spalte: was zu tun ist").
+
+**Die Handlungs-Spalte braucht gar keine Klasse.** Sie ist negativ selektiert – Handlung
+ist, was nicht Material ist. Das ist nicht nur kürzer, es ist robuster: Eine Klasse, die
+man setzen müsste, kann man vergessen; diese hier nicht.
+
+### Warum das trotz Umbenennung Minor ist
+
+Nach den Regeln in `AGENTS.md` ist eine umbenannte Klasse **Major**. Diese Regel schützt
+Konsumenten – und hier gibt es nachweislich keine: Der Name stammt aus 2.23.0, veröffentlicht
+eine knappe Stunde zuvor, und **kein einziges Repo** verwendet die Regie-Klassen bisher
+(geprüft über alle vier Schulungsrepos und den Playground). Das erste Deck wird gerade
+umgestellt – auf den neuen Namen.
+
+Ein Major-Sprung hätte jedes Repo auf eine neue Spanne gezwungen, um einen Namen zu
+reparieren, den noch niemand tippen konnte. Die Umbenennung steht trotzdem hier und im
+Markup Contract als Entfernung – wer später sucht, findet sie.
+
+---
+
+## 2.23.0
+
+### Neu: Regie-Deck – Folien zum Bedienen, nicht zum Zeigen
+
+Ein Foliensatz, der **während** der Durchführung bedient wird: eine Folie je Einheit, oben
+die Uhrzeit, links die Handlung, rechts die Verweise aufs Material, höchstens eine Falle.
+Bewusst Text und Liste statt Bild – das ist kein Lehrmedium, sondern ein Spickzettel im
+Blätterformat.
+
+Dreizehn Klassen unter `avd-academy-regie__*`, dokumentiert unter
+[Layouts → Regie-Deck](https://timetoact.ghe.com/pages/AVD-Academy-Tools/academy-theme/docs/theme/layouts.html#regie-deck).
+
+**Warum das ins Theme gehört.** Die Form entstand in einem Schulungsrepo
+(`training-concept-api-engineering`, A-006) als **92 Zeilen CSS im Seitenkopf**. Das trug,
+solange es zwei Seiten waren. Sobald jedes Repo ein Regie-Deck führt, wären es dieselben
+92 Zeilen in jedem – dieselbe Kopie-Drift, gegen die die Vorlagenversion überhaupt
+existiert. Was in jedem Repo gleich aussieht, ist Design.
+
+**Wann** man ein Regie-Deck schreibt und was daraufsteht, bleibt didaktisch und steht im
+Didaktikon. Die Grenze verläuft wie immer: hier die Klassen, dort der Zweck.
+
+**`:has()` statt einer Modifier-Klasse.** Die Inhaltsspalte einer Folie ist sonst kein
+Flex-Container; das Deck braucht sie als solchen. Eine Klasse dafür müsste jede Folie
+tragen und wäre genau das, was man vergisst – die Folie säße dann oben statt mittig, und
+niemand wüsste warum.
+
+**Die Klassen stehen im Markup Contract** – kuratiert, nicht per Scan: `theme/jekyll/`
+pauschal mitzuscannen hätte 109 weitere Namen aufgenommen, fast alle interne
+Layout-Klassen. Die Regie-Klassen sind Autorenfläche; sie stehen im Markdown eines
+Schulungsrepos, in jeder Folie.
+
+**Für Konsumenten:** rein ergänzend. Ein Deck, das seine Klassen weiter im Seitenkopf
+definiert, läuft unverändert – die Namen kollidieren nicht (dort `.k`, `.r`, hier
+`avd-academy-regie__*`).
+
+---
+
 ## 2.22.0
 
 ### Neu: Zielgruppengefiltert bauen ist eine Komponente des Themes

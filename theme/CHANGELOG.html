@@ -64,13 +64,13 @@
 
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789739079"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789739079">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789739079">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789739079">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789739079"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789739079">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789739079" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789739079" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789739079">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789749999"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789749999">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789749999">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789749999">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789749999"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789749999">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789749999" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789749999" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789749999">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -98,8 +98,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789739079">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789739079"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789749999">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789749999"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -159,6 +159,73 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2240">2.24.0</h2>
+
+<h3 id="behoben-eine-klasse-des-regie-decks-hieß-das-gegenteil-von-dem-was-sie-tut">Behoben: Eine Klasse des Regie-Decks hieß das Gegenteil von dem, was sie tut</h3>
+
+<p><code>avd-academy-regie__handlung</code> heißt jetzt <strong><code>avd-academy-regie__material</code></strong>.</p>
+
+<p>Die Vorlage, aus der der Baustein entstand, nennt die Klasse <code>.r--hand</code> – kurz für
+<strong>„zur Hand”</strong>, also die <strong>rechte</strong> Spalte mit den Verweisen aufs Material. Beim Übertragen
+wurde daraus „Handlung” gelesen und benannt. Das CSS tat von Anfang an das Richtige, aber
+der Name sagte das Gegenteil, und die Dokumentation beschrieb damit die falsche Spalte
+(„die linke Spalte: was zu tun ist”).</p>
+
+<p><strong>Die Handlungs-Spalte braucht gar keine Klasse.</strong> Sie ist negativ selektiert – Handlung
+ist, was nicht Material ist. Das ist nicht nur kürzer, es ist robuster: Eine Klasse, die
+man setzen müsste, kann man vergessen; diese hier nicht.</p>
+
+<h3 id="warum-das-trotz-umbenennung-minor-ist">Warum das trotz Umbenennung Minor ist</h3>
+
+<p>Nach den Regeln in <code>AGENTS.md</code> ist eine umbenannte Klasse <strong>Major</strong>. Diese Regel schützt
+Konsumenten – und hier gibt es nachweislich keine: Der Name stammt aus 2.23.0, veröffentlicht
+eine knappe Stunde zuvor, und <strong>kein einziges Repo</strong> verwendet die Regie-Klassen bisher
+(geprüft über alle vier Schulungsrepos und den Playground). Das erste Deck wird gerade
+umgestellt – auf den neuen Namen.</p>
+
+<p>Ein Major-Sprung hätte jedes Repo auf eine neue Spanne gezwungen, um einen Namen zu
+reparieren, den noch niemand tippen konnte. Die Umbenennung steht trotzdem hier und im
+Markup Contract als Entfernung – wer später sucht, findet sie.</p>
+
+<hr />
+
+<h2 id="2230">2.23.0</h2>
+
+<h3 id="neu-regie-deck--folien-zum-bedienen-nicht-zum-zeigen">Neu: Regie-Deck – Folien zum Bedienen, nicht zum Zeigen</h3>
+
+<p>Ein Foliensatz, der <strong>während</strong> der Durchführung bedient wird: eine Folie je Einheit, oben
+die Uhrzeit, links die Handlung, rechts die Verweise aufs Material, höchstens eine Falle.
+Bewusst Text und Liste statt Bild – das ist kein Lehrmedium, sondern ein Spickzettel im
+Blätterformat.</p>
+
+<p>Dreizehn Klassen unter <code>avd-academy-regie__*</code>, dokumentiert unter
+<a href="https://timetoact.ghe.com/pages/AVD-Academy-Tools/academy-theme/docs/theme/layouts.html#regie-deck">Layouts → Regie-Deck</a>.</p>
+
+<p><strong>Warum das ins Theme gehört.</strong> Die Form entstand in einem Schulungsrepo
+(<code>training-concept-api-engineering</code>, A-006) als <strong>92 Zeilen CSS im Seitenkopf</strong>. Das trug,
+solange es zwei Seiten waren. Sobald jedes Repo ein Regie-Deck führt, wären es dieselben
+92 Zeilen in jedem – dieselbe Kopie-Drift, gegen die die Vorlagenversion überhaupt
+existiert. Was in jedem Repo gleich aussieht, ist Design.</p>
+
+<p><strong>Wann</strong> man ein Regie-Deck schreibt und was daraufsteht, bleibt didaktisch und steht im
+Didaktikon. Die Grenze verläuft wie immer: hier die Klassen, dort der Zweck.</p>
+
+<p><strong><code>:has()</code> statt einer Modifier-Klasse.</strong> Die Inhaltsspalte einer Folie ist sonst kein
+Flex-Container; das Deck braucht sie als solchen. Eine Klasse dafür müsste jede Folie
+tragen und wäre genau das, was man vergisst – die Folie säße dann oben statt mittig, und
+niemand wüsste warum.</p>
+
+<p><strong>Die Klassen stehen im Markup Contract</strong> – kuratiert, nicht per Scan: <code>theme/jekyll/</code>
+pauschal mitzuscannen hätte 109 weitere Namen aufgenommen, fast alle interne
+Layout-Klassen. Die Regie-Klassen sind Autorenfläche; sie stehen im Markdown eines
+Schulungsrepos, in jeder Folie.</p>
+
+<p><strong>Für Konsumenten:</strong> rein ergänzend. Ein Deck, das seine Klassen weiter im Seitenkopf
+definiert, läuft unverändert – die Namen kollidieren nicht (dort <code>.k</code>, <code>.r</code>, hier
+<code>avd-academy-regie__*</code>).</p>
 
 <hr />
 
