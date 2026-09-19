@@ -378,7 +378,13 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 
 /* Legende zur Tabelle – erklärt die Töne und die Schraffur. Eigenständig
    verwendbar, auch mehrfach über mehreren Tabellen. */
-.avd-academy-grouptable-legend {
+/* DER KLASSENNAME STEHT ZWEIMAL, mit Absicht. Der Flussrhythmus
+   `.avd-academy-guide-main > * + *` in guide.css hat DIESELBE Spezifitaet wie
+   ein einfacher Klassenselektor (0-1-0) - und guide.css laedt spaeter als diese
+   Datei. Bei Gleichstand gewinnt das Spaetere, der eigene Abstand kaeme also nie
+   an. Die Dopplung hebt auf 0-2-0 und entscheidet die Sache unabhaengig von der
+   Ladereihenfolge. Nicht wegraeumen. */
+.avd-academy-grouptable-legend.avd-academy-grouptable-legend {
   display: flex; flex-wrap: wrap;
   gap: var(--avd-academy-space-1) var(--avd-academy-space-4);
   margin: var(--avd-academy-space-2) 0 var(--avd-academy-space-4);
@@ -449,7 +455,13 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
    Visualisierungen, Simulationen). Diese Trennung ist der Zweck der
    Darstellung – und sie steht je Themenblock, nicht global, damit
    Zusammengehörendes zusammen bleibt.                                  */
-.avd-academy-topic { margin: var(--avd-academy-space-8) 0 0; }
+/* DER KLASSENNAME STEHT ZWEIMAL, mit Absicht. Der Flussrhythmus
+   `.avd-academy-guide-main > * + *` in guide.css hat DIESELBE Spezifitaet wie
+   ein einfacher Klassenselektor (0-1-0) - und guide.css laedt spaeter als diese
+   Datei. Bei Gleichstand gewinnt das Spaetere, der eigene Abstand kaeme also nie
+   an. Die Dopplung hebt auf 0-2-0 und entscheidet die Sache unabhaengig von der
+   Ladereihenfolge. Nicht wegraeumen. */
+.avd-academy-topic.avd-academy-topic { margin: var(--avd-academy-space-8) 0 0; }
 .avd-academy-topic > h3 {
   margin: 0 0 var(--avd-academy-space-3);
   padding-bottom: .35rem;
@@ -997,11 +1009,12 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 /* OBEN MEHR LUFT ALS UNTEN. Die Reiterleiste ist ein Bedienelement, kein
    Absatz - sie braucht sichtbaren Abstand zu dem, was ueber ihr steht, sonst
    liest sie sich als Fortsetzung des vorigen Textes. */
-/* DER KLASSENNAME STEHT ZWEIMAL, und das mit Absicht: Der Flussrhythmus
-   `.avd-academy-guide-main > * + *` traegt die Spezifitaet 0-1-1 und setzt
-   `margin-top` fuer jedes Geschwisterkind. Einfach geschrieben verliert
-   `.avd-academy-tabs` (0-1-0) gegen ihn - der groessere Abstand war gesetzt und
-   kam nie an. Gemessen: 17,6px statt 48. */
+/* DER KLASSENNAME STEHT ZWEIMAL, mit Absicht. Der Flussrhythmus
+   `.avd-academy-guide-main > * + *` in guide.css hat DIESELBE Spezifitaet wie
+   ein einfacher Klassenselektor (0-1-0) - und guide.css laedt spaeter als diese
+   Datei. Bei Gleichstand gewinnt das Spaetere, der eigene Abstand kaeme also nie
+   an. Die Dopplung hebt auf 0-2-0 und entscheidet die Sache unabhaengig von der
+   Ladereihenfolge. Nicht wegraeumen. */
 .avd-academy-tabs.avd-academy-tabs {
   margin: var(--avd-academy-space-12, 3rem) 0 var(--avd-academy-space-6, 1.5rem);
 }
