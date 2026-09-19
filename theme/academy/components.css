@@ -1113,3 +1113,59 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-tabs--enhanced > .avd-academy-tabs__panel[open] {
   padding: var(--avd-academy-space-6, 1.5rem);
 }
+
+/* --- Reiter links statt oben (`--side`) ----------------------------------- *
+   WOFUER: Beschriftungen, die ganze Saetze sind. Der waagerechte Streifen
+   rollt und bricht nie um - bei sieben Saetzen waere er unbedienbar. Links
+   untereinander darf jede Beschriftung umbrechen und trotzdem lesbar bleiben.
+
+   Es ist dieselbe Komponente, nur anders angeordnet: dasselbe Markup, dasselbe
+   Skript, dieselben Anker, dieselben Druckregeln. Nur diese Datei weiss davon.  */
+
+/* Leiste in Spalte 1, ALLE Panels in Spalte 2 - ausdruecklich gesetzt und nicht
+   dem Fluss ueberlassen. Ein geschlossenes `<details>` ist im Gitter weiterhin
+   ein Element und bekaeme sonst eine eigene Zelle; die Panels wanderten dann
+   treppenfoermig nach unten, obwohl nur eines sichtbar ist. */
+.avd-academy-tabs--enhanced.avd-academy-tabs--side {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+}
+.avd-academy-tabs--side > .avd-academy-tabs__bar    { grid-area: 1 / 1; }
+.avd-academy-tabs--side > .avd-academy-tabs__panel  { grid-area: 1 / 2; }
+
+.avd-academy-tabs--side > .avd-academy-tabs__bar {
+  flex-direction: column;
+  overflow-x: visible;
+  padding: var(--avd-academy-space-2, 0.5rem) 0;
+  border-bottom: 0;
+  border-right: 1px solid var(--avd-academy-color-border);
+}
+
+/* Die Wahl wandert von der Unter- an die linke Kante - sonst alles wie oben.
+   `white-space: normal` ist hier der Punkt: Waagerecht darf nichts umbrechen,
+   senkrecht MUSS es. */
+.avd-academy-tabs--side > .avd-academy-tabs__bar > .avd-academy-tabs__tab {
+  text-align: left;
+  white-space: normal;
+  border-bottom: 0;
+  border-left: 3px solid transparent;
+  transition: color var(--avd-academy-transition, 160ms ease),
+              border-color var(--avd-academy-transition, 160ms ease);
+}
+.avd-academy-tabs--side > .avd-academy-tabs__bar > .avd-academy-tabs__tab:hover {
+  border-left-color: color-mix(in srgb, var(--avd-academy-color-accent) 35%, transparent);
+}
+.avd-academy-tabs--side > .avd-academy-tabs__bar > .avd-academy-tabs__tab[aria-selected="true"] {
+  border-left-color: var(--avd-academy-color-accent);
+}
+
+/* Schmal ist eine Seitenspalte keine: Unter dieser Breite bliebe fuer den Text
+   nichts uebrig. Dann steht die Leiste wieder oben - untereinander, nicht als
+   Streifen, denn die langen Beschriftungen sind ja der Grund fuer `--side`. */
+@media (max-width: 46rem) {
+  .avd-academy-tabs--enhanced.avd-academy-tabs--side { display: block; }
+  .avd-academy-tabs--side > .avd-academy-tabs__bar {
+    border-right: 0;
+    border-bottom: 1px solid var(--avd-academy-color-border);
+  }
+}

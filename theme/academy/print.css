@@ -201,6 +201,9 @@
      ausgeblendet und die Zusammenfassungen eingeblendet waren - also genau ein
      Akkordeon, und wegen `!important` durch nichts zu ueberschreiben.
      ---------------------------------------------------------------------- */
+  /* Auch das Gitter der seitlichen Fassung: Ohne die Leiste stuende sonst eine
+     leere Spalte neben dem Text, und der Text haette nur den Rest der Seite. */
+  .avd-academy-tabs--side { display: block !important; }
   .avd-academy-tabs__bar { display: none !important; }
   .avd-academy-tabs--enhanced > .avd-academy-tabs__panel > summary {
     display: block !important;

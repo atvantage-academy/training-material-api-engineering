@@ -630,9 +630,28 @@
       );
       if (panels.length < 2) return;   /* ein einzelner Reiter ist keiner */
 
+      /* Senkrecht oder waagerecht? Entscheidet allein die Klasse im Markup.
+         Das Skript muss es wissen, weil Hilfstechnik und Pfeiltasten sich
+         danach richten - die Anordnung selbst macht das Stylesheet. */
+      var seitlich = box.classList.contains("avd-academy-tabs--side");
+
       var leiste = document.createElement("div");
       leiste.className = "avd-academy-tabs__bar";
       leiste.setAttribute("role", "tablist");
+      leiste.setAttribute("aria-orientation", seitlich ? "vertical" : "horizontal");
+
+      /* DIE ADRESSE FUEHRT DEN ZUSTAND MIT, damit sie sich als Lesezeichen eignet.
+         `replaceState` und nicht `location.hash`: Letzteres SPRINGT zum Ziel - der
+         Browser scrollte also bei jedem Reiterwechsel - und legt je Klick einen
+         Verlaufseintrag an. Wer fuenfmal umschaltet, muesste fuenfmal zurueck, um
+         die Seite zu verlassen.
+         Die Tastatur ruft dieselbe Funktion: Ein per Pfeiltaste gewaehlter Reiter
+         ist genauso gewaehlt wie ein angeklickter. */
+      function adresseFuehren(panel) {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, "", "#" + panel.id);
+        }
+      }
 
       var knoepfe = panels.map(function (panel, i) {
         var summary = panel.querySelector(":scope > summary");
@@ -664,14 +683,7 @@
         knopf.innerHTML = summary.innerHTML;
         knopf.addEventListener("click", function () {
           panel.open = true;
-          /* DIE ADRESSE FUEHRT DEN ZUSTAND MIT, damit sie sich als Lesezeichen
-             eignet. `replaceState` und nicht `location.hash`: Letzteres SPRINGT
-             zum Ziel - der Browser scrollt also bei jedem Reiterwechsel - und
-             legt je Klick einen Verlaufseintrag an. Wer fuenfmal umschaltet,
-             muesste fuenfmal zurueck, um die Seite zu verlassen. */
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState(null, "", "#" + panel.id);
-          }
+          adresseFuehren(panel);
         });
         leiste.appendChild(knopf);
         return knopf;
@@ -698,14 +710,21 @@
       leiste.addEventListener("keydown", function (event) {
         var i = knoepfe.indexOf(document.activeElement);
         if (i === -1) return;
+        /* Die Pfeile folgen der Anordnung: senkrecht hoch/runter, waagerecht
+           links/rechts. Eine Leiste, die untereinander steht und auf
+           `ArrowDown` nicht reagiert, fuehlt sich kaputt an - so steht die
+           Erwartung auch in den ARIA Authoring Practices. */
+        var vor = seitlich ? "ArrowDown" : "ArrowRight";
+        var zurueck = seitlich ? "ArrowUp" : "ArrowLeft";
         var ziel = null;
-        if (event.key === "ArrowRight") { ziel = (i + 1) % knoepfe.length; }
-        else if (event.key === "ArrowLeft") { ziel = (i - 1 + knoepfe.length) % knoepfe.length; }
+        if (event.key === vor) { ziel = (i + 1) % knoepfe.length; }
+        else if (event.key === zurueck) { ziel = (i - 1 + knoepfe.length) % knoepfe.length; }
         else if (event.key === "Home") { ziel = 0; }
         else if (event.key === "End") { ziel = knoepfe.length - 1; }
         if (ziel === null) return;
         event.preventDefault();
         panels[ziel].open = true;
+        adresseFuehren(panels[ziel]);
         knoepfe[ziel].focus();
       });
 

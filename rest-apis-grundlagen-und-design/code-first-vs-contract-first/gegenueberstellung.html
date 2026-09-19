@@ -64,13 +64,13 @@
 <meta property="og:description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789776171"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789776171">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789776171">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789776171">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789776171"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789776171">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789776171" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789776171" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789776171">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789777047"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789777047">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789777047">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789777047">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789777047"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789777047">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789777047" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789777047" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789777047">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -98,8 +98,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789776171">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789776171"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789777047">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789777047"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a>
   <section class="avd-academy-guide-hero avd-academy-guide-hero--slim"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -175,62 +175,45 @@ sich bei Bedarf Gerüstcode für Server und Client erzeugen – muss aber nicht.
 gegriffen. Sie sind der Grund, warum Code First so verbreitet ist – und wer sie
 übergeht, überzeugt niemanden.</p>
 
-<div class="cf__tabs" data-cf-gruppe="code">
-<div class="cf__liste" role="tablist" aria-label="Argumente">
-<button type="button" class="cf__tab is-aktiv" role="tab" aria-selected="true" data-cf-tab="code-0">„Die Lernkurve ist niedriger.“</button>
-<button type="button" class="cf__tab" role="tab" aria-selected="false" data-cf-tab="code-1">„Die API passt garantiert zum Code.“</button>
-<button type="button" class="cf__tab" role="tab" aria-selected="false" data-cf-tab="code-2">„Für Prototypen bin ich schneller.“</button>
-</div>
-<div class="cf__details">
-<section class="cf__detail is-aktiv" role="tabpanel" data-cf-detail="code-0">
-<h3>„Die Lernkurve ist niedriger.“</h3>
+<div class="avd-academy-tabs avd-academy-tabs--side cf--claims">
+<details class="avd-academy-tabs__panel" name="cf-code" open="">
+<summary>„Die Lernkurve ist niedriger.“</summary>
 <p>Als Entwickler kenne ich meine Sprache. Eine API in einem gewohnten Format zu
 formulieren fällt mir leichter, als ein neues Beschreibungsformat zu lernen.
 Notfalls lerne ich ein paar Annotationen dazu. Das Beschreibungsformat meide ich,
 weil es kompliziert wirkt – und weil mir kein Compiler sagt, ob es stimmt.</p>
-<p class="cf__gegen"><strong>Einwand:</strong> Beides lässt sich auflösen. Editoren
+<p class="cf__objection"><strong>Einwand:</strong> Beides lässt sich auflösen. Editoren
 und IDEs bieten für das Beschreibungsformat Vervollständigung, Hervorhebung und
 Umbenennen; statt eines Compilers gibt es Validatoren, die in jeder Pipeline
 laufen. Der Aufwand ist einmalig, das Ergebnis dauerhaft.</p>
-</section>
+</details>
 
-<section class="cf__detail" role="tabpanel" data-cf-detail="code-1">
-<h3>„Die API passt garantiert zum Code.“</h3>
+<details class="avd-academy-tabs__panel" name="cf-code">
+<summary>„Die API passt garantiert zum Code.“</summary>
 <p>Was ich herausgebe, entspricht exakt der Implementierung. Ändert sich der Code,
 ändert sich die Beschreibung automatisch mit. Es kann keine Abweichung geben.</p>
-<p class="cf__gegen"><strong>Einwand:</strong> Genau darin liegt die Gefahr. Wird die
+<p class="cf__objection"><strong>Einwand:</strong> Genau darin liegt die Gefahr. Wird die
 API von anderen Teams genutzt, ist die automatische Änderung kein Vorteil, sondern
 ein <strong>unbemerkter Vertragsbruch</strong>. Was heute Komfort ist, ist morgen ein
 Produktionsvorfall bei jemand anderem.</p>
-</section>
+</details>
 
-<section class="cf__detail" role="tabpanel" data-cf-detail="code-2">
-<h3>„Für Prototypen bin ich schneller.“</h3>
+<details class="avd-academy-tabs__panel" name="cf-code">
+<summary>„Für Prototypen bin ich schneller.“</summary>
 <p>Wenn ich noch wenig Erfahrung mit API-Design habe, erkenne ich im Code schneller,
 was möglich ist und was nicht – und welche Informationen ich überhaupt brauche, um
 die Fachlichkeit abzubilden.</p>
-<p class="cf__gegen"><strong>Einwand:</strong> Stimmt – für einen Prototyp. Der Haken
+<p class="cf__objection"><strong>Einwand:</strong> Stimmt – für einen Prototyp. Der Haken
 ist nur, dass Prototypen selten sterben. Wer so anfängt, sollte den Zeitpunkt
 festlegen, an dem die Beschreibung die Führung übernimmt.</p>
-</section>
-</div>
+</details>
 </div>
 
 <h2 class="cf__h2">Was für Contract First spricht</h2>
 
-<div class="cf__tabs" data-cf-gruppe="contract">
-<div class="cf__liste" role="tablist" aria-label="Argumente">
-<button type="button" class="cf__tab is-aktiv cf__detail--pro" role="tab" aria-selected="true" data-cf-tab="contract-0">Die API ist ein Produkt</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-1">Es gibt zwei APIs, nicht eine</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-2">Fallstricke der Generierung vermeiden</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-3">Kein unnötiger Code</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-4">Technologieneutralität</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-5">Besseres Verständnis für fremde APIs</button>
-<button type="button" class="cf__tab cf__detail--pro" role="tab" aria-selected="false" data-cf-tab="contract-6">Die API folgt dem Anwendungsfall</button>
-</div>
-<div class="cf__details">
-<section class="cf__detail is-aktiv cf__detail--pro" role="tabpanel" data-cf-detail="contract-0">
-<h3>Die API ist ein Produkt</h3>
+<div class="avd-academy-tabs avd-academy-tabs--side cf--pros">
+<details class="avd-academy-tabs__panel" name="cf-contract" open="">
+<summary>Die API ist ein Produkt</summary>
 <p>Eine API hat Anforderungen, ein verantwortliches Team, einen eigenen
 Entwicklungszyklus, eine eigene Versionierung und eigene Releases. Ihre
 Implementierung kann aus einem oder mehreren Projekten bestehen, jedes mit eigenem
@@ -238,10 +221,10 @@ Lebenszyklus – daran sollte die API nicht eng gekoppelt sein.</p>
 <p>Dazu kommt: Wie eine Benutzeroberfläche ist die API das <strong>Aushängeschild</strong>
 des Teams nach innen und des Herstellers nach außen. Ob man dieses Aushängeschild
 von einem Generator erzeugen lassen möchte, darf man kritisch sehen.</p>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-1">
-<h3>Es gibt zwei APIs, nicht eine</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Es gibt zwei APIs, nicht eine</summary>
 <p>Die <strong>öffentliche API</strong> am Gateway – das, was Frontends und andere
 Dienste sehen, samt Gateway-Konfiguration, zusätzlichen Headern und Verweisen auf
 Operationen. Und die <strong>interne API</strong> der Implementierung, die das Gateway
@@ -252,10 +235,10 @@ mehreren Implementierungen bedient wird – etwa weil eine Funktion besser als
 eigenständiger Dienst läuft –, <strong>lässt sich die öffentliche API gar nicht aus
 Code erzeugen</strong>. Nach außen steht die Fachlichkeit, nach innen bleibt die
 Umsetzung frei.</p>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-2">
-<h3>Fallstricke der Generierung vermeiden</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Fallstricke der Generierung vermeiden</summary>
 <ul>
 <li>Hinter scheinbar kleinen Codeänderungen entstehen schnell und unbewusst
 <strong>Breaking Changes</strong> – nicht nur für die Nutzer, sondern auch in der
@@ -270,20 +253,20 @@ geprüft werden, etwa auf einmalig definierte und wiederverwendete Parameter.</l
 öffentlich</strong> – der Klassiker sind Betriebs- und Diagnose-Endpunkte, die
 standardmäßig in der Beschreibung landen, am Gateway aber nichts zu suchen haben.</li>
 </ul>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-3">
-<h3>Kein unnötiger Code</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Kein unnötiger Code</summary>
 <p>Um eine saubere Beschreibung zu erhalten, muss man den Code verbiegen. So entsteht
 Code, der nur für die API da ist. Manches muss überhaupt nicht implementiert werden –
 CORS und Authentifizierung erledigt das Gateway davor –, und die Gateway-Konfiguration
 lässt sich im Code gar nicht ausdrücken.</p>
 <p>Nebenbei leidet die Lesbarkeit: Der Code beschreibt dann auch noch sich selbst.
 Von Trennung der Zuständigkeiten kann keine Rede mehr sein.</p>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-4">
-<h3>Technologieneutralität</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Technologieneutralität</summary>
 <p>HTTP-basierte Schnittstellen sind technologieneutral; aus einer Beschreibung
 lässt sich Code für unterschiedliche Sprachen und Rahmenwerke erzeugen. Code First
 gefährdet genau das:</p>
@@ -293,25 +276,24 @@ gefährdet genau das:</p>
 Client-Code suboptimal.</li>
 <li>Sie verrät unnötige Informationen an potenzielle Angreifer.</li>
 </ul>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-5">
-<h3>Besseres Verständnis für fremde APIs</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Besseres Verständnis für fremde APIs</summary>
 <p>Wer das Beschreibungsformat selbst schreibt, erwirbt ein tieferes Verständnis für
 API-Design im Allgemeinen – und versteht damit auch fremde APIs besser. Das ist der
 Nutzen, der am längsten bleibt.</p>
-</section>
+</details>
 
-<section class="cf__detail cf__detail--pro" role="tabpanel" data-cf-detail="contract-6">
-<h3>Die API folgt dem Anwendungsfall</h3>
+<details class="avd-academy-tabs__panel" name="cf-contract">
+<summary>Die API folgt dem Anwendungsfall</summary>
 <p>Im Idealfall ergibt sich die API aus den fachlichen Anforderungen – <strong>nicht</strong>
 aus dem Datenbankschema und den Eigenheiten der Implementierung (typisch für Code
 First) und <strong>nicht</strong> aus den Dialogen der Oberfläche.</p>
 <p>Am leichtesten gelingt das, wenn beim Entwurf gar kein Code im Spiel ist, sondern
 ein technologieunabhängiges Format – das hält den Blick auf dem, was die API leisten
 soll.</p>
-</section>
-</div>
+</details>
 </div>
 
 <h2 class="cf__h2">Passt das auf Deine Lage?</h2>
@@ -362,24 +344,16 @@ anwendbar.</strong></p>
 /* Argumente als Reiterleiste: links das Argument, rechts die Ausfuehrung.
    Beim DRUCKEN faellt die Aufteilung weg - dann steht jedes Argument als
    eigenes Kapitel untereinander (siehe @media print am Ende). */
-.cf__tabs { display: grid; grid-template-columns: minmax(13rem, 20rem) minmax(0, 1fr); border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; }
-@media (max-width: 46rem) { .cf__tabs { grid-template-columns: minmax(0, 1fr); } }
-.cf__liste { display: flex; flex-direction: column; border-right: 1px solid var(--avd-academy-color-border); background: var(--avd-academy-color-bg-subtle); }
-@media (max-width: 46rem) { .cf__liste { border-right: none; border-bottom: 1px solid var(--avd-academy-color-border); } }
-.cf__tab { font: inherit; text-align: left; cursor: pointer; padding: .75rem 1rem; border: none; border-bottom: 1px solid var(--avd-academy-color-border); border-left: 4px solid var(--avd-academy-color-warning); background: transparent; color: var(--avd-academy-color-ink-muted); transition: var(--avd-academy-transition, all .15s ease); }
-.cf__tab.cf__detail--pro { border-left-color: var(--avd-academy-color-success); }
-.cf__tab:last-child { border-bottom: none; }
-.cf__tab:hover { color: var(--avd-academy-color-ink); }
-.cf__tab.is-aktiv { background: var(--avd-academy-color-bg); color: var(--avd-academy-color-ink); font-weight: 600; }
-.cf__tab:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px; }
-.cf__details { background: var(--avd-academy-color-bg); }
-.cf__detail { display: none; padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
-.cf__detail.is-aktiv { display: block; }
-/* Am Bildschirm steht der Titel schon links im Reiter - zweimal waere doppelt. */
-.cf__detail h3 { display: none; }
-.cf__detail p:last-child, .cf__detail ul:last-child { margin-bottom: 0; }
-.cf__gegen { font-size: var(--avd-academy-fs-sm, .92rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
-.cf__gegen strong { color: var(--avd-academy-color-ink); }
+.avd-academy-tabs__panel p:last-child, .avd-academy-tabs__panel ul:last-child { margin-bottom: 0; }
+/* DER TON JE GRUPPE. Die Komponente zeigt die Wahl als linke Kante in der
+   Akzentfarbe; hier bekommt sie die Bedeutung der Gruppe - Behauptungen warnend,
+   Argumente bestaetigend. Ein eigener Rahmen je Eintrag entfaellt damit: Die
+   Ueberschrift ueber der Gruppe sagt ohnehin, um welche Sorte es geht. */
+.cf--claims > .avd-academy-tabs__bar > .avd-academy-tabs__tab[aria-selected="true"] { border-left-color: var(--avd-academy-color-warning); }
+.cf--pros   > .avd-academy-tabs__bar > .avd-academy-tabs__tab[aria-selected="true"] { border-left-color: var(--avd-academy-color-success); }
+
+.cf__objection { font-size: var(--avd-academy-fs-sm, .92rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
+.cf__objection strong { color: var(--avd-academy-color-ink); }
 
 .cf__quiz { display: grid; gap: .6rem; margin-bottom: var(--avd-academy-space-4, 1rem); }
 .cf__frage { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: .7rem .9rem; background: var(--avd-academy-color-bg-subtle); }
@@ -400,16 +374,6 @@ anwendbar.</strong></p>
 /* GEDRUCKT gibt es keine Reiter. Dann steht jedes Argument als eigenes
    Kapitel untereinander - Ueberschrift plus Text, wie in einem Handout. */
 @media print {
-  .cf__tabs { display: block; border: none; border-radius: 0; }
-  .cf__liste { display: none; }
-  .cf__detail {
-    display: block; break-inside: avoid;
-    padding: .5rem 0 .5rem .9rem;
-    margin-bottom: .6rem;
-    border-left: 3pt solid var(--avd-academy-color-warning);
-  }
-  .cf__detail--pro { border-left-color: var(--avd-academy-color-success); }
-  .cf__detail h3 { display: block; margin-top: 0; }
   .cf__quiz, .cf__ergebnis { break-inside: avoid; }
 }
 </style>
@@ -429,23 +393,6 @@ anwendbar.</strong></p>
 
   var wurzel = document.querySelector(".cf");
   if (!wurzel) return;
-
-  /* Reiterleisten - je Gruppe genau ein sichtbarer Abschnitt. */
-  wurzel.querySelectorAll(".cf__tabs").forEach(function (gruppe) {
-    gruppe.addEventListener("click", function (e) {
-      var reiter = e.target.closest("[data-cf-tab]");
-      if (!reiter) return;
-      var kennung = reiter.dataset.cfTab;
-      gruppe.querySelectorAll("[data-cf-tab]").forEach(function (b) {
-        var an = b === reiter;
-        b.classList.toggle("is-aktiv", an);
-        b.setAttribute("aria-selected", an ? "true" : "false");
-      });
-      gruppe.querySelectorAll("[data-cf-detail]").forEach(function (d) {
-        d.classList.toggle("is-aktiv", d.dataset.cfDetail === kennung);
-      });
-    });
-  });
 
   var quiz = wurzel.querySelector("[data-cf-quiz]");
   var ergebnis = wurzel.querySelector("[data-cf-ergebnis]");
