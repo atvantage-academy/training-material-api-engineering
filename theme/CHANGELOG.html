@@ -64,13 +64,13 @@
 
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789777047"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789777047">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789777047">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789777047">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789777047"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789777047">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789777047" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789777047" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789777047">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789863962"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789863962">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789863962">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789863962">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789863962"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789863962">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789863962" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789863962" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789863962">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -78,8 +78,23 @@
     .then(([core, ...grammatiken]) => {
       const hljs = core.default;
       _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      document.querySelectorAll(_hlsprachen.map((s) => "pre code.language-" + s).join(","))
-        .forEach((el) => hljs.highlightElement(el));
+      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
+      const _faerben = (wurzel) => (wurzel || document)
+        .querySelectorAll(_auswahl)
+        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
+      _faerben(document);
+
+      /* NACHTRAEGLICH EINGEFUEGTER CODE. Die Hervorhebung laeuft einmal beim Laden.
+         Eine Seite, die ihre Codebloecke per Skript einsetzt - eine Visualisierung,
+         die rohe Nachrichten durchschaltet -, bekam deshalb gar keine Farben und
+         baute sich einen eigenen Hervorheber. Genau die Kopie, die das Theme
+         verhindern soll.
+
+         `AvdHighlight.apply(knoten)` faerbt, was seither dazugekommen ist; `hljs`
+         liegt daneben fuer Faelle, die mehr brauchen. Das Ereignis sagt Seiten, die
+         frueh zeichnen, wann der Haken da ist - die Module laden asynchron. */
+      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
+      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
 
       /* Statuszeile nach Klasse einfaerben. highlight.js gibt jedem dreistelligen
          Code dieselbe Klasse `hljs-number` - in einem Mitschnitt ist aber genau das
@@ -98,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789777047">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789777047"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789863962">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789863962"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
