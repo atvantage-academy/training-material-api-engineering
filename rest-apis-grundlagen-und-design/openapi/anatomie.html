@@ -64,13 +64,13 @@
 <meta property="og:description" content="Ein vollständiges OpenAPI-Dokument zum Anklicken – jeder Abschnitt erklärt, wozu er da ist.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789996134"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789996134"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789996134">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789996134" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789996134" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789996134">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790003436">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790003436" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790003436" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790003436">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789996134">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789996134"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790003436">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790003436"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
            aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -142,7 +142,12 @@ er da ist.</p>
 <div class="an__layout">
 
 <div class="an__codebox">
-<div class="an__tabs" role="tablist" aria-label="Abschnitte des Dokuments">
+<!-- KEINE REITER, SONDERN SPRUNGKNÖPFE: Sie scrollen zu einem Abschnitt, sie
+     schalten keine Panels um. `role="tablist"` verlangt Kinder mit `role="tab"`
+     und verspricht eine Bedienung, die es hier nicht gibt – eine Vorlesehilfe
+     sagte „Reiter 1 von 3“ und der Pfeiltaste passierte nichts. `group` sagt,
+     was es ist: eine benannte Gruppe von Schaltflächen. -->
+<div class="an__tabs" role="group" aria-label="Zu einem Abschnitt des Dokuments springen">
   <button type="button" class="an__tab" data-an-jump="openapi">Kopf</button>
   <button type="button" class="an__tab" data-an-jump="paths">paths</button>
   <button type="button" class="an__tab" data-an-jump="components">components</button>
@@ -206,7 +211,10 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
 
 .an__codebox { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; background: var(--avd-academy-color-bg); }
 .an__tabs { display: flex; gap: .3rem; padding: .5rem; border-bottom: 1px solid var(--avd-academy-color-border); background: var(--avd-academy-color-bg-subtle); }
-.an__tab { font: inherit; font-size: var(--avd-academy-fs-sm, .85rem); font-family: var(--avd-academy-font-mono, monospace); cursor: pointer; padding: .25em .8em; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); }
+/* `min-height`: WCAG 2.5.8 verlangt 24x24 Pixel Trefferflaeche. Bei .85rem und
+   .25em Innenabstand kam der Knopf auf 23,8 Pixel - gemessen, nicht geschaetzt.
+   Die Schrift bleibt gleich gross; nur die Flaeche waechst um zwei Zehntel. */
+.an__tab { font: inherit; font-size: var(--avd-academy-fs-sm, .85rem); font-family: var(--avd-academy-font-mono, monospace); cursor: pointer; padding: .25em .8em; min-height: 24px; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); }
 .an__tab:hover { border-color: var(--avd-academy-color-accent); }
 .an__tab:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
 
@@ -223,7 +231,11 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
   background: var(--avd-academy-code-bg); color: var(--avd-academy-color-ink);
   border: 0; border-radius: 0;
 }
-.an__block { display: block; cursor: pointer; border-left: 3px solid transparent; transition: var(--avd-academy-transition, all .15s ease); }
+/* `min-height`: Jede Zeile des Dokuments ist anklickbar (WCAG 2.5.8, 24 Pixel).
+   Gemessen waren es 22,3 - und weil die Zeilen unmittelbar aneinanderliegen,
+   gibt es keinen Abstand, der die Differenz ausgleicht. Der Codeblock wird
+   dadurch je Zeile knapp zwei Pixel luftiger; die Schrift bleibt gleich. */
+.an__block { display: block; min-height: 24px; cursor: pointer; border-left: 3px solid transparent; transition: var(--avd-academy-transition, all .15s ease); }
 .an__block:hover { background: var(--avd-academy-color-accent-soft); }
 .an__block.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
 .an__zeile { display: block; padding: 0 .9rem; white-space: pre; }

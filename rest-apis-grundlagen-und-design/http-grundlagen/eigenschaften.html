@@ -64,13 +64,13 @@
 <meta property="og:description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1789996134"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1789996134">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1789996134"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1789996134">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1789996134" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1789996134" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1789996134">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790003436">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790003436">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790003436" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790003436" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790003436">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1789996134">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1789996134"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790003436">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790003436"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
            aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -579,7 +579,10 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
 .hg__msg__fuss { margin: 0; padding: .35rem .8rem; font-size: .72rem; font-style: italic;
   color: var(--avd-academy-color-ink-muted); background: var(--avd-academy-color-bg-subtle);
   border-top: 1px solid var(--avd-academy-color-border); }
-.hg__teil { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid transparent; background: transparent; font: inherit; color: var(--avd-academy-color-ink); cursor: pointer; padding: .1rem .8rem; white-space: pre-wrap; word-break: break-word; transition: var(--avd-academy-transition, all .15s ease); }
+/* `min-height`: Jede Zeile der Nachricht ist anklickbar, und WCAG 2.5.8 verlangt
+   24 Pixel. Mit .1rem Innenabstand waren es 23,8 - die Zeilen liegen ausserdem
+   direkt aneinander, es gibt also keinen Abstand, der das ausgleicht. */
+.hg__teil { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid transparent; background: transparent; font: inherit; color: var(--avd-academy-color-ink); cursor: pointer; padding: .1rem .8rem; min-height: 24px; white-space: pre-wrap; word-break: break-word; transition: var(--avd-academy-transition, all .15s ease); }
 .hg__teil:hover { background: var(--avd-academy-color-accent-soft); }
 .hg__teil:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px; }
 .hg__teil.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
