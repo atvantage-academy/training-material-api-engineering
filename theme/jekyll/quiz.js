@@ -66,10 +66,10 @@
     var elKontext = q("context"), elFrage = q("question"), elOptionen = q("options"),
         elFeedback = q("feedback"), elWeiter = q("next"), elKarte = q("card"),
         elErgebnis = q("result"), elZaehler = q("counter"), elPunkte = q("score"),
-        elBalken = q("progress");
+        elBalken = q("progress"), elBalkenRahmen = q("bar");
     if (!elKarte || !elOptionen || !elWeiter) { return; }
 
-    var reihenfolge = [], aktuell = 0, punkte = 0;
+    var reihenfolge = [], aktuell = 0, punkte = 0, gestartet = false;
 
     /* DIE OPTIONEN WERDEN JE FRAGE GEMISCHT. Sonst steht die richtige Antwort
        zweimal hintereinander an derselben Stelle, und man raet die Position statt
@@ -117,7 +117,21 @@
 
       if (elZaehler) { elZaehler.textContent = fuellen(T.frageVon, aktuell + 1, reihenfolge.length); }
       if (elPunkte) { elPunkte.textContent = fuellen(T.richtigZahl, punkte); }
-      if (elBalken) { elBalken.style.width = (aktuell / reihenfolge.length * 100) + "%"; }
+      var stand = Math.round(aktuell / reihenfolge.length * 100);
+      if (elBalken) { elBalken.style.width = stand + "%"; }
+      if (elBalkenRahmen) {
+        elBalkenRahmen.setAttribute("aria-valuenow", String(stand));
+        elBalkenRahmen.setAttribute("aria-valuetext",
+          fuellen(T.frageVon, aktuell + 1, reihenfolge.length));
+      }
+
+      /* DER FOKUS MUSS MITKOMMEN. „Weiter“ blendet sich nach dem Klick aus - wer
+         mit der Tastatur arbeitet, stuende danach mit dem Fokus im Nichts (beim
+         `body`) und muesste sich von vorn durch die Seite tabben. Die Frage nimmt
+         ihn auf; zugleich liest eine Vorlesehilfe damit die neue Frage vor.
+         NICHT beim ersten Aufbau: Dort hat noch niemand etwas bedient, und ein
+         Sprung in die Seite beim blossen Laden waere eine Entfuehrung. */
+      if (elFrage && gestartet) { elFrage.focus(); }
     }
 
     function absatz(text, klasse) {
@@ -171,24 +185,31 @@
       elKarte.hidden = true;
       if (elErgebnis) { elErgebnis.hidden = false; }
       if (elBalken) { elBalken.style.width = "100%"; }
+      if (elBalkenRahmen) {
+        elBalkenRahmen.setAttribute("aria-valuenow", "100");
+        elBalkenRahmen.setAttribute("aria-valuetext", T.fertig);
+      }
       if (elZaehler) { elZaehler.textContent = T.fertig; }
       if (elPunkte) { elPunkte.textContent = fuellen(T.ergebnis, punkte, reihenfolge.length); }
 
       var deutung = deutungFinden(DEUTUNGEN, punkte / reihenfolge.length);
       var elTitel = q("result-title"), elZahl = q("result-score"), elText = q("result-verdict");
       if (elTitel) { elTitel.textContent = (deutung && deutung.title) || T.fertig; }
+      /* Auch hier wandert der Fokus mit - die Karte ist weg, die Auswertung neu. */
+      if (elTitel) { elTitel.setAttribute("tabindex", "-1"); elTitel.focus(); }
       if (elZahl) { elZahl.textContent = fuellen(T.ergebnisLang, punkte, reihenfolge.length); }
       if (elText) { elText.textContent = (deutung && deutung.text) || ""; }
     }
 
     elWeiter.addEventListener("click", function () {
+      gestartet = true;
       aktuell++;
       if (aktuell < reihenfolge.length) { zeigen(); return; }
       beenden();
     });
 
     var neu = q("restart");
-    if (neu) { neu.addEventListener("click", starten); }
+    if (neu) { neu.addEventListener("click", function () { gestartet = true; starten(); }); }
     if (neu) { neu.textContent = T.nochmal; }
 
     /* ERST JETZT die Klasse setzen - sie blendet den Rueckfall aus und die
