@@ -105,7 +105,11 @@
   --avd-academy-font-head:  var(--avd-academy-font-sans);
   --avd-academy-font-mono:  "Consolas", "SF Mono", ui-monospace, monospace;
 
-  --avd-academy-fs-root:      16px;
+  /* KEIN `--avd-academy-fs-root` MEHR. Es stand hier mit 16px, wurde aber von
+     KEINER Regel gelesen - ein Wert, der aussieht, als liesse sich die
+     Grundschrift damit einstellen, und es nicht tut. Die Grundschrift gehoert
+     ohnehin dem Browser: Wer sie hochstellt, tut das aus einem Grund, und das
+     Theme rechnet ueber `rem` von dort aus weiter. */
   --avd-academy-lh-body:      var(--text-line-height, 1.6);
   --avd-academy-lh-heading:   1.2;
   --avd-academy-fw-normal:    var(--text-weight, 400);

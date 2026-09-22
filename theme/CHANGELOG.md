@@ -15,6 +15,167 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.39.0
+
+### `avd-academy-walkthrough` – eine Zeile, eine Erklärung
+
+Eine rohe HTTP-Nachricht, ein OpenAPI-Dokument, ein Stück Code: Jede Zeile ist
+anklickbar und klappt ihre Erklärung auf.
+
+```html
+<div class="avd-academy-walkthrough">
+  <details class="avd-academy-walkthrough__line" name="anfrage">
+    <summary><span class="avd-academy-walkthrough__mark">GET</span> /produkte HTTP/1.1</summary>
+    <div class="avd-academy-walkthrough__note">Die Startzeile nennt Methode, Ziel und Protokollfassung.</div>
+  </details>
+</div>
+```
+
+**Grundlage ist `<details name="…">`**, wie bei Reitern und Reveal: Der Browser schaltet
+exklusiv, bringt Tastaturbedienung und `aria-expanded` mit, und ohne JavaScript bleibt
+jede Erklärung erreichbar.
+
+**Warum es den Baustein gibt:** Die Konstruktion kam in einem einzigen Schulungs-Repo
+**dreimal selbst gebaut** vor (A-013, A-016), jedes Mal mit denselben drei Fehlern:
+
+| | |
+| --- | --- |
+| Zeilen 22–24 px hoch | jetzt `min-height: 24px` – und weil Zeilen aneinanderliegen, greift die Abstands-Ausnahme gerade nicht (32 Stellen gemessen) |
+| dunkler Codeblock als Fläche | jetzt die zurückgenommene Seitenfläche – auf dunklem Grund kippen die Statusfarben (2,1:1 gemessen) |
+| Zustand nur über Farbe | jetzt ein Marker, der sich dreht (1.4.1) |
+
+Dazu: lange Zeilen scrollen **im Baustein** statt die Seite zu verbreitern, mit
+Tastaturzugang; im Druck stehen alle Erklärungen offen, ohne Marker, und Zeile und
+Erklärung bleiben zusammen auf einer Seite.
+
+Nachgemessen an der Doku-Seite, die den Baustein **lauffähig** zeigt: 28,2 px je Zeile,
+Enter öffnet, die nächste Zeile schliesst die vorige, Fokusring sichtbar.
+
+## 2.38.0
+
+### Schriftgrößen wachsen wieder mit der Browsereinstellung
+
+**25 `font-size`-Angaben standen in Pixeln** und reagierten damit nicht auf die
+Standardschriftgröße des Browsers. Das Ergebnis war nicht „zu klein", sondern
+**inkonsistent** – gemessen an einer Guide-Seite mit 24px Standardschrift:
+
+| | 16 px | 24 px |
+| --- | --- | --- |
+| Fließtext (rem) | 21,6 px | **32,4 px** |
+| Inhaltsverzeichnis (px) | 16 px | **16 px** |
+| Brotkrume (px) | 15 px | **15 px** |
+| Kartenbeschriftung (px) | 14 px | **14 px** |
+
+Die Seite wuchs zur Hälfte mit. Wer die Schriftgröße hochstellt, tut das aus einem
+Grund – und für viele ist es der einzige Weg, der ohne Zoom auskommt.
+
+Umgerechnet mit 16px Wurzel, also **dieselben Größen wie bisher**: 14px = 0.875rem,
+15px = 0.9375rem, 17px = 1.0625rem. Optisch ändert sich im Auslieferungszustand nichts.
+
+**Für Radien, Schatten und Haarlinien bleibt Pixel richtig.** Ein Rahmen, der mit der
+Schrift wächst, wird unscharf und gewinnt nichts. Die Regel lautet nicht „nie px",
+sondern „px nicht für Schrift".
+
+**Nicht enthalten:** Die H1 im Hero kommt aus dem ATVANTAGE-Fundament
+(`--h1-base: 38px`) und bleibt unangetastet – sie zu überschreiben wäre eine
+Design-Abweichung und keine Korrektur. Ebenso die Breakpoints, die weiter in Pixeln
+stehen; `em`-Breakpoints wären eine eigene, zu messende Entscheidung.
+
+### `--avd-academy-fs-root` entfällt
+
+Das Token stand mit `16px` im Satz und wurde von **keiner Regel gelesen** – ein Wert,
+der aussieht, als liesse sich damit die Grundschrift einstellen, und es nicht tut.
+
+**Einstufung: Minor, nicht Major.** Formal fällt „Token entfernt" unter Major. Die Regel
+schützt Projekte, die ein Token **setzen und damit etwas bewirken**; dieses konnte nichts
+bewirken, weil es nirgends gelesen wurde. Wer es gesetzt hat, sah keine Wirkung und
+verliert keine. Die Grundschrift gehört ohnehin dem Browser.
+
+## 2.37.0
+
+### `avd-academy-muted` – zurückgenommener Text, ohne den Kontrast mitzunehmen
+
+Für Randbemerkungen und Einleitungen gab es bisher keine Klasse, also nahmen die
+Unterlagen `opacity`. Das ist der naheliegendste Weg und der falsche: Die Deckkraft legt
+eine Ebene über die **ganze Gruppe** und senkt damit auch den Kontrast von allem, was
+darin hervorgehoben ist – ein Wort im Akzent, ein Verweis.
+
+Gemessen in `training-concept-java-se`: Die Schulungsfarbe erreicht abgeleitet 5,38:1;
+unter `opacity: .85` blieben **4,21**, an 46 Stellen. **Ein `opacity: 1` am Kindelement
+hebt das nicht auf** – Elterndeckkraft erzeugt eine eigene Ebene. Deshalb sieht man der
+CSS-Regel den Fehler nicht an.
+
+```html
+<p class="avd-academy-muted">Die Beispiele stammen aus Java 21.</p>
+```
+
+**`opacity` bleibt richtig, wo eine ganze Fläche mitsamt Hintergrund zurücktreten soll** –
+eine Pausenzeile in einer getönten Tabelle etwa. Das Theme nutzt es an drei Stellen
+genau dafür; falsch ist es über Text, dessen Farbe schon knapp ist. Beides steht jetzt
+in [Bausteine → Zurückgenommener Text](https://timetoact.ghe.com/pages/AVD-Academy-Tools/academy-theme/docs/theme/bausteine.html#muted)
+und im Plugin-Skill `barrierefreiheit-pruefen` (3.4.0).
+
+## 2.36.0
+
+### Der Bericht sagt, wofür er gilt
+
+Neue Option **`--label`**. Dieselbe Site wird in Schulungs-Repos mehrfach gebaut – einmal
+je Zielgruppe –, und beide Berichte landen am selben Ort: als Kommentar an demselben
+Issue. Dort stand zweimal „Barrierefreiheit: 2 Regel(n) verletzt" mit verschiedenen
+Zahlen, ohne dass erkennbar war, welche Fassung gemeint ist.
+
+```
+## ⚠️ Barrierefreiheit · learner: 2 Regel(n) verletzt
+```
+
+Ohne die Option bleibt alles wie bisher – wer nur ein Bündel baut, braucht keine
+Beschriftung.
+
+## 2.35.0
+
+### Eine Messung, die nichts messen konnte, meldet das jetzt
+
+**Der Fall, der es gezeigt hat:** Die Pipeline eines Schulungs-Repos baut das
+Lernenden-Bundle für eine Basisadresse (`/training-material-…`) – alle Verweise darin
+sind absolut. Ausgeliefert wurde es der Messung unter `/`. **Jede CSS- und JS-Datei lief
+ins Leere**, gemessen wurde nacktes HTML, und der Bericht nannte **468 Befunde**: zu
+kleine Trefferflächen, fehlende Namen, schlechte Kontraste. Alles wahr für die Seite, die
+der Browser sah – und alles falsch für die Unterlage.
+
+Zwei Änderungen, und die zweite ist die wichtigere:
+
+**`--baseurl`** reicht die Basisadresse durch: Der eingebaute Server bedient sie, und die
+Seiten werden darunter geöffnet.
+
+**Eine Plausibilitätsprobe vor jeder Messung.** Ist das Theme nicht angekommen – kein
+`--avd-academy-color-bg` im Dokument –, **gibt es kein Ergebnis, sondern eine Fehlmeldung
+mit Grund**. Die Seite zählt als „nicht messbar", und der Bericht sagt ausdrücklich, dass
+das **nicht** als „sauber" zu lesen ist. Ein Werkzeug, das im Zweifel schweigt, ist
+besser als eines, das im Zweifel Zahlen erfindet.
+
+### Kopiervorlagen werden nicht mehr gemessen
+
+Die Probe hat im eigenen Haus gleich zugeschlagen: `presentation-template.html` trägt
+statt Pfaden den Platzhalter `«BASISPFAD»` – sie lädt also weder Stylesheet noch Skript
+und ist erst dann eine Seite, wenn jemand sie kopiert. **Bisher wurde sie ungestylt
+gemessen und als sauber gemeldet**; jetzt bleibt sie draussen, und der Lauf sagt, welche
+Datei er warum übersprungen hat.
+
+Erkannt wird sie am Platzhalter **in einem Verweis** (`href`/`src`) – eine Doku-Seite,
+die ihn nur im Beispielcode zeigt, bleibt eine gewöhnliche Seite.
+
+### Die mitgelieferte Herkunftsnotiz ist keine Seite mehr
+
+`vendor/axe-core/HERKUNFT.md` wurde von Jekyll **als Seite gerendert** – in jeder
+Unterlage, die das Theme lädt. Die `exclude`-Liste des Themes half nicht: Jekyll
+**ersetzt** den Schlüssel, ein Repo mit eigener Liste verliert die des Themes. Die Datei
+heißt jetzt `HERKUNFT.txt`; was nicht wie eine Seite aussieht, kann auch keine werden.
+
+**Einstufung: Minor, nicht Major.** Die Regel „Dateien aus dem Paket entfernt = Major"
+schützt öffentliche Adressen und Asset-Pfade. Diese Datei ist eine Lizenz- und
+Herkunftsnotiz neben einer Bibliothek; sie wird von nichts verlinkt, und ihr bisheriger
+Pfad war ein Versehen, kein Angebot.
+
 ## 2.34.0
 
 ### Die Verweise sind wieder orange – als benannte Abweichung

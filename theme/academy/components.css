@@ -690,7 +690,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-metanav {
   background: var(--avd-academy-metanav-bg);
   color: var(--avd-academy-metanav-text);
-  font-size: 14px;
+  font-size: 0.875rem;
   display: flex;
   gap: 24px;
   padding: 6px max(24px, calc((100% - var(--avd-academy-page-width, 1200px)) / 2));
@@ -745,7 +745,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 }
 .avd-academy-header__nav { margin-left: auto; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
 .avd-academy-header__nav a {
-  text-decoration: none; font-weight: 500; font-size: 17px;
+  text-decoration: none; font-weight: 500; font-size: 1.0625rem;
   color: var(--avd-academy-color-headline);
 }
 .avd-academy-header__nav a:hover,
@@ -802,7 +802,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-header__grouptoggle {
   display: inline-flex; align-items: center; gap: 6px;
   background: none; border: 0; padding: 0; cursor: pointer;
-  font: inherit; font-weight: 500; font-size: 17px;
+  font: inherit; font-weight: 500; font-size: 1.0625rem;
   color: var(--avd-academy-color-headline);
 }
 .avd-academy-header__grouptoggle:hover,
@@ -810,7 +810,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
    ersten Ebene der Schalter der dritten gleich mit ein - zwei hervorgehobene
    Eintraege, obwohl nur einer den Fokus hat. */
 .avd-academy-header__group:focus-within > .avd-academy-header__grouptoggle { color: var(--avd-orange); }
-.avd-academy-header__caret { font-size: 11px; line-height: 1; }
+.avd-academy-header__caret { font-size: 0.6875rem; line-height: 1; }
 /* Inline-Icon in Link-Labels (TopNav, Footer, Ressourcen). Quadratische Quellbilder
    werden – wie GitHub-Profilbilder – KREISRUND dargestellt (quadratisch + border-radius
    50% + object-fit: cover). */
@@ -870,7 +870,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-header__group:focus-within > .avd-academy-header__submenu,
 .avd-academy-header__submenu[data-open] { display: flex; }
 .avd-academy-header__submenu a {
-  padding: 8px 20px; font-size: 16px; font-weight: 500; white-space: nowrap;
+  padding: 8px 20px; font-size: 1rem; font-weight: 500; white-space: nowrap;
   text-decoration: none; color: var(--avd-academy-color-headline);
 }
 .avd-academy-header__submenu a:hover,
@@ -971,7 +971,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-header__setlabel {
   position: relative;
   margin: 0; padding: 4px 20px 6px;
-  font-size: 12px; font-weight: var(--avd-academy-fw-bold, 700);
+  font-size: 0.75rem; font-weight: var(--avd-academy-fw-bold, 700);
   letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--avd-academy-color-ink-muted);
 }
@@ -990,7 +990,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
    (`__submenu a`) wuerde sie sonst zur gewoehnlichen Zeile machen; der
    Kompound-Selektor haelt die Ueberschriftenform. */
 .avd-academy-header__submenu a.avd-academy-header__setlabel--link {
-  padding: 4px 20px 2px; font-size: 12px; text-decoration: none;
+  padding: 4px 20px 2px; font-size: 0.75rem; text-decoration: none;
   color: var(--avd-academy-color-ink-muted);
 }
 .avd-academy-header__submenu a.avd-academy-header__setlabel--link:hover,
@@ -1015,7 +1015,7 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-header__group--sub { display: flex; width: 100%; }
 .avd-academy-header__grouptoggle--sub {
   width: 100%; justify-content: space-between;
-  padding: 8px 20px; font-size: 16px; text-align: left;
+  padding: 8px 20px; font-size: 1rem; text-align: left;
 }
 .avd-academy-header__grouptoggle--sub:hover { color: var(--avd-orange); background: var(--avd-academy-color-bg-subtle); }
 .avd-academy-header__caret--side { margin-left: 8px; }
@@ -1380,6 +1380,96 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 @media print {
   .avd-academy-tablescroll { overflow-x: visible; }
 }
+
+/* ===========================================================================
+   ZEILE FÜR ZEILE ERKLÄREN (`avd-academy-walkthrough`)
+   ---------------------------------------------------------------------------
+   Eine rohe HTTP-Nachricht, ein OpenAPI-Dokument, ein Stück Code: Jede Zeile ist
+   anklickbar und klappt ihre Erklärung auf. Die Konstruktion kam in einem
+   einzigen Schulungs-Repo DREIMAL selbst gebaut vor (A-013, A-016) – jedes Mal
+   mit denselben drei Fehlern.
+
+   GRUNDLAGE IST `<details name="…">`, wie bei Reitern und Reveal. Der Browser
+   schaltet exklusiv (eine Erklärung zur Zeit), bringt Tastaturbedienung und
+   `aria-expanded` von sich aus mit, und ohne JavaScript bleibt alles erreichbar.
+   Ein nachgebauter Klick-Handler hatte in den Eigenbauten weder das eine noch
+   das andere.
+
+   WAS DIE EIGENBAUTEN FALSCH HATTEN, und was hier deshalb festgelegt ist:
+
+   1. `min-height: 24px` an der Zeile. Eine Zeile Monospace mit knappem
+      Innenabstand kommt auf 22-24 Pixel; WCAG 2.5.8 verlangt 24. Und weil die
+      Zeilen unmittelbar aneinanderliegen, greift die Ausnahme „genug Platz
+      ringsum" gerade nicht - gemessen 32 Stellen in einem Repo.
+   2. Die Fläche ist die ZURÜCKGENOMMENE Seitenfläche, nicht der dunkle
+      Codeblock. Auf dunklem Grund kippen die Akzent- und Statusfarben, die in so
+      einer Nachricht vorkommen (gemessen 2,1:1).
+   3. Der Marker links zeigt den Zustand mit FORM, nicht nur mit Farbe: Er dreht
+      sich beim Öffnen. Farbe allein trägt nicht (1.4.1).
+   =========================================================================== */
+
+/* Der Klassenname steht zweimal - siehe die Begründung beim Reiter-Baustein:
+   Der Flussrhythmus in guide.css hat dieselbe Spezifität und lädt später. */
+.avd-academy-walkthrough.avd-academy-walkthrough {
+  margin: var(--avd-academy-space-6) 0;
+  border: 1px solid var(--avd-academy-color-border);
+  border-radius: var(--avd-academy-radius);
+  background: var(--avd-academy-color-bg-subtle);
+  overflow-x: auto;                 /* lange Zeilen scrollen IM Baustein */
+  overscroll-behavior-x: contain;
+}
+
+.avd-academy-walkthrough__line { border-bottom: 1px solid var(--avd-academy-color-border); }
+.avd-academy-walkthrough__line:last-child { border-bottom: 0; }
+
+.avd-academy-walkthrough__line > summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--avd-academy-space-2);
+  min-height: 24px;                 /* WCAG 2.5.8 - siehe oben */
+  padding: 0.2rem var(--avd-academy-space-3);
+  font-family: var(--avd-academy-font-mono);
+  font-size: var(--avd-academy-fs-sm);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  list-style: none;                 /* Standard-Dreieck weg (Firefox) */
+}
+.avd-academy-walkthrough__line > summary::-webkit-details-marker { display: none; }
+
+/* Der Marker: eine Form, die sich dreht - nicht nur eine Farbe. */
+.avd-academy-walkthrough__line > summary::before {
+  content: "›";
+  flex: none;
+  width: 1ch;
+  color: var(--avd-academy-color-ink-muted);
+  transition: var(--avd-academy-transition, transform 0.15s ease);
+}
+.avd-academy-walkthrough__line[open] > summary::before { transform: rotate(90deg); }
+
+.avd-academy-walkthrough__line > summary:hover { background: var(--avd-academy-color-accent-soft); }
+.avd-academy-walkthrough__line[open] > summary {
+  background: var(--avd-academy-color-accent-soft);
+  border-left-color: var(--avd-academy-color-accent);
+}
+
+/* Ein hervorgehobenes Stück der Zeile - Methode, Statuscode, Schlüssel. */
+.avd-academy-walkthrough__mark {
+  font-weight: var(--avd-academy-fw-bold, 700);
+  color: var(--avd-academy-color-accent-ink);
+}
+
+.avd-academy-walkthrough__note {
+  margin: 0;
+  padding: var(--avd-academy-space-3) var(--avd-academy-space-4);
+  border-left: 3px solid var(--avd-academy-color-accent);
+  background: var(--avd-academy-color-bg);
+  font-size: var(--avd-academy-fs-sm);
+}
+.avd-academy-walkthrough__note > :first-child { margin-top: 0; }
+.avd-academy-walkthrough__note > :last-child { margin-bottom: 0; }
 
 /* ===========================================================================
    TABS – ein langer Leitfaden in schaltbaren Abschnitten

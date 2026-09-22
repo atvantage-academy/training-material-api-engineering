@@ -211,4 +211,12 @@
     break-after: avoid;
   }
   .avd-academy-tabs--enhanced > .avd-academy-tabs__panel > summary::before { content: none; }
+
+  /* Zeilenerklärung: Auf Papier gibt es nichts aufzuklappen. Der Marker entfällt,
+     die Zeile bleibt eine Zeile, und Zeile und Erklärung gehören zusammen auf
+     dieselbe Seite. */
+  .avd-academy-walkthrough { overflow: visible !important; }
+  .avd-academy-walkthrough__line > summary::before { content: none !important; }
+  .avd-academy-walkthrough__line > summary { cursor: auto; break-after: avoid; }
+  .avd-academy-walkthrough__line { break-inside: avoid; }
 }

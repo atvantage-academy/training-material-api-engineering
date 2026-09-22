@@ -815,7 +815,9 @@
     var namenGemerkt = [];
     function nameAus() {
       namenGemerkt = [];
-      document.querySelectorAll("details.avd-academy-tabs__panel[name]").forEach(function (d) {
+      document.querySelectorAll(
+        "details.avd-academy-tabs__panel[name], details.avd-academy-walkthrough__line[name]"
+      ).forEach(function (d) {
         namenGemerkt.push([d, d.getAttribute("name")]);
         d.removeAttribute("name");
       });
@@ -828,7 +830,8 @@
       nameAus();
       fuerDruckGeoeffnet = [];
       document.querySelectorAll(
-        "details.avd-academy-reveal, details.avd-academy-tabs__panel"
+        "details.avd-academy-reveal, details.avd-academy-tabs__panel, " +
+        "details.avd-academy-walkthrough__line"
       ).forEach(function (d) {
         if (d.classList.contains("avd-academy-reveal--screen-only")) return;
         if (d.open) return;
@@ -1030,7 +1033,8 @@
       if (scrollt) { b.setAttribute("tabindex", "0"); }
       else if (b.getAttribute("tabindex") === "0") { b.removeAttribute("tabindex"); }
     }
-    var kandidaten = haupt.querySelectorAll(".avd-academy-tablescroll, pre, pre > code");
+    var kandidaten = haupt.querySelectorAll(
+      ".avd-academy-tablescroll, .avd-academy-walkthrough, pre, pre > code");
 
     /* EINMAL MESSEN GENUEGT NICHT. Ob ein Block ueberlaeuft, steht erst fest, wenn
        Schrift UND Inhalt endgueltig sind - und die Syntaxhervorhebung baut den

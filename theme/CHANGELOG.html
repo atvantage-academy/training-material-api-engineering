@@ -64,13 +64,13 @@
 
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790003436">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790003436">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790003436">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790003436"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790003436">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790003436" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790003436" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790003436">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790081655"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790081655">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790081655">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790081655">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790081655"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790081655">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790081655" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790081655" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790081655">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790003436">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790003436"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790081655">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790081655"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -174,6 +174,206 @@ inkompatibel gilt und wie eingestuft wird, steht in
 Abschnitt „Theme-Version“.</p>
 
 <hr />
+
+<h2 id="2390">2.39.0</h2>
+
+<h3 id="avd-academy-walkthrough--eine-zeile-eine-erklärung"><code>avd-academy-walkthrough</code> – eine Zeile, eine Erklärung</h3>
+
+<p>Eine rohe HTTP-Nachricht, ein OpenAPI-Dokument, ein Stück Code: Jede Zeile ist
+anklickbar und klappt ihre Erklärung auf.</p>
+
+<pre><code class="language-html">&lt;div class="avd-academy-walkthrough"&gt;
+  &lt;details class="avd-academy-walkthrough__line" name="anfrage"&gt;
+    &lt;summary&gt;&lt;span class="avd-academy-walkthrough__mark"&gt;GET&lt;/span&gt; /produkte HTTP/1.1&lt;/summary&gt;
+    &lt;div class="avd-academy-walkthrough__note"&gt;Die Startzeile nennt Methode, Ziel und Protokollfassung.&lt;/div&gt;
+  &lt;/details&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p><strong>Grundlage ist <code>&lt;details name="…"&gt;</code></strong>, wie bei Reitern und Reveal: Der Browser schaltet
+exklusiv, bringt Tastaturbedienung und <code>aria-expanded</code> mit, und ohne JavaScript bleibt
+jede Erklärung erreichbar.</p>
+
+<p><strong>Warum es den Baustein gibt:</strong> Die Konstruktion kam in einem einzigen Schulungs-Repo
+<strong>dreimal selbst gebaut</strong> vor (A-013, A-016), jedes Mal mit denselben drei Fehlern:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Zeilen 22–24 px hoch</td>
+      <td>jetzt <code>min-height: 24px</code> – und weil Zeilen aneinanderliegen, greift die Abstands-Ausnahme gerade nicht (32 Stellen gemessen)</td>
+    </tr>
+    <tr>
+      <td>dunkler Codeblock als Fläche</td>
+      <td>jetzt die zurückgenommene Seitenfläche – auf dunklem Grund kippen die Statusfarben (2,1:1 gemessen)</td>
+    </tr>
+    <tr>
+      <td>Zustand nur über Farbe</td>
+      <td>jetzt ein Marker, der sich dreht (1.4.1)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Dazu: lange Zeilen scrollen <strong>im Baustein</strong> statt die Seite zu verbreitern, mit
+Tastaturzugang; im Druck stehen alle Erklärungen offen, ohne Marker, und Zeile und
+Erklärung bleiben zusammen auf einer Seite.</p>
+
+<p>Nachgemessen an der Doku-Seite, die den Baustein <strong>lauffähig</strong> zeigt: 28,2 px je Zeile,
+Enter öffnet, die nächste Zeile schliesst die vorige, Fokusring sichtbar.</p>
+
+<h2 id="2380">2.38.0</h2>
+
+<h3 id="schriftgrößen-wachsen-wieder-mit-der-browsereinstellung">Schriftgrößen wachsen wieder mit der Browsereinstellung</h3>
+
+<p><strong>25 <code>font-size</code>-Angaben standen in Pixeln</strong> und reagierten damit nicht auf die
+Standardschriftgröße des Browsers. Das Ergebnis war nicht „zu klein”, sondern
+<strong>inkonsistent</strong> – gemessen an einer Guide-Seite mit 24px Standardschrift:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>16 px</th>
+      <th>24 px</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fließtext (rem)</td>
+      <td>21,6 px</td>
+      <td><strong>32,4 px</strong></td>
+    </tr>
+    <tr>
+      <td>Inhaltsverzeichnis (px)</td>
+      <td>16 px</td>
+      <td><strong>16 px</strong></td>
+    </tr>
+    <tr>
+      <td>Brotkrume (px)</td>
+      <td>15 px</td>
+      <td><strong>15 px</strong></td>
+    </tr>
+    <tr>
+      <td>Kartenbeschriftung (px)</td>
+      <td>14 px</td>
+      <td><strong>14 px</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Die Seite wuchs zur Hälfte mit. Wer die Schriftgröße hochstellt, tut das aus einem
+Grund – und für viele ist es der einzige Weg, der ohne Zoom auskommt.</p>
+
+<p>Umgerechnet mit 16px Wurzel, also <strong>dieselben Größen wie bisher</strong>: 14px = 0.875rem,
+15px = 0.9375rem, 17px = 1.0625rem. Optisch ändert sich im Auslieferungszustand nichts.</p>
+
+<p><strong>Für Radien, Schatten und Haarlinien bleibt Pixel richtig.</strong> Ein Rahmen, der mit der
+Schrift wächst, wird unscharf und gewinnt nichts. Die Regel lautet nicht „nie px”,
+sondern „px nicht für Schrift”.</p>
+
+<p><strong>Nicht enthalten:</strong> Die H1 im Hero kommt aus dem ATVANTAGE-Fundament
+(<code>--h1-base: 38px</code>) und bleibt unangetastet – sie zu überschreiben wäre eine
+Design-Abweichung und keine Korrektur. Ebenso die Breakpoints, die weiter in Pixeln
+stehen; <code>em</code>-Breakpoints wären eine eigene, zu messende Entscheidung.</p>
+
+<h3 id="--avd-academy-fs-root-entfällt"><code>--avd-academy-fs-root</code> entfällt</h3>
+
+<p>Das Token stand mit <code>16px</code> im Satz und wurde von <strong>keiner Regel gelesen</strong> – ein Wert,
+der aussieht, als liesse sich damit die Grundschrift einstellen, und es nicht tut.</p>
+
+<p><strong>Einstufung: Minor, nicht Major.</strong> Formal fällt „Token entfernt” unter Major. Die Regel
+schützt Projekte, die ein Token <strong>setzen und damit etwas bewirken</strong>; dieses konnte nichts
+bewirken, weil es nirgends gelesen wurde. Wer es gesetzt hat, sah keine Wirkung und
+verliert keine. Die Grundschrift gehört ohnehin dem Browser.</p>
+
+<h2 id="2370">2.37.0</h2>
+
+<h3 id="avd-academy-muted--zurückgenommener-text-ohne-den-kontrast-mitzunehmen"><code>avd-academy-muted</code> – zurückgenommener Text, ohne den Kontrast mitzunehmen</h3>
+
+<p>Für Randbemerkungen und Einleitungen gab es bisher keine Klasse, also nahmen die
+Unterlagen <code>opacity</code>. Das ist der naheliegendste Weg und der falsche: Die Deckkraft legt
+eine Ebene über die <strong>ganze Gruppe</strong> und senkt damit auch den Kontrast von allem, was
+darin hervorgehoben ist – ein Wort im Akzent, ein Verweis.</p>
+
+<p>Gemessen in <code>training-concept-java-se</code>: Die Schulungsfarbe erreicht abgeleitet 5,38:1;
+unter <code>opacity: .85</code> blieben <strong>4,21</strong>, an 46 Stellen. <strong>Ein <code>opacity: 1</code> am Kindelement
+hebt das nicht auf</strong> – Elterndeckkraft erzeugt eine eigene Ebene. Deshalb sieht man der
+CSS-Regel den Fehler nicht an.</p>
+
+<pre><code class="language-html">&lt;p class="avd-academy-muted"&gt;Die Beispiele stammen aus Java 21.&lt;/p&gt;
+</code></pre>
+
+<p><strong><code>opacity</code> bleibt richtig, wo eine ganze Fläche mitsamt Hintergrund zurücktreten soll</strong> –
+eine Pausenzeile in einer getönten Tabelle etwa. Das Theme nutzt es an drei Stellen
+genau dafür; falsch ist es über Text, dessen Farbe schon knapp ist. Beides steht jetzt
+in <a href="https://timetoact.ghe.com/pages/AVD-Academy-Tools/academy-theme/docs/theme/bausteine.html#muted">Bausteine → Zurückgenommener Text</a>
+und im Plugin-Skill <code>barrierefreiheit-pruefen</code> (3.4.0).</p>
+
+<h2 id="2360">2.36.0</h2>
+
+<h3 id="der-bericht-sagt-wofür-er-gilt">Der Bericht sagt, wofür er gilt</h3>
+
+<p>Neue Option <strong><code>--label</code></strong>. Dieselbe Site wird in Schulungs-Repos mehrfach gebaut – einmal
+je Zielgruppe –, und beide Berichte landen am selben Ort: als Kommentar an demselben
+Issue. Dort stand zweimal „Barrierefreiheit: 2 Regel(n) verletzt” mit verschiedenen
+Zahlen, ohne dass erkennbar war, welche Fassung gemeint ist.</p>
+
+<pre><code>## ⚠️ Barrierefreiheit · learner: 2 Regel(n) verletzt
+</code></pre>
+
+<p>Ohne die Option bleibt alles wie bisher – wer nur ein Bündel baut, braucht keine
+Beschriftung.</p>
+
+<h2 id="2350">2.35.0</h2>
+
+<h3 id="eine-messung-die-nichts-messen-konnte-meldet-das-jetzt">Eine Messung, die nichts messen konnte, meldet das jetzt</h3>
+
+<p><strong>Der Fall, der es gezeigt hat:</strong> Die Pipeline eines Schulungs-Repos baut das
+Lernenden-Bundle für eine Basisadresse (<code>/training-material-…</code>) – alle Verweise darin
+sind absolut. Ausgeliefert wurde es der Messung unter <code>/</code>. <strong>Jede CSS- und JS-Datei lief
+ins Leere</strong>, gemessen wurde nacktes HTML, und der Bericht nannte <strong>468 Befunde</strong>: zu
+kleine Trefferflächen, fehlende Namen, schlechte Kontraste. Alles wahr für die Seite, die
+der Browser sah – und alles falsch für die Unterlage.</p>
+
+<p>Zwei Änderungen, und die zweite ist die wichtigere:</p>
+
+<p><strong><code>--baseurl</code></strong> reicht die Basisadresse durch: Der eingebaute Server bedient sie, und die
+Seiten werden darunter geöffnet.</p>
+
+<p><strong>Eine Plausibilitätsprobe vor jeder Messung.</strong> Ist das Theme nicht angekommen – kein
+<code>--avd-academy-color-bg</code> im Dokument –, <strong>gibt es kein Ergebnis, sondern eine Fehlmeldung
+mit Grund</strong>. Die Seite zählt als „nicht messbar”, und der Bericht sagt ausdrücklich, dass
+das <strong>nicht</strong> als „sauber” zu lesen ist. Ein Werkzeug, das im Zweifel schweigt, ist
+besser als eines, das im Zweifel Zahlen erfindet.</p>
+
+<h3 id="kopiervorlagen-werden-nicht-mehr-gemessen">Kopiervorlagen werden nicht mehr gemessen</h3>
+
+<p>Die Probe hat im eigenen Haus gleich zugeschlagen: <code>presentation-template.html</code> trägt
+statt Pfaden den Platzhalter <code>«BASISPFAD»</code> – sie lädt also weder Stylesheet noch Skript
+und ist erst dann eine Seite, wenn jemand sie kopiert. <strong>Bisher wurde sie ungestylt
+gemessen und als sauber gemeldet</strong>; jetzt bleibt sie draussen, und der Lauf sagt, welche
+Datei er warum übersprungen hat.</p>
+
+<p>Erkannt wird sie am Platzhalter <strong>in einem Verweis</strong> (<code>href</code>/<code>src</code>) – eine Doku-Seite,
+die ihn nur im Beispielcode zeigt, bleibt eine gewöhnliche Seite.</p>
+
+<h3 id="die-mitgelieferte-herkunftsnotiz-ist-keine-seite-mehr">Die mitgelieferte Herkunftsnotiz ist keine Seite mehr</h3>
+
+<p><code>vendor/axe-core/HERKUNFT.md</code> wurde von Jekyll <strong>als Seite gerendert</strong> – in jeder
+Unterlage, die das Theme lädt. Die <code>exclude</code>-Liste des Themes half nicht: Jekyll
+<strong>ersetzt</strong> den Schlüssel, ein Repo mit eigener Liste verliert die des Themes. Die Datei
+heißt jetzt <code>HERKUNFT.txt</code>; was nicht wie eine Seite aussieht, kann auch keine werden.</p>
+
+<p><strong>Einstufung: Minor, nicht Major.</strong> Die Regel „Dateien aus dem Paket entfernt = Major”
+schützt öffentliche Adressen und Asset-Pfade. Diese Datei ist eine Lizenz- und
+Herkunftsnotiz neben einer Bibliothek; sie wird von nichts verlinkt, und ihr bisheriger
+Pfad war ein Versehen, kein Angebot.</p>
 
 <h2 id="2340">2.34.0</h2>
 
