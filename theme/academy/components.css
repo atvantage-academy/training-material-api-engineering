@@ -1597,6 +1597,13 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
 .avd-academy-tabs--enhanced > .avd-academy-tabs__panel[open] {
   padding: var(--avd-academy-space-6, 1.5rem);
 }
+/* DAS UNSICHTBARE `summary` ZAEHLT TROTZDEM ALS GESCHWISTER. Im Reiterstreifen
+   ist es `display: none`; die Eulenregel des Rhythmus sieht es dennoch und gibt
+   dem ersten sichtbaren Element einen Blockabstand - der zum Innenabstand des
+   Panels hinzukaeme. Gemessen: 24 px Padding plus 25,6 px Marge ueber dem ersten
+   Absatz. Im Akkordeon-Zustand (ohne `--enhanced`) ist das `summary` sichtbar,
+   und dort gehoert der Abstand hin; deshalb greift diese Regel nur hier. */
+.avd-academy-tabs--enhanced > .avd-academy-tabs__panel > summary + * { margin-top: 0; }
 
 /* --- Reiter links statt oben (`--side`) ----------------------------------- *
    WOFUER: Beschriftungen, die ganze Saetze sind. Der waagerechte Streifen
@@ -1652,4 +1659,117 @@ pre > .avd-academy-copy.is-copied { opacity: 1; }
     border-right: 0;
     border-bottom: 1px solid var(--avd-academy-color-border);
   }
+}
+
+
+/* ===========================================================================
+   AKKORDEON (`avd-academy-accordion`)
+   ---------------------------------------------------------------------------
+   Ueberschriften werden zu Klappbereichen. Der Autor schreibt gewoehnliches
+   Markdown in einen Kasten; das Skript baut daraus Knoepfe und Bereiche und
+   setzt erst danach `--enhanced`.
+
+   OHNE DIESE KLASSE PASSIERT HIER NICHTS. Das ist die ganze Absicherung: Ohne
+   JavaScript steht ein gewoehnliches Dokument da, vollstaendig und lesbar. Kein
+   `display: none` ausserhalb von `--enhanced`.
+
+   ABGRENZUNG ZU DEN REITERN: Dort schreibt der Autor `<details>` und bekommt
+   einen Streifen; hier bleibt die Gliederung des Dokuments stehen und bekommt
+   eine Bedienung. Beides exklusiv, beides aus demselben Grund - eine lange
+   Seite soll nicht in ganzer Laenge dastehen.
+   =========================================================================== */
+
+/* Der eigene Abstand im Textfluss - der Klassenname steht ZWEIMAL, wie bei den
+   Reitern. Begruendung dort: Der Flussrhythmus `.avd-academy-guide-main > * + *`
+   hat dieselbe Spezifitaet (0-1-0) und laedt spaeter; die Dopplung hebt auf
+   0-2-0 und entscheidet es unabhaengig von der Ladereihenfolge. */
+.avd-academy-accordion.avd-academy-accordion {
+  margin: var(--avd-academy-space-8, 2rem) 0 var(--avd-academy-space-6, 1.5rem);
+}
+
+/* Eine Linie je Bereich - dieselbe Sprache wie das Akkordeon der Reiter ohne
+   JavaScript. Kein Rahmen um das Ganze: Die Bereiche stehen IM Text und sollen
+   nicht wie ein eingesetztes Bedienfeld wirken. */
+.avd-academy-accordion--enhanced > :is(h2, h3, h4, h5, h6) {
+  margin: 0;
+  border-top: 1px solid var(--avd-academy-color-border);
+}
+.avd-academy-accordion--enhanced > :is(h2, h3, h4, h5, h6):last-child,
+.avd-academy-accordion--enhanced > .avd-academy-accordion__region:last-child {
+  border-bottom: 1px solid var(--avd-academy-color-border);
+}
+
+/* DER KNOPF FUELLT DIE UEBERSCHRIFT. Er erbt Schriftgroesse und -gewicht der
+   Ebene, in der er steht - eine `###`-Liste sieht damit aus wie `###` und nicht
+   wie eine Reihe gleicher Knoepfe. `width: 100%` macht die ganze Zeile
+   anklickbar; die Zielgroesse (WCAG 2.5.8) ist ueber den Innenabstand ohnehin
+   weit ueberschritten. */
+.avd-academy-accordion__toggle {
+  appearance: none; cursor: pointer;
+  display: flex; align-items: baseline; gap: 0.6rem;
+  width: 100%; text-align: left;
+  background: transparent; border: 0; border-radius: 0;
+  padding: var(--avd-academy-space-3, 0.75rem) 0;
+  color: inherit; font: inherit;
+  /* MITSCROLLEN BRAUCHT LUFT. Der Header klebt oben; ohne diesen Rand landet
+     der gewaehlte Kopf beim Springen darunter und ist nicht zu sehen. */
+  scroll-margin-top: calc(var(--topnav-height, 80px) + 1rem);
+}
+.avd-academy-accordion__toggle:hover { color: var(--avd-academy-color-accent-ink); }
+.avd-academy-accordion__toggle:focus-visible {
+  outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px;
+}
+
+/* Das Dreieck zeigt den Zustand an - dasselbe Zeichen und dieselbe Drehung wie
+   bei Reitern und Fold, damit „aufklappbar“ auf jeder Seite gleich aussieht.
+   `flex: none` haelt es bei langen Ueberschriften in der ersten Zeile. */
+.avd-academy-accordion__toggle::before {
+  content: "▸"; flex: none;
+  color: var(--avd-academy-color-accent);
+  transition: transform var(--avd-academy-transition, 160ms ease);
+}
+.avd-academy-accordion__toggle[aria-expanded="true"]::before { transform: rotate(90deg); }
+
+/* DIE BEWEGUNG - dieselbe Bauart wie im Burger-Menue, aus demselben Grund:
+   `0fr` -> `1fr` rechnet mit der WIRKLICHEN Hoehe. Ein `max-height`-Ansatz
+   faellt beim Zuklappen erst durch den zu grossen Wert, bevor etwas passiert;
+   sichtbar wird nur das letzte Zehntel, und das sieht aus wie ein Sprung.
+
+   `minmax(0, 0fr)` und nicht `0fr`: Letzteres ist die Kurzform fuer
+   `minmax(auto, 0fr)`, und das `auto` haelt die Zeile auf der Mindesthoehe des
+   Inhalts - gemessen blieb der Innenabstand stehen statt null.
+
+   `visibility` schaltet verzoegert: erst nach der Bewegung unsichtbar, beim
+   Oeffnen sofort. So laeuft der Fokus nicht in einen Bereich, der zu ist.
+
+   Die globale Regel in base.css setzt bei `prefers-reduced-motion` jede Dauer
+   auf 0,01 ms - hier steht deshalb keine eigene Ausnahme. */
+.avd-academy-accordion__region {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr);
+  transition: grid-template-rows 220ms ease;
+}
+.avd-academy-accordion__region.is-open { grid-template-rows: minmax(0, 1fr); }
+
+.avd-academy-accordion__body {
+  min-height: 0; overflow: hidden;
+  visibility: hidden;
+  padding-bottom: 0;
+  transition: padding-bottom 220ms ease, visibility 0s linear 220ms;
+}
+.avd-academy-accordion__region.is-open > .avd-academy-accordion__body {
+  visibility: visible;
+  padding-bottom: var(--avd-academy-space-4, 1rem);
+  transition: padding-bottom 220ms ease, visibility 0s;
+}
+.avd-academy-accordion__body > :first-child { margin-top: 0; }
+.avd-academy-accordion__body > :last-child { margin-bottom: 0; }
+
+/* Ein Akkordeon IM Akkordeon ruecken wir ein - sonst steht die zweite Ebene auf
+   derselben Kante wie die erste, und die Schachtelung ist nicht zu sehen. Die
+   Linie links sagt dasselbe noch einmal fuer den, der nur den Rand wahrnimmt. */
+.avd-academy-accordion .avd-academy-accordion.avd-academy-accordion {
+  margin: var(--avd-academy-space-2, 0.5rem) 0;
+  padding-left: var(--avd-academy-space-4, 1rem);
+  border-left: 2px solid var(--avd-academy-border-soft);
 }
