@@ -64,13 +64,13 @@
 
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790166398"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790166398">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790166398">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790166398">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790166398"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790166398">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790166398" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790166398" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790166398">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790244106"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790244106">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790244106">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790244106">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790244106"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790244106">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790244106" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790244106" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790244106">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790166398">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790166398"></head><body class="avd-academy-guide">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790244106">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790244106"></head><body class="avd-academy-guide">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
   </div>
 
@@ -172,6 +172,36 @@
 inkompatibel gilt und wie eingestuft wird, steht in
 <a href="https://timetoact.ghe.com/AVD-Academy-Tools/academy-theme/blob/main/AGENTS.md"><code>AGENTS.md</code></a>,
 Abschnitt „Theme-Version“.</p>
+
+<hr />
+
+<h2 id="2450">2.45.0</h2>
+
+<h3 id="die-wortmarke-war-in-simulation-und-präsentation-orange-statt-in-der-schulungsfarbe">Die Wortmarke war in Simulation und Präsentation orange statt in der Schulungsfarbe</h3>
+
+<p>Gemeldet aus dem Docker-Grundlagenkurs: „Nur die Simulation hat ein orangenes Logo.”</p>
+
+<p><strong>Und genau so war es.</strong> <code>brand.logo_ratio</code> schaltet die Wortmarke von Bild auf Maske, damit
+sie die Schulungsfarbe trägt – gebaut war das aber nur in <code>_includes/header.html</code>, also für
+alles, was durch <code>default.html</code> läuft. <code>presentation</code> und <code>simulation</code> sind <strong>eigenständige
+Dokumente</strong> mit eigenem <code>&lt;!DOCTYPE html&gt;</code>; sie banden die Marke als schlichtes <code>&lt;img&gt;</code> ein.
+Ein <code>&lt;img&gt;</code> lädt das SVG als eigenes Dokument, und dort ist weder ein Token der Seite noch
+<code>currentColor</code> sichtbar – die Datei behielt ihre eigene Farbe.</p>
+
+<p>Aufgefallen ist es erst jetzt, weil die Vorlage bis vor Kurzem eine <strong>grüne</strong> Platzhalter-
+Wortmarke lieferte: Grün neben Grün fällt nicht auf, Orange neben Blau schon.</p>
+
+<p>Beide Layouts tragen jetzt dieselbe Konstruktion wie der Kopfbereich – <code>&lt;img&gt;</code> plus
+eingefärbter <code>&lt;span&gt;</code>, und das Bild bleibt stehen, wenn eine Engine keine Masken kann.</p>
+
+<p><strong>Nachgemessen</strong> an der mitgelieferten Beispiel-Simulation: <code>&lt;img&gt;</code> ausgeblendet, Maske
+sichtbar, Farbe der Akzent der Site.</p>
+
+<p><strong>Neue Namen:</strong> <code>avd-academy-sim__logo-mask</code>, <code>avd-academy-present__logo-mask</code>.</p>
+
+<p><strong>Die eigentliche Lehre steht in der Doku:</strong> Eigenständig heißt, dass jede Gemeinsamkeit
+zweimal gebaut werden muss – und genau dort entstehen Abweichungen, die niemand sucht. Wer
+an Kopfbereich oder Marke etwas ändert, sieht in beiden Layouts nach.</p>
 
 <hr />
 

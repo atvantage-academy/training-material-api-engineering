@@ -15,6 +15,36 @@ Abschnitt „Theme-Version“.
 
 ---
 
+## 2.45.0
+
+### Die Wortmarke war in Simulation und Präsentation orange statt in der Schulungsfarbe
+
+Gemeldet aus dem Docker-Grundlagenkurs: „Nur die Simulation hat ein orangenes Logo."
+
+**Und genau so war es.** `brand.logo_ratio` schaltet die Wortmarke von Bild auf Maske, damit
+sie die Schulungsfarbe trägt – gebaut war das aber nur in `_includes/header.html`, also für
+alles, was durch `default.html` läuft. `presentation` und `simulation` sind **eigenständige
+Dokumente** mit eigenem `<!DOCTYPE html>`; sie banden die Marke als schlichtes `<img>` ein.
+Ein `<img>` lädt das SVG als eigenes Dokument, und dort ist weder ein Token der Seite noch
+`currentColor` sichtbar – die Datei behielt ihre eigene Farbe.
+
+Aufgefallen ist es erst jetzt, weil die Vorlage bis vor Kurzem eine **grüne** Platzhalter-
+Wortmarke lieferte: Grün neben Grün fällt nicht auf, Orange neben Blau schon.
+
+Beide Layouts tragen jetzt dieselbe Konstruktion wie der Kopfbereich – `<img>` plus
+eingefärbter `<span>`, und das Bild bleibt stehen, wenn eine Engine keine Masken kann.
+
+**Nachgemessen** an der mitgelieferten Beispiel-Simulation: `<img>` ausgeblendet, Maske
+sichtbar, Farbe der Akzent der Site.
+
+**Neue Namen:** `avd-academy-sim__logo-mask`, `avd-academy-present__logo-mask`.
+
+**Die eigentliche Lehre steht in der Doku:** Eigenständig heißt, dass jede Gemeinsamkeit
+zweimal gebaut werden muss – und genau dort entstehen Abweichungen, die niemand sucht. Wer
+an Kopfbereich oder Marke etwas ändert, sieht in beiden Layouts nach.
+
+---
+
 ## 2.44.0
 
 ### Der Blockrhythmus fehlte in Reitern, im Akkordeon – und an Listen und Zitaten überall
