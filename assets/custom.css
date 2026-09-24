@@ -44,7 +44,7 @@
      Vorgabe ist das Academy-Blau. Ein Kurs darf einen eigenen Farbton setzen;
      geändert wird dann NUR diese Zeile. Abgeleitet trägt der Ton in beiden
      Farbschemata – roh gesetzt fast keiner, siehe oben. */
-  --avd-academy-accent-base: #0e7c66;
+  --avd-academy-accent-base: #0198FF;
 
   /* Fließtext-LINKS hängen nicht am Academy-Akzent, sondern am Fundament
      (`a { color: var(--color-link) }` → `--color-orange` → `--avd-orange`).
