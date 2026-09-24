@@ -64,13 +64,13 @@
 <meta property="og:description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247198">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247198" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247198" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247198">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247898">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247898" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247898" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247898">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247198">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247198"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247898">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247898"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
            aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -207,7 +207,7 @@ jeder Website, sofort.</p>
 </svg>
 <h3>Textbasiert</h3>
 <p class="hg__karte__kurz">Eine HTTP-Nachricht ist lesbarer Text – deshalb kannst Du sie mitlesen.</p>
-<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<button type="button" class="hg__mehr" data-hg-mehr="textbasiert" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
         <p>Kein Binärformat, kein Werkzeugzwang: Du kannst eine Nachricht in ein Ticket
 kopieren und von Hand nachbauen. Fehlersuche ist hier billig.</p>
@@ -259,7 +259,7 @@ auf der Leitung.</p>
 </svg>
 <h3>Zustandslos</h3>
 <p class="hg__karte__kurz">Nicht der Server vergisst – die <em>Leitung</em> trägt keine Erinnerung von einem Nachrichtenpaar zum nächsten.</p>
-<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<button type="button" class="hg__mehr" data-hg-mehr="zustandslos" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
         <p>HTTP verbindet zwei Anfrage-Antwort-Paare <strong>nicht</strong>. Für das Protokoll ist die
 vorherige Nachricht nicht vorhanden – also muss <strong>jede Anfrage aus sich heraus
@@ -314,7 +314,7 @@ Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworte
 </svg>
 <h3>Request – Response</h3>
 <p class="hg__karte__kurz">Genau zwei Arten von Nachrichten, und sie kommen immer paarweise.</p>
-<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<button type="button" class="hg__mehr" data-hg-mehr="request-response" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
         <p>Auf jede Anfrage folgt genau eine Antwort. Der Server spricht <strong>nie von sich aus</strong>.</p>
 
@@ -362,7 +362,7 @@ antworten.</p>
 </svg>
 <h3>Hyper</h3>
 <p class="hg__karte__kurz">Das <strong>H</strong> in HTTP: Die Antwort bringt die Verweise mit, die den nächsten Aufruf möglich machen.</p>
-<button type="button" class="hg__mehr" aria-expanded="false">Was daraus folgt</button>
+<button type="button" class="hg__mehr" data-hg-mehr="hyper" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
         <p><strong>Hypertext</strong> ist Text, der Verweise auf anderen Text enthält – klickbar statt
 linear zu lesen. <strong>Hypermedia</strong> ist dasselbe Prinzip für alle Inhaltsarten: Bilder,
@@ -748,11 +748,16 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
 
   wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
     var detail = knopf.nextElementSibling;
-    knopf.addEventListener("click", function () {
-      var offen = detail.classList.toggle("is-offen");
+    function schalte(offen) {
+      detail.classList.toggle("is-offen", offen);
       knopf.setAttribute("aria-expanded", offen ? "true" : "false");
       knopf.textContent = offen ? "Weniger" : "Was daraus folgt";
+    }
+    knopf.addEventListener("click", function () {
+      schalte(!detail.classList.contains("is-offen"));
+      merken();
     });
+    knopf._hg = schalte;
   });
 
   /* --- Die Nachricht: Bestandteile anklickbar ------------------------------ */
@@ -778,7 +783,10 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
                                        .replace(/\b(200)\b/, '<span class="hg__marke">$1</span>');
         return t;
       }).join("\n");
-      knopf.addEventListener("click", function () { zeige(teil, knopf); });
+      knopf.addEventListener("click", function () { zeige(teil, knopf); merken(); });
+      /* Kennung fuer die Adresse: `anfrage-header` statt einer Nummer. */
+      knopf.dataset.hgTeil = schluessel + "-" + teil.art;
+      knopf._hgTeil = teil;
       alle.push(knopf);
       ziel.appendChild(knopf);
     });
@@ -788,6 +796,52 @@ der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; de
     alle.forEach(function (k) { k.classList.toggle("is-aktiv", k === knopf); });
     detail.innerHTML = "<h3>" + teil.titel + "</h3><p>" + teil.text + "</p>" +
       (teil.merke ? '<p class="hg__merke">' + teil.merke + "</p>" : "");
+  }
+
+  /* --- Zustand in der Adresse ---------------------------------------------
+     ZWEI DINGE STEHEN HIER ZUR WAHL: welcher Bestandteil der Nachricht erklaert
+     wird (`teil`) und welche „Was daraus folgt"-Abschnitte offen sind (die reihen
+     sich in den gemeinsamen Schluessel `open` des Themes ein). Ein Kapitel des
+     Regiebuchs kann damit auf „die Leerzeile" zeigen statt auf die Seite.
+
+     Angemeldet wird bei `AvdAcademyState` (Theme ab 2.46.0) - es gibt nur EIN
+     Fragment je Seite, und wer allein hineinschreibt, loescht den Zustand der
+     uebrigen Bausteine. Erst bei DOMContentLoaded, weil das Theme-Skript `defer`
+     traegt und damit nach diesem hier laeuft.
+
+     BEWUSST NICHT IN DER ADRESSE: die beiden `<dialog>`-Nachtraege. Ein modaler
+     Dialog, der sich beim Laden von selbst oeffnet, faengt den Fokus, bevor
+     jemand weiss, worum es geht. */
+  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
+
+  function anmelden() {
+    if (!window.AvdAcademyState) { return; }
+
+    window.AvdAcademyState.register({
+      key: "teil",
+      read: function () {
+        var a = alle.filter(function (k) { return k.classList.contains("is-aktiv"); })[0];
+        return a ? a.dataset.hgTeil : "";
+      },
+      apply: function (wert) {
+        var k = alle.filter(function (x) { return x.dataset.hgTeil === wert; })[0];
+        if (k) { zeige(k._hgTeil, k); }
+      }
+    });
+
+    wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
+      var detail = knopf.nextElementSibling;
+      window.AvdAcademyState.openable({
+        id: "folgt-" + knopf.getAttribute("data-hg-mehr"),
+        istOffen: function () { return detail.classList.contains("is-offen"); },
+        setzen: function (auf) { knopf._hg(auf); }
+      });
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", anmelden);
+  } else {
+    anmelden();
   }
 
   /* Fuer den Ausdruck: alle Erklaerungen als Liste. Am Bildschirm ausgeblendet. */

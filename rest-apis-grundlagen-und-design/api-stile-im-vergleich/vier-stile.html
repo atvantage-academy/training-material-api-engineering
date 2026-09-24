@@ -64,13 +64,13 @@
 <meta property="og:description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247198">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247198" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247198" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247198">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247898">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247898" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247898" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247898">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247198">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247198"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247898">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247898"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
            aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -1223,10 +1223,45 @@ Auswertung, die in den Body schaut – mit HTTP-Bordmitteln kommt er nicht weit.
 
   wurzel.addEventListener("click", function (e) {
     var s = e.target.closest("[data-stil]");
-    if (s) { stil = s.dataset.stil; zeichne(); return; }
+    if (s) { stil = s.dataset.stil; zeichne(); merken(); return; }
     var f = e.target.closest("[data-fall]");
-    if (f) { fall = f.dataset.fall; zeichne(); }
+    if (f) { fall = f.dataset.fall; zeichne(); merken(); }
   });
+
+  /* --- Zustand in der Adresse ---------------------------------------------
+     STIL UND FALL SIND ZWEI ACHSEN - und genau die Kombination ist das, worauf
+     ein Kapitel zeigen will („GraphQL, wenn nur zwei Felder gebraucht werden").
+     Ohne Zustand in der Adresse landet jeder Verweis bei SOAP/alles, und ein
+     Neuladen waehrend der Schulung wirft das Gespraech zurueck.
+
+     Angemeldet wird bei `AvdAcademyState` des Themes (ab 2.46.0) statt selbst ins
+     Fragment zu schreiben: Es gibt nur eines je Seite. Erst bei DOMContentLoaded,
+     weil das Theme-Skript `defer` traegt und damit nach diesem hier laeuft. */
+  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
+
+  function anmelden() {
+    if (!window.AvdAcademyState) { return; }
+    function achse(schluessel, holen, setzen) {
+      window.AvdAcademyState.register({
+        key: schluessel,
+        read: holen,
+        apply: function (wert) {
+          /* Nur bekannte Werte - eine von Hand getippte Adresse darf Unsinn
+             enthalten, und dann bleibt es beim Ausgangszustand. */
+          if (!wurzel.querySelector("[data-" + schluessel + '="' + wert.replace(/[^a-z0-9-]/gi, "") + '"]')) { return; }
+          setzen(wert);
+          zeichne();
+        }
+      });
+    }
+    achse("stil", function () { return stil; }, function (w) { stil = w; });
+    achse("fall", function () { return fall; }, function (w) { fall = w; });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", anmelden);
+  } else {
+    anmelden();
+  }
 
   zeichne();
 })();

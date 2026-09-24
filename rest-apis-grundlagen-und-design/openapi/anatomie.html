@@ -64,13 +64,13 @@
 <meta property="og:description" content="Ein vollständiges OpenAPI-Dokument zum Anklicken – jeder Abschnitt erklärt, wozu er da ist.">
 <meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247198">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247198"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247198">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247198" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247198" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247198">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247898">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247898">
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247898" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247898" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247898">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -113,8 +113,8 @@
 <link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247198">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247198"></head><body class="avd-academy-guide avd-academy-guide--viz">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247898">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247898"></head><body class="avd-academy-guide avd-academy-guide--viz">
   <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
            aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
@@ -386,17 +386,20 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
     el.innerHTML = b.zeilen.map(function (z) {
       return '<span class="an__zeile">' + (faerbe(z) || "&nbsp;") + "</span>";
     }).join("");
-    el.addEventListener("click", function () { zeige(b, el); });
+    el.addEventListener("click", function () { zeige(b, el); merken(); });
     el.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); zeige(b, el); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); zeige(b, el); merken(); }
     });
     bloecke[b.id] = el;
     code.appendChild(el);
   });
 
+  var aktiv = "";
+
   function zeige(b, el) {
     Array.prototype.forEach.call(code.children, function (k) { k.classList.remove("is-aktiv"); });
     el.classList.add("is-aktiv");
+    aktiv = b.id;
     panel.innerHTML = "<h3>" + b.titel + "</h3><p>" + b.text + "</p>" +
       (b.merke ? '<p class="an__merke">' + b.merke + "</p>" : "");
   }
@@ -407,8 +410,39 @@ YAML zum Schreiben – lesbarer und mit Kommentaren. JSON zum Verarbeiten.</p>
       var b = BLOECKE.filter(function (x) { return bloecke[x.id] === ziel; })[0];
       ziel.scrollIntoView({ block: "nearest", behavior: "smooth" });
       zeige(b, ziel);
+      merken();
     });
   });
+
+  /* --- Zustand in der Adresse ---------------------------------------------
+     DER ERKLAERTE BLOCK GEHOERT IN DIE ADRESSE: Das Regiebuch verweist auf die
+     Stelle, an der die siebenfache Verschachtelung der Antwort steht, nicht auf
+     „irgendwo in diesem Dokument".
+
+     Ueber `AvdAcademyState` des Themes (ab 2.46.0) - es gibt nur EIN Fragment je
+     Seite, und wer allein hineinschreibt, loescht den Zustand der uebrigen
+     Bausteine. Die Anmeldung wartet auf DOMContentLoaded, weil das Theme-Skript
+     `defer` traegt und damit erst nach diesem Inline-Skript laeuft. */
+  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
+
+  function anmelden() {
+    if (!window.AvdAcademyState) { return; }
+    window.AvdAcademyState.register({
+      key: "block",
+      read: function () { return aktiv; },
+      apply: function (wert) {
+        var el = bloecke[wert];
+        if (!el) { return; }
+        var b = BLOECKE.filter(function (x) { return x.id === wert; })[0];
+        if (b) { zeige(b, el); }
+      }
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", anmelden);
+  } else {
+    anmelden();
+  }
 })();
 </script>
 
