@@ -1,0 +1,30 @@
+/* =============================================================================
+   Repo-eigene Ergänzung – KEINE Kopie aus dem Scaffolding.
+   -----------------------------------------------------------------------------
+   Seit Theme 4 darf eine Seite mit `layout: page` kein eigenes <style> mitbringen
+   (`checks.source_assets: error`). Die Regeln stehen deshalb hier und werden über
+   `styles` in `_config.yml` site-weit nach dem Theme geladen. Sie greifen nur in
+   Gruppentabellen mit eingebetteter Materialübersicht.
+   ============================================================================= */
+
+/* Materialverweise IN der Tagestabelle des Regiebuchs
+   (rest-apis-grundlagen-und-design/index-trainer.md) – siehe ABWEICHUNGEN.md A-012.
+   Es ist die Materialübersicht des Themes (.avd-academy-materials), nur je
+   Tabellenzeile statt je Themenblock. Das Theme legt sie als Block-Bausteine
+   mit <ul>/<li> aus; in einer Inhaltszelle (markdown="span") geht nur
+   Span-Auszeichnung, deshalb diese vier Regeln. */
+.avd-academy-grouptable td > .avd-academy-materials {
+  margin-top: .55rem;
+  gap: var(--avd-academy-space-4, 1rem);
+  font-size: .88rem;
+}
+.avd-academy-grouptable td > .avd-academy-materials .avd-academy-materials__head {
+  display: block;
+}
+.avd-academy-grouptable td > .avd-academy-materials .avd-academy-doclink {
+  display: flex;
+  margin-bottom: .3rem;
+}
+@media (max-width: 800px) {
+  .avd-academy-grouptable td > .avd-academy-materials { grid-template-columns: 1fr; gap: .6rem; }
+}

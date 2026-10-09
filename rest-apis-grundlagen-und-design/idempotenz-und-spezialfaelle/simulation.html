@@ -1,76 +1,37 @@
-<!DOCTYPE html>
-<!--
-  ATVANTAGE-Academy – Layout „simulation“ (Jekyll)
-  ------------------------------------------------
-  Bühne für BEWEGTE Abläufe. Anders als eine Präsentation, die Folien wechselt,
-  zeigt eine Simulation EINEN Schauplatz, der sich Schritt für Schritt verändert:
-  Kästen entstehen, Werte wandern, Pfeile werden gezogen. Der Ablauf lässt sich
-  vorwärts und rückwärts durchgehen, zurücksetzen und automatisch abspielen.
-
-  Optisch ist die Seite an das Layout „presentation“ angelehnt – dieselbe schmale
-  Kopfleiste mit Logo, Titel, QR-Code und Farbschema-Umschalter. Drei Zonen:
-
-    ┌──────────────────────────────────────────────┐
-    │ Kopfleiste  Logo · Titel · Schritt · Werkzeug│
-    ├───────────────────────────────┬──────────────┤
-    │ Bühne (der Inhalt dieser Datei)│ Erklärtext   │
-    │                               │ (je Schritt) │
-    ├───────────────────────────────┴──────────────┤
-    │ Fortschritt + Steuerleiste (⟲ ‹ ▶ Abspielen 1×▴ ›)│
-    └──────────────────────────────────────────────┘
-
-  AUFZEICHNEN: Der Capture-Modus (Taste C oder ?capture in der Adresse) räumt alles
-  weg, was nicht zur Sache gehört – Kopfleiste, Erklärspalte, Fortschritt,
-  Steuerleiste – und blendet den Mauszeiger aus. Die Bühne füllt das Fenster. Der
-  Erklärtext ist dann nicht verloren: Taste T holt ihn als Einblendung (OST) an den
-  unteren Rand zurück, für den Fall, dass beim Aufzeichnen niemand spricht.
-
-  NICHT DRUCKBAR – bewusst. Eine Simulation lebt von der Bewegung; ein Ausdruck
-  wäre ein willkürliches Standbild. Es gibt daher weder Druck-Knopf noch
-  Drucklayout; wer die Seite trotzdem druckt, bekommt den gerade sichtbaren
-  Schritt und den QR-Code als Rückweg zur Online-Fassung.
-
-  Front Matter (alles optional außer `layout`):
-    layout: simulation
-    title:        "…"            → Titel in der Kopfleiste; sonst die erste #-Überschrift
-    description:  "…"            → Meta-Description
-    simulation:
-      aside: false               → rechte Spalte weglassen (Bühne über volle Breite)
-      intro: "…"                 → ein Satz auf der Szenario-Übersicht (nur bei mehreren)
-      speed: 0.5 | 1 | 2 | 5     → Start-Tempo des automatischen Abspielens
-      step:
-        interval: 2500           → Grunddauer je Schritt beim Abspielen (ms)
-
-  MEHRERE SZENARIEN: Meldet die Seite über `registerScenario` mehr als einen
-  Ablauf an, bekommt sie eine Reiterleiste und eine Übersicht als Startbild. Je
-  Szenario liefert die Seite ein eigenes Bühnenbild in einem Container mit
-  `data-avd-academy-sim-scene="«id»"`; sichtbar ist immer genau eines. Mit nur
-  einem Szenario (oder bloßem `registerStep`) ändert sich nichts.
-
-  Der INHALT dieser Seite ist das BÜHNENBILD: die Kulisse (Kästen, Beschriftungen,
-  Container) plus ein <script>, das die Schritte anmeldet. Das Miniframework dazu
-  liefert theme/jekyll/simulation.js als `AvdSimulation` – es wird ABSICHTLICH
-  ohne `defer` geladen, damit ein Inline-<script> im Body es bereits vorfindet.
-
-  Ohne JavaScript bleibt die Seite lesbar: Die Kulisse steht da, Steuerleiste und
-  Erklärspalte bleiben leer – der Ablauf ist eine Zutat, keine Voraussetzung.
-
-  Anleitung und Beispiel: /templates/simulations/.
---><html lang="de">
+<!DOCTYPE html><html lang="de">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Idempotenz: Wenn dieselbe Anfrage zweimal ankommt · ATVANTAGE Academy</title><meta name="description" content="Eine verlorene Antwort, eine Wiederholung – und zwei Entwürfe, die sich dabei völlig unterschiedlich verhalten."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("avd-academy-theme");
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
+  } catch (e) {}
+  addEventListener("unhandledrejection", function (e) {
+    var r = e.reason;
+    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
+  });
+})();
+</script><title>Idempotenz: Wenn dieselbe Anfrage zweimal ankommt · ATVANTAGE Academy</title><meta name="description" content="Eine verlorene Antwort, eine Wiederholung – und zwei Entwürfe, die sich dabei völlig unterschiedlich verhalten."><meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Idempotenz: Wenn dieselbe Anfrage zweimal ankommt">
 <meta property="og:description" content="Eine verlorene Antwort, eine Wiederholung – und zwei Entwürfe, die sich dabei völlig unterschiedlich verhalten.">
-<meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247898">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247898" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247898" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247898">
+<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
+<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
+<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.html","title":"Idempotenz: Wenn dieselbe Anfrage zweimal ankommt","layout":"simulation","description":"Eine verlorene Antwort, eine Wiederholung – und zwei Entwürfe, die sich dabei völlig unterschiedlich verhalten.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
+        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -83,24 +44,8 @@
         .querySelectorAll(_auswahl)
         .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
       _faerben(document);
-
-      /* NACHTRAEGLICH EINGEFUEGTER CODE. Die Hervorhebung laeuft einmal beim Laden.
-         Eine Seite, die ihre Codebloecke per Skript einsetzt - eine Visualisierung,
-         die rohe Nachrichten durchschaltet -, bekam deshalb gar keine Farben und
-         baute sich einen eigenen Hervorheber. Genau die Kopie, die das Theme
-         verhindern soll.
-
-         `AvdHighlight.apply(knoten)` faerbt, was seither dazugekommen ist; `hljs`
-         liegt daneben fuer Faelle, die mehr brauchen. Das Ereignis sagt Seiten, die
-         frueh zeichnen, wann der Haken da ist - die Module laden asynchron. */
       window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
       document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-
-      /* Statuszeile nach Klasse einfaerben. highlight.js gibt jedem dreistelligen
-         Code dieselbe Klasse `hljs-number` - in einem Mitschnitt ist aber genau das
-         die Stelle, auf die man zuerst sieht: 2xx ist etwas anderes als 4xx.
-         Deshalb hier die einzige eigene Zutat, und bewusst nur diese: Die
-         Statusklassen von HTTP aendern sich nicht, das bleibt stabil. */
       document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
         const code = parseInt(el.textContent, 10);
         if (code >= 100 && code <= 599) {
@@ -110,10 +55,11 @@
     });
 </script>
 <link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=1790247898"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=1790247898"></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247898"></head>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=af5c6650"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=d7bb5e7e"></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head>
 <body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Idempotenz: Wenn dieselbe Anfrage zweimal ankommt"
       data-avd-academy-sim-speed="1"
       data-avd-academy-sim-step-interval="3000">
@@ -126,9 +72,9 @@
     <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
               title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
                 title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
               title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Farbschema umschalten">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
+              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
               data-avd-academy-sim-full
               title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
   </header><nav class="avd-academy-sim__tabs" data-avd-academy-sim-tabs hidden aria-label="Szenarien"></nav>
@@ -436,9 +382,9 @@
 
 
     </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
-         data-lead="Dieselbe Störung, zwei Entwürfe. Einmal geht ein Kunde zu viel verloren, einmal passiert beim zweiten Mal gar nichts."></div><div class="avd-academy-sim__ost" data-avd-academy-sim-ost hidden aria-hidden="true">
-      <p class="avd-academy-sim__ost-title" data-avd-academy-sim-ost-title></p>
-      <div class="avd-academy-sim__ost-text" data-avd-academy-sim-ost-text></div>
+         data-lead="Dieselbe Störung, zwei Entwürfe. Einmal geht ein Kunde zu viel verloren, einmal passiert beim zweiten Mal gar nichts."></div><div class="avd-academy-sim__caption" data-avd-academy-sim-caption hidden aria-hidden="true">
+      <p class="avd-academy-sim__caption-title" data-avd-academy-sim-caption-title></p>
+      <div class="avd-academy-sim__caption-text" data-avd-academy-sim-caption-text></div>
     </div>
     <aside class="avd-academy-sim__aside" aria-label="Erklärung zum aktuellen Schritt">
       <h2 class="avd-academy-sim__note-title" data-avd-academy-sim-note-title></h2>

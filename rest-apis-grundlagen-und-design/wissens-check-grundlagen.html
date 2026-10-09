@@ -1,76 +1,37 @@
-<!DOCTYPE html>
-<!--
-  ATVANTAGE-Academy – EINZIGES Seitenlayout (Jekyll)
-  --------------------------------------------------
-  Ein Layout für alles: allgemeine Doku-Seiten UND Guides (Übungen/Anleitungen).
-  Optik nach der ATVANTAGE-Website: Meta-Nav, weiße sticky Kopfzeile, Hero-Band,
-  zweispaltig mit rechter Sidebar (automatisches Inhaltsverzeichnis, Fortschritt
-  aus Task-Listen, weiterführende Ressourcen). Überschriften ohne Emoji-Icons.
-
-  Verwendung im Front Matter:  layout: default   (oder `layout: guide` – Alias,
-  siehe guide.html; beides rendert dieselbe Guide-Ansicht)
-
-  `layout: visualization` (siehe visualization.html) rendert dieselbe Seite OHNE
-  obere Navigation (Meta-Leiste + Kopfzeile/TopNav), OHNE Brotkrumen und OHNE den
-  rechten Bereich (Inhaltsverzeichnis, Fortschritt, Ressourcen – auch bei gesetztem
-  `resources`), mit schmalerem Hero-Balken und breiterem, zentriertem Inhalt – für
-  eigenständige Visualisierungen/Simulationen.
-
-  Alle Front-Matter-Felder sind OPTIONAL (Convention over Configuration). Nur der
-  Titel ist faktisch erforderlich – als `title:` ODER als erste `#`-Überschrift:
-
-    title:       "…"                → sonst erste #-Überschrift (eins von beiden nötig)
-    description: "…"                → Meta-Description
-    duration:    8                  → Zahl in Minuten → Hero-Tag „ca. 8 Minuten“
-                                       (ungefähre LESEDAUER; bei Guides/Übungen die
-                                       Dauer der Übung, bei Visualisierungen die
-                                       Bearbeitungszeit – dort unüblich, aber erlaubt).
-    topics:      ["Cloud & DevOps"] → weitere Hero-Tags
-    resources:   [{title, url, icon}, …] → Sidebar-Karte „Weiterführende Informationen“.
-                                       title und/oder icon (Bildpfad); icon erscheint
-                                       rechts und wird kreisrund dargestellt.
-    breadcrumb:                     → Brotkrumen anpassen (beides optional):
-      label: "…"                    → überschreibt den Ordnernamen dieser Ebene;
-                                       in der Ordner-`index.md` gesetzt gilt es für
-                                       ALLE Seiten im Ordner und in Unterordnern.
-      ancestors: [{title, url}, …]  → explizite Vorfahren-Kette OHNE die aktuelle
-                                       Seite (diese wird automatisch angehängt); in
-                                       der `index.md` gesetzt wird sie vererbt.
-
-  „Markdown kopieren“ (Button im Hero) erscheint NUR auf Guides – dort ist das
-  Übernehmen des Quelltexts der Zweck. Bedingungen: Markdown-Seite (`.md`, nicht
-  reines HTML) UND der Schalter `toolbar.copy` (Vorgabe: nur `layout: guide`, siehe
-  `_includes/avd-switch.html`). Doku-Seiten und Visualisierungen haben ihn nicht –
-  bei letzteren, weil ihr Inhalt nicht sinnvoll als Markdown kopierbar ist.
-
-  DIE SEITENWERKZEUGE – QR-Code, Farbschema-Umschalter, Drucken – sind EINE
-  Komponente (`_includes/tools.html`) an zwei Standorten in diesem Rahmen:
-
-    Kopfzeile   `chrome: true`  (page, guide)      QR + Farbschema
-    Hero rechts `hero_tools`    (visualization)    QR + Farbschema + Drucken
-
-  Die Regel dahinter ist die Kopfzeile: Wo es sie gibt, tragen die Werkzeuge sie;
-  wo nicht, tritt der Hero an ihre Stelle. Drucken gibt es nur dort, weil auf einer
-  gewöhnlichen Seite der Browser-Befehl (Strg/Cmd+P) genügt, die rahmenlose
-  Ansicht aber keinen anderen Weg aufs Papier hat.
-
-  Der QR-Code wird erst im Browser erzeugt (theme/academy/atvantage.js), weil die
-  Adresse zur Build-Zeit nicht feststeht; ohne JavaScript erscheint er nicht.
---><html lang="de">
+<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions translucent-header reading-progress">
 <head>
   <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Wissens-Check: HTTP, Ressourcen, Methoden · ATVANTAGE Academy</title><meta name="description" content="Fünfzehn Fragen zum Selbstprüfen – REST, HTTP, Methoden, Idempotenz und die Anforderungen an eine Ressourcen-ID. Mit Begründung zu jeder Antwort."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("avd-academy-theme");
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
+  } catch (e) {}
+  addEventListener("unhandledrejection", function (e) {
+    var r = e.reason;
+    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
+  });
+})();
+</script><title>Wissens-Check: HTTP, Ressourcen, Methoden · ATVANTAGE Academy</title><meta name="description" content="Fünfzehn Fragen zum Selbstprüfen – REST, HTTP, Methoden, Idempotenz und die Anforderungen an eine Ressourcen-ID. Mit Begründung zu jeder Antwort."><meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Wissens-Check: HTTP, Ressourcen, Methoden">
 <meta property="og:description" content="Fünfzehn Fragen zum Selbstprüfen – REST, HTTP, Methoden, Idempotenz und die Anforderungen an eine Ressourcen-ID. Mit Begründung zu jeder Antwort.">
-<meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/styles.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=1790247898">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=1790247898"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/print.css?v=1790247898">
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=1790247898" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=1790247898" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=1790247898">
+<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
+<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
+<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/wissens-check-grundlagen.html","title":"Wissens-Check: HTTP, Ressourcen, Methoden","layout":"page","description":"Fünfzehn Fragen zum Selbstprüfen – REST, HTTP, Methoden, Idempotenz und die Anforderungen an eine Ressourcen-ID. Mit Begründung zu jeder Antwort.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
+<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
+<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
+        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
 <script type="module">
   const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
   const _hlsprachen = ["java", "http", "json", "xml"];
@@ -83,24 +44,8 @@
         .querySelectorAll(_auswahl)
         .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
       _faerben(document);
-
-      /* NACHTRAEGLICH EINGEFUEGTER CODE. Die Hervorhebung laeuft einmal beim Laden.
-         Eine Seite, die ihre Codebloecke per Skript einsetzt - eine Visualisierung,
-         die rohe Nachrichten durchschaltet -, bekam deshalb gar keine Farben und
-         baute sich einen eigenen Hervorheber. Genau die Kopie, die das Theme
-         verhindern soll.
-
-         `AvdHighlight.apply(knoten)` faerbt, was seither dazugekommen ist; `hljs`
-         liegt daneben fuer Faelle, die mehr brauchen. Das Ereignis sagt Seiten, die
-         frueh zeichnen, wann der Haken da ist - die Module laden asynchron. */
       window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
       document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-
-      /* Statuszeile nach Klasse einfaerben. highlight.js gibt jedem dreistelligen
-         Code dieselbe Klasse `hljs-number` - in einem Mitschnitt ist aber genau das
-         die Stelle, auf die man zuerst sieht: 2xx ist etwas anderes als 4xx.
-         Deshalb hier die einzige eigene Zutat, und bewusst nur diese: Die
-         Statusklassen von HTTP aendern sich nicht, das bleibt stabil. */
       document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
         const code = parseInt(el.textContent, 10);
         if (code >= 100 && code <= 599) {
@@ -110,201 +55,513 @@
     });
 </script>
 <link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/logo-orange.svg">
+<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
 <link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=1790247898">
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/quiz.css?v=1790247898">
-  <script src="/training-material-api-engineering/theme/jekyll/quiz.js?v=1790247898" defer></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=1790247898"></head><body class="avd-academy-guide avd-academy-guide--viz">
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
+  <link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/quiz.css?v=c1260d38">
+  <script src="/training-material-api-engineering/theme/jekyll/quiz.js?v=993192e8" defer></script>
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
+  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide">
+<div class="avd-academy-reading-progress" aria-hidden="true"></div>
+  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><div class="avd-academy-metanav"><span>ATVANTAGE Academy</span>
+  </div>
+
+  <header class="avd-academy-header"
+        data-avd-academy-menu-visible="7" data-avd-academy-menu-speed="1.0" data-avd-academy-header><a class="avd-academy-header__brand" href="/training-material-api-engineering/" aria-label="Startseite"><img class="avd-academy-header__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-header__logo-mask" role="img" aria-label="ATVANTAGE Academy"
+          style="--avd-academy-logo-src: url('/training-material-api-engineering/assets/logo-schulung.svg'); --avd-academy-logo-ratio: 260 / 24;"></span><img class="avd-academy-header__mark" src="/training-material-api-engineering/theme/atvantage/assets/icon-180.png" alt="">
+  </a><button class="avd-academy-tool avd-academy-header__burger" data-avd-academy-nav-toggle="#avd-academy-main-nav"
+          aria-label="Navigation umschalten" aria-expanded="false">☰</button><nav class="avd-academy-header__nav" id="avd-academy-main-nav">
+      <a href="/training-material-api-engineering/">Start</a>
+      <a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a>
+  </nav><div class="avd-academy-header__tools"><div class="avd-academy-search" data-avd-academy-search hidden
+             data-mode="expand" data-shortcut="double_shift"
+             data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203"
+             data-base="/training-material-api-engineering/">
+          <button type="button" class="avd-academy-tool avd-academy-tool--search" data-avd-academy-search-toggle
+                  aria-expanded="false" aria-controls="avd-academy-search-dialog"
+                  title="Suchen (zweimal Shift)" aria-label="Suchen"><svg viewBox="0 0 24 24" width="1em" height="1em"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"
+                  ><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+          <dialog class="avd-academy-search__dialog" id="avd-academy-search-dialog" aria-label="Suchen">
+            <div class="avd-academy-search__bar" role="search"><label class="avd-academy-search__field avd-academy-search__field--scope" hidden>
+                <span class="avd-academy-search__label">Bereich</span>
+                <select class="avd-academy-search__scope">
+                  <option value="">Alle</option>
+                </select>
+              </label>
+              <label class="avd-academy-search__field avd-academy-search__field--query">
+                <span class="avd-academy-search__label">Suchbegriff</span>
+                <input type="search" class="avd-academy-search__input"
+                       placeholder="Diese Site durchsuchen" autocomplete="off" spellcheck="false"
+                       aria-describedby="avd-academy-search-status">
+              </label>
+              <button type="button" class="avd-academy-tool avd-academy-search__close" data-avd-academy-search-close
+                      title="Suche schließen" aria-label="Suche schließen">✕</button>
+            </div>
+            <p class="avd-academy-search__status" id="avd-academy-search-status" data-avd-academy-search-status role="status"></p>
+            <ul class="avd-academy-search__results" data-avd-academy-search-results aria-label="Suchergebnisse"></ul>
+          </dialog>
+        </div>
+        <script src="/training-material-api-engineering/theme/jekyll/search.js?v=4b72be9e" defer></script><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
+                title="Diese Seite auf Deinem Smartphone öffnen"
+                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
+              title="Farbschema umschalten (hell/dunkel)"
+              aria-label="Dunkles Farbschema">◐</button></div>
+</header>
+<section class="avd-academy-guide-hero"
+           aria-labelledby="avd-academy-page-title"><nav class="avd-academy-guide-hero__crumbs" aria-label="Brotkrumen"><a href="/training-material-api-engineering/">Home</a><span>/</span><a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/">REST APIs – Grundlagen und Design</a><span>/</span><span aria-current="page">Wissens-Check: HTTP, Ressourcen, Methoden</span></nav><div class="avd-academy-guide-hero__meta">
       <div class="avd-academy-guide-hero__tags">
       </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-tool avd-academy-tool--theme avd-academy-theme-toggle" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Farbschema umschalten">◐</button>
+      <div class="avd-academy-guide-hero__actions">
       </div>
     </div><h1 id="avd-academy-page-title">Wissens-Check: HTTP, Ressourcen, Methoden</h1>
   </section><div class="avd-academy-guide-layout">
     <main class="avd-academy-guide-main" id="avd-academy-content">
 
-<p class="avd-academy-quiz__intro">Fünfzehn Fragen. Zu <strong>jeder</strong> Antwort steht,
-warum sie richtig oder falsch ist – auch zu der, die Du angeklickt hast. Das ist der
-eigentliche Zweck: Nicht der Punktestand zählt, sondern die Begründung.</p>
+<p>Fünfzehn Fragen. Zu <strong>jeder</strong> Antwort steht, warum sie richtig oder falsch ist – auch zu der, die Du angeklickt hast. Das ist der eigentliche Zweck: Nicht der Punktestand zählt, sondern die Begründung.</p>
 
+<div class="avd-academy-quiz" id="wissens-check">
+<script type="text/plain" data-avd-academy-payload>eyJodG1sIjoiXG5cbiAgPG9sPlxuICAgIDxsaT5cbiAgICAgIDxwPkRlciBCZWdyaWZmIGbDpGxsdCBpbiBqZWRlbSB6d2VpdGVuIFNhdHog4oCTIHVuZCB3aXJkIHNlbHRlbiBzYXViZXIgZWluZ2VvcmRuZXQuPC9wPlxuXG4gICAgICA8cD5XYXMgaXN0IFJFU1Q/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+RWluIEFyY2hpdGVrdHVyc3RpbCDigJMgZWluZSBTYW1tbHVuZyB2b24gQmVkaW5ndW5nZW4gZsO8ciBkZW4gVW1nYW5nIG1pdCBIVFRQLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RWluZSBTYW1tbHVuZyB2b24gQmVkaW5ndW5nZW4gZGFmw7xyLCB3aWUgbWFuIEhUVFAgYmVudXR6dCDigJMga2VpbiBQcm90b2tvbGwsIGtlaW5lIEJpYmxpb3RoZWsgdW5kIGtlaW4gU3RhbmRhcmQgbWl0IFByw7xmc2llZ2VsLiBFaW4gU3RpbCwgZGVuIG1hbiBlaW5oYWx0ZW4ga2FubiBvZGVyIG5pY2h0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5FaW4gZWlnZW5lcyBQcm90b2tvbGwgb2JlcmhhbGIgdm9uIFRDUCwgZGFzIEhUVFAgYmVpIFNjaG5pdHRzdGVsbGVuIGFibMO2c3QuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EYXMgUHJvdG9rb2xsIGlzdCBIVFRQLiBSRVNUIGxpZWd0IGRhcsO8YmVyIHVuZCBzYWd0LCB3aWUgbWFuIGVzIGJlbnV0enQg4oCTIGVzIGVyc2V0enQgbmljaHRzLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5FaW4gRGF0ZW5mb3JtYXQ6IEpTT04sIGRhcyDDvGJlciBIVFRQIHp3aXNjaGVuIFN5c3RlbWVuIMO8YmVydHJhZ2VuIHdpcmQuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EaWUgaMOkdWZpZ3N0ZSBWZXJ3ZWNoc2x1bmcuIE1hbiBrYW5uIEpTT04gw7xiZXIgSFRUUCBzY2hpY2tlbiB1bmQgbWVpbGVud2VpdCB2b24gUkVTVCBlbnRmZXJudCBzZWluLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5FaW5lIFNwZXppZmlrYXRpb24gZGVyIElFVEYsIGdlZ2VuIGRpZSBtYW4gZWluZSBBUEkgemVydGlmaXppZXJlbiBsYXNzZW4ga2Fubi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVzIGdpYnQga2VpbiBQcsO8ZnNpZWdlbC4gUkVTVCBzdGFtbXQgYXVzIGVpbmVyIERpc3NlcnRhdGlvbiAoUm95IEZpZWxkaW5nLCAyMDAwKSwgbmljaHQgYXVzIGVpbmVtIFJGQy48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgPC91bD5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIDxwPkVpbiBTeXN0ZW0gd2lyZCBpbiBtZWhyZXJlIFRlaWxlIHplcmxlZ3QsIGRpZSBnZXRyZW5udCBiZXRyaWViZW4gd2VyZGVuIChNaWNyb3NlcnZpY2VzKS48L3A+XG5cbiAgICAgIDxwPldhcyBwYXNzaWVydCBkYWJlaSBtaXQgZGVuIEhlcmF1c2ZvcmRlcnVuZ2VuPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPlNpZSB2ZXJzY2hpZWJlbiBzaWNoIGF1cyBkZXIgQW53ZW5kdW5nIGluIGRpZSBJbmZyYXN0cnVrdHVyIOKAkyBkb3J0IGdpYnQgZXMgamV0enQgYWxsZXMgbWVocmZhY2guPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EZXIgU2F0eiwgYXVmIGRlbiBlcyBoaW5hdXNsw6R1ZnQ6IFNpZSB2ZXJzY2h3aW5kZW4gbmljaHQuIEF1cyBNZXRob2RlbmF1ZnJ1ZmVuIHdlcmRlbiBTY2huaXR0c3RlbGxlbiwgdW5kIGFsbGVzIGdpYnQgZXMgamV0enQgbWVocmZhY2gg4oCTIEJ1aWxkLCBEZXBsb3ltZW50LCBNb25pdG9yaW5nLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5TaWUgdmVyc2Nod2luZGVuIHdlaXRnZWhlbmQsIHdlaWwgamVkZXIgZWluemVsbmUgVGVpbCBmw7xyIHNpY2ggZWluZmFjaGVyIHp1IHZlcnN0ZWhlbiBpc3QuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EZXIgZWluemVsbmUgVGVpbCB3aXJkIGVpbmZhY2hlciDigJMgZGFzIEdhbnplIG5pY2h0LiBEaWUgS29tcGxleGl0w6R0IHdhbmRlcnQgbmFjaCBhdcOfZW4sIHNpZSBsw7ZzdCBzaWNoIG5pY2h0IGF1Zi48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+U2llIGJsZWliZW4gdW52ZXLDpG5kZXJ0LCBkZW5uIGRpZSBBdWZ0ZWlsdW5nIGlzdCBlaW5lIG9yZ2FuaXNhdG9yaXNjaGUgRW50c2NoZWlkdW5nLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+U29iYWxkIFRlaWxlIMO8YmVyIGRhcyBOZXR6IG1pdGVpbmFuZGVyIHJlZGVuLCBrb21tZW4gTGF0ZW56LCBUZWlsYXVzZsOkbGxlIHVuZCB2ZXJ0ZWlsdGUgRGF0ZW4gZGF6dS4gRGFzIGlzdCBuaWNodCBvcmdhbmlzYXRvcmlzY2guPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPlNpZSB2ZXJkb3BwZWxuIHNpY2gsIHdlaWwgbWFuIGRpZSBhbHRlIHVuZCBkaWUgbmV1ZSBBcmNoaXRla3R1ciBlaW5lIFplaXQgbGFuZyBwYXJhbGxlbCBiZXRyZWlidC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPk1pc2NoZm9ybWVuIHNpbmQgendhciBkZXIgTm9ybWFsZmFsbCDigJMgYWJlciBkYXMgaXN0IG5pY2h0IGRlciBLZXJuLiBEaWUgSGVyYXVzZm9yZGVydW5nZW4gdmVybGFnZXJuIHNpY2gsIHNpZSB2ZXJkb3BwZWxuIHNpY2ggbmljaHQuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD5XaWUgdmllbGUgQXJ0ZW4gdm9uIE5hY2hyaWNodGVuIGtlbm50IEhUVFAsIHVuZCB3ZXIgZsOkbmd0IGFuPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPlp3ZWkg4oCTIEFuZnJhZ2UgdW5kIEFudHdvcnQsIGltbWVyIHBhYXJ3ZWlzZSwgdW5kIGRlbiBBbmZhbmcgbWFjaHQgaW1tZXIgZGVyIENsaWVudC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkplZGVyIEF1c3RhdXNjaCBnZWh0IHZvbSBDbGllbnQgYXVzOiBFciBmcmFndCwgZGVyIFNlcnZlciBhbnR3b3J0ZXQg4oCTIGdlbmF1IGVpbm1hbCBqZSBBbmZyYWdlLiBXZXIgZWluZSBNZWxkdW5nIG9obmUgdm9yaGVyaWdlIEZyYWdlIGJyYXVjaHQsIGJyYXVjaHQgZXR3YXMgYW5kZXJlczogV2ViU29ja2V0cyBvZGVyIFNlcnZlci1TZW50IEV2ZW50cy48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+WndlaSDigJMgQW5mcmFnZSB1bmQgQW50d29ydCwgd29iZWkgYmVpZGUgU2VpdGVuIGVpbmVuIEF1c3RhdXNjaCBiZWdpbm5lbiBkw7xyZmVuLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGllIFphaGwgc3RpbW10LCBkaWUgUmljaHR1bmcgbmljaHQuIEluIEhUVFAgYmVnaW5udCBpbW1lciBkZXIgQ2xpZW50LCBuaWUgZGVyIFNlcnZlci48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RHJlaSDigJMgQW5mcmFnZSwgQW50d29ydCB1bmQgZGllIEJlbmFjaHJpY2h0aWd1bmcsIGRpZSBkZXIgU2VydmVyIHZvbiBzaWNoIGF1cyBzY2hpY2t0LjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RWluZSBCZW5hY2hyaWNodGlndW5nIHZvbSBTZXJ2ZXIga2VubnQgSFRUUCBuaWNodC4gR2VuYXUgZGVzaGFsYiBnaWJ0IGVzIFdlYlNvY2tldHMgdW5kIFNlcnZlci1TZW50IEV2ZW50cy48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RWluZSDigJMgZGllc2VsYmUgU3RydWt0dXIgaW4gYmVpZGUgUmljaHR1bmdlbiwgdW50ZXJzY2hpZWRlbiBudXIgZHVyY2ggZGllIFJpY2h0dW5nLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGVyIEF1ZmJhdSBpc3QgdGF0c8OkY2hsaWNoIGRlcnNlbGJlLCBhYmVyIGRpZSBTdGFydHplaWxlIHVudGVyc2NoZWlkZXQgc2ljaDogTWV0aG9kZSB1bmQgUGZhZCBnZWdlbiBWZXJzaW9uIHVuZCBTdGF0dXNjb2RlLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+RWluZSBIVFRQLU5hY2hyaWNodCBpc3QgbGVzYmFyZXIgVGV4dDogU3RhcnR6ZWlsZSwgSGVhZGVyLCBMZWVyemVpbGUsIEJvZHkuPC9wPlxuXG4gICAgICA8cD5XZWxjaGUgUm9sbGUgaGF0IGRpZSBMZWVyemVpbGU/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+U2llIHRyZW5udCBkaWUgSGVhZGVyIHZvbSBCb2R5IOKAkyB1bmQgaXN0IGRhcyBlaW56aWdlIFRyZW5uemVpY2hlbiBkYWbDvHIuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5VbmQgendhciBhbHMgPGVtPmVpbnppZ2VzPC9lbT4gVHJlbm56ZWljaGVuIOKAkyBkZXNoYWxiIHdpY2h0aWdlciwgYWxzIHNpZSBhdXNzaWVodC4gRGVyIEVtcGbDpG5nZXIgbGllc3QgWmVpbGUgZsO8ciBaZWlsZSwgYmlzIGVpbmUgbGVlciBpc3Q7IGFsbGVzIGRhbmFjaCBpc3QgSW5oYWx0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5TaWUgaXN0IHJlaW5lIEZvcm1hdGllcnVuZyB1bmQgZGFyZiB6dXIgYmVzc2VyZW4gTGVzYmFya2VpdCBlbnRmYWxsZW4uPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5PaG5lIHNpZSB3ZWnDnyBkZXIgRW1wZsOkbmdlciBuaWNodCwgd28gZGllIEhlYWRlciBhdWZow7ZyZW4uIERpZSBOYWNocmljaHQgaXN0IGRhbm4ga2FwdXR0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5TaWUgdHJlbm50IGRpZSBTdGFydHplaWxlIHZvbiBkZW4gSGVhZGVybiwgZGllIGRhbmFjaCBaZWlsZSBmw7xyIFplaWxlIGZvbGdlbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPlN0YXJ0emVpbGUgdW5kIEhlYWRlciBzdGVoZW4gZGlyZWt0IHVudGVyZWluYW5kZXIuIERpZSBMZWVyemVpbGUga29tbXQgZXJzdCBuYWNoIGRlbiBIZWFkZXJuLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5TaWUgemVpZ3QgYW4sIGRhc3MgZGllIE5hY2hyaWNodCBrZWluZW4gQm9keSBoYXQgdW5kIGhpZXIgenUgRW5kZSBpc3QuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5TaWUgc3RlaHQgYXVjaCBkYW5uLCB3ZW5uIGVpbiBCb2R5IGZvbGd0LiBPYiBlaW5lciBkYSBpc3QsIHNhZ3QgdW50ZXIgYW5kZXJlbSA8Y29kZT5Db250ZW50LUxlbmd0aDwvY29kZT4uPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD7igJ5adXN0YW5kc2xvc+KAnCB3aXJkIGltIEt1cnMgZsO8ciB6d2VpIHZlcnNjaGllZGVuZSBEaW5nZSBiZW51dHp0LjwvcD5cblxuICAgICAgPHA+V2FzIGhlacOfdCDigJ5IVFRQIGlzdCB6dXN0YW5kc2xvc+KAnD88L3A+XG5cbiAgICAgIDx1bCBjbGFzcz1cInRhc2stbGlzdFwiPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIGNoZWNrZWQ9XCJjaGVja2VkXCIgLz5EYXMgUHJvdG9rb2xsIHZlcmtuw7xwZnQgendlaSBOYWNocmljaHRlbnBhYXJlIG5pY2h0IOKAkyBqZWRlIEFuZnJhZ2Ugc3RlaHQgZsO8ciBzaWNoLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGVzaGFsYiBtdXNzIGplZGUgQW5mcmFnZSBhdXMgc2ljaCBoZXJhdXMgdmVyc3TDpG5kbGljaCBzZWluLiBEYXMgaXN0IG5pY2h0IGFid8OkaGxiYXIg4oCTIG1hbiBrYW5uIG51ciBldHdhcyBkYXLDvGJlcmJhdWVuLCB1bmQgZ2VuYXUgZGFzIHR1biBDb29raWVzLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5EZXIgU2VydmVyIGRhcmYgc2ljaCB6d2lzY2hlbiB6d2VpIEFuZnJhZ2VuIG5pY2h0cyDDvGJlciBkZW4gQ2xpZW50IG1lcmtlbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRvY2gsIGRhcmYgZXIg4oCTIGluIGVpbmVyIERhdGVuYmFuaywgZWluZW0gQ2FjaGUsIGVpbmVtIFNpdHp1bmdzc3BlaWNoZXIuIEVyIGVyZsOkaHJ0IG51ciBuaWNodCB2b24gYWxsZWluLCB6dSB3ZW0gZWluZSBBbmZyYWdlIGdlaMO2cnQuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkRpZSBJbnN0YW56IGjDpGx0IG5pY2h0cyBpbSBTcGVpY2hlciwgZGFtaXQgamVkZSBJbnN0YW56IGplZGUgQW5mcmFnZSBiZWFudHdvcnRlbiBrYW5uLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGFzIGlzdCBkaWUgYW5kZXJlIEJlZGV1dHVuZzogPGVtPmVpbiBTZXJ2aWNlIGlzdCB6dXN0YW5kc2xvczwvZW0+IOKAkyBlaW5lIEVudHd1cmZzZW50c2NoZWlkdW5nLiBEaWUgUHJvdG9rb2xsZWlnZW5zY2hhZnQgZ2lsdCBpbW1lciwgZGllIEVudHd1cmZzZW50c2NoZWlkdW5nIHRyaWZmdCBtYW4uPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPlp3ZWkgYXVmZWluYW5kZXJmb2xnZW5kZSBBbmZyYWdlbiBkZXNzZWxiZW4gQ2xpZW50cyBsYW5kZW4gYmVpIGRlcnNlbGJlbiBJbnN0YW56LjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGFzIEdlZ2VudGVpbCBpc3QgZGVyIEZhbGwg4oCTIHVuZCBkYXJpbiBsaWVndCBkZXIgTnV0emVuOiBXZWlsIGRpZSBMZWl0dW5nIG5pY2h0cyB2b24gZWluZXIgQW5mcmFnZSB6dXIgbsOkY2hzdGVuIHRyw6RndCwga2FubiA8ZW0+amVkZTwvZW0+IEluc3RhbnogPGVtPmplZGU8L2VtPiBBbmZyYWdlIGJlYW50d29ydGVuLiBFcnN0IGRhZHVyY2ggbGFzc2VuIHNpY2ggSW5zdGFuemVuIGRhenVzdGVsbGVuLCB3ZWduZWhtZW4gdW5kIG5ldSBzdGFydGVuLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+RWluIFN1Y2hmb3JtdWxhciB3aXJkIGFiZ2VzY2hpY2t0LCBlaW4gQmVzdGVsbGZvcm11bGFyIGF1Y2guPC9wPlxuXG4gICAgICA8cD5Xb3JpbiB1bnRlcnNjaGVpZGVuIHNpY2ggR0VUIHVuZCBQT1NUIGbDvHIgZGVuIEJyb3dzZXItTnV0emVyIHNpY2h0YmFyPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPkVpbmUgR0VULUFkcmVzc2UgbMOkc3N0IHNpY2ggdmVyc2NoaWNrZW4sIGFscyBMZXNlemVpY2hlbiBzcGVpY2hlcm4gdW5kIG5ldSBsYWRlbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPldlaWwgZGllIERhdGVuIGJlaSBHRVQgaW4gZGVyIEFkcmVzc2Ugc3RlaGVuIHVuZCBiZWkgUE9TVCBpbSBCb2R5IOKAkyB1bmQgZGVyIEJvZHkgaXN0IG5pY2h0IFRlaWwgZGVyIEFkcmVzc2UuIERlc2hhbGIgZnJhZ3QgZGVyIEJyb3dzZXIgYmVpbSBOZXVsYWRlbiBuYWNoLCBvYiBlciBkaWUgQW5mcmFnZSB3aWVkZXJob2xlbiBzb2xsLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5HRVQgaXN0IHNww7xyYmFyIHNjaG5lbGxlciwgd2VpbCBkYWJlaSBkZXV0bGljaCB3ZW5pZ2VyIERhdGVuIMO8YmVydHJhZ2VuIHdlcmRlbiBtw7xzc2VuLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGllIE1lbmdlIGVudHNjaGVpZGV0IG5pY2h0LiBEZXIgVW50ZXJzY2hpZWQgaXN0LCA8ZW0+d288L2VtPiBkaWUgRGF0ZW4gc3RlaGVuIOKAkyB1bmQgd2FzIGRhcyBmw7xyIEFkcmVzc2UgdW5kIFdpZWRlcmhvbHVuZyBiZWRldXRldC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+UE9TVCB3aXJkIHZlcnNjaGzDvHNzZWx0IMO8YmVydHJhZ2VuLCBHRVQgZ2VodCBpbSBLbGFydGV4dCDDvGJlciBkaWUgTGVpdHVuZy48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPlZlcnNjaGzDvHNzZWx0IHdpcmQgZHVyY2ggVExTIOKAkyBiZWlkZSBnbGVpY2hlcm1hw59lbiwgdW5kIGRpZSBBZHJlc3NlIGlzdCBkYWJlaSBlYmVuZmFsbHMgZ2VzY2jDvHR6dC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+R0VUIGRhcmYgYW0gU2VydmVyIG5pY2h0cyB2ZXLDpG5kZXJuLCBQT1NUIG11c3MgZGFnZWdlbiBpbW1lciBldHdhcyB2ZXLDpG5kZXJuLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGVyIGVyc3RlIFRlaWwgc3RpbW10LCBkZXIgendlaXRlIG5pY2h0OiBQT1NUIDxlbT5kYXJmPC9lbT4gw6RuZGVybiwgbXVzcyBhYmVyIG5pY2h0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+RWluZSBuZXVlIFJlc3NvdXJjZSBzb2xsIGFuZ2VsZWd0IHdlcmRlbi4gQmVpZGUgTWV0aG9kZW4ga8O2bm5lbiBkYXMuPC9wPlxuXG4gICAgICA8cD5XYW5uIG5pbW10IG1hbiBQVVQgenVtIEFubGVnZW4sIHVuZCB3YW5uIFBPU1Q/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+UFVUIGF1ZiBkaWUgRWluemVscmVzc291cmNlLCB3ZW5uIGRlciBDbGllbnQgZGllIElEIGJlc3RpbW10IOKAkyBkYXMgaXN0IGlkZW1wb3RlbnQuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EZXIgQ2xpZW50IGtlbm50IGRpZSBJRCDigJMgZXR3YSBlaW5lbiBmYWNobGljaGVuIFNjaGzDvHNzZWwgd2llIEt1bmRlbm51bW1lciBvZGVyIElTQk4g4oCTIHVuZCBzY2hpY2t0IHNpZSBpbiBkZXIgQWRyZXNzZSBtaXQ6IDxjb2RlPlBVVCAvY3VzdG9tZXJzLzQ3MTE8L2NvZGU+LiBad2VpbWFsIGdlc2VuZGV0IGVudHN0ZWh0IGRlcnNlbGJlIFp1c3RhbmQsIG5pY2h0IHp3ZWkgS3VuZGVuLjxiciAvPjxiciAvPjxzdHJvbmc+UE9TVDwvc3Ryb25nPiBpc3QgZGVyIFdlZywgd2VubiBkZXIgPGVtPlNlcnZlcjwvZW0+IGRpZSBJRCB2ZXJnaWJ0OiA8Y29kZT5QT1NUIC9jdXN0b21lcnM8L2NvZGU+LCBBbnR3b3J0IDxjb2RlPjIwMTwvY29kZT4gbWl0IDxjb2RlPkxvY2F0aW9uPC9jb2RlPiDigJMgdW5kIGViZW4gPGVtPm5pY2h0PC9lbT4gaWRlbXBvdGVudC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+SW1tZXIgUE9TVCwgd2VpbCBhdXNzY2hsaWXDn2xpY2ggZGVyIFNlcnZlciBJRHMgdmVyZ2ViZW4gdW5kIEtvbGxpc2lvbmVuIHZlcmhpbmRlcm4gZGFyZi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRlciBTZXJ2ZXIgPGVtPmRhcmY8L2VtPiBJRHMgdmVyZ2ViZW4sIG11c3MgYWJlciBuaWNodC4gS2VubnQgZGVyIENsaWVudCBlaW5lbiBzdGFiaWxlbiBmYWNobGljaGVuIFNjaGzDvHNzZWwsIGlzdCBQVVQgZGVyIGJlc3NlcmUgV2VnIOKAkyB1bmQgZGVyIGVpbnppZ2UsIGJlaSBkZW0gZWluIHp3ZWl0ZXIgVmVyc3VjaCBrZWluZW4gendlaXRlbiBEYXRlbnNhdHogYW5sZWd0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5JbW1lciBQVVQsIHdlaWwgUE9TVCBuaWNodHMgYW5sZWd0LCBzb25kZXJuIG51ciBGb3JtdWxhcmRhdGVuIGFuIGRlbiBTZXJ2ZXIgw7xiZXJ0csOkZ3QuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5QT1NUIGxlZ3Qgc2VociB3b2hsIGFuIOKAkyBlcyBpc3QgZGVyIE5vcm1hbGZhbGwsIHdlbm4gZGVyIFNlcnZlciBkaWUgSUQgdmVyZ2lidC4gRm9ybXVsYXJkYXRlbiBzaW5kIGRpZSBIZXJrdW5mdCBkZXIgTWV0aG9kZSwgbmljaHQgaWhyZSBCZWRldXR1bmcuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkRhcyBpc3QgR2VzY2htYWNrc3NhY2hlIOKAkyBiZWlkZSBsZWdlbiBhbiwgZGVyIFVudGVyc2NoaWVkIGlzdCByZWluIHN0aWxpc3Rpc2NoZXIgTmF0dXIuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EZXIgVW50ZXJzY2hpZWQgaXN0IG5pY2h0IHN0aWxpc3Rpc2NoLCBzb25kZXJuIGJlb2JhY2h0YmFyOiBad2VpbWFsIFBPU1QgbGVndCB6d2VpIFJlc3NvdXJjZW4gYW4sIHp3ZWltYWwgUFVUIG5pY2h0LiBHZW5hdSBkYXMgaGVpw590IDxlbT5pZGVtcG90ZW50PC9lbT4uPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD5LdW5kZSA1IGhlacOfdCDigJ5NYWllcuKAnCBtaXQgVm9ybmFtZSDigJ5Ub23igJwuIER1IHNjaGlja3N0IGVpbmVuIEJvZHksIGluIGRlbSA8ZW0+bnVyPC9lbT4gPGNvZGU+bmFtZTwvY29kZT4gc3RlaHQuPC9wPlxuXG4gICAgICA8cD5XYXMgc3RlaHQgZGFuYWNoIGltIFZvcm5hbWVuIOKAkyBiZWkgUFVULCB1bmQgYmVpIFBBVENIPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPkJlaSBQVVQgaXN0IGRlciBWb3JuYW1lIGRhbmFjaCB3ZWcsIGJlaSBQQVRDSCBibGVpYnQgZXIgdW52ZXLDpG5kZXJ0IHN0ZWhlbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRlciBVbnRlcnNjaGllZCBpbiBlaW5lbSBTYXR6OiA8c3Ryb25nPlBVVCBlcnNldHp0LCBQQVRDSCDDpG5kZXJ0Ljwvc3Ryb25nPiBXYXMgRHUgYmVpIFBVVCBuaWNodCBtaXRzY2hpY2tzdCwgaXN0IGRhbmFjaCB3ZWcuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkluIGJlaWRlbiBGw6RsbGVuIGJsZWlidCBkZXIgVm9ybmFtZSBzdGVoZW4sIG5pY2h0IGdlbmFubnRlIEZlbGRlciBibGVpYmVuIHVuYmVyw7xocnQuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EYXMgZ2lsdCBmw7xyIFBBVENILiBQVVQgZXJzZXR6dCBkaWUgUmVzc291cmNlIHZvbGxzdMOkbmRpZyBkdXJjaCBkYXMgTWl0Z2VzY2hpY2t0ZS48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+SW4gYmVpZGVuIEbDpGxsZW4gaXN0IGRlciBWb3JuYW1lIGRhbmFjaCB3ZWcsIGRlbm4gYmVpZGUgZXJzZXR6ZW4gZGllIFJlc3NvdXJjZS48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkJlaSBQVVQgamEuIFBBVENIIMOkbmRlcnQgYWJlciBudXIgZGFzLCB3YXMgaW0gQm9keSBzdGVodC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+QmVpIFBVVCBibGVpYnQgZGVyIFZvcm5hbWUgc3RlaGVuLCBiZWkgUEFUQ0ggaXN0IGVyIGRhbmFjaCB2ZXJzY2h3dW5kZW4uPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5BbmRlcnNoZXJ1bTogUFVUIGlzdCBkYXMgRXJzZXR6ZW4sIFBBVENIIGRhcyDDhG5kZXJuLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+V2FzIGhlacOfdCDigJ5pZGVtcG90ZW504oCcPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPk1laHJmYWNoIGF1c2dlZsO8aHJ0IGhpbnRlcmzDpHNzdCBkaWUgQW5mcmFnZSBkZW5zZWxiZW4gWnVzdGFuZCB3aWUgZWlubWFsIGF1c2dlZsO8aHJ0LjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RXMgZ2VodCB1bSBkZW4gPHN0cm9uZz5adXN0YW5kPC9zdHJvbmc+LCBuaWNodCB1bSBkaWUgQW50d29ydC4gREVMRVRFIGRhcmYgYmVpbSB6d2VpdGVuIE1hbCA8Y29kZT40MDQ8L2NvZGU+IGFudHdvcnRlbiB1bmQgaXN0IHRyb3R6ZGVtIGlkZW1wb3RlbnQuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPk1laHJmYWNoIGF1c2dlZsO8aHJ0IGxpZWZlcnQgZGllIEFuZnJhZ2UgamVkZXMgTWFsIGV4YWt0IGRpZXNlbGJlIEFudHdvcnQgYW4gZGVuIENsaWVudC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRpZSBow6R1Zmlnc3RlIFZlcndlY2hzbHVuZy4gRGVyIFN0YXR1c2NvZGUgZGFyZiBzaWNoIHVudGVyc2NoZWlkZW4g4oCTIGRlciBadXN0YW5kIG5pY2h0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5EaWUgQW5mcmFnZSB2ZXLDpG5kZXJ0IGFtIFNlcnZlciDDvGJlcmhhdXB0IG5pY2h0cywgc2llIGxpZXN0IGF1c3NjaGxpZcOfbGljaC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRhcyBoZWnDn3QgPGVtPnNpY2hlcjwvZW0+LiBKZWRlIHNpY2hlcmUgTWV0aG9kZSBpc3QgaWRlbXBvdGVudCwgYWJlciBERUxFVEUgaXN0IGlkZW1wb3RlbnQgdW5kIG5pY2h0IHNpY2hlci48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RGllIEFuZnJhZ2UgbMOkc3N0IHNpY2ggbnVyIGVpbiBlaW56aWdlcyBNYWwgYXVzZsO8aHJlbiwgZGFuYWNoIHdpcmQgc2llIGFiZ2VsZWhudC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkltIEdlZ2VudGVpbCDigJMgZ2VyYWRlIHdlaWwgc2llIGlkZW1wb3RlbnQgaXN0LCBkYXJmIGRlciBBdWZydWZlciBzaWUgZ2VmYWhybG9zIHdpZWRlcmhvbGVuLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+WnVtIFZlcmdsZWljaDogPGNvZGU+REVMRVRFIC9jdXN0b21lcnMvNTwvY29kZT4gaXN0IGlkZW1wb3RlbnQuPC9wPlxuXG4gICAgICA8cD5XYXJ1bSBpc3QgPGNvZGU+REVMRVRFIC9jdXN0b21lcnMvb2xkZXN0PC9jb2RlPiBuaWNodCBpZGVtcG90ZW50PzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPldlaWwgZGllIEFkcmVzc2UgbmFjaCBkZW0gZXJzdGVuIEzDtnNjaGVuIGJlcmVpdHMgamVtYW5kIGFuZGVyZW4gYmV6ZWljaG5ldC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPlp3ZWltYWwgZ2VzZW5kZXQgbMO2c2NodCB6d2VpIHZlcnNjaGllZGVuZSBLdW5kZW4uIERhcyBpc3QgZGVyIEdydW5kLCB3YXJ1bSBlaW4gU3VwZXJsYXRpdiBpbiBkZXIgQWRyZXNzZSBlaW4gRW50d3VyZnNmZWhsZXIgaXN0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5XZWlsIG9obmUgZWluZSBaYWhsIGFscyBCZXplaWNobmVyIMO8YmVyaGF1cHQga2VpbiBERUxFVEUgaWRlbXBvdGVudCBzZWluIGthbm4uPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5FcyBsaWVndCBuaWNodCBhbiBkZXIgU2NocmVpYndlaXNlIGRlcyBCZXplaWNobmVycywgc29uZGVybiBkYXJhbiwgb2IgZGllIEFkcmVzc2UgPGVtPmRhdWVyaGFmdCBkaWVzZWxiZSBTYWNoZTwvZW0+IG1laW50LiA8Y29kZT5ERUxFVEUgL2N1c3RvbWVycy9qb2huLW1haWVyPC9jb2RlPiB3w6RyZSBlYmVuc28gaWRlbXBvdGVudCDigJMgPGNvZGU+b2xkZXN0PC9jb2RlPiBpc3QgZXMgbmljaHQsIHdlaWwgZGFtaXQgamVkZXMgTWFsIGplbWFuZCBhbmRlcmVzIGdlbWVpbnQgaXN0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5XZWlsIGRlciBTZXJ2ZXIgZGFmw7xyIGVyc3QgYWxsZSBLdW5kZW4gZHVyY2hzdWNoZW4gdW5kIHNvcnRpZXJlbiBtdXNzLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGllIERhdWVyIHNwaWVsdCBrZWluZSBSb2xsZS4gRXMgZ2VodCBkYXJ1bSwgPGVtPndhczwvZW0+IGRpZSBBZHJlc3NlIGJlaW0gendlaXRlbiBBdWZydWYgYmV6ZWljaG5ldC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+R2FyIG5pY2h0IOKAkyBERUxFVEUgaXN0IGdydW5kc8OkdHpsaWNoIGlkZW1wb3RlbnQsIGF1Y2ggaW4gZGllc2VtIEZhbGwuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5ERUxFVEUgaXN0IGVzIG51ciwgc29sYW5nZSBkaWUgQWRyZXNzZSBzdGFiaWwgZGllc2VsYmUgUmVzc291cmNlIG1laW50LiA8Y29kZT5vbGRlc3Q8L2NvZGU+IHR1dCBkYXMgbmljaHQg4oCTIGRlc2hhbGIgdHLDpGd0IGRpZSBHYXJhbnRpZSBoaWVyIG5pY2h0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPHA+PGNvZGU+L3BsYXlsaXN0cy83L3RpdGxlczwvY29kZT4gaXN0IGRpZSBUaXRlbGxpc3RlIGVpbmVyIFdpZWRlcmdhYmVsaXN0ZS48L3A+XG5cbiAgICAgIDxwPldhcyBpc3Qgdm9uIDxjb2RlPkRFTEVURSAvcGxheWxpc3RzLzcvdGl0bGVzPC9jb2RlPiB6dSBoYWx0ZW4/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+RXMgZ2VodCwgaXN0IGFiZXIgc2VtYW50aXNjaCBmYWxzY2g6IERpZSBUaXRlbGxpc3RlIGJsZWlidCBiZXN0ZWhlbiwgbnVyIGxlZXIuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5EZXIgU2VydmVyIDxlbT5rYW5uPC9lbT4gZGFzIHVtc2V0emVuLCB1bmQgSFRUUCB2ZXJiaWV0ZXQgZXMgbmljaHQuIE51ciBiZWRldXRldCBERUxFVEUg4oCeZGllIFJlc3NvdXJjZSBpc3QgZGFuYWNoIHdlZ+KAnCDigJMgZWluIGFuc2NobGllw59lbmRlcyBHRVQgbcO8c3N0ZSA8Y29kZT40MDQ8L2NvZGU+IGFudHdvcnRlbi4gRXMgYW50d29ydGV0IGFiZXIgPGNvZGU+MjAwPC9jb2RlPiBtaXQgPGNvZGU+W108L2NvZGU+OiBEaWUgVGl0ZWxsaXN0ZSBpc3Qgbm9jaCBkYSwgbnVyIGxlZXIuIEdlbWVpbnQgd2FyIDxzdHJvbmc+bGVlcmVuPC9zdHJvbmc+LCB1bmQgZGFmw7xyIGlzdCBERUxFVEUgZGllIGZhbHNjaGUgTWV0aG9kZS48YnIgLz48YnIgLz5adW0gVmVyZ2xlaWNoOiA8Y29kZT5ERUxFVEUgL3BsYXlsaXN0cy83PC9jb2RlPiBpc3Qgc2F1YmVyIOKAkyBkYW5hY2ggZ2lidCBlcyBkaWUgV2llZGVyZ2FiZWxpc3RlIHdpcmtsaWNoIG5pY2h0IG1laHIuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkVzIGzDtnNjaHQgc8OkbXRsaWNoZSBUaXRlbCBkZXIgTGlzdGUg4oCTIHNhdWJlciBkZWZpbmllcnQsIGluIGRlciBQcmF4aXMgZ2Vmw6RocmxpY2guPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5TbyB3aXJkIGVzIG9mdCBnZWxlc2VuLCB0cmlmZnQgZGllIFNhY2hlIGFiZXIgbmljaHQ6IERpZSBMaXN0ZW5yZXNzb3VyY2Ugc2VsYnN0IMO8YmVybGVidC4gRXMgd8OkcmUgZWluIExlZXJlbiwga2VpbiBMw7ZzY2hlbi48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RXMgaXN0IHZlcmJvdGVuLCBIVFRQIGzDpHNzdCBERUxFVEUgYXVmIGVpbmVyIExpc3RlbnJlc3NvdXJjZSBnYXIgbmljaHQgenUuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5WZXJib3RlbiBpc3QgZXMgbmljaHQuIEVzIGVyZ2lidCBudXIga2VpbmUgc2F1YmVyZSBCZWRldXR1bmcuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkJlaSBlaW5lciBVbnRlcmxpc3RlIHdpZSBkaWVzZXIgZ2VodCBlcywgYmVpIGVpbmVyIEhhdXB0bGlzdGUgZGFnZWdlbiBuaWNodC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRpZSBWZXJzY2hhY2h0ZWx1bmcgw6RuZGVydCBuaWNodHMuIEF1Y2ggPGNvZGU+L3BsYXlsaXN0czwvY29kZT4gd8OkcmUgbmFjaCBlaW5lbSBERUxFVEUgbm9jaCBkYSDigJMgbnVyIGxlZXIuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD5EaWUgVGl0ZWxsaXN0ZSBlaW5lciBXaWVkZXJnYWJlbGlzdGUgc29sbCBnZWxlZXJ0IHdlcmRlbi48L3A+XG5cbiAgICAgIDxwPldlbGNoZXIgRW50d3VyZiB0cmlmZnQgZGllIEJlZGV1dHVuZyBhbSBnZW5hdWVzdGVuIHVuZCB2ZXJnaWJ0IGRhcyBnZXJpbmdzdGUgUmVjaHQ/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+UEFUQ0ggYXVmIGRpZSBUaXRlbGxpc3RlLCBtaXQgZWluZXIgQW53ZWlzdW5nIGltIEJvZHksIHNpZSB6dSBsZWVyZW4uPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5QQVRDSCDDpG5kZXJ0IGV0d2FzIGFuIGRlciBSZXNzb3VyY2UsIG9obmUgc2llIHp1IGVyc2V0emVuIOKAkyBkZXIgQm9keSBzYWd0IGdlbmF1IGRhcyBlaW5lLCB3YXMgZ2VzY2hlaGVuIHNvbGwuIFByZWlzOiBFcyBicmF1Y2h0IGVpbiB2ZXJlaW5iYXJ0ZXMgw4RuZGVydW5nc2Zvcm1hdC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+UFVUIGF1ZiBkaWUgVGl0ZWxsaXN0ZSwgbWl0IGVpbmVyIGxlZXJlbiBMaXN0ZSBpbSBCb2R5IGFscyBuZXVlbSBJbmhhbHQuPC9wPlxuXG4gICAgICAgICAgPGJsb2NrcXVvdGU+XG4gICAgICAgICAgICA8cD5GdW5rdGlvbmllcnQgdW5kIGlzdCBpZGVtcG90ZW50IOKAkyBhYmVyIHdlciBsZWVyZW4gZGFyZiwgZGFyZiBkYW1pdCA8ZW0+amVkZSBiZWxpZWJpZ2U8L2VtPiBMaXN0ZSBzZXR6ZW4uIFZpZWwgbWVociBSZWNodCBhbHMgbsO2dGlnLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5QT1NUIGF1ZiAvcGxheWxpc3RzLzcvdGl0bGVzL2FjdGlvbnMvZW1wdHksIGdhbnogb2huZSBJbmhhbHQgaW0gQm9keS48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVpbmUgZ3V0ZSBWYXJpYW50ZTogRGllIEFic2ljaHQgc3RlaHQgaW4gZGVyIEFkcmVzc2UuIERlciBQcmVpcyBpc3QgZWluIFZlcmIgaW4gZGVyIFVSTCwgYWxzbyBiZXd1c3N0IGF1w59lcmhhbGIgZGVzIENSVUQtUmFzdGVycy48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+REVMRVRFIGF1ZiBkaWUgVGl0ZWxsaXN0ZSwgbWl0IGRlbSBRdWVyeS1QYXJhbWV0ZXIgYWxsPXRydWUgYWxzIFp1c2F0ei48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVpbiBRdWVyeS1QYXJhbWV0ZXIgbWFjaHQgYXVzIGRlbSBMw7ZzY2hlbiBrZWluIExlZXJlbi4gRGllIEJlZGV1dHVuZyB2b24gREVMRVRFIGJsZWlidCBmYWxzY2guPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD5EaWUgQmlsZGVyIGVpbmVzIFByb2R1a3RzIHdlcmRlbiBkdXJjaG51bW1lcmllcnQ6IDxjb2RlPuKApi9pbWFnZXMvMDwvY29kZT4sIDxjb2RlPi8xPC9jb2RlPiwgPGNvZGU+LzI8L2NvZGU+LjwvcD5cblxuICAgICAgPHA+V2llIHNvbGx0ZSBzaWNoIGRhcyBTeXN0ZW0gdmVyaGFsdGVuLCB3ZW5uIDxjb2RlPuKApi9pbWFnZXMvMTwvY29kZT4gZ2Vsw7ZzY2h0IHdpcmQ/PC9wPlxuXG4gICAgICA8dWwgY2xhc3M9XCJ0YXNrLWxpc3RcIj5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiBjaGVja2VkPVwiY2hlY2tlZFwiIC8+RGllIEJpbGRlciBiZWhhbHRlbiBpaHJlbiBJbmRleCwgZGllIDEgYmxlaWJ0IGRhdWVyaGFmdCBlaW5lIEzDvGNrZS48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVpbmUgZWlubWFsIHZlcmdlYmVuZSBJRCB3aXJkIG5hY2ggZGVtIEzDtnNjaGVuIDxzdHJvbmc+bmljaHQgd2llZGVyIGF1c2dlZ2ViZW48L3N0cm9uZz4uIERpZSBMw7xja2UgaXN0IGtlaW4gU2Now7ZuaGVpdHNmZWhsZXIsIHNvbmRlcm4gZGVyIEJlbGVnIGRhZsO8ciwgZGFzcyBkaWUgQWRyZXNzZSBlaW5lIDxlbT5JZGVudGl0w6R0PC9lbT4gYmV6ZWljaG5ldCB1bmQga2VpbmUgUG9zaXRpb24uIFdlciA8Y29kZT7igKYvaW1hZ2VzLzE8L2NvZGU+IHNww6R0ZXIgYXVmcnVmdCwgYmVrb21tdCA8Y29kZT40MDQ8L2NvZGU+IOKAkyB1bmQgZGFzIGlzdCBkaWUgcmljaHRpZ2UgQW50d29ydC48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RGllIEJpbGRlciBiZWhhbHRlbiBpaHJlbiBJbmRleCwgZGllIDEgd2lyZCBiZWltIG7DpGNoc3RlbiBVcGxvYWQgbmV1IHZlcmdlYmVuLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGVyIGVyc3RlIFRlaWwgc3RpbW10IOKAkyBkaWUgTMO8Y2tlIGlzdCByaWNodGlnLiBEYXMgTmV1dmVyZ2ViZW4gaXN0IGRlciBGZWhsZXI6IFdlciBkaWUgMSBpcmdlbmR3YW5uIHdpZWRlciBhdXNnaWJ0LCBsaWVmZXJ0IGplZGVtIGFsdGVuIFZlcndlaXMgd29ydGxvcyBlaW4gPGVtPmFuZGVyZXM8L2VtPiBCaWxkLiBHZW5hdSBkZXNoYWxiIGhlacOfdCBkYXMgS3JpdGVyaXVtIOKAnmVpbmRldXRpZyDigJMgZGF1ZXJoYWZ04oCcLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5EaWUgZm9sZ2VuZGVuIEJpbGRlciBydXRzY2hlbiBpbSBJbmRleCBqZXdlaWxzIHVtIGVpbmUgU3RlbGxlIG5hY2ggdm9ybi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRhbm4gd2lyZCBhdXMgZGVtIGFsdGVuIDxjb2RlPi8yPC9jb2RlPiBkYXMgbmV1ZSA8Y29kZT4vMTwvY29kZT4uIEplZGVyIGdlc3BlaWNoZXJ0ZSBWZXJ3ZWlzIHplaWd0IGFiIGRhIGF1ZiBlaW4gYW5kZXJlcyBCaWxkLCB1bmQgbmlyZ2VuZHdvIHRyaXR0IGVpbiBGZWhsZXIgYXVmIOKAkyBkaWUgQWRyZXNzZSBibGVpYnQgamEgZ8O8bHRpZy4gRWluIEluZGV4IGlzdCBlaW5lIFBvc2l0aW9uLCBrZWluZSBJZGVudGl0w6R0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5EYXMgTMO2c2NoZW4gd2lyZCBhYmdlbGVobnQsIGVpbnplbG5lIEVpbnRyw6RnZSBlaW5lciBMaXN0ZSBibGVpYmVuIHN0ZWhlbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVpbnplbG5lIEVpbnRyw6RnZSBsYXNzZW4gc2ljaCBzZWhyIHdvaGwgbMO2c2NoZW4g4oCTIERFTEVURSBhdWYgZGllIEVpbnplbHJlc3NvdXJjZSBpc3QgZ2VuYXUgZGFmw7xyIGRhLiBEaWUgRnJhZ2UgaXN0IG51ciwgd2FzIGRhbmFjaCBtaXQgaWhyZXIgQWRyZXNzZSBnZXNjaGllaHQuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgIDwvdWw+XG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICA8cD5FaW5lIEVpbnplbHJlc3NvdXJjZSB3aXJkIMO8YmVyIGlocmUgSUQgYWRyZXNzaWVydC48L3A+XG5cbiAgICAgIDxwPldlbGNoZSBBbmZvcmRlcnVuZyBtdXNzIGVpbmUgZ3V0ZSBSZXNzb3VyY2VuLUlEIGVyZsO8bGxlbj88L3A+XG5cbiAgICAgIDx1bCBjbGFzcz1cInRhc2stbGlzdFwiPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIGNoZWNrZWQ9XCJjaGVja2VkXCIgLz5TaWUgbXVzcyBkYXVlcmhhZnQgZWluZGV1dGlnIHVuZCDDvGJlciBpaHJlIExlYmVuc2RhdWVyIHVudmVyw6RuZGVybGljaCBzZWluLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+PHN0cm9uZz5FaW5kZXV0aWc8L3N0cm9uZz4sIGRhbWl0IHNpZSBnZW5hdSBlaW5lIFJlc3NvdXJjZSBiZXplaWNobmV0IOKAkyB1bmQgendhciBkYXVlcmhhZnQsIGFsc28gYXVjaCBuYWNoIGRlbSBMw7ZzY2hlbi4gPHN0cm9uZz5VbnZlcsOkbmRlcmxpY2g8L3N0cm9uZz4sIHdlaWwgc29uc3QgamVkZXIgZ2VzcGVpY2hlcnRlIFZlcndlaXMgYnJpY2h0OiBMZXNlemVpY2hlbiwgQ2FjaGVzLCBGcmVtZHN5c3RlbWUuPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPlNpZSBtdXNzIHNpY2ggYW5wYXNzZW4gbGFzc2VuLCBzb2JhbGQgc2ljaCBkaWUgRGF0ZW4gZGVyIFJlc3NvdXJjZSB2ZXLDpG5kZXJuLjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RGFubiBicmljaHQgamVkZXIgZ2VzcGVpY2hlcnRlIFZlcndlaXMsIHVuZCB6d2FyIGxhdXRsb3MuIEdlbmF1IGRlc2hhbGIgaXN0IGRpZSBFLU1haWwtQWRyZXNzZSBhbHMgSUQgdmVyZsO8aHJlcmlzY2ggdW5kIG1laXN0IGZhbHNjaCDigJMgTWVuc2NoZW4gd2VjaHNlbG4gc2llLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5TaWUgbXVzcyBmb3J0bGF1ZmVuZCB1bmQgb2huZSBMw7xja2VuIHZlcmdlYmVuIHdlcmRlbiwgZGFtaXQgbmljaHRzIGZlaGx0LjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RWluZSBMw7xja2UgaXN0IGhhcm1sb3MuIERhcyBGb3J0bGF1ZmVuZGUgaXN0IHNvZ2FyIGVoZXIgc2Now6RkbGljaDogRWluIFrDpGhsZXIgdmVycsOkdCBkaWUgTWVuZ2UgKDxjb2RlPi9jdXN0b21lcnMvODwvY29kZT4g4oCTIGVzIGdpYnQgYWxzbyBhY2h0KSB1bmQgbMOkZHQgenVtIER1cmNoesOkaGxlbiBlaW4uPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPlNpZSBtdXNzIGbDvHIgTWVuc2NoZW4gbGVzYmFyIHVuZCBsZWljaHQgenUgbWVya2VuIHVuZCB6dSBkaWt0aWVyZW4gc2Vpbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkVpbiBLb21mb3J0d3Vuc2NoLCBrZWluZSBBbmZvcmRlcnVuZy4gRWluZSBVVUlEIGVyZsO8bGx0IGFsbGUgZWNodGVuIEtyaXRlcmllbiB1bmQgaXN0IHRyb3R6ZGVtIG5pY2h0IHZvcmxlc2Jhci48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgPC91bD5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIDxwPkVpbiBBdWZydWYgc2NobMOkZ3QgZmVobCwgd2VpbCBkZXIgS3VuZGUgbmljaHQgZXhpc3RpZXJ0LjwvcD5cblxuICAgICAgPHA+V2FzIGlzdCB2b24gPGNvZGU+MjAwIE9LPC9jb2RlPiBtaXQgPGNvZGU+e1wiZXJyb3JcIjogXCJub3QgZm91bmRcIn08L2NvZGU+IGltIEJvZHkgenUgaGFsdGVuPzwvcD5cblxuICAgICAgPHVsIGNsYXNzPVwidGFzay1saXN0XCI+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgY2hlY2tlZD1cImNoZWNrZWRcIiAvPkVzIHNjaGFkZXQsIHdlaWwgUHJveHksIENhY2hlLCBHYXRld2F5IHVuZCBNb25pdG9yaW5nIEVyZm9sZyBhbm5laG1lbi48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkNhY2hlLCBHYXRld2F5LCBNb25pdG9yaW5nIHVuZCBSZXRyeS1Mb2dpayBsZXNlbiBkZW4gU3RhdHVzY29kZSwgbmljaHQgZGVuIEJvZHkuIERlciBGZWhsZXIgd2lyZCBmw7xyIGFsbGUgdW5zaWNodGJhciwgZGllIGRlbiBCb2R5IG5pY2h0IGxlc2VuLiBSaWNodGlnIHfDpHJlIDxjb2RlPjQwNDwvY29kZT4uPC9wPlxuICAgICAgICAgIDwvYmxvY2txdW90ZT5cbiAgICAgICAgPC9saT5cbiAgICAgICAgPGxpIGNsYXNzPVwidGFzay1saXN0LWl0ZW1cIj5cbiAgICAgICAgICA8cD48aW5wdXQgdHlwZT1cImNoZWNrYm94XCIgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbS1jaGVja2JveFwiIGRpc2FibGVkPVwiZGlzYWJsZWRcIiAvPkVzIGlzdCBpbiBPcmRudW5nLCBzb2xhbmdlIGRlciBGZWhsZXIgaW0gQm9keSBhdXNmw7xocmxpY2ggYmVzY2hyaWViZW4gd2lyZC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPkRlciBCb2R5IGhpbGZ0IG51ciBkZW0sIGRlciBpaG4gbGllc3QuIERlciBTdGF0dXNjb2RlIGlzdCBkaWUgWnVzYWdlIGFuIGFsbGUgYW5kZXJlbi48L3A+XG4gICAgICAgICAgPC9ibG9ja3F1b3RlPlxuICAgICAgICA8L2xpPlxuICAgICAgICA8bGkgY2xhc3M9XCJ0YXNrLWxpc3QtaXRlbVwiPlxuICAgICAgICAgIDxwPjxpbnB1dCB0eXBlPVwiY2hlY2tib3hcIiBjbGFzcz1cInRhc2stbGlzdC1pdGVtLWNoZWNrYm94XCIgZGlzYWJsZWQ9XCJkaXNhYmxlZFwiIC8+RXMgaXN0IHNvZ2FyIGJlc3Nlciwgd2VpbCBkZXIgQ2xpZW50IGRhbm4gbnVyIGVpbmUgRmVobGVyYmVoYW5kbHVuZyBicmF1Y2h0LjwvcD5cblxuICAgICAgICAgIDxibG9ja3F1b3RlPlxuICAgICAgICAgICAgPHA+RXIgYnJhdWNodCBzaWUgZGFubiBhbiBkZXIgZmFsc2NoZW4gU3RlbGxlIOKAkyB1bmQgYWxsZSBad2lzY2hlbnN0YXRpb25lbiBiZWtvbW1lbiBuaWNodHMgbWl0LjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICAgIDxsaSBjbGFzcz1cInRhc2stbGlzdC1pdGVtXCI+XG4gICAgICAgICAgPHA+PGlucHV0IHR5cGU9XCJjaGVja2JveFwiIGNsYXNzPVwidGFzay1saXN0LWl0ZW0tY2hlY2tib3hcIiBkaXNhYmxlZD1cImRpc2FibGVkXCIgLz5FcyBpc3QgZmFsc2NoLCB3ZWlsIGRlciBDb2RlIDIwMCBhdXNzY2hsaWXDn2xpY2ggYmVpIEdFVCBlcmxhdWJ0IGlzdC48L3A+XG5cbiAgICAgICAgICA8YmxvY2txdW90ZT5cbiAgICAgICAgICAgIDxwPjxjb2RlPjIwMDwvY29kZT4gaXN0IGJlaSB2aWVsZW4gTWV0aG9kZW4gcmljaHRpZy4gRmFsc2NoIGlzdCBoaWVyLCBkYXNzIGVpbiBGZWhsZXIgYWxzIEVyZm9sZyBnZW1lbGRldCB3aXJkLjwvcD5cbiAgICAgICAgICA8L2Jsb2NrcXVvdGU+XG4gICAgICAgIDwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvbGk+XG4gIDwvb2w+XG5cbiJ9</script>
 
-<div class="avd-academy-quiz" data-avd-academy-quiz><script type="application/json" data-avd-academy-quiz-data>
-{"questions":[{"question":"Was ist REST?","context":"Der Begriff fällt in jedem zweiten Satz – und wird selten sauber eingeordnet.","options":[{"text":"Ein Architekturstil – eine Sammlung von Bedingungen für den Umgang mit HTTP.","correct":true,"feedback":"Eine Sammlung von Bedingungen dafür, wie man HTTP benutzt – kein Protokoll, keine Bibliothek und kein Standard mit Prüfsiegel. Ein Stil, den man einhalten kann oder nicht."},{"text":"Ein eigenes Protokoll oberhalb von TCP, das HTTP bei Schnittstellen ablöst.","feedback":"Das Protokoll ist HTTP. REST liegt darüber und sagt, wie man es benutzt – es ersetzt nichts."},{"text":"Ein Datenformat: JSON, das über HTTP zwischen Systemen übertragen wird.","feedback":"Die häufigste Verwechslung. Man kann JSON über HTTP schicken und meilenweit von REST entfernt sein."},{"text":"Eine Spezifikation der IETF, gegen die man eine API zertifizieren lassen kann.","feedback":"Es gibt kein Prüfsiegel. REST stammt aus einer Dissertation (Roy Fielding, 2000), nicht aus einem RFC."}]},{"question":"Was passiert dabei mit den Herausforderungen?","context":"Ein System wird in mehrere Teile zerlegt, die getrennt betrieben werden (Microservices).","options":[{"text":"Sie verschieben sich aus der Anwendung in die Infrastruktur – dort gibt es jetzt alles mehrfach.","correct":true,"feedback":"Der Satz, auf den es hinausläuft: Sie verschwinden nicht. Aus Methodenaufrufen werden Schnittstellen, und alles gibt es jetzt mehrfach – Build, Deployment, Monitoring."},{"text":"Sie verschwinden weitgehend, weil jeder einzelne Teil für sich einfacher zu verstehen ist.","feedback":"Der einzelne Teil wird einfacher – das Ganze nicht. Die Komplexität wandert nach außen, sie löst sich nicht auf."},{"text":"Sie bleiben unverändert, denn die Aufteilung ist eine organisatorische Entscheidung.","feedback":"Sobald Teile über das Netz miteinander reden, kommen Latenz, Teilausfälle und verteilte Daten dazu. Das ist nicht organisatorisch."},{"text":"Sie verdoppeln sich, weil man die alte und die neue Architektur eine Zeit lang parallel betreibt.","feedback":"Mischformen sind zwar der Normalfall – aber das ist nicht der Kern. Die Herausforderungen verlagern sich, sie verdoppeln sich nicht."}]},{"question":"Wie viele Arten von Nachrichten kennt HTTP, und wer fängt an?","options":[{"text":"Zwei – Anfrage und Antwort, immer paarweise, und den Anfang macht immer der Client.","correct":true,"feedback":"Jeder Austausch geht vom Client aus: Er fragt, der Server antwortet – genau einmal je Anfrage. Wer eine Meldung ohne vorherige Frage braucht, braucht etwas anderes: WebSockets oder Server-Sent Events."},{"text":"Zwei – Anfrage und Antwort, wobei beide Seiten einen Austausch beginnen dürfen.","feedback":"Die Zahl stimmt, die Richtung nicht. In HTTP beginnt immer der Client, nie der Server."},{"text":"Drei – Anfrage, Antwort und die Benachrichtigung, die der Server von sich aus schickt.","feedback":"Eine Benachrichtigung vom Server kennt HTTP nicht. Genau deshalb gibt es WebSockets und Server-Sent Events."},{"text":"Eine – dieselbe Struktur in beide Richtungen, unterschieden nur durch die Richtung.","feedback":"Der Aufbau ist tatsächlich derselbe, aber die Startzeile unterscheidet sich: Methode und Pfad gegen Version und Statuscode."}]},{"question":"Welche Rolle hat die Leerzeile?","context":"Eine HTTP-Nachricht ist lesbarer Text: Startzeile, Header, Leerzeile, Body.","options":[{"text":"Sie trennt die Header vom Body – und ist das einzige Trennzeichen dafür.","correct":true,"feedback":"Und zwar als <em>einziges<\/em> Trennzeichen – deshalb wichtiger, als sie aussieht. Der Empfänger liest Zeile für Zeile, bis eine leer ist; alles danach ist Inhalt."},{"text":"Sie ist reine Formatierung und darf zur besseren Lesbarkeit entfallen.","feedback":"Ohne sie weiß der Empfänger nicht, wo die Header aufhören. Die Nachricht ist dann kaputt."},{"text":"Sie trennt die Startzeile von den Headern, die danach Zeile für Zeile folgen.","feedback":"Startzeile und Header stehen direkt untereinander. Die Leerzeile kommt erst nach den Headern."},{"text":"Sie zeigt an, dass die Nachricht keinen Body hat und hier zu Ende ist.","feedback":"Sie steht auch dann, wenn ein Body folgt. Ob einer da ist, sagt unter anderem <code>Content-Length<\/code>."}]},{"question":"Was heißt „HTTP ist zustandslos“?","context":"„Zustandslos“ wird im Kurs für zwei verschiedene Dinge benutzt.","options":[{"text":"Das Protokoll verknüpft zwei Nachrichtenpaare nicht – jede Anfrage steht für sich.","correct":true,"feedback":"Deshalb muss jede Anfrage aus sich heraus verständlich sein. Das ist nicht abwählbar – man kann nur etwas darüberbauen, und genau das tun Cookies."},{"text":"Der Server darf sich zwischen zwei Anfragen nichts über den Client merken.","feedback":"Doch, darf er – in einer Datenbank, einem Cache, einem Sitzungsspeicher. Er erfährt nur nicht von allein, zu wem eine Anfrage gehört."},{"text":"Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.","feedback":"Das ist die andere Bedeutung: <em>ein Service ist zustandslos<\/em> – eine Entwurfsentscheidung. Die Protokolleigenschaft gilt immer, die Entwurfsentscheidung trifft man."},{"text":"Zwei aufeinanderfolgende Anfragen desselben Clients landen bei derselben Instanz.","feedback":"Das Gegenteil ist der Fall – und darin liegt der Nutzen: Weil die Leitung nichts von einer Anfrage zur nächsten trägt, kann <em>jede<\/em> Instanz <em>jede<\/em> Anfrage beantworten. Erst dadurch lassen sich Instanzen dazustellen, wegnehmen und neu starten."}]},{"question":"Worin unterscheiden sich GET und POST für den Browser-Nutzer sichtbar?","context":"Ein Suchformular wird abgeschickt, ein Bestellformular auch.","options":[{"text":"Eine GET-Adresse lässt sich verschicken, als Lesezeichen speichern und neu laden.","correct":true,"feedback":"Weil die Daten bei GET in der Adresse stehen und bei POST im Body – und der Body ist nicht Teil der Adresse. Deshalb fragt der Browser beim Neuladen nach, ob er die Anfrage wiederholen soll."},{"text":"GET ist spürbar schneller, weil dabei deutlich weniger Daten übertragen werden müssen.","feedback":"Die Menge entscheidet nicht. Der Unterschied ist, <em>wo<\/em> die Daten stehen – und was das für Adresse und Wiederholung bedeutet."},{"text":"POST wird verschlüsselt übertragen, GET geht im Klartext über die Leitung.","feedback":"Verschlüsselt wird durch TLS – beide gleichermaßen, und die Adresse ist dabei ebenfalls geschützt."},{"text":"GET darf am Server nichts verändern, POST muss dagegen immer etwas verändern.","feedback":"Der erste Teil stimmt, der zweite nicht: POST <em>darf<\/em> ändern, muss aber nicht."}]},{"question":"Wann nimmt man PUT zum Anlegen, und wann POST?","context":"Eine neue Ressource soll angelegt werden. Beide Methoden können das.","options":[{"text":"PUT auf die Einzelressource, wenn der Client die ID bestimmt – das ist idempotent.","correct":true,"feedback":"Der Client kennt die ID – etwa einen fachlichen Schlüssel wie Kundennummer oder ISBN – und schickt sie in der Adresse mit: <code>PUT /customers/4711<\/code>. Zweimal gesendet entsteht derselbe Zustand, nicht zwei Kunden.<br><br><strong>POST<\/strong> ist der Weg, wenn der <em>Server<\/em> die ID vergibt: <code>POST /customers<\/code>, Antwort <code>201<\/code> mit <code>Location<\/code> – und eben <em>nicht<\/em> idempotent."},{"text":"Immer POST, weil ausschließlich der Server IDs vergeben und Kollisionen verhindern darf.","feedback":"Der Server <em>darf<\/em> IDs vergeben, muss aber nicht. Kennt der Client einen stabilen fachlichen Schlüssel, ist PUT der bessere Weg – und der einzige, bei dem ein zweiter Versuch keinen zweiten Datensatz anlegt."},{"text":"Immer PUT, weil POST nichts anlegt, sondern nur Formulardaten an den Server überträgt.","feedback":"POST legt sehr wohl an – es ist der Normalfall, wenn der Server die ID vergibt. Formulardaten sind die Herkunft der Methode, nicht ihre Bedeutung."},{"text":"Das ist Geschmackssache – beide legen an, der Unterschied ist rein stilistischer Natur.","feedback":"Der Unterschied ist nicht stilistisch, sondern beobachtbar: Zweimal POST legt zwei Ressourcen an, zweimal PUT nicht. Genau das heißt <em>idempotent<\/em>."}]},{"question":"Was steht danach im Vornamen – bei PUT, und bei PATCH?","context":"Kunde 5 heißt „Maier“ mit Vorname „Tom“. Du schickst einen Body, in dem <em>nur<\/em> <code>name<\/code> steht.","options":[{"text":"Bei PUT ist der Vorname danach weg, bei PATCH bleibt er unverändert stehen.","correct":true,"feedback":"Der Unterschied in einem Satz: <strong>PUT ersetzt, PATCH ändert.<\/strong> Was Du bei PUT nicht mitschickst, ist danach weg."},{"text":"In beiden Fällen bleibt der Vorname stehen, nicht genannte Felder bleiben unberührt.","feedback":"Das gilt für PATCH. PUT ersetzt die Ressource vollständig durch das Mitgeschickte."},{"text":"In beiden Fällen ist der Vorname danach weg, denn beide ersetzen die Ressource.","feedback":"Bei PUT ja. PATCH ändert aber nur das, was im Body steht."},{"text":"Bei PUT bleibt der Vorname stehen, bei PATCH ist er danach verschwunden.","feedback":"Andersherum: PUT ist das Ersetzen, PATCH das Ändern."}]},{"question":"Was heißt „idempotent“?","options":[{"text":"Mehrfach ausgeführt hinterlässt die Anfrage denselben Zustand wie einmal ausgeführt.","correct":true,"feedback":"Es geht um den <strong>Zustand<\/strong>, nicht um die Antwort. DELETE darf beim zweiten Mal <code>404<\/code> antworten und ist trotzdem idempotent."},{"text":"Mehrfach ausgeführt liefert die Anfrage jedes Mal exakt dieselbe Antwort an den Client.","feedback":"Die häufigste Verwechslung. Der Statuscode darf sich unterscheiden – der Zustand nicht."},{"text":"Die Anfrage verändert am Server überhaupt nichts, sie liest ausschließlich.","feedback":"Das heißt <em>sicher<\/em>. Jede sichere Methode ist idempotent, aber DELETE ist idempotent und nicht sicher."},{"text":"Die Anfrage lässt sich nur ein einziges Mal ausführen, danach wird sie abgelehnt.","feedback":"Im Gegenteil – gerade weil sie idempotent ist, darf der Aufrufer sie gefahrlos wiederholen."}]},{"question":"Warum ist <code>DELETE /customers/oldest<\/code> nicht idempotent?","context":"Zum Vergleich: <code>DELETE /customers/5<\/code> ist idempotent.","options":[{"text":"Weil die Adresse nach dem ersten Löschen bereits jemand anderen bezeichnet.","correct":true,"feedback":"Zweimal gesendet löscht zwei verschiedene Kunden. Das ist der Grund, warum ein Superlativ in der Adresse ein Entwurfsfehler ist."},{"text":"Weil ohne eine Zahl als Bezeichner überhaupt kein DELETE idempotent sein kann.","feedback":"Es liegt nicht an der Schreibweise des Bezeichners, sondern daran, ob die Adresse <em>dauerhaft dieselbe Sache<\/em> meint. <code>DELETE /customers/john-maier<\/code> wäre ebenso idempotent – <code>oldest<\/code> ist es nicht, weil damit jedes Mal jemand anderes gemeint ist."},{"text":"Weil der Server dafür erst alle Kunden durchsuchen und sortieren muss.","feedback":"Die Dauer spielt keine Rolle. Es geht darum, <em>was<\/em> die Adresse beim zweiten Aufruf bezeichnet."},{"text":"Gar nicht – DELETE ist grundsätzlich idempotent, auch in diesem Fall.","feedback":"DELETE ist es nur, solange die Adresse stabil dieselbe Ressource meint. <code>oldest<\/code> tut das nicht – deshalb trägt die Garantie hier nicht."}]},{"question":"Was ist von <code>DELETE /playlists/7/titles<\/code> zu halten?","context":"<code>/playlists/7/titles<\/code> ist die Titelliste einer Wiedergabeliste.","options":[{"text":"Es geht, ist aber semantisch falsch: Die Titelliste bleibt bestehen, nur leer.","correct":true,"feedback":"Der Server <em>kann<\/em> das umsetzen, und HTTP verbietet es nicht. Nur bedeutet DELETE „die Ressource ist danach weg“ – ein anschließendes GET müsste <code>404<\/code> antworten. Es antwortet aber <code>200<\/code> mit <code>[]<\/code>: Die Titelliste ist noch da, nur leer. Gemeint war <strong>leeren<\/strong>, und dafür ist DELETE die falsche Methode.<br><br>Zum Vergleich: <code>DELETE /playlists/7<\/code> ist sauber – danach gibt es die Wiedergabeliste wirklich nicht mehr."},{"text":"Es löscht sämtliche Titel der Liste – sauber definiert, in der Praxis gefährlich.","feedback":"So wird es oft gelesen, trifft die Sache aber nicht: Die Listenressource selbst überlebt. Es wäre ein Leeren, kein Löschen."},{"text":"Es ist verboten, HTTP lässt DELETE auf einer Listenressource gar nicht zu.","feedback":"Verboten ist es nicht. Es ergibt nur keine saubere Bedeutung."},{"text":"Bei einer Unterliste wie dieser geht es, bei einer Hauptliste dagegen nicht.","feedback":"Die Verschachtelung ändert nichts. Auch <code>/playlists<\/code> wäre nach einem DELETE noch da – nur leer."}]},{"question":"Welcher Entwurf trifft die Bedeutung am genauesten und vergibt das geringste Recht?","context":"Die Titelliste einer Wiedergabeliste soll geleert werden.","options":[{"text":"PATCH auf die Titelliste, mit einer Anweisung im Body, sie zu leeren.","correct":true,"feedback":"PATCH ändert etwas an der Ressource, ohne sie zu ersetzen – der Body sagt genau das eine, was geschehen soll. Preis: Es braucht ein vereinbartes Änderungsformat."},{"text":"PUT auf die Titelliste, mit einer leeren Liste im Body als neuem Inhalt.","feedback":"Funktioniert und ist idempotent – aber wer leeren darf, darf damit <em>jede beliebige<\/em> Liste setzen. Viel mehr Recht als nötig."},{"text":"POST auf /playlists/7/titles/actions/empty, ganz ohne Inhalt im Body.","feedback":"Eine gute Variante: Die Absicht steht in der Adresse. Der Preis ist ein Verb in der URL, also bewusst außerhalb des CRUD-Rasters."},{"text":"DELETE auf die Titelliste, mit dem Query-Parameter all=true als Zusatz.","feedback":"Ein Query-Parameter macht aus dem Löschen kein Leeren. Die Bedeutung von DELETE bleibt falsch."}]},{"question":"Wie sollte sich das System verhalten, wenn <code>…/images/1<\/code> gelöscht wird?","context":"Die Bilder eines Produkts werden durchnummeriert: <code>…/images/0<\/code>, <code>/1<\/code>, <code>/2<\/code>.","options":[{"text":"Die Bilder behalten ihren Index, die 1 bleibt dauerhaft eine Lücke.","correct":true,"feedback":"Eine einmal vergebene ID wird nach dem Löschen <strong>nicht wieder ausgegeben<\/strong>. Die Lücke ist kein Schönheitsfehler, sondern der Beleg dafür, dass die Adresse eine <em>Identität<\/em> bezeichnet und keine Position. Wer <code>…/images/1<\/code> später aufruft, bekommt <code>404<\/code> – und das ist die richtige Antwort."},{"text":"Die Bilder behalten ihren Index, die 1 wird beim nächsten Upload neu vergeben.","feedback":"Der erste Teil stimmt – die Lücke ist richtig. Das Neuvergeben ist der Fehler: Wer die 1 irgendwann wieder ausgibt, liefert jedem alten Verweis wortlos ein <em>anderes<\/em> Bild. Genau deshalb heißt das Kriterium „eindeutig – dauerhaft“."},{"text":"Die folgenden Bilder rutschen im Index jeweils um eine Stelle nach vorn.","feedback":"Dann wird aus dem alten <code>/2<\/code> das neue <code>/1<\/code>. Jeder gespeicherte Verweis zeigt ab da auf ein anderes Bild, und nirgendwo tritt ein Fehler auf – die Adresse bleibt ja gültig. Ein Index ist eine Position, keine Identität."},{"text":"Das Löschen wird abgelehnt, einzelne Einträge einer Liste bleiben stehen.","feedback":"Einzelne Einträge lassen sich sehr wohl löschen – DELETE auf die Einzelressource ist genau dafür da. Die Frage ist nur, was danach mit ihrer Adresse geschieht."}]},{"question":"Welche Anforderung muss eine gute Ressourcen-ID erfüllen?","context":"Eine Einzelressource wird über ihre ID adressiert.","options":[{"text":"Sie muss dauerhaft eindeutig und über ihre Lebensdauer unveränderlich sein.","correct":true,"feedback":"<strong>Eindeutig<\/strong>, damit sie genau eine Ressource bezeichnet – und zwar dauerhaft, also auch nach dem Löschen. <strong>Unveränderlich<\/strong>, weil sonst jeder gespeicherte Verweis bricht: Lesezeichen, Caches, Fremdsysteme."},{"text":"Sie muss sich anpassen lassen, sobald sich die Daten der Ressource verändern.","feedback":"Dann bricht jeder gespeicherte Verweis, und zwar lautlos. Genau deshalb ist die E-Mail-Adresse als ID verführerisch und meist falsch – Menschen wechseln sie."},{"text":"Sie muss fortlaufend und ohne Lücken vergeben werden, damit nichts fehlt.","feedback":"Eine Lücke ist harmlos. Das Fortlaufende ist sogar eher schädlich: Ein Zähler verrät die Menge (<code>/customers/8<\/code> – es gibt also acht) und lädt zum Durchzählen ein."},{"text":"Sie muss für Menschen lesbar und leicht zu merken und zu diktieren sein.","feedback":"Ein Komfortwunsch, keine Anforderung. Eine UUID erfüllt alle echten Kriterien und ist trotzdem nicht vorlesbar."}]},{"question":"Was ist von <code>200 OK<\/code> mit <code>{\"error\": \"not found\"}<\/code> im Body zu halten?","context":"Ein Aufruf schlägt fehl, weil der Kunde nicht existiert.","options":[{"text":"Es schadet, weil Proxy, Cache, Gateway und Monitoring Erfolg annehmen.","correct":true,"feedback":"Cache, Gateway, Monitoring und Retry-Logik lesen den Statuscode, nicht den Body. Der Fehler wird für alle unsichtbar, die den Body nicht lesen. Richtig wäre <code>404<\/code>."},{"text":"Es ist in Ordnung, solange der Fehler im Body ausführlich beschrieben wird.","feedback":"Der Body hilft nur dem, der ihn liest. Der Statuscode ist die Zusage an alle anderen."},{"text":"Es ist sogar besser, weil der Client dann nur eine Fehlerbehandlung braucht.","feedback":"Er braucht sie dann an der falschen Stelle – und alle Zwischenstationen bekommen nichts mit."},{"text":"Es ist falsch, weil der Code 200 ausschließlich bei GET erlaubt ist.","feedback":"<code>200<\/code> ist bei vielen Methoden richtig. Falsch ist hier, dass ein Fehler als Erfolg gemeldet wird."}]}],"verdicts":[{"min":0.85,"title":"Sitzt.","text":"Die Grundlagen tragen. Die interessanten Fragen sind ab jetzt Entwurfsfragen – und die haben mehr als eine vertretbare Antwort."},{"min":0.6,"title":"Trägt im Großen und Ganzen.","text":"Geh die Fragen durch, bei denen Du danebenlagst, und lies die Begründung. Meist steckt dahinter eine einzelne Unterscheidung – zustandslos gegen zustandslos, Löschen gegen Leeren, Zustand gegen Antwort."},{"min":0,"title":"Noch Luft.","text":"Kein Grund zur Sorge – das ist der Zweck der Übung. Nimm Dir die Visualisierungen zur Methoden-Matrix und zu den HTTP-Eigenschaften noch einmal vor; sie beantworten die meisten dieser Fragen."}]}
-</script>
+  <ol>
+    <li>
+      <p>Der Begriff fällt in jedem zweiten Satz – und wird selten sauber eingeordnet.</p>
 
-  <div class="avd-academy-quiz__bar">
-    <span data-avd-academy-quiz-counter></span>
-    <span data-avd-academy-quiz-score></span>
-  </div><div class="avd-academy-quiz__progress" data-avd-academy-quiz-bar
-       role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
-       aria-label="Fortschritt">
-    <div class="avd-academy-quiz__progress-fill" data-avd-academy-quiz-progress></div>
-  </div>
+      <p>Was ist REST?</p>
 
-  <div class="avd-academy-quiz__card" data-avd-academy-quiz-card>
-    <p class="avd-academy-quiz__context" data-avd-academy-quiz-context></p>
-    <h2 class="avd-academy-quiz__question" id="avd-academy-quiz-frage" tabindex="-1"
-        data-avd-academy-quiz-question></h2>
-    <div class="avd-academy-quiz__options" role="group"
-         aria-labelledby="avd-academy-quiz-frage" data-avd-academy-quiz-options></div>
-    <div class="avd-academy-quiz__feedback" role="status" data-avd-academy-quiz-feedback hidden></div>
-    <button type="button" class="avd-academy-quiz__next" data-avd-academy-quiz-next hidden></button>
-  </div>
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Ein Architekturstil – eine Sammlung von Bedingungen für den Umgang mit HTTP.</p>
 
-  <div class="avd-academy-quiz__result" data-avd-academy-quiz-result hidden>
-    <h2 data-avd-academy-quiz-result-title></h2>
-    <p class="avd-academy-quiz__score" data-avd-academy-quiz-result-score></p>
-    <p class="avd-academy-quiz__verdict" data-avd-academy-quiz-result-verdict></p>
-    <button type="button" class="avd-academy-quiz__next" data-avd-academy-quiz-restart></button>
-  </div><div class="avd-academy-quiz__fallback">
-    <ol>
-      <li><em>Der Begriff fällt in jedem zweiten Satz – und wird selten sauber eingeordnet.</em><br>
-        <strong>Was ist REST?</strong>
-        <ul>
-          <li>Ein Architekturstil – eine Sammlung von Bedingungen für den Umgang mit HTTP.</li>
-          <li>Ein eigenes Protokoll oberhalb von TCP, das HTTP bei Schnittstellen ablöst.</li>
-          <li>Ein Datenformat: JSON, das über HTTP zwischen Systemen übertragen wird.</li>
-          <li>Eine Spezifikation der IETF, gegen die man eine API zertifizieren lassen kann.</li>
-        </ul>
-      </li>
-      <li><em>Ein System wird in mehrere Teile zerlegt, die getrennt betrieben werden (Microservices).</em><br>
-        <strong>Was passiert dabei mit den Herausforderungen?</strong>
-        <ul>
-          <li>Sie verschieben sich aus der Anwendung in die Infrastruktur – dort gibt es jetzt alles mehrfach.</li>
-          <li>Sie verschwinden weitgehend, weil jeder einzelne Teil für sich einfacher zu verstehen ist.</li>
-          <li>Sie bleiben unverändert, denn die Aufteilung ist eine organisatorische Entscheidung.</li>
-          <li>Sie verdoppeln sich, weil man die alte und die neue Architektur eine Zeit lang parallel betreibt.</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Wie viele Arten von Nachrichten kennt HTTP, und wer fängt an?</strong>
-        <ul>
-          <li>Zwei – Anfrage und Antwort, immer paarweise, und den Anfang macht immer der Client.</li>
-          <li>Zwei – Anfrage und Antwort, wobei beide Seiten einen Austausch beginnen dürfen.</li>
-          <li>Drei – Anfrage, Antwort und die Benachrichtigung, die der Server von sich aus schickt.</li>
-          <li>Eine – dieselbe Struktur in beide Richtungen, unterschieden nur durch die Richtung.</li>
-        </ul>
-      </li>
-      <li><em>Eine HTTP-Nachricht ist lesbarer Text: Startzeile, Header, Leerzeile, Body.</em><br>
-        <strong>Welche Rolle hat die Leerzeile?</strong>
-        <ul>
-          <li>Sie trennt die Header vom Body – und ist das einzige Trennzeichen dafür.</li>
-          <li>Sie ist reine Formatierung und darf zur besseren Lesbarkeit entfallen.</li>
-          <li>Sie trennt die Startzeile von den Headern, die danach Zeile für Zeile folgen.</li>
-          <li>Sie zeigt an, dass die Nachricht keinen Body hat und hier zu Ende ist.</li>
-        </ul>
-      </li>
-      <li><em>„Zustandslos“ wird im Kurs für zwei verschiedene Dinge benutzt.</em><br>
-        <strong>Was heißt „HTTP ist zustandslos“?</strong>
-        <ul>
-          <li>Das Protokoll verknüpft zwei Nachrichtenpaare nicht – jede Anfrage steht für sich.</li>
-          <li>Der Server darf sich zwischen zwei Anfragen nichts über den Client merken.</li>
-          <li>Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.</li>
-          <li>Zwei aufeinanderfolgende Anfragen desselben Clients landen bei derselben Instanz.</li>
-        </ul>
-      </li>
-      <li><em>Ein Suchformular wird abgeschickt, ein Bestellformular auch.</em><br>
-        <strong>Worin unterscheiden sich GET und POST für den Browser-Nutzer sichtbar?</strong>
-        <ul>
-          <li>Eine GET-Adresse lässt sich verschicken, als Lesezeichen speichern und neu laden.</li>
-          <li>GET ist spürbar schneller, weil dabei deutlich weniger Daten übertragen werden müssen.</li>
-          <li>POST wird verschlüsselt übertragen, GET geht im Klartext über die Leitung.</li>
-          <li>GET darf am Server nichts verändern, POST muss dagegen immer etwas verändern.</li>
-        </ul>
-      </li>
-      <li><em>Eine neue Ressource soll angelegt werden. Beide Methoden können das.</em><br>
-        <strong>Wann nimmt man PUT zum Anlegen, und wann POST?</strong>
-        <ul>
-          <li>PUT auf die Einzelressource, wenn der Client die ID bestimmt – das ist idempotent.</li>
-          <li>Immer POST, weil ausschließlich der Server IDs vergeben und Kollisionen verhindern darf.</li>
-          <li>Immer PUT, weil POST nichts anlegt, sondern nur Formulardaten an den Server überträgt.</li>
-          <li>Das ist Geschmackssache – beide legen an, der Unterschied ist rein stilistischer Natur.</li>
-        </ul>
-      </li>
-      <li><em>Kunde 5 heißt „Maier“ mit Vorname „Tom“. Du schickst einen Body, in dem <em>nur</em> <code>name</code> steht.</em><br>
-        <strong>Was steht danach im Vornamen – bei PUT, und bei PATCH?</strong>
-        <ul>
-          <li>Bei PUT ist der Vorname danach weg, bei PATCH bleibt er unverändert stehen.</li>
-          <li>In beiden Fällen bleibt der Vorname stehen, nicht genannte Felder bleiben unberührt.</li>
-          <li>In beiden Fällen ist der Vorname danach weg, denn beide ersetzen die Ressource.</li>
-          <li>Bei PUT bleibt der Vorname stehen, bei PATCH ist er danach verschwunden.</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Was heißt „idempotent“?</strong>
-        <ul>
-          <li>Mehrfach ausgeführt hinterlässt die Anfrage denselben Zustand wie einmal ausgeführt.</li>
-          <li>Mehrfach ausgeführt liefert die Anfrage jedes Mal exakt dieselbe Antwort an den Client.</li>
-          <li>Die Anfrage verändert am Server überhaupt nichts, sie liest ausschließlich.</li>
-          <li>Die Anfrage lässt sich nur ein einziges Mal ausführen, danach wird sie abgelehnt.</li>
-        </ul>
-      </li>
-      <li><em>Zum Vergleich: <code>DELETE /customers/5</code> ist idempotent.</em><br>
-        <strong>Warum ist <code>DELETE /customers/oldest</code> nicht idempotent?</strong>
-        <ul>
-          <li>Weil die Adresse nach dem ersten Löschen bereits jemand anderen bezeichnet.</li>
-          <li>Weil ohne eine Zahl als Bezeichner überhaupt kein DELETE idempotent sein kann.</li>
-          <li>Weil der Server dafür erst alle Kunden durchsuchen und sortieren muss.</li>
-          <li>Gar nicht – DELETE ist grundsätzlich idempotent, auch in diesem Fall.</li>
-        </ul>
-      </li>
-      <li><em><code>/playlists/7/titles</code> ist die Titelliste einer Wiedergabeliste.</em><br>
-        <strong>Was ist von <code>DELETE /playlists/7/titles</code> zu halten?</strong>
-        <ul>
-          <li>Es geht, ist aber semantisch falsch: Die Titelliste bleibt bestehen, nur leer.</li>
-          <li>Es löscht sämtliche Titel der Liste – sauber definiert, in der Praxis gefährlich.</li>
-          <li>Es ist verboten, HTTP lässt DELETE auf einer Listenressource gar nicht zu.</li>
-          <li>Bei einer Unterliste wie dieser geht es, bei einer Hauptliste dagegen nicht.</li>
-        </ul>
-      </li>
-      <li><em>Die Titelliste einer Wiedergabeliste soll geleert werden.</em><br>
-        <strong>Welcher Entwurf trifft die Bedeutung am genauesten und vergibt das geringste Recht?</strong>
-        <ul>
-          <li>PATCH auf die Titelliste, mit einer Anweisung im Body, sie zu leeren.</li>
-          <li>PUT auf die Titelliste, mit einer leeren Liste im Body als neuem Inhalt.</li>
-          <li>POST auf /playlists/7/titles/actions/empty, ganz ohne Inhalt im Body.</li>
-          <li>DELETE auf die Titelliste, mit dem Query-Parameter all=true als Zusatz.</li>
-        </ul>
-      </li>
-      <li><em>Die Bilder eines Produkts werden durchnummeriert: <code>…/images/0</code>, <code>/1</code>, <code>/2</code>.</em><br>
-        <strong>Wie sollte sich das System verhalten, wenn <code>…/images/1</code> gelöscht wird?</strong>
-        <ul>
-          <li>Die Bilder behalten ihren Index, die 1 bleibt dauerhaft eine Lücke.</li>
-          <li>Die Bilder behalten ihren Index, die 1 wird beim nächsten Upload neu vergeben.</li>
-          <li>Die folgenden Bilder rutschen im Index jeweils um eine Stelle nach vorn.</li>
-          <li>Das Löschen wird abgelehnt, einzelne Einträge einer Liste bleiben stehen.</li>
-        </ul>
-      </li>
-      <li><em>Eine Einzelressource wird über ihre ID adressiert.</em><br>
-        <strong>Welche Anforderung muss eine gute Ressourcen-ID erfüllen?</strong>
-        <ul>
-          <li>Sie muss dauerhaft eindeutig und über ihre Lebensdauer unveränderlich sein.</li>
-          <li>Sie muss sich anpassen lassen, sobald sich die Daten der Ressource verändern.</li>
-          <li>Sie muss fortlaufend und ohne Lücken vergeben werden, damit nichts fehlt.</li>
-          <li>Sie muss für Menschen lesbar und leicht zu merken und zu diktieren sein.</li>
-        </ul>
-      </li>
-      <li><em>Ein Aufruf schlägt fehl, weil der Kunde nicht existiert.</em><br>
-        <strong>Was ist von <code>200 OK</code> mit <code>{"error": "not found"}</code> im Body zu halten?</strong>
-        <ul>
-          <li>Es schadet, weil Proxy, Cache, Gateway und Monitoring Erfolg annehmen.</li>
-          <li>Es ist in Ordnung, solange der Fehler im Body ausführlich beschrieben wird.</li>
-          <li>Es ist sogar besser, weil der Client dann nur eine Fehlerbehandlung braucht.</li>
-          <li>Es ist falsch, weil der Code 200 ausschließlich bei GET erlaubt ist.</li>
-        </ul>
-      </li>
-    </ol>
-  </div>
+          
+        </li>
+        <li class="task-list-item">
+          <p>Ein eigenes Protokoll oberhalb von TCP, das HTTP bei Schnittstellen ablöst.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Ein Datenformat: JSON, das über HTTP zwischen Systemen übertragen wird.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Eine Spezifikation der IETF, gegen die man eine API zertifizieren lassen kann.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Ein System wird in mehrere Teile zerlegt, die getrennt betrieben werden (Microservices).</p>
+
+      <p>Was passiert dabei mit den Herausforderungen?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Sie verschieben sich aus der Anwendung in die Infrastruktur – dort gibt es jetzt alles mehrfach.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie verschwinden weitgehend, weil jeder einzelne Teil für sich einfacher zu verstehen ist.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie bleiben unverändert, denn die Aufteilung ist eine organisatorische Entscheidung.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie verdoppeln sich, weil man die alte und die neue Architektur eine Zeit lang parallel betreibt.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Wie viele Arten von Nachrichten kennt HTTP, und wer fängt an?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Zwei – Anfrage und Antwort, immer paarweise, und den Anfang macht immer der Client.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Zwei – Anfrage und Antwort, wobei beide Seiten einen Austausch beginnen dürfen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Drei – Anfrage, Antwort und die Benachrichtigung, die der Server von sich aus schickt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Eine – dieselbe Struktur in beide Richtungen, unterschieden nur durch die Richtung.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Eine HTTP-Nachricht ist lesbarer Text: Startzeile, Header, Leerzeile, Body.</p>
+
+      <p>Welche Rolle hat die Leerzeile?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Sie trennt die Header vom Body – und ist das einzige Trennzeichen dafür.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie ist reine Formatierung und darf zur besseren Lesbarkeit entfallen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie trennt die Startzeile von den Headern, die danach Zeile für Zeile folgen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie zeigt an, dass die Nachricht keinen Body hat und hier zu Ende ist.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>„Zustandslos“ wird im Kurs für zwei verschiedene Dinge benutzt.</p>
+
+      <p>Was heißt „HTTP ist zustandslos“?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Das Protokoll verknüpft zwei Nachrichtenpaare nicht – jede Anfrage steht für sich.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Der Server darf sich zwischen zwei Anfragen nichts über den Client merken.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Zwei aufeinanderfolgende Anfragen desselben Clients landen bei derselben Instanz.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Ein Suchformular wird abgeschickt, ein Bestellformular auch.</p>
+
+      <p>Worin unterscheiden sich GET und POST für den Browser-Nutzer sichtbar?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Eine GET-Adresse lässt sich verschicken, als Lesezeichen speichern und neu laden.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>GET ist spürbar schneller, weil dabei deutlich weniger Daten übertragen werden müssen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>POST wird verschlüsselt übertragen, GET geht im Klartext über die Leitung.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>GET darf am Server nichts verändern, POST muss dagegen immer etwas verändern.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Eine neue Ressource soll angelegt werden. Beide Methoden können das.</p>
+
+      <p>Wann nimmt man PUT zum Anlegen, und wann POST?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>PUT auf die Einzelressource, wenn der Client die ID bestimmt – das ist idempotent.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Immer POST, weil ausschließlich der Server IDs vergeben und Kollisionen verhindern darf.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Immer PUT, weil POST nichts anlegt, sondern nur Formulardaten an den Server überträgt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Das ist Geschmackssache – beide legen an, der Unterschied ist rein stilistischer Natur.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Kunde 5 heißt „Maier“ mit Vorname „Tom“. Du schickst einen Body, in dem <em>nur</em> <code>name</code> steht.</p>
+
+      <p>Was steht danach im Vornamen – bei PUT, und bei PATCH?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Bei PUT ist der Vorname danach weg, bei PATCH bleibt er unverändert stehen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>In beiden Fällen bleibt der Vorname stehen, nicht genannte Felder bleiben unberührt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>In beiden Fällen ist der Vorname danach weg, denn beide ersetzen die Ressource.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Bei PUT bleibt der Vorname stehen, bei PATCH ist er danach verschwunden.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Was heißt „idempotent“?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Mehrfach ausgeführt hinterlässt die Anfrage denselben Zustand wie einmal ausgeführt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Mehrfach ausgeführt liefert die Anfrage jedes Mal exakt dieselbe Antwort an den Client.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Die Anfrage verändert am Server überhaupt nichts, sie liest ausschließlich.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Die Anfrage lässt sich nur ein einziges Mal ausführen, danach wird sie abgelehnt.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Zum Vergleich: <code>DELETE /customers/5</code> ist idempotent.</p>
+
+      <p>Warum ist <code>DELETE /customers/oldest</code> nicht idempotent?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Weil die Adresse nach dem ersten Löschen bereits jemand anderen bezeichnet.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Weil ohne eine Zahl als Bezeichner überhaupt kein DELETE idempotent sein kann.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Weil der Server dafür erst alle Kunden durchsuchen und sortieren muss.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Gar nicht – DELETE ist grundsätzlich idempotent, auch in diesem Fall.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><code>/playlists/7/titles</code> ist die Titelliste einer Wiedergabeliste.</p>
+
+      <p>Was ist von <code>DELETE /playlists/7/titles</code> zu halten?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Es geht, ist aber semantisch falsch: Die Titelliste bleibt bestehen, nur leer.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Es löscht sämtliche Titel der Liste – sauber definiert, in der Praxis gefährlich.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Es ist verboten, HTTP lässt DELETE auf einer Listenressource gar nicht zu.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Bei einer Unterliste wie dieser geht es, bei einer Hauptliste dagegen nicht.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Die Titelliste einer Wiedergabeliste soll geleert werden.</p>
+
+      <p>Welcher Entwurf trifft die Bedeutung am genauesten und vergibt das geringste Recht?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>PATCH auf die Titelliste, mit einer Anweisung im Body, sie zu leeren.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>PUT auf die Titelliste, mit einer leeren Liste im Body als neuem Inhalt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>POST auf /playlists/7/titles/actions/empty, ganz ohne Inhalt im Body.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>DELETE auf die Titelliste, mit dem Query-Parameter all=true als Zusatz.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Die Bilder eines Produkts werden durchnummeriert: <code>…/images/0</code>, <code>/1</code>, <code>/2</code>.</p>
+
+      <p>Wie sollte sich das System verhalten, wenn <code>…/images/1</code> gelöscht wird?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Die Bilder behalten ihren Index, die 1 bleibt dauerhaft eine Lücke.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Die Bilder behalten ihren Index, die 1 wird beim nächsten Upload neu vergeben.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Die folgenden Bilder rutschen im Index jeweils um eine Stelle nach vorn.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Das Löschen wird abgelehnt, einzelne Einträge einer Liste bleiben stehen.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Eine Einzelressource wird über ihre ID adressiert.</p>
+
+      <p>Welche Anforderung muss eine gute Ressourcen-ID erfüllen?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Sie muss dauerhaft eindeutig und über ihre Lebensdauer unveränderlich sein.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie muss sich anpassen lassen, sobald sich die Daten der Ressource verändern.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie muss fortlaufend und ohne Lücken vergeben werden, damit nichts fehlt.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Sie muss für Menschen lesbar und leicht zu merken und zu diktieren sein.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Ein Aufruf schlägt fehl, weil der Kunde nicht existiert.</p>
+
+      <p>Was ist von <code>200 OK</code> mit <code>{"error": "not found"}</code> im Body zu halten?</p>
+
+      <ul class="task-list">
+        <li class="task-list-item">
+          <p>Es schadet, weil Proxy, Cache, Gateway und Monitoring Erfolg annehmen.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Es ist in Ordnung, solange der Fehler im Body ausführlich beschrieben wird.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Es ist sogar besser, weil der Client dann nur eine Fehlerbehandlung braucht.</p>
+
+          
+        </li>
+        <li class="task-list-item">
+          <p>Es ist falsch, weil der Code 200 ausschließlich bei GET erlaubt ist.</p>
+
+          
+        </li>
+      </ul>
+    </li>
+  </ol>
 
 </div>
 
-    </main>
+<h2 id="wie-es-weitergeht">Wie es weitergeht</h2>
+
+<ul>
+  <li><strong>Ab 85 % richtig – Sitzt.</strong> Die Grundlagen tragen. Die interessanten Fragen sind ab jetzt Entwurfsfragen – und die haben mehr als eine vertretbare Antwort.</li>
+  <li><strong>Ab 60 % richtig – Trägt im Großen und Ganzen.</strong> Geh die Fragen durch, bei denen Du danebenlagst, und lies die Begründung. Meist steckt dahinter eine einzelne Unterscheidung – zustandslos gegen zustandslos, Löschen gegen Leeren, Zustand gegen Antwort.</li>
+  <li><strong>Unter 60 % – Noch Luft.</strong> Kein Grund zur Sorge – das ist der Zweck der Übung. Nimm Dir die Visualisierungen zur Methoden-Matrix und zu den HTTP-Eigenschaften noch einmal vor; sie beantworten die meisten dieser Fragen.</li>
+</ul>
+
+
+    </main><aside class="avd-academy-guide-sidebar"><details class="avd-academy-guide-side avd-academy-guide-side--toc avd-academy-fold" data-avd-academy-toc-box
+               data-avd-academy-toc-grenze="12" open hidden>
+        <summary class="avd-academy-guide-side__label">Auf dieser Seite</summary>
+        <nav class="avd-academy-toc avd-academy-fold__body" data-avd-academy-toc aria-label="Inhaltsverzeichnis"></nav>
+      </details>
+    </aside>
   </div><div class="avd-academy-print-contact" aria-hidden="true">
     <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
     <span>academy@atvantage.com</span>
