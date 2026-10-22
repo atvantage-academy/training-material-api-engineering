@@ -1,0 +1,162 @@
+/* Stylesheet der Seite 02-http-grundlagen/eigenschaften.md – über `styles:` im Front Matter geladen. */
+.hg { margin-block: var(--skr-space-6, 1.5rem); }
+.hg__lead { color: var(--skr-color-ink); }
+.hg__lead--eng { margin-top: 0; }
+
+/* SPEZIFITÄT MIT ABSICHT (0-2-1): Vor der Überschrift steht ein eigenes Raster-<div>
+   ohne Außenabstand, sie bekommt ihre Luft deshalb hier von oben. Ein bloßes
+   `.xx__h2` (0-1-0) verlöre gegen die Überschriftenregeln des Skriptoriums. */
+.hg h2.hg__h2 { margin-top: var(--skr-space-12, 3rem); }
+
+/* Einstieg: Bild und Anleitung nebeneinander */
+.hg__start { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--skr-space-6, 1.5rem); align-items: center;
+  border-left: 4px solid var(--skr-color-accent); background: var(--skr-color-bg-subtle);
+  border-radius: var(--skr-radius, 8px); padding: var(--skr-space-4, 1rem) var(--skr-space-6, 1.5rem); }
+@media (max-width: 48rem) { .hg__start { grid-template-columns: 1fr; } }
+.hg__start svg { width: 100%; height: auto; max-width: 420px; }
+.hg__start__text h3 { margin-top: 0; }
+.hg__start__text ol { margin-bottom: .6rem; }
+.hg__start__text p:last-child { margin-bottom: 0; }
+
+/* Die vier Eigenschaften */
+/* Feste 2x2-Anordnung statt auto-fit: Mit VIER Karten ergab auto-fit je nach
+   Breite 3+1, und die vierte stand allein in einer Reihe. Zwei Spalten sind
+   ausserdem breiter - die Skizzen werden groesser, und genau darauf kommt es an,
+   wenn die Seite projiziert wird. */
+.hg__karten { display: grid; grid-template-columns: 1fr; gap: var(--skr-space-4, 1rem); }
+@media (min-width: 46rem) { .hg__karten { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hg__karte { border: 1px solid var(--skr-color-border); border-top: 4px solid var(--skr-color-accent);
+  border-radius: var(--skr-radius, 8px); padding: var(--skr-space-4, 1rem); background: var(--skr-color-bg); }
+.hg__karte svg { width: 100%; height: auto; display: block; margin-bottom: .6rem; color: var(--skr-color-ink); }
+.hg__karte h3 { margin: 0 0 .3rem; font-size: var(--skr-fs-md, 1.05rem); }
+.hg__karte__kurz { margin: 0 0 .8rem; }
+.hg__mehr { font: inherit; font-size: var(--skr-fs-sm, .9rem); font-weight: var(--skr-fw-medium, 500);
+  cursor: pointer; padding: .35em 1em; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px solid var(--skr-color-accent); background: transparent; color: var(--skr-color-accent); }
+.hg__mehr:hover { background: var(--skr-color-accent-soft); }
+.hg__mehr:focus-visible { outline: 2px solid var(--skr-color-accent); outline-offset: 2px; }
+.hg__mehr::after { content: " ▾"; }
+.hg__mehr[aria-expanded="true"]::after { content: " ▴"; }
+.hg__karte__detail { display: none; margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--skr-color-border); font-size: var(--skr-fs-sm, .92rem); }
+.hg__karte__detail.is-offen { display: block; }
+.hg__karte__detail p:last-child { margin-bottom: 0; }
+
+/* Aufbau: Schema und Beispiel nebeneinander */
+.hg__aufbau { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: var(--skr-space-6, 1.5rem); align-items: start; }
+@media (max-width: 54rem) { .hg__aufbau { grid-template-columns: 1fr; } }
+.hg__schema svg { width: 100%; height: auto; color: var(--skr-color-ink); }
+.hg__schema__fuss { font-size: var(--skr-fs-sm, .88rem); color: var(--skr-color-ink); margin-top: .6rem; }
+.hg__nachrichten { display: grid; gap: var(--skr-space-3, .75rem); }
+.hg__msg { border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius, 8px); overflow: hidden; }
+.hg__msg__kopf { margin: 0; padding: .45rem .8rem; background: var(--skr-color-bg-subtle); border-bottom: 1px solid var(--skr-color-border); font-weight: var(--skr-fw-bold, 700); font-size: .92rem; }
+.hg__msg__kopf span { font-weight: var(--skr-fw-normal, 400); color: var(--skr-color-ink-muted); font-size: .85em; margin-left: .4rem; }
+.hg__code { font-family: var(--skr-font-mono, monospace); font-size: .78rem; line-height: 1.65; padding: .5rem 0 .6rem; background: color-mix(in srgb, var(--skr-fill-3-bg) 55%, var(--skr-color-bg)); }
+/* Der Body ist der ZETTEL IM UMSCHLAG – deshalb sitzt er als eigenes Blatt auf
+   der Umschlagflaeche, eingerueckt und heller. */
+.hg__teil--zettel { margin: .35rem .6rem 0; padding: .35rem .6rem; border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-color-bg); border: 1px solid var(--skr-didaktikon-tone-4); border-left-width: 3px; }
+.hg__msg__fuss { margin: 0; padding: .35rem .8rem; font-size: .72rem; font-style: italic;
+  color: var(--skr-color-ink-muted); background: var(--skr-color-bg-subtle);
+  border-top: 1px solid var(--skr-color-border); }
+/* `min-height`: Jede Zeile der Nachricht ist anklickbar, und WCAG 2.5.8 verlangt
+   24 Pixel. Mit .1rem Innenabstand waren es 23,8 - die Zeilen liegen ausserdem
+   direkt aneinander, es gibt also keinen Abstand, der das ausgleicht. */
+.hg__teil { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid transparent; background: transparent; font: inherit; color: var(--skr-color-ink); cursor: pointer; padding: .1rem .8rem; min-height: 24px; white-space: pre-wrap; word-break: break-word; transition: var(--skr-transition, all .15s ease); }
+.hg__teil:hover { background: var(--skr-color-accent-soft); }
+.hg__teil:focus-visible { outline: 2px solid var(--skr-color-accent); outline-offset: -2px; }
+.hg__teil.is-aktiv { background: var(--skr-color-accent-soft); border-left-color: var(--skr-color-accent); }
+.hg__teil--leer { color: var(--skr-color-ink-muted); font-style: italic; }
+.hg__marke { color: color-mix(in srgb, var(--skr-color-accent) 82%, var(--skr-color-ink)); font-weight: 600; }
+.hg__detail { padding: var(--skr-space-3, .75rem) var(--skr-space-4, 1rem); border-left: 4px solid var(--skr-color-accent); background: var(--skr-color-bg-subtle); border-radius: var(--skr-radius, 8px); min-height: 7rem; }
+.hg__detail h3 { margin-top: 0; font-size: var(--skr-fs-md, 1rem); }
+.hg__detail p { font-size: var(--skr-fs-sm, .92rem); }
+.hg__detail p:last-child { margin-bottom: 0; }
+.hg__hint { color: var(--skr-color-ink-muted); font-style: italic; }
+.hg__merke { border-top: 1px dashed var(--skr-color-border); padding-top: .5rem; color: var(--skr-color-ink-muted); }
+.hg__merke strong { color: var(--skr-color-ink); }
+
+.hg__bild svg { width: 100%; height: auto; color: var(--skr-color-ink); }
+.hg__bild { margin: 0 0 var(--skr-space-4, 1rem); }
+
+.hg__scroll { overflow-x: auto; }
+.hg__tab { border-collapse: collapse; width: 100%; min-width: 34rem; }
+.hg__tab th, .hg__tab td { border: 1px solid var(--skr-color-border); padding: .5rem .8rem; text-align: left; }
+.hg__tab thead th { background: var(--skr-color-bg-subtle); }
+.hg__tab tbody th { background: var(--skr-color-bg-subtle); font-weight: var(--skr-fw-medium, 500); width: 16rem; }
+.hg__ja { color: color-mix(in srgb, var(--skr-color-success) 72%, var(--skr-color-ink)); }
+.hg__nein { color: var(--skr-color-danger-ink); }
+
+/* --- Der Nachtrag hinter einem Klick -----------------------------------------
+   Der Unterschied zwischen „HTTP ist zustandslos" und „der Service ist
+   zustandslos" stand als Warn-Kasten UNTER den Karten - dort ging er unter, weil
+   niemand nach dem Lesen der Karten noch weiterscrollt. Er gehoert zur Karte, ist
+   aber zu lang fuer sie. Deshalb hinter einem Klick; im Ausdruck steht er
+   vollstaendig an genau dieser Stelle.
+
+   <dialog> statt eigenem Overlay: Hintergrund, Esc zum Schliessen und der
+   Fokusfang kommen vom Browser und muessen nicht nachgebaut werden. */
+.hg__poplink { margin: .9rem 0 0; }
+.hg__pop {
+  font: inherit; font-size: var(--skr-fs-sm, .92rem);
+  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  color: var(--skr-color-accent);
+  text-decoration: underline; text-underline-offset: .2em;
+}
+.hg__pop::before { content: "ⓘ\00a0"; text-decoration: none; }
+.hg__pop:hover { text-decoration-thickness: 2px; }
+.hg__pop:focus-visible { outline: 2px solid var(--skr-color-accent); outline-offset: 3px; border-radius: 2px; }
+
+.hg__dialog {
+  /* Mitte ausdruecklich setzen: Die UA-Regel `margin: auto` traegt nur, solange
+     kein Vorfahr einen eigenen Enthaltungsblock aufmacht. Hier tat sie es nicht -
+     der Kasten stand oben links. */
+  position: fixed; inset: 0; margin: auto;
+  max-width: 38rem; width: calc(100% - 2rem); height: fit-content;
+  border: 1px solid var(--skr-color-border);
+  border-top: 4px solid var(--skr-didaktikon-tone-alert);
+  border-radius: var(--skr-radius, 8px);
+  background: var(--skr-color-bg); color: var(--skr-color-ink);
+  padding: var(--skr-space-4, 1.25rem);
+  box-shadow: 0 10px 40px rgb(0 0 0 / .35);
+}
+.hg__dialog::backdrop { background: rgb(0 0 0 / .55); }
+.hg__dialog h4 { margin: 0 0 .7rem; font-size: var(--skr-fs-md, 1.05rem); }
+.hg__dialog p { margin: 0 0 .7rem; }
+.hg__dialog p:last-of-type { margin-bottom: 0; }
+.hg__dialog__zu {
+  margin-top: var(--skr-space-4, 1rem);
+  font: inherit; font-size: var(--skr-fs-sm, .92rem); cursor: pointer;
+  padding: .35em 1.1em; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px solid var(--skr-color-accent);
+  background: var(--skr-color-accent);
+  color: var(--skr-color-accent-contrast);
+}
+.hg__dialog__zu:focus-visible { outline: 2px solid var(--skr-color-accent); outline-offset: 3px; }
+
+/* Nur fuer den Ausdruck: die Erklaerungen, die am Bildschirm im Panel erscheinen. */
+.hg__druck { display: none; }
+
+@media (prefers-reduced-motion: reduce) { .hg * { transition: none !important; } }
+
+/* --- AUSDRUCK ---------------------------------------------------------------
+   Aufgeklapptes bleibt aufgeklappt, Bedienelemente verschwinden, und was am
+   Bildschirm hinter einem Klick liegt, steht auf dem Papier vollstaendig da. */
+@media print {
+  .hg__mehr { display: none; }
+  .hg__karte__detail { display: block !important; }
+  /* Der Nachtrag steht auf dem Papier an seiner Stelle - in der Karte, an die er
+     gehoert - statt hinter einem Klick, den es auf Papier nicht gibt. */
+  .hg__pop, .hg__poplink, .hg__dialog__zu { display: none; }
+  .hg__dialog {
+    display: block; position: static; inset: auto;
+    max-width: none; width: auto; height: auto;
+    margin: .8rem 0 0; padding: .6rem .9rem; box-shadow: none;
+  }
+  .hg__detail { display: none; }
+  .hg__druck { display: block; }
+  .hg__teil { background: none !important; border-left-color: transparent !important; }
+  .hg__karte, .hg__msg, .hg__schema, .hg__bild, .hg__start { break-inside: avoid; }
+  .hg__aufbau, .hg__karten { break-inside: auto; }
+  .hg__druck dt { font-weight: 700; margin-top: .6rem; }
+  .hg__druck dd { margin: 0 0 .2rem 0; }
+}

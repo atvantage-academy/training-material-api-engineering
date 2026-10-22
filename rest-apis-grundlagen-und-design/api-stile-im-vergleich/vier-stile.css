@@ -1,0 +1,135 @@
+/* Stylesheet der Seite 10-api-stile-im-vergleich/vier-stile.md – über `styles:` im Front Matter geladen. */
+.vs { --vs-ja: #187452; --vs-nein: #b3402c; --vs-teils: #806414; }
+[data-skr-theme="dark"] .vs,
+.vs:where([data-skr-theme="dark"] *) { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-skr-theme="light"]) .vs { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+}
+
+.vs__tabelle-scroll { overflow-x: auto; margin: 1.5rem 0 2.5rem; }
+.vs__tabelle { border-collapse: collapse; width: 100%; min-width: 52rem; font-size: .88rem; }
+.vs__tabelle th, .vs__tabelle td {
+  border: 1px solid var(--skr-color-border);
+  padding: .55rem .7rem; vertical-align: top; text-align: left;
+}
+.vs__tabelle thead th {
+  background: var(--skr-color-bg-subtle);
+  font-size: 1rem; text-align: center;
+}
+.vs__tabelle tbody th {
+  background: var(--skr-color-bg-subtle);
+  width: 12rem; font-weight: 600;
+}
+.vs__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--skr-color-bg-subtle) 45%, transparent); }
+.vs__k { display: block; font-weight: 700; margin-bottom: .15rem; }
+.vs__k--ja    { color: var(--vs-ja); }
+.vs__k--nein  { color: var(--vs-nein); }
+.vs__k--teils { color: var(--vs-teils); }
+.vs__k--ja::before    { content: "✓ "; }
+.vs__k--nein::before  { content: "✗ "; }
+.vs__k--teils::before { content: "~ "; }
+
+/* Abstand NACH OBEN fuer die Abschnitts-Ueberschriften. Das Theme setzt h2
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--skr-space-12`). */
+.vs h2.vs__h2 { margin-top: var(--skr-space-12, 3rem); }
+.vs__lead { color: var(--skr-color-ink-muted); }
+
+.vs__stile { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0 0; }
+.vs__stil {
+  font: inherit; font-weight: 600; cursor: pointer;
+  padding: .55rem 1.2rem; border-radius: var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px) 0 0;
+  border: 1px solid var(--skr-color-border); border-bottom: none;
+  background: var(--skr-color-bg-subtle); color: var(--skr-color-ink-muted);
+}
+.vs__stil.is-aktiv {
+  background: var(--skr-color-accent); color: var(--skr-color-accent-contrast);
+  border-color: var(--skr-color-accent);
+}
+
+.vs__werk {
+  display: grid; grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+  border: 1px solid var(--skr-color-border);
+  border-radius: 0 var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px);
+  overflow: hidden;
+}
+@media (max-width: 40rem) { .vs__werk { grid-template-columns: minmax(0, 1fr); } }
+
+.vs__faelle { display: flex; flex-direction: column; border-right: 1px solid var(--skr-color-border); }
+.vs__fall {
+  font: inherit; cursor: pointer; text-align: left;
+  padding: .8rem 1rem; border: none; border-bottom: 1px solid var(--skr-color-border);
+  background: transparent; color: inherit;
+  border-left: 4px solid transparent;
+}
+.vs__fall:last-child { border-bottom: none; }
+.vs__fall strong { display: block; font-size: .92rem; }
+.vs__fall small { color: var(--skr-color-ink-muted); font-size: .78rem; }
+.vs__fall.is-aktiv { border-left-color: var(--skr-color-accent); background: var(--skr-color-bg-subtle); }
+
+.vs__buehne { padding: 1rem 1.2rem 1.2rem; min-width: 0; }
+.vs__marke {
+  margin: 0 0 .35rem; font-size: .7rem; font-weight: 700;
+  letter-spacing: .09em; text-transform: uppercase;
+}
+.vs__marke--auf    { color: var(--skr-color-ink-muted); }
+.vs__marke--ok     { color: var(--vs-ja); margin-top: 1rem; }
+.vs__marke--fehler { color: var(--vs-nein); margin-top: 1rem; text-transform: none; letter-spacing: .02em; font-size: .78rem; }
+
+/* Rohe Nachricht: das Theme faerbt nur Java, also faerbt die Seite selbst. */
+/* Ein Mitschnitt sieht in beiden Farbschemata gleich aus - deshalb traegt der
+   Block seine Farben selbst statt sie aus den Tokens zu ziehen. Alle Werte
+   unten liegen auf #1d2426 ueber 6:1. */
+.vs__code {
+  margin: 0; padding: .7rem .9rem; overflow-x: auto;
+  font-family: var(--skr-font-mono, monospace);
+  font-size: .76rem; line-height: 1.55; white-space: pre;
+  background: #1d2426; color: #e6edf0;
+  border: 1px solid #2e383b;
+  border-radius: var(--skr-radius-sm, 4px);
+}
+.vs__code .hl-m   { color: #4fd1a5; font-weight: 700; }
+.vs__code .hl-p   { color: #ffffff; font-weight: 700; }
+.vs__code .hl-v   { color: #94a8ad; }
+.vs__code .hl-s2  { color: #4fd1a5; font-weight: 700; }
+.vs__code .hl-s4,
+.vs__code .hl-s5  { color: #ff8a70; font-weight: 700; }
+.vs__code .hl-h   { color: #e0be5c; }
+.vs__code .hl-k   { color: #8dc0ff; }
+.vs__code .hl-str { color: #a5e075; }
+.vs__code .hl-num { color: #e0be5c; }
+.vs__code .hl-tag { color: #8dc0ff; }
+.vs__code .hl-kw  { color: #e0be5c; font-weight: 700; }
+.vs__code .hl-c   { color: #94a8ad; font-style: italic; }
+
+/* Der Body haengt optisch am Kopf - deshalb oben buendig, kein Abstand. */
+.vs__falt { margin: 0; }
+.vs__falt > summary {
+  cursor: pointer; list-style: none;
+  font-size: .74rem; letter-spacing: .04em;
+  padding: .3rem .9rem; margin-top: -1px;
+  color: #94a8ad; background: #1d2426;
+  border: 1px solid #2e383b;
+  border-radius: 0 0 var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px);
+}
+.vs__falt > summary::-webkit-details-marker { display: none; }
+.vs__falt > summary::before { content: "▸ "; }
+.vs__falt[open] > summary { border-radius: 0; }
+.vs__falt[open] > summary::before { content: "▾ "; }
+.vs__falt > summary:hover { color: #e6edf0; }
+.vs__code--rumpf {
+  border-top: none; margin-top: -1px;
+  border-radius: 0 0 var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px);
+}
+/* Der Kopf allein steht ohne Rundung unten, solange ein Body darunter haengt. */
+.vs__code:has(+ .vs__falt:not([hidden])) { border-radius: var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px) 0 0; }
+
+.vs__hinweis { font-size: .86rem; margin: 1rem 0 0; }
+.vs__schluss { margin-top: 1.5rem; }
+.vs__fazit { margin: .8rem 0 0; }
+.vs__fazit li { margin-bottom: .3rem; }

@@ -1,0 +1,50 @@
+/* Stylesheet der Seite 12-hypermedia-und-hal/simulation.md – über `styles:` im Front Matter geladen. */
+.buehne {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem);
+  align-items: stretch;
+  align-content: center;
+  min-height: 100%;
+}
+.buehne .skr-didaktikon-simulation-panel { display: flex; flex-direction: column; }
+.buehne .skr-didaktikon-simulation-panel__body { min-height: 17rem; }
+
+.kn { display: flex; flex-direction: column; gap: .45rem; }
+.kn__leer { font-size: .85rem; font-style: italic; color: var(--skr-color-ink-muted); }
+.kn__knopf {
+  display: block; text-align: center; font-weight: 600; font-size: .92rem;
+  padding: .55rem .6rem; border-radius: var(--skr-radius-sm, 4px);
+  border: 2px solid var(--skr-color-accent);
+  background: var(--skr-color-bg-subtle);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.kn__knopf small {
+  display: block; font-weight: 400; font-size: .72rem;
+  font-family: var(--skr-font-mono, monospace);
+  color: var(--skr-color-ink-muted);
+}
+.kn__knopf.is-new { animation: kn-rein .4s ease-out; }
+.kn__knopf.is-gone { opacity: 0; transform: scale(.9); }
+.kn__knopf.is-error { border-color: var(--skr-color-danger, #c0392b); }
+@keyframes kn-rein { from { opacity: 0; transform: translateY(-.4rem) scale(.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .kn__knopf.is-new { animation: none; } }
+
+.herkunft {
+  margin-top: .8rem; padding-top: .5rem;
+  border-top: 1px dashed var(--skr-color-border);
+  font-size: .76rem; color: var(--skr-color-ink-muted);
+}
+.herkunft code { font-size: .72rem; }
+
+.skr-didaktikon-simulation-code { font-size: .72rem; line-height: 1.45; margin: 0; overflow-x: auto; }
+@media (min-width: 62rem) {
+  .buehne { grid-template-columns: 1fr 1.35fr 1fr; }
+}
+.lt {
+  text-align: center; font-size: .78rem;
+  font-family: var(--skr-font-mono, monospace);
+  color: var(--skr-color-ink-muted);
+  padding-bottom: .5rem; min-height: 1.4rem;
+}
+.lt strong { color: var(--skr-color-accent); font-family: inherit; }

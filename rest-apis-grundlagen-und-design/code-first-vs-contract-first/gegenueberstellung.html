@@ -1,146 +1,137 @@
-<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions reading-progress">
+<!DOCTYPE html>
+<html lang="de" data-skr-effects="page-transitions reading-progress">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>Code First vs. Contract First · ATVANTAGE Academy</title><meta name="description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>Code First vs. Contract First · ATVANTAGE Academy</title>
+<meta name="description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Code First vs. Contract First">
 <meta property="og:description" content="Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.html","title":"Code First vs. Contract First","layout":"visualization","description":"Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" href="../../skriptorium/guide.css?v=d99cc970">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Die Gegenüberstellung beider Ansätze mit den Argumenten beider Seiten – und einer Entscheidungshilfe für die eigene Lage.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.css","src":"gegenueberstellung.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.js","src":"gegenueberstellung.js","type":"script"}],"pageId":null,"runtimeFragments":["^/(\\?.*)?$","^/[A-Za-z0-9_-]+(\\?.*)?$"],"siteIndex":"/skriptorium/site.json","title":"Code First vs. Contract First","topics":null,"url":"/rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
-<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide avd-academy-guide--viz">
-<div class="avd-academy-reading-progress" aria-hidden="true"></div>
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags">
-      </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-print
-                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
-      </div>
-    </div><h1 id="avd-academy-page-title">Code First vs. Contract First</h1>
-  </section><div class="avd-academy-guide-layout">
-    <main class="avd-academy-guide-main" id="avd-academy-content">
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
+  <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+  <link rel="stylesheet" href="../../skriptorium/page-transitions.css?v=716872f0">
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.css?v=c05e7478">
+<script src="../../rest-apis-grundlagen-und-design/code-first-vs-contract-first/gegenueberstellung.js?v=2e1ff7ee" defer></script>
+
+</head><body class="skr-guide skr-guide--sidebar-empty" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization" data-skr-lang="de" data-skr-audience="learner">
+<div class="skr-reading-progress" aria-hidden="true"></div>
+  <a class="skr-skip-link" href="#skr-content">Zum Inhalt springen</a><section class="skr-guide-hero skr-guide-hero--slim"
+         aria-labelledby="skr-page-title">
+  <div class="skr-guide-hero__meta">
+    <div class="skr-guide-hero__tags">
+    </div>
+    <div class="skr-guide-hero__actions">
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+
+    </div>
+  </div><h1 id="skr-page-title">Code First vs. Contract First</h1>
+</section>
+
+  <div class="skr-guide-layout">
+    <main class="skr-guide-main" id="skr-content">
 <p>Zwei Wege, zu einer beschriebenen Schnittstelle zu kommen. Beide haben gute
 Argumente – und ein klares Einsatzgebiet. Diese Seite stellt sie so gegenüber, dass
 Du damit im eigenen Unternehmen argumentieren kannst.</p>
-
 <div class="cf">
-
 <div class="cf__wege">
-
 <div class="cf__weg">
 <h2>Code First</h2>
 <svg viewBox="0 0 300 90" role="img" aria-label="Ablauf: Implementierung, daraus erzeugt ein Generator die API-Beschreibung, daraus optional Client-Code." class="cf__svg">
   <title>Code First: Code zuerst, Beschreibung daraus erzeugt</title>
-  <rect x="2" y="25" width="80" height="40" rx="8" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <rect x="2" y="25" width="80" height="40" rx="8" fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="42" y="50" text-anchor="middle" font-size="12" fill="currentColor">Code</text>
-  <rect x="110" y="25" width="88" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <rect x="110" y="25" width="88" height="40" rx="8" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2" stroke-dasharray="4 3"/>
   <text x="154" y="44" text-anchor="middle" font-size="11" fill="currentColor">API-</text>
   <text x="154" y="57" text-anchor="middle" font-size="11" fill="currentColor">Beschreibung</text>
-  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2" stroke-dasharray="4 3"/>
   <text x="262" y="50" text-anchor="middle" font-size="11" fill="currentColor">Client</text>
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#cfa)">
-    <line x1="84" y1="45" x2="106" y2="45" /><line x1="200" y1="45" x2="222" y2="45" />
+  <g stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#cfa)">
+    <line x1="84" y1="45" x2="106" y2="45"/><line x1="200" y1="45" x2="222" y2="45"/>
   </g>
-  <defs><marker id="cfa" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker></defs>
-  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-ink-muted)">gestrichelt = erzeugt</text>
+  <defs><marker id="cfa" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--skr-color-accent)"/></marker></defs>
+  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--skr-color-ink-muted)">gestrichelt = erzeugt</text>
 </svg>
 <p>Die Implementierung entsteht zuerst – oder liegt als Altbestand schon vor. Die
 API-Beschreibung wird per Annotationen aus dem Code erzeugt, aus ihr optional
 Client-Code.</p>
 </div>
-
 <div class="cf__weg">
 <h2>Contract First</h2>
 <svg viewBox="0 0 300 90" role="img" aria-label="Ablauf: API-Beschreibung von Hand, daraus optional Server- und Client-Code erzeugt." class="cf__svg">
   <title>Contract First: Beschreibung zuerst, Code daraus erzeugt</title>
-  <rect x="102" y="25" width="96" height="40" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <rect x="102" y="25" width="96" height="40" rx="8" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
   <text x="150" y="44" text-anchor="middle" font-size="11" fill="currentColor">API-</text>
   <text x="150" y="57" text-anchor="middle" font-size="11" fill="currentColor">Beschreibung</text>
-  <rect x="2" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <rect x="2" y="25" width="72" height="40" rx="8" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2" stroke-dasharray="4 3"/>
   <text x="38" y="50" text-anchor="middle" font-size="11" fill="currentColor">Server</text>
-  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="4 3" />
+  <rect x="226" y="25" width="72" height="40" rx="8" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2" stroke-dasharray="4 3"/>
   <text x="262" y="50" text-anchor="middle" font-size="11" fill="currentColor">Client</text>
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#cfb)">
-    <line x1="100" y1="45" x2="78" y2="45" /><line x1="200" y1="45" x2="222" y2="45" />
+  <g stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#cfb)">
+    <line x1="100" y1="45" x2="78" y2="45"/><line x1="200" y1="45" x2="222" y2="45"/>
   </g>
-  <defs><marker id="cfb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker></defs>
-  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-ink-muted)">gestrichelt = erzeugt</text>
+  <defs><marker id="cfb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--skr-color-accent)"/></marker></defs>
+  <text x="150" y="14" text-anchor="middle" font-size="10" fill="var(--skr-color-ink-muted)">gestrichelt = erzeugt</text>
 </svg>
 <p>Die API wird von Hand entworfen und aufgeschrieben. Aus der Beschreibung lässt
 sich bei Bedarf Gerüstcode für Server und Client erzeugen – muss aber nicht.</p>
 </div>
-
 </div>
-
 <h2 class="cf__h2">Was für Code First spricht – und was dagegen einzuwenden ist</h2>
-
 <p class="cf__lead">Diese Argumente sind <strong>nicht</strong> aus der Luft
 gegriffen. Sie sind der Grund, warum Code First so verbreitet ist – und wer sie
 übergeht, überzeugt niemanden.</p>
-
-<div class="avd-academy-tabs avd-academy-tabs--side cf--claims">
-<details class="avd-academy-tabs__panel" name="cf-code" open="">
+<div class="skr-tabs skr-tabs--side cf--claims">
+<details class="skr-tabs__panel" name="cf-code" open>
 <summary>„Die Lernkurve ist niedriger.“</summary>
 <p>Als Entwickler kenne ich meine Sprache. Eine API in einem gewohnten Format zu
 formulieren fällt mir leichter, als ein neues Beschreibungsformat zu lernen.
@@ -151,8 +142,7 @@ und IDEs bieten für das Beschreibungsformat Vervollständigung, Hervorhebung un
 Umbenennen; statt eines Compilers gibt es Validatoren, die in jeder Pipeline
 laufen. Der Aufwand ist einmalig, das Ergebnis dauerhaft.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-code">
+<details class="skr-tabs__panel" name="cf-code">
 <summary>„Die API passt garantiert zum Code.“</summary>
 <p>Was ich herausgebe, entspricht exakt der Implementierung. Ändert sich der Code,
 ändert sich die Beschreibung automatisch mit. Es kann keine Abweichung geben.</p>
@@ -161,8 +151,7 @@ API von anderen Teams genutzt, ist die automatische Änderung kein Vorteil, sond
 ein <strong>unbemerkter Vertragsbruch</strong>. Was heute Komfort ist, ist morgen ein
 Produktionsvorfall bei jemand anderem.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-code">
+<details class="skr-tabs__panel" name="cf-code">
 <summary>„Für Prototypen bin ich schneller.“</summary>
 <p>Wenn ich noch wenig Erfahrung mit API-Design habe, erkenne ich im Code schneller,
 was möglich ist und was nicht – und welche Informationen ich überhaupt brauche, um
@@ -172,11 +161,9 @@ ist nur, dass Prototypen selten sterben. Wer so anfängt, sollte den Zeitpunkt
 festlegen, an dem die Beschreibung die Führung übernimmt.</p>
 </details>
 </div>
-
 <h2 class="cf__h2">Was für Contract First spricht</h2>
-
-<div class="avd-academy-tabs avd-academy-tabs--side cf--pros">
-<details class="avd-academy-tabs__panel" name="cf-contract" open="">
+<div class="skr-tabs skr-tabs--side cf--pros">
+<details class="skr-tabs__panel" name="cf-contract" open>
 <summary>Die API ist ein Produkt</summary>
 <p>Eine API hat Anforderungen, ein verantwortliches Team, einen eigenen
 Entwicklungszyklus, eine eigene Versionierung und eigene Releases. Ihre
@@ -186,8 +173,7 @@ Lebenszyklus – daran sollte die API nicht eng gekoppelt sein.</p>
 des Teams nach innen und des Herstellers nach außen. Ob man dieses Aushängeschild
 von einem Generator erzeugen lassen möchte, darf man kritisch sehen.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Es gibt zwei APIs, nicht eine</summary>
 <p>Die <strong>öffentliche API</strong> am Gateway – das, was Frontends und andere
 Dienste sehen, samt Gateway-Konfiguration, zusätzlichen Headern und Verweisen auf
@@ -200,8 +186,7 @@ eigenständiger Dienst läuft –, <strong>lässt sich die öffentliche API gar 
 Code erzeugen</strong>. Nach außen steht die Fachlichkeit, nach innen bleibt die
 Umsetzung frei.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Fallstricke der Generierung vermeiden</summary>
 <ul>
 <li>Hinter scheinbar kleinen Codeänderungen entstehen schnell und unbewusst
@@ -218,8 +203,7 @@ geprüft werden, etwa auf einmalig definierte und wiederverwendete Parameter.</l
 standardmäßig in der Beschreibung landen, am Gateway aber nichts zu suchen haben.</li>
 </ul>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Kein unnötiger Code</summary>
 <p>Um eine saubere Beschreibung zu erhalten, muss man den Code verbiegen. So entsteht
 Code, der nur für die API da ist. Manches muss überhaupt nicht implementiert werden –
@@ -228,8 +212,7 @@ lässt sich im Code gar nicht ausdrücken.</p>
 <p>Nebenbei leidet die Lesbarkeit: Der Code beschreibt dann auch noch sich selbst.
 Von Trennung der Zuständigkeiten kann keine Rede mehr sein.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Technologieneutralität</summary>
 <p>HTTP-basierte Schnittstellen sind technologieneutral; aus einer Beschreibung
 lässt sich Code für unterschiedliche Sprachen und Rahmenwerke erzeugen. Code First
@@ -241,15 +224,13 @@ Client-Code suboptimal.</li>
 <li>Sie verrät unnötige Informationen an potenzielle Angreifer.</li>
 </ul>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Besseres Verständnis für fremde APIs</summary>
 <p>Wer das Beschreibungsformat selbst schreibt, erwirbt ein tieferes Verständnis für
 API-Design im Allgemeinen – und versteht damit auch fremde APIs besser. Das ist der
 Nutzen, der am längsten bleibt.</p>
 </details>
-
-<details class="avd-academy-tabs__panel" name="cf-contract">
+<details class="skr-tabs__panel" name="cf-contract">
 <summary>Die API folgt dem Anwendungsfall</summary>
 <p>Im Idealfall ergibt sich die API aus den fachlichen Anforderungen – <strong>nicht</strong>
 aus dem Datenbankschema und den Eigenheiten der Implementierung (typisch für Code
@@ -259,20 +240,14 @@ ein technologieunabhängiges Format – das hält den Blick auf dem, was die API
 soll.</p>
 </details>
 </div>
-
 <h2 class="cf__h2">Passt das auf Deine Lage?</h2>
-
 <p class="cf__lead">Sechs Fragen. Antworte für eine konkrete Schnittstelle, die Du
 kennst.</p>
-
-<div class="cf__quiz" data-cf-quiz=""></div>
-
-<div class="cf__ergebnis" data-cf-ergebnis="" aria-live="polite">
+<div class="cf__quiz" data-cf-quiz></div>
+<div class="cf__ergebnis" data-cf-ergebnis aria-live="polite">
   <p class="cf__hint">Beantworte die Fragen – die Einschätzung erscheint hier.</p>
 </div>
-
 <h2 class="cf__h2">Das Fazit in drei Sätzen</h2>
-
 <div class="cf__fazit">
 <p><strong>Contract First gehört zum Standardvorgehen.</strong> Nur wenn wir die
 Beschreibung selbst schreiben, haben wir die volle Kontrolle und das volle
@@ -285,168 +260,14 @@ von Clean-Code- oder REST-Prinzipien.</p>
 zugreift – und sei es nur die Qualitätssicherung –, ist Code First nicht mehr
 anwendbar.</strong></p>
 </div>
-
 </div>
 
-<style>
-.cf { margin-block: var(--avd-academy-space-6, 1.5rem); }
-.cf__wege { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--avd-academy-space-6, 1.5rem); }
-.cf__weg { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg-subtle); }
-.cf__weg h2 { margin-top: 0; font-size: var(--avd-academy-fs-lg, 1.15rem); }
-.cf__weg p { margin-bottom: 0; }
-.cf__svg { width: 100%; max-width: 320px; display: block; margin: 0 auto .8rem; color: var(--avd-academy-color-ink); }
-/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
-   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
-   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
-   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
-   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
-   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
-   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
-   Container (`--avd-academy-space-12`). */
-.cf h2.cf__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
-.cf__lead { color: var(--avd-academy-color-ink-muted); }
-/* Argumente als Reiterleiste: links das Argument, rechts die Ausfuehrung.
-   Beim DRUCKEN faellt die Aufteilung weg - dann steht jedes Argument als
-   eigenes Kapitel untereinander (siehe @media print am Ende). */
-.avd-academy-tabs__panel p:last-child, .avd-academy-tabs__panel ul:last-child { margin-bottom: 0; }
-/* DER TON JE GRUPPE. Die Komponente zeigt die Wahl als linke Kante in der
-   Akzentfarbe; hier bekommt sie die Bedeutung der Gruppe - Behauptungen warnend,
-   Argumente bestaetigend. Ein eigener Rahmen je Eintrag entfaellt damit: Die
-   Ueberschrift ueber der Gruppe sagt ohnehin, um welche Sorte es geht. */
-.cf--claims > .avd-academy-tabs__bar > .avd-academy-tabs__tab[aria-selected="true"] { border-left-color: var(--avd-academy-color-warning); }
-.cf--pros   > .avd-academy-tabs__bar > .avd-academy-tabs__tab[aria-selected="true"] { border-left-color: var(--avd-academy-color-success); }
-
-.cf__objection { font-size: var(--avd-academy-fs-sm, .92rem); border-top: 1px dashed var(--avd-academy-color-border); padding-top: .6rem; color: var(--avd-academy-color-ink-muted); }
-.cf__objection strong { color: var(--avd-academy-color-ink); }
-
-.cf__quiz { display: grid; gap: .6rem; margin-bottom: var(--avd-academy-space-4, 1rem); }
-.cf__frage { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); padding: .7rem .9rem; background: var(--avd-academy-color-bg-subtle); }
-.cf__frage p { margin: 0; flex: 1 1 18rem; }
-.cf__wahl { display: flex; gap: .4rem; flex: 0 0 auto; }
-.cf__opt { font: inherit; font-size: var(--avd-academy-fs-sm, .9rem); cursor: pointer; padding: .3em 1em; border-radius: var(--avd-academy-radius-sm, 4px); border: 1px solid var(--avd-academy-color-border); background: transparent; color: var(--avd-academy-color-ink); transition: var(--avd-academy-transition, all .15s ease); }
-.cf__opt:hover { border-color: var(--avd-academy-color-accent); }
-.cf__opt[aria-pressed="true"] { background: var(--avd-academy-color-accent); border-color: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast); }
-.cf__opt:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
-.cf__ergebnis { border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); min-height: 6rem; }
-.cf__ergebnis h3 { margin-top: 0; }
-.cf__ergebnis p:last-child { margin-bottom: 0; }
-.cf__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
-.cf__fazit { border-left: 4px solid var(--avd-academy-color-success); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
-.cf__fazit p:last-child { margin-bottom: 0; }
-@media (prefers-reduced-motion: reduce) { .cf * { transition: none !important; } }
-
-/* GEDRUCKT gibt es keine Reiter. Dann steht jedes Argument als eigenes
-   Kapitel untereinander - Ueberschrift plus Text, wie in einem Handout. */
-@media print {
-  .cf__quiz, .cf__ergebnis { break-inside: avoid; }
-}
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  var FRAGEN = [
-    { id: "f1", text: "Greift ein anderes Team auf diese API zu – und sei es nur die Qualitätssicherung?", gewicht: 3 },
-    { id: "f2", text: "Steht ein API Gateway davor, das eigene Aufgaben übernimmt (Auth, CORS, Drosselung)?", gewicht: 2 },
-    { id: "f3", text: "Soll die API mehr als eine Implementierung überleben oder von mehreren bedient werden?", gewicht: 2 },
-    { id: "f4", text: "Wäre ein unbemerkter Bruch der Schnittstelle für jemanden teuer?", gewicht: 3 },
-    { id: "f5", text: "Wird die API außerhalb Eurer Sprache/Eures Frameworks genutzt?", gewicht: 1 },
-    { id: "f6", text: "Ist das hier ein Wegwerf-Prototyp mit festem Enddatum?", gewicht: -3 }
-  ];
-
-  var wurzel = document.querySelector(".cf");
-  if (!wurzel) return;
-
-  var quiz = wurzel.querySelector("[data-cf-quiz]");
-  var ergebnis = wurzel.querySelector("[data-cf-ergebnis]");
-  var antworten = {};
-
-  FRAGEN.forEach(function (f) {
-    var zeile = document.createElement("div");
-    zeile.className = "cf__frage";
-    var text = document.createElement("p");
-    text.textContent = f.text;
-    var wahl = document.createElement("div");
-    wahl.className = "cf__wahl";
-
-    [["ja", true], ["nein", false]].forEach(function (paar) {
-      var knopf = document.createElement("button");
-      knopf.type = "button";
-      knopf.className = "cf__opt";
-      knopf.textContent = paar[0];
-      knopf.setAttribute("aria-pressed", "false");
-      knopf.setAttribute("aria-label", f.text + " – " + paar[0]);
-      knopf.addEventListener("click", function () {
-        antworten[f.id] = paar[1];
-        Array.prototype.forEach.call(wahl.children, function (k) {
-          k.setAttribute("aria-pressed", k === knopf ? "true" : "false");
-        });
-        werte();
-      });
-      wahl.appendChild(knopf);
-    });
-
-    zeile.appendChild(text);
-    zeile.appendChild(wahl);
-    quiz.appendChild(zeile);
-  });
-
-  function werte() {
-    var beantwortet = FRAGEN.filter(function (f) { return f.id in antworten; });
-    if (beantwortet.length < FRAGEN.length) {
-      ergebnis.innerHTML = '<p class="cf__hint">Noch ' +
-        (FRAGEN.length - beantwortet.length) + " von " + FRAGEN.length +
-        " Fragen offen.</p>";
-      return;
-    }
-
-    var punkte = 0;
-    FRAGEN.forEach(function (f) { if (antworten[f.id]) punkte += f.gewicht; });
-
-    var titel, text, zusatz;
-    if (punkte >= 5) {
-      titel = "Contract First – ohne Wenn und Aber";
-      text = "Deine Schnittstelle ist ein Vertrag mit anderen. Sie zuerst zu beschreiben ist hier keine Stilfrage, sondern der Unterschied zwischen einer Änderung und einem Vorfall.";
-      zusatz = "Nächster Schritt: die Beschreibung dorthin legen, wo sie ein eigenes Release bekommen kann – nicht in den Service, der sie zufällig bedient.";
-    } else if (punkte >= 1) {
-      titel = "Contract First, mit pragmatischem Einstieg";
-      text = "Die Argumente wiegen schwer genug, dass die Beschreibung führen sollte. Wenn Euch der Einstieg schwerfällt, beginnt mit Code und legt einen Zeitpunkt fest, ab dem die Beschreibung die Führung übernimmt.";
-      zusatz = "Wichtig ist, dass dieser Zeitpunkt <strong>festgelegt</strong> wird. Prototypen, die niemand abgelöst hat, sind die häufigste Ursache für Code First im Produktivbetrieb.";
-    } else {
-      titel = "Code First ist hier vertretbar";
-      text = "Die Schnittstelle bleibt im Team, und ein Bruch trifft niemanden, der nicht mit im Raum sitzt. Dann darf die Beschreibung Nebenprodukt sein.";
-      zusatz = "Beobachte die erste Frage weiter: Sobald ein anderes Team zugreift – auch die Qualitätssicherung –, ändert sich die Antwort.";
-    }
-
-    ergebnis.innerHTML = "<h3>" + titel + "</h3><p>" + text + "</p><p>" + zusatz + "</p>";
-  }
-
-  werte();
-})();
-</script>
-
-
-
     </main>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
   </div>
-
-  <footer class="avd-academy-footer">
-  <div class="avd-academy-footer__grid">
-    <div><strong>ATVANTAGE Academy</strong>
-      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
-    </div><div>
-      <strong>Kontakt</strong>
-      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
-      </p>
-    </div></div>
-  <div class="avd-academy-footer__legal">
-    © <span data-avd-academy-year>2026</span> ATVANTAGE
-  </div>
-</footer>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
 
 </body>
 </html>

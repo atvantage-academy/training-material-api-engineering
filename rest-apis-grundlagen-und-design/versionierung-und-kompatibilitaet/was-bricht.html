@@ -1,113 +1,105 @@
-<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions reading-progress">
+<!DOCTYPE html>
+<html lang="de" data-skr-effects="page-transitions reading-progress">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>Versionierung: Welche Änderung bricht die API? · ATVANTAGE Academy</title><meta name="description" content="Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>Versionierung: Welche Änderung bricht die API? · ATVANTAGE Academy</title>
+<meta name="description" content="Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Versionierung: Welche Änderung bricht die API?">
 <meta property="og:description" content="Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.html","title":"Versionierung: Welche Änderung bricht die API?","layout":"visualization","description":"Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" href="../../skriptorium/guide.css?v=d99cc970">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Zehn Änderungen an einer laufenden Kundenverwaltung – erst schätzen lassen, dann aufdecken: bricht, bricht nicht, oder bricht nur in der Praxis.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.css","src":"was-bricht.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.js","src":"was-bricht.js","type":"script"}],"pageId":null,"runtimeFragments":["^/(\\?.*)?$","^/[A-Za-z0-9_-]+(\\?.*)?$"],"siteIndex":"/skriptorium/site.json","title":"Versionierung: Welche Änderung bricht die API?","topics":null,"url":"/rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
-<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide avd-academy-guide--viz">
-<div class="avd-academy-reading-progress" aria-hidden="true"></div>
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags">
-      </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-print
-                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
-      </div>
-    </div><h1 id="avd-academy-page-title">Versionierung: Welche Änderung bricht die API?</h1>
-  </section><div class="avd-academy-guide-layout">
-    <main class="avd-academy-guide-main" id="avd-academy-content">
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
+  <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+  <link rel="stylesheet" href="../../skriptorium/page-transitions.css?v=716872f0">
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.css?v=e12e185d">
+<script src="../../rest-apis-grundlagen-und-design/versionierung-und-kompatibilitaet/was-bricht.js?v=deb51b4c" defer></script>
+
+</head><body class="skr-guide skr-guide--sidebar-empty" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization" data-skr-lang="de" data-skr-audience="learner">
+<div class="skr-reading-progress" aria-hidden="true"></div>
+  <a class="skr-skip-link" href="#skr-content">Zum Inhalt springen</a><section class="skr-guide-hero skr-guide-hero--slim"
+         aria-labelledby="skr-page-title">
+  <div class="skr-guide-hero__meta">
+    <div class="skr-guide-hero__tags">
+    </div>
+    <div class="skr-guide-hero__actions">
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+
+    </div>
+  </div><h1 id="skr-page-title">Versionierung: Welche Änderung bricht die API?</h1>
+</section>
+
+  <div class="skr-guide-layout">
+    <main class="skr-guide-main" id="skr-content">
 <p>Die Kundenverwaltung läuft seit einem Jahr. <strong>Drei Teams</strong> rufen sie auf, eines
 davon in einer anderen Programmiersprache, und eines kennt niemand persönlich.
 Jetzt liegen zehn Änderungswünsche auf dem Tisch.</p>
-
-<div class="avd-academy-callout avd-academy-callout--info">
-  <p><strong>Erst schätzen, dann aufdecken.</strong> Jede Karte ist zugeklappt. Die Frage ist bei
+<div class="skr-callout skr-callout--info">
+<p><strong>Erst schätzen, dann aufdecken.</strong> Jede Karte ist zugeklappt. Die Frage ist bei
 allen zehn dieselbe: <em>Ein Aufrufer, der von dieser Änderung nichts weiß und seinen
 Code nicht anfasst – funktioniert der danach noch?</em></p>
-
-  <p>Ob die Änderung fachlich sinnvoll ist, steht hier <strong>nicht</strong> zur Debatte.</p>
+<p>Ob die Änderung fachlich sinnvoll ist, steht hier <strong>nicht</strong> zur Debatte.</p>
 </div>
-
 <div class="wb">
-
 <p class="wb__steuer">
-  <button type="button" class="wb__alle" data-wb-alle="">Alle aufdecken</button>
-  <button type="button" class="wb__alle" data-wb-zu="">Alle zuklappen</button>
+  <button type="button" class="wb__alle" data-wb-alle>Alle aufdecken</button>
+  <button type="button" class="wb__alle" data-wb-zu>Alle zuklappen</button>
   <span class="wb__legende">
     <span class="wb__marke wb__marke--ok">bricht nicht</span>
     <span class="wb__marke wb__marke--praxis">bricht in der Praxis</span>
     <span class="wb__marke wb__marke--bruch">bricht</span>
   </span>
 </p>
-
-<ol class="wb__liste" data-wb-liste=""></ol>
-
+<ol class="wb__liste" data-wb-liste></ol>
 <h2 class="wb__h2">Die Faustregel dahinter</h2>
-
 <div class="wb__regeln">
   <div class="wb__regel">
     <h3>In der <em>Antwort</em></h3>
@@ -132,13 +124,10 @@ Code nicht anfasst – funktioniert der danach noch?</em></p>
     stillschweigend versprochen.</p>
   </div>
 </div>
-
 <h2 class="wb__h2" id="versionen">Und wenn es doch sein muss: fünf Arten zu versionieren</h2>
-
 <p class="wb__lead">Manche Änderung lässt sich nicht in zwei verträgliche Schritte
 zerlegen. Dann braucht es eine zweite Fassung – und die Frage ist, <strong>woran ein
 Aufrufer sie erkennt</strong>. Fünf Antworten sind in Gebrauch; keine ist umsonst.</p>
-
 <div class="wb__tabelle-scroll">
 <table class="wb__tabelle">
 <thead>
@@ -227,7 +216,6 @@ Aufrufer sie erkennt</strong>. Fünf Antworten sind in Gebrauch; keine ist umson
 </tbody>
 </table>
 </div>
-
 <p class="wb__nb"><strong>Zwei Varianten, die es auch gibt</strong> – beide führen wir
 nicht in der Tabelle, weil sie sich verhalten wie eine Spalte oben:
 <code>?version=2</code> als <strong>Query-Parameter</strong> ist die URL-Variante mit
@@ -236,310 +224,29 @@ Vorgabe, und niemand merkt es). Und eine <strong>neue Ressource unter neuem
 Namen</strong> – <code>/customers-neu</code> – ist keine Versionierung, sondern ein
 zweiter Endpunkt; ehrlich benannt ist das manchmal die beste Lösung, weil sie keine
 Migration verspricht, die nie stattfindet.</p>
-
 <h3 class="wb__h3">Die eine Frage, an der sich alles entscheidet</h3>
-
 <p class="wb__schluss"><strong>Wer ruft auf, und kann man ihn erreichen?</strong>
 Kennt man alle Aufrufer und kann einen Termin mit ihnen vereinbaren, ist die
 <em>ganze API in der URL</em> der einfachste Weg – sichtbar, trivial zu routen, ein
 Umstellungstermin für alle. Sind es viele fremde Aufrufer, die man nicht zu etwas
 bewegen kann, führt an einem <em>Datumsstand je Aufrufer</em> kaum etwas vorbei – mit
 dem Preis, dass die alten Stände nie wieder verschwinden.</p>
-
 <p class="wb__schluss"><strong>Und in jedem Fall gilt der Satz aus dem ersten
 Abschnitt:</strong> Eine neue Fassung bedeutet, dass zwei Stände gleichzeitig
 betrieben, getestet und irgendwann abgeschaltet werden müssen. Das ist Aufwand für
 Jahre – deshalb ist sie nicht die erste, sondern die letzte Antwort. <strong>Die
 billigste Versionierung ist die, die nicht stattfindet.</strong></p>
-
 <p class="wb__schluss"><strong>Verträglich heißt nicht „wir haben nichts
 weggenommen“</strong>, sondern „ein Aufrufer, der von der Änderung nichts weiß,
 funktioniert weiter“. Die beiden schlimmsten Fälle oben nehmen nichts weg.</p>
-
 </div>
 
-<style>
-  .wb { --wb-ok: #187452; --wb-praxis: #806414; --wb-bruch: #b3402c; }
-  [data-avd-academy-theme="dark"] .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-avd-academy-theme="light"]) .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
-  }
-
-  .wb__steuer { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1.5rem 0 1rem; }
-  .wb__alle {
-    font: inherit; font-size: .85rem; cursor: pointer;
-    padding: .4rem .9rem; border-radius: var(--avd-academy-radius-sm, 4px);
-    border: 1px solid var(--avd-academy-color-border);
-    background: var(--avd-academy-color-bg-subtle); color: inherit;
-  }
-  .wb__legende { margin-left: auto; display: flex; flex-wrap: wrap; gap: .5rem; }
-  .wb__marke {
-    font-size: .74rem; font-weight: 700; letter-spacing: .02em;
-    padding: .15rem .5rem; border-radius: 999px;
-    border: 1px solid currentColor;
-  }
-  .wb__marke--ok     { color: var(--wb-ok); }
-  .wb__marke--praxis { color: var(--wb-praxis); }
-  .wb__marke--bruch  { color: var(--wb-bruch); }
-
-  .wb__liste { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
-  .wb__karte {
-    border: 1px solid var(--avd-academy-color-border);
-    border-left: 5px solid var(--avd-academy-color-border);
-    border-radius: var(--avd-academy-radius-sm, 4px);
-    background: var(--avd-academy-color-bg-subtle);
-    transition: border-left-color .3s ease;
-  }
-  .wb__karte.ist-ok     { border-left-color: var(--wb-ok); }
-  .wb__karte.ist-praxis { border-left-color: var(--wb-praxis); }
-  .wb__karte.ist-bruch  { border-left-color: var(--wb-bruch); }
-
-  .wb__kopf {
-    width: 100%; font: inherit; text-align: left; cursor: pointer;
-    display: flex; align-items: baseline; gap: .8rem;
-    padding: .85rem 1rem; background: transparent; border: none; color: inherit;
-  }
-  .wb__nr {
-    flex: none; width: 1.7rem; height: 1.7rem; line-height: 1.7rem; text-align: center;
-    border-radius: 50%; font-size: .82rem; font-weight: 700;
-    background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
-  }
-  .wb__was { flex: 1 1 auto; }
-  .wb__was code { font-size: .88em; }
-  .wb__pfeil { flex: none; color: var(--avd-academy-color-ink-muted); transition: transform .25s ease; }
-  .wb__karte.ist-offen .wb__pfeil { transform: rotate(90deg); }
-
-  .wb__auf { display: none; padding: 0 1rem 1rem 3.5rem; }
-  .wb__karte.ist-offen .wb__auf { display: block; animation: wb-auf .3s ease-out; }
-  @keyframes wb-auf { from { opacity: 0; transform: translateY(-.3rem); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .wb__karte.ist-offen .wb__auf { animation: none; } }
-
-  .wb__urteil { font-weight: 700; margin: 0 0 .4rem; }
-  .ist-ok     .wb__urteil { color: var(--wb-ok); }
-  .ist-praxis .wb__urteil { color: var(--wb-praxis); }
-  .ist-bruch  .wb__urteil { color: var(--wb-bruch); }
-  .wb__warum { margin: 0 0 .6rem; }
-  .wb__weg {
-    margin: 0; font-size: .88rem; padding: .55rem .8rem;
-    border-left: 3px solid var(--avd-academy-color-accent);
-    background: var(--avd-academy-color-bg);
-  }
-  .wb__weg strong { display: block; font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; color: var(--avd-academy-color-ink-muted); }
-
-  /* Abstand NACH OBEN fuer die Abschnitts-Ueberschriften. Das Theme setzt h2
-     auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
-     von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
-     Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
-     Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
-     sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
-     Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
-     Container (`--avd-academy-space-12`). */
-  .wb h2.wb__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
-  .wb__regeln { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1rem; }
-  .wb__regel {
-    border: 1px solid var(--avd-academy-color-border);
-    border-radius: var(--avd-academy-radius-sm, 4px);
-    padding: .9rem 1.1rem; background: var(--avd-academy-color-bg-subtle);
-  }
-  .wb__regel h3 { margin: 0 0 .4rem; font-size: 1rem; }
-  .wb__regel p { margin: 0; font-size: .9rem; }
-  .wb__schluss { margin-top: 1.5rem; }
-  .wb h3.wb__h3 { margin-top: var(--avd-academy-space-8, 2rem); font-size: var(--avd-academy-fs-md, 1.05rem); }
-  .wb__lead { color: var(--avd-academy-color-ink-muted); }
-  .wb__nb { font-size: .9rem; }
-
-  .wb__tabelle-scroll { overflow-x: auto; margin: 1.2rem 0; }
-  .wb__tabelle { border-collapse: collapse; width: 100%; min-width: 60rem; font-size: .84rem; }
-  .wb__tabelle th, .wb__tabelle td {
-    border: 1px solid var(--avd-academy-color-border);
-    padding: .5rem .65rem; vertical-align: top; text-align: left;
-  }
-  .wb__tabelle thead th { background: var(--avd-academy-color-bg-subtle); font-size: .9rem; }
-  .wb__tabelle thead th small {
-    display: block; font-weight: 400; font-size: .72rem;
-    color: var(--avd-academy-color-ink-muted); margin-top: .15rem;
-  }
-  .wb__tabelle tbody th { background: var(--avd-academy-color-bg-subtle); width: 11rem; font-weight: 600; }
-  .wb__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent); }
-  .wb__m { display: block; font-weight: 700; margin-bottom: .15rem; }
-  .wb__m--ok     { color: var(--wb-ok); }
-  .wb__m--praxis { color: var(--wb-praxis); }
-  .wb__m--bruch  { color: var(--wb-bruch); }
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  var FAELLE = [
-    {
-      was: "Das Feld <code>telefon</code> kommt neu in der Kundenantwort dazu.",
-      art: "ok", urteil: "Bricht nicht – wenn es eine Zusicherung gibt",
-      warum: "Wer das Feld nicht kennt, liest es nicht. Das gilt aber nur, solange die Aufrufer unbekannte Felder wirklich ignorieren. Ein streng validierender Client (<code>additionalProperties: false</code>) fliegt genau hier auf die Nase – und das sind oft die erzeugten.",
-      weg: "Schreib in die Dokumentation: „Felder, die Du nicht kennst, ignoriere.“ Ein Satz, der über Jahre Ärger spart."
-    },
-    {
-      was: "Das Feld <code>fax</code> wird aus der Kundenantwort entfernt.",
-      art: "bruch", urteil: "Bricht",
-      warum: "Jeder Aufrufer, der es liest, bekommt ab sofort nichts mehr – in typisierten Clients meist gleich eine Ausnahme beim Deserialisieren.",
-      weg: "In drei Schritten: als veraltet kennzeichnen (<code>Deprecation</code>-Kopf, OpenAPI <code>deprecated</code>), messen, wer es noch liest, und erst entfernen, wenn niemand mehr zugreift."
-    },
-    {
-      was: "<code>name</code> wird in <code>fullName</code> umbenannt.",
-      art: "bruch", urteil: "Bricht – das ist Fall 2 und Fall 1 in einem",
-      warum: "Umbenennen ist kein eigener Vorgang: Es ist ein Feld weggenommen und ein neues hinzugefügt. Der Bruch steckt in der ersten Hälfte.",
-      weg: "Eine Zeit lang <strong>beide</strong> Felder ausliefern und beim Schreiben beide annehmen, <code>name</code> als veraltet kennzeichnen. Die Frage ist nicht, ob es geht, sondern wie lange man beides betreibt."
-    },
-    {
-      was: "<code>birthdate</code> war beim Anlegen optional und wird zur Pflicht.",
-      art: "bruch", urteil: "Bricht",
-      warum: "Ein Aufrufer, der es bisher weggelassen hat, bekommt ab sofort <code>400</code>. <strong>Im Request darf man lockern, nie verschärfen</strong> – das ist die Spiegelregel zur Antwort.",
-      weg: "Entweder einen fachlich vertretbaren Standardwert setzen, oder die Pflicht nur in einer neuen Version verlangen und die alte weiter betreiben."
-    },
-    {
-      was: "<code>kundennummer</code> war eine Zahl und wird zu einer Zeichenkette.",
-      art: "bruch", urteil: "Bricht",
-      warum: "Ein Typwechsel ist immer ein Bruch. Erzeugte Clients werfen beim Deserialisieren; handgeschriebene rechnen irgendwo mit dem Wert und bekommen etwas Absurdes heraus.",
-      weg: "Ein <strong>neues Feld daneben</strong> (<code>kundennummerText</code>), das alte unverändert weiterliefern – und dann denselben Dreischritt wie beim Entfernen."
-    },
-    {
-      was: "Der Status kann neben <code>aktiv</code>, <code>deaktiviert</code> und <code>gesperrt</code> künftig auch <code>in_pruefung</code> sein.",
-      art: "praxis", urteil: "Formal verträglich – und trotzdem einer der gefährlichsten Fälle",
-      warum: "Es wird nichts weggenommen und nichts umbenannt. Aber jeder Aufrufer, der daraus ein Aufzählungsobjekt gemacht hat, bekommt beim Einlesen eine Ausnahme – und jedes <code>switch</code> ohne <code>default</code> läuft ins Leere. <strong>Die Aufrufer haben die Werteliste für vollständig gehalten, weil nirgends stand, dass sie wächst.</strong>",
-      weg: "Von Anfang an zusichern: „Diese Liste kann wachsen. Behandle unbekannte Werte wie <em>X</em>.“ Danach ist derselbe Schritt harmlos."
-    },
-    {
-      was: "<code>GET /customers</code> liefert künftig nach Nachname sortiert statt nach Anlagedatum.",
-      art: "praxis", urteil: "Formal verträglich – bricht still",
-      warum: "Dieselben Felder, dieselben Typen, derselbe Statuscode. Nur holt sich jemand mit <code>?limit=10</code> seit einem Jahr „die zehn neuesten Kunden“ – und bekommt jetzt zehn Kunden, deren Nachname mit A beginnt. <strong>Es gibt keinen Fehler, nur falsche Daten.</strong>",
-      weg: "Die Sortierung gehört in den Vertrag – entweder als Zusicherung oder ausdrücklich als <em>nicht</em> zugesichert. Schweigen ist hier ein Versprechen."
-    },
-    {
-      was: "<code>GET /customers</code> liefert künftig nur noch die ersten 100 Einträge.",
-      art: "bruch", urteil: "Bricht – und zwar unsichtbar",
-      warum: "Wer bisher alles bekam, bekommt jetzt stillschweigend weniger und hält es für alles. Das ist schlimmer als ein Fehler, weil es wie Erfolg aussieht. Fachlich ist die Änderung trotzdem richtig – ohne Obergrenze fällt irgendwann der Service um.",
-      weg: "Paginierung einführen, aber die Grenze <strong>ankündigen und beziffern</strong>: Antwort mit <code>next</code>-Verweis und Gesamtzahl, Übergangsfrist, und erst danach die Obergrenze schärfen."
-    },
-    {
-      was: "Beim Anlegen eines doppelten Kunden kommt statt <code>400</code> künftig <code>409</code>.",
-      art: "bruch", urteil: "Bricht, wenn jemand auf den Code prüft",
-      warum: "Wer <code>=== 400</code> abfragt, landet ab sofort im allgemeinen Fehlerzweig und zeigt dem Nutzer etwas Falsches. Wer nur <code>>= 400</code> prüft, merkt nichts – <strong>der Bruch hängt daran, wie sorgfältig der Aufrufer gebaut ist</strong>.",
-      weg: "Die Fehlerursache <em>im Body</em> transportieren (Problem Details, Feld <code>type</code>) statt im Statuscode. Dann darf der Code sich ändern, ohne dass jemand nachzieht."
-    },
-    {
-      was: "Es gibt eine neue Operation <code>GET /customers/{id}/orders</code>.",
-      art: "ok", urteil: "Bricht nicht",
-      warum: "Eine neue Adresse kennt bisher niemand, also ruft sie auch niemand auf. <strong>Hinzufügen an einer neuen Stelle ist der einzige risikofreie Fall in dieser Liste.</strong>",
-      weg: "Nichts zu tun – außer die Frage, ob die Operation später wieder wegkann. Was einmal veröffentlicht ist, muss betrieben werden."
-    }
-  ];
-
-  var liste = document.querySelector("[data-wb-liste]");
-  if (!liste) return;
-
-  /* EINE LESBARE ID JE KARTE - sie landet in der Adresse. `#/?open=feld-umbenennen`
-     ist ein brauchbares Lesezeichen, `#/?open=karte-3` nicht, und eine Nummer
-     ueberlebt das Umsortieren der Faelle ohnehin nicht. */
-  function kennung(text) {
-    return "wb-" + text.replace(/<[^>]*>/g, "").toLowerCase()
-      .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
-  }
-
-  FAELLE.forEach(function (f, i) {
-    var li = document.createElement("li");
-    li.className = "wb__karte";
-    li.id = kennung(f.was);
-    li.dataset.art = f.art;
-    li.innerHTML =
-      '<button type="button" class="wb__kopf" aria-expanded="false">' +
-        '<span class="wb__nr">' + (i + 1) + '</span>' +
-        '<span class="wb__was">' + f.was + '</span>' +
-        '<span class="wb__pfeil" aria-hidden="true">▸</span>' +
-      '</button>' +
-      '<div class="wb__auf">' +
-        '<p class="wb__urteil">' + f.urteil + '</p>' +
-        '<p class="wb__warum">' + f.warum + '</p>' +
-        '<p class="wb__weg"><strong>Verträglicher Weg</strong>' + f.weg + '</p>' +
-      '</div>';
-    liste.appendChild(li);
-  });
-
-  function schalte(karte, auf) {
-    karte.classList.toggle("ist-offen", auf);
-    /* Die Farbe kommt erst mit dem Aufdecken - sonst verrät der Rand das Urteil. */
-    karte.classList.toggle("ist-" + karte.dataset.art, auf);
-    karte.querySelector(".wb__kopf").setAttribute("aria-expanded", auf ? "true" : "false");
-  }
-
-  liste.addEventListener("click", function (e) {
-    var kopf = e.target.closest(".wb__kopf");
-    if (!kopf) return;
-    var karte = kopf.parentNode;
-    schalte(karte, !karte.classList.contains("ist-offen"));
-    merken();
-  });
-
-  document.querySelector("[data-wb-alle]").addEventListener("click", function () {
-    liste.querySelectorAll(".wb__karte").forEach(function (k) { schalte(k, true); });
-    merken();
-  });
-  document.querySelector("[data-wb-zu]").addEventListener("click", function () {
-    liste.querySelectorAll(".wb__karte").forEach(function (k) { schalte(k, false); });
-    merken();
-  });
-
-  /* --- Zustand in der Adresse ---------------------------------------------
-     AUFGEDECKT IST EIN ZUSTAND: Wer im Kurs drei Faelle aufgeschlagen hat und neu
-     laedt, will sie wiederfinden - und ein Verweis aus dem Regiebuch darf genau
-     auf einen Fall zeigen.
-
-     Die Karten reihen sich in den Schluessel `open` des Themes ein (ab 2.46.0),
-     zusammen mit Reitern, Folds und Reveals derselben Seite. Selbst ins Fragment
-     zu schreiben waere falsch: Es gibt nur eines, und wer es allein beansprucht,
-     loescht den Zustand der uebrigen Bausteine. Die Anmeldung wartet auf
-     DOMContentLoaded, weil das Theme-Skript `defer` traegt. */
-  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
-
-  function anmelden() {
-    if (!window.AvdAcademyState) { return; }
-    liste.querySelectorAll(".wb__karte").forEach(function (karte) {
-      window.AvdAcademyState.openable({
-        id: karte.id,
-        istOffen: function () { return karte.classList.contains("ist-offen"); },
-        setzen: function (auf) { schalte(karte, auf); }
-      });
-    });
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", anmelden);
-  } else {
-    anmelden();
-  }
-})();
-</script>
-
-
-
     </main>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
   </div>
-
-  <footer class="avd-academy-footer">
-  <div class="avd-academy-footer__grid">
-    <div><strong>ATVANTAGE Academy</strong>
-      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
-    </div><div>
-      <strong>Kontakt</strong>
-      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
-      </p>
-    </div></div>
-  <div class="avd-academy-footer__legal">
-    © <span data-avd-academy-year>2026</span> ATVANTAGE
-  </div>
-</footer>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
 
 </body>
 </html>

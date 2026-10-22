@@ -1,0 +1,16 @@
+/* Stylesheet der Seite 01-was-ist-rest/praesentation.md – über `styles:` im Front Matter geladen. */
+/* Bilder sollen die Folie FÜLLEN. Ohne das stünde ein SVG mit fester Breite
+   linksbündig oben in der 1100px-Spalte und liesse zwei Drittel der Folie leer.
+   `max-height` haelt es zugleich davon ab, unter den Folienrand zu laufen –
+   der viewBox skaliert dann mit (preserveAspectRatio, Standardwert). */
+.bild { margin: 0 0 var(--skr-space-4) 0; }
+.bild svg { display: block; width: 100%; height: auto; max-height: 58vh; margin: 0 auto; }
+.bild figcaption {
+  margin-top: var(--skr-space-3);
+  text-align: center;
+  color: var(--skr-color-ink-muted);
+  font-size: 0.85em;
+}
+/* Zwei Aussagen nebeneinander, ohne Tabelle. */
+.paar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--skr-space-6); }
+@media (max-width: 50rem) { .paar { grid-template-columns: 1fr; } }

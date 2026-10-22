@@ -1,0 +1,165 @@
+/* Stylesheet der Seite 09-best-practices/simulation.md – über `styles:` im Front Matter geladen. */
+/* Alle Flächen sind von Anfang an so groß wie in ihrem größten Zustand.
+   Es wird nichts hinzugefügt und nichts entfernt – Einträge ändern nur
+   ihren Inhalt und ihre Markierung. Sonst wackelt die ganze Spalte. */
+.buehne {
+  display: grid;
+  gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem);
+  align-items: stretch;
+  align-content: center;
+  min-height: 100%;
+}
+.buehne--kette { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.buehne--blaettern { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+
+.buehne .skr-didaktikon-simulation-panel { display: flex; flex-direction: column; }
+.buehne--kette .skr-didaktikon-simulation-panel__body { min-height: 13rem; }
+
+/* ---------------------------------------------- Szenario 1: die Kette */
+.st { display: flex; flex-direction: column; gap: .6rem; justify-content: center; height: 100%; }
+.st__wert {
+  text-align: center; font-family: var(--skr-font-mono, monospace);
+  font-size: 1.05rem; font-weight: 600; min-height: 1.6rem;
+}
+.st .skr-didaktikon-simulation-cell { min-height: 3.4rem; align-items: center; }
+.st__grenze {
+  font-size: .74rem; color: var(--skr-color-ink-muted);
+  border-top: 1px dashed var(--skr-color-border);
+  padding-top: .4rem; text-align: center; min-height: 3.2rem; margin: 0;
+}
+
+/* ------------------------------------------ Szenario 2+3: das Blättern */
+.spalte { display: flex; flex-direction: column; gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem); }
+
+/* Eine Frage an die Runde gehoert gross auf die Buehne, nicht klein in die
+   Leitung. Sie liegt als Auflage darueber und veraendert das Raster nicht. */
+.buehne--blaettern { position: relative; }
+.frage {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center; padding: 2rem;
+  background: color-mix(in oklab, var(--skr-color-bg) 82%, transparent);
+  animation: frage-auf .45s ease-out;
+}
+.frage[hidden] { display: none; }
+.frage p {
+  margin: 0; max-width: 44rem; text-align: center;
+  font-size: clamp(1.15rem, .85rem + 1.1vw, 1.9rem);
+  font-weight: 700; line-height: 1.35;
+  background: var(--skr-color-bg);
+  border: 3px solid var(--skr-color-accent);
+  border-radius: var(--skr-radius, 8px);
+  padding: 1.5rem 1.9rem;
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / .2);
+}
+@keyframes frage-auf { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .frage { animation: none; } }
+
+/* Platz ist reserviert, der Rahmen kommt erst mit dem Text - so entsteht
+   beim Einblenden kein Versatz. */
+.fussnote {
+  min-height: 3.2rem; margin: .5rem 0 0; padding-top: .4rem;
+  font-size: .8rem; color: var(--skr-color-ink-muted);
+}
+.fussnote:not(:empty) { border-top: 1px dashed var(--skr-color-border); }
+.fussnote strong { color: var(--skr-color-danger, #b3402c); }
+
+.zaehler { font-size: .76rem; color: var(--skr-color-ink-muted); padding: .2rem 0 .4rem; min-height: 1.1rem; }
+.sortierung {
+  font-size: .74rem; color: var(--skr-color-ink-muted);
+  border-top: 1px dashed var(--skr-color-border);
+  margin: .5rem 0 0; padding-top: .4rem;
+}
+
+.liste { display: flex; flex-direction: column; gap: .35rem; min-height: 19.5rem; }
+.liste .skr-didaktikon-simulation-cell { min-height: 2.5rem; transition: opacity .35s ease; }
+
+/* Ein Eintrag verschwindet nicht – er wird durchgestrichen. */
+.skr-didaktikon-simulation-cell.ist-weg { opacity: .45; }
+.skr-didaktikon-simulation-cell.ist-weg .skr-didaktikon-simulation-cell__name { text-decoration: line-through; }
+.skr-didaktikon-simulation-cell.ist-leer {
+  border-style: dashed; opacity: .5;
+}
+/* Der Cursor steht dauerhaft auf einem Eintrag - is-pulse allein wäre nach
+   einer halben Sekunde wieder weg. */
+.skr-didaktikon-simulation-cell.ist-anker {
+  border-color: var(--skr-color-accent);
+  box-shadow: inset .25rem 0 0 var(--skr-color-accent);
+}
+.skr-didaktikon-simulation-cell.ist-anker .skr-didaktikon-simulation-cell__value::after {
+  content: " ◂ Cursor";
+  color: var(--skr-color-accent);
+  font-weight: 700; font-size: .72rem; letter-spacing: .04em;
+}
+
+/* Die Seitengrenze ist ein eigenes Element in der Liste und wandert mit. */
+.grenze {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .7rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--skr-color-accent); font-weight: 700;
+  min-height: 1.1rem;
+}
+.grenze::before, .grenze::after {
+  content: ""; flex: 1 1 auto; height: 0;
+  border-top: 2px dashed var(--skr-color-accent);
+}
+
+/* ------------------------------------------------- Das laufende Paket
+   Eine Bahn mit einem Punkt darauf. Sie zeigt in einer halben Sekunde,
+   WER gerade WOHIN schickt - das steht sonst nur im Text. */
+.bahn {
+  position: relative; height: 1.1rem; margin: .1rem 0;
+  border-top: 2px dashed var(--skr-color-border);
+}
+.bahn__punkt {
+  position: absolute; top: -.55rem; left: 0;
+  width: 1rem; height: 1rem; border-radius: 50%;
+  background: var(--skr-color-accent);
+  opacity: 0;
+}
+.bahn.laeuft .bahn__punkt  { animation: bahn-hin .85s ease-in-out; }
+.bahn.laeuft.zurueck .bahn__punkt { animation-name: bahn-her; }
+@keyframes bahn-hin {
+  from { left: 0; opacity: 1; }
+  to   { left: calc(100% - 1rem); opacity: 1; }
+}
+@keyframes bahn-her {
+  from { left: calc(100% - 1rem); opacity: 1; }
+  to   { left: 0; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bahn.laeuft .bahn__punkt { animation: none; opacity: 1; left: calc(50% - .5rem); }
+}
+
+/* Ueber der ganzen Kette: das Paket laeuft vom Client bis zur Datenbank. */
+.bahn--kette { grid-column: 1 / -1; order: -1; margin-bottom: .3rem; }
+
+/* ------------------------------------------------------------ Leitung */
+.lt { display: flex; flex-direction: column; gap: .5rem; justify-content: center; text-align: center; min-height: 10.5rem; }
+.lt__pfeil { font-size: 1.7rem; line-height: 1; min-height: 1.8rem; color: var(--skr-color-accent); }
+/* Die Anfrage ist das, worauf im Kurs gezeigt wird - sie muss aus der
+   letzten Reihe lesbar sein, nicht nur auf dem eigenen Bildschirm. */
+.lt__url {
+  font-family: var(--skr-font-mono, monospace);
+  font-size: clamp(.92rem, .75rem + .45vw, 1.15rem);
+  font-weight: 600; line-height: 1.4;
+  padding: .7rem .7rem; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px dashed var(--skr-color-border);
+  background: var(--skr-color-bg-subtle);
+  word-break: break-all; min-height: 4.6rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.lt__notiz { font-size: .84rem; color: var(--skr-color-ink-muted); margin: 0; min-height: 2.6rem; }
+.lt__notiz strong { color: var(--skr-color-ink); }
+.lt.ist-still .lt__url { color: var(--skr-color-ink-muted); font-style: italic; }
+
+/* -------------------------------------------- Der andere Client (klein) */
+.nb { min-height: 6.5rem; }
+.nb__body { display: flex; flex-direction: column; gap: .4rem; justify-content: center; min-height: 3.6rem; }
+.nb__zeile {
+  font-family: var(--skr-font-mono, monospace); font-size: .74rem;
+  text-align: center; padding: .45rem .5rem;
+  border-radius: var(--skr-radius-sm, 4px);
+  border: 1px solid var(--skr-color-border);
+  background: var(--skr-color-bg-subtle);
+}
+.nb__zeile.ist-still { color: var(--skr-color-ink-muted); font-style: italic; font-family: inherit; }

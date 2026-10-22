@@ -1,138 +1,117 @@
-<!DOCTYPE html><html lang="de">
+<!DOCTYPE html>
+<html lang="de" data-skr-present-mark>
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>REST: Von einem System zu vielen · ATVANTAGE Academy</title><meta name="description" content="Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>REST: Von einem System zu vielen · ATVANTAGE Academy</title>
+<meta name="description" content="Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="REST: Von einem System zu vielen">
 <meta property="og:description" content="Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/was-ist-rest/praesentation.html","title":"REST: Von einem System zu vielen","layout":"presentation","description":"Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/presentation.css?v=42e076e9">
-  <script src="/training-material-api-engineering/theme/jekyll/presentation.js?v=b2cc2b42" defer></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head>
-<body class="avd-academy-present" data-avd-academy-present data-avd-academy-present-title="REST: Von einem System zu vielen">
-  <a class="avd-academy-skip-link" href="#avd-academy-deck">Zum Inhalt springen</a>
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Warum ein System irgendwann aufgeteilt wird, was dabei zwischen den Teilen entsteht – und was REST damit zu tun hat.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"skriptorium.presentation","pageAssets":[{"path":"rest-apis-grundlagen-und-design/was-ist-rest/praesentation.css","src":"praesentation.css","type":"style"}],"pageId":null,"runtimeFragments":["^/\\d+$"],"siteIndex":"/skriptorium/site.json","title":"REST: Von einem System zu vielen","topics":null,"url":"/rest-apis-grundlagen-und-design/was-ist-rest/praesentation.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <header class="avd-academy-present__bar">
-    <img class="avd-academy-present__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-present__logo-mask" role="img" aria-label="ATVANTAGE Academy"
-          style="--avd-academy-logo-src: url('/training-material-api-engineering/assets/logo-schulung.svg'); --avd-academy-logo-ratio: 260 / 24;"></span><span class="avd-academy-present__title">REST: Von einem System zu vielen</span>
-    <span class="avd-academy-present__counter" data-avd-academy-present-counter aria-live="off"></span>
-    <div class="avd-academy-present__tools"><button type="button" class="avd-academy-present__back" data-avd-academy-back hidden
-              title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-present-print
-                title="Drucken (alle Folien)" aria-label="Drucken (alle Folien)"></button><button type="button" class="avd-academy-tool avd-academy-tool--full"
-              data-avd-academy-present-full
-              title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
-  </header><main class="avd-academy-deck" id="avd-academy-deck" data-avd-academy-deck>
-    <style>
-  /* Bilder sollen die Folie FÜLLEN. Ohne das stünde ein SVG mit fester Breite
-     linksbündig oben in der 1100px-Spalte und liesse zwei Drittel der Folie leer.
-     `max-height` haelt es zugleich davon ab, unter den Folienrand zu laufen –
-     der viewBox skaliert dann mit (preserveAspectRatio, Standardwert). */
-  .bild { margin: 0 0 var(--avd-academy-space-4) 0; }
-  .bild svg { display: block; width: 100%; height: auto; max-height: 58vh; margin: 0 auto; }
-  .bild figcaption {
-    margin-top: var(--avd-academy-space-3);
-    text-align: center;
-    color: var(--avd-academy-color-ink-muted);
-    font-size: 0.85em;
-  }
-  /* Zwei Aussagen nebeneinander, ohne Tabelle. */
-  .paar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--avd-academy-space-6); }
-  @media (max-width: 50rem) { .paar { grid-template-columns: 1fr; } }
-</style>
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
-<h1 id="rest-von-einem-system-zu-vielen">REST: Von einem System zu vielen</h1>
+<link rel="stylesheet" href="../../skriptorium/presentation.css?v=fc13e38e">
+<script src="../../skriptorium/presentation.js?v=59ada18d" defer></script>
 
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/was-ist-rest/praesentation.css?v=d7b294b6">
+
+</head>
+<body class="skr-present" data-skr-layout="skriptorium.presentation" data-skr-layouts="skriptorium.presentation" data-skr-lang="de" data-skr-audience="learner" data-skr-present data-skr-present-title="REST: Von einem System zu vielen">
+  <a class="skr-skip-link" href="#skr-deck">Zum Inhalt springen</a>
+  <header class="skr-present__bar">
+    <img class="skr-present__logo" src="../../themes/didaktikon/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="skr-present__logo-mask" role="img" aria-label="ATVANTAGE Academy" data-skr-logo-mask></span><span class="skr-present__title">REST: Von einem System zu vielen</span>
+    <span class="skr-present__counter" data-skr-present-counter aria-live="off"></span>
+    <div class="skr-present__tools">
+      <button type="button" class="skr-present__back" data-skr-back hidden
+              title="Zurück" aria-label="Zurück"><svg viewBox="0 0 24 24" width="1em" height="1em"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+              ><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Zurück</button>
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-present-print=""
+        title="Drucken (alle Folien)" aria-label="Drucken (alle Folien)"></button>
+<button type="button" class="skr-tool skr-tool--full"
+        data-skr-present-full=""
+        title="Vollbild (Taste F)" aria-label="Vollbild"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+        ><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+</div>
+  </header>
+  <main class="skr-deck" id="skr-deck" data-skr-deck>
+    <h1 id="rest-von-einem-system-zu-vielen">REST: Von einem System zu vielen</h1>
 <p>Warum Schnittstellen entstehen – und warum sie HTTP sprechen</p>
-
 <p>REST APIs – Grundlagen und Design · ATVANTAGE Academy</p>
-
 <h2 id="ein-system-ein-team-ein-release">Ein System. Ein Team. Ein Release.</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 620" role="img" aria-label="Ein Monolith: ein einziger Block „Online-Shop“, der die Benutzeroberfläche und neun Fachbereiche enthält – Kundenkonto, Warenkorb, Produkte, Suche, Bestellung, Zahlung, Versand, Lager, Marketing. Darunter eine einzige Datenbank. Rechts zwei Markierungen: ein Team, ein Release.">
   <title>Der Monolith: Oberfläche und alle Fachlichkeiten in einem Block, eine Datenbank, ein Team</title>
   <defs>
     <marker id="pf-mono" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-ink-muted)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-ink-muted)"/>
     </marker>
   </defs>
-
   <!-- Der Monolith – die Oberfläche steckt MIT DRIN -->
-  <rect x="110" y="20" width="860" height="420" rx="14" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="3" />
+  <rect x="110" y="20" width="860" height="420" rx="14"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="3"/>
   <text x="540" y="56" text-anchor="middle" font-size="22" font-weight="600" fill="currentColor">Online-Shop</text>
-  <text x="540" y="79" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">ein Stück Software, ein Deployment</text>
-
-  <rect x="140" y="96" width="800" height="56" rx="8" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <text x="540" y="79" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">ein Stück Software, ein Deployment</text>
+  <rect x="140" y="96" width="800" height="56" rx="8"
+        fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
   <text x="540" y="131" text-anchor="middle" font-size="20" fill="currentColor">Benutzeroberfläche</text>
-
   <g font-size="18" text-anchor="middle">
-    <g fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1.5">
-      <rect x="140" y="170" width="250" height="58" rx="8" />
-      <rect x="415" y="170" width="250" height="58" rx="8" />
-      <rect x="690" y="170" width="250" height="58" rx="8" />
-      <rect x="140" y="246" width="250" height="58" rx="8" />
-      <rect x="415" y="246" width="250" height="58" rx="8" />
-      <rect x="690" y="246" width="250" height="58" rx="8" />
-      <rect x="140" y="322" width="250" height="58" rx="8" />
-      <rect x="415" y="322" width="250" height="58" rx="8" />
-      <rect x="690" y="322" width="250" height="58" rx="8" />
+    <g fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="1.5">
+      <rect x="140" y="170" width="250" height="58" rx="8"/>
+      <rect x="415" y="170" width="250" height="58" rx="8"/>
+      <rect x="690" y="170" width="250" height="58" rx="8"/>
+      <rect x="140" y="246" width="250" height="58" rx="8"/>
+      <rect x="415" y="246" width="250" height="58" rx="8"/>
+      <rect x="690" y="246" width="250" height="58" rx="8"/>
+      <rect x="140" y="322" width="250" height="58" rx="8"/>
+      <rect x="415" y="322" width="250" height="58" rx="8"/>
+      <rect x="690" y="322" width="250" height="58" rx="8"/>
     </g>
     <g fill="currentColor">
       <text x="265" y="205">Kundenkonto</text>
@@ -146,99 +125,93 @@
       <text x="815" y="357">Marketing</text>
     </g>
   </g>
-
-  <line x1="540" y1="440" x2="540" y2="472" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" marker-end="url(#pf-mono)" />
-
-  <g fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2">
-    <path d="M390 492 v58 a150 22 0 0 0 300 0 v-58 z" />
-    <ellipse cx="540" cy="492" rx="150" ry="22" />
+  <line x1="540" y1="440" x2="540" y2="472" stroke="var(--skr-color-ink-muted)" stroke-width="2" marker-end="url(#pf-mono)"/>
+  <g fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2">
+    <path d="M390 492 v58 a150 22 0 0 0 300 0 v-58 z"/>
+    <ellipse cx="540" cy="492" rx="150" ry="22"/>
   </g>
   <text x="540" y="530" text-anchor="middle" font-size="19" fill="currentColor">eine Datenbank</text>
-  <text x="540" y="604" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">ein Schema für alles</text>
-
+  <text x="540" y="604" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">ein Schema für alles</text>
   <g>
-    <rect x="1000" y="170" width="210" height="66" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+    <rect x="1000" y="170" width="210" height="66" rx="10"
+          fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2"/>
     <text x="1105" y="210" text-anchor="middle" font-size="22" font-weight="600" fill="currentColor">1 Team</text>
-    <rect x="1000" y="254" width="210" height="66" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+    <rect x="1000" y="254" width="210" height="66" rx="10"
+          fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2"/>
     <text x="1105" y="294" text-anchor="middle" font-size="22" font-weight="600" fill="currentColor">1 Release</text>
-    <text x="1105" y="358" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger-ink)">jede Änderung</text>
-    <text x="1105" y="380" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-danger-ink)">betrifft alle</text>
+    <text x="1105" y="358" text-anchor="middle" font-size="15" fill="var(--skr-color-danger-ink)">jede Änderung</text>
+    <text x="1105" y="380" text-anchor="middle" font-size="15" fill="var(--skr-color-danger-ink)">betrifft alle</text>
   </g>
 </svg>
 <figcaption>Vierzig Entwickler, ein Kalender: Jedes Release ist ein Termin, auf den alle warten.</figcaption>
 </figure>
-
 <h2 id="der-grund-heißt-agilität">Der Grund heißt Agilität</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 700" role="img" aria-label="Links der durchgestrichene Monolith, ein Pfeil mit der Beschriftung Agilität, rechts die Aufteilung: oben die Benutzeroberfläche, darunter sechs Microservices mit je einem Team und einer Datenbank außerhalb des Kastens. Verbindungen: von der Oberfläche zu einzelnen Services, zwischen Services, und von Services zum Messaging-System.">
   <title>Vom Monolithen zu Microservices – jeder mit eigenem Team und eigener Datenbank</title>
   <defs>
     <marker id="pf-dir3" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
     <marker id="pf-msg3" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-ink-muted)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-ink-muted)"/>
     </marker>
     <g id="team3">
-      <circle cx="0" cy="-8" r="8" fill="var(--avd-academy-tone-3)" />
-      <path d="M-13 11 a13 13 0 0 1 26 0 z" fill="var(--avd-academy-tone-3)" />
+      <circle cx="0" cy="-8" r="8" fill="var(--skr-didaktikon-tone-3)"/>
+      <path d="M-13 11 a13 13 0 0 1 26 0 z" fill="var(--skr-didaktikon-tone-3)"/>
     </g>
     <g id="db3">
-      <path d="M-17 -7 v17 a17 6 0 0 0 34 0 v-17 z" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
-      <ellipse cx="0" cy="-7" rx="17" ry="6" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+      <path d="M-17 -7 v17 a17 6 0 0 0 34 0 v-17 z" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
+      <ellipse cx="0" cy="-7" rx="17" ry="6" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
     </g>
   </defs>
-
   <!-- Der Monolith, durchgestrichen – Oberflaeche steckt mit drin -->
   <g opacity="0.55">
-    <rect x="30" y="230" width="200" height="186" rx="8" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1.5" />
-    <rect x="44" y="244" width="172" height="26" rx="4" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1" />
-    <g fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1">
-      <rect x="44" y="280" width="52" height="24" rx="4" /><rect x="104" y="280" width="52" height="24" rx="4" /><rect x="164" y="280" width="52" height="24" rx="4" />
-      <rect x="44" y="312" width="52" height="24" rx="4" /><rect x="104" y="312" width="52" height="24" rx="4" /><rect x="164" y="312" width="52" height="24" rx="4" />
-      <rect x="44" y="344" width="52" height="24" rx="4" /><rect x="104" y="344" width="52" height="24" rx="4" /><rect x="164" y="344" width="52" height="24" rx="4" />
+    <rect x="30" y="230" width="200" height="186" rx="8"
+          fill="var(--skr-fill-1-bg)" stroke="var(--skr-color-border)" stroke-width="1.5"/>
+    <rect x="44" y="244" width="172" height="26" rx="4"
+          fill="var(--skr-fill-3-bg)" stroke="var(--skr-color-border)" stroke-width="1"/>
+    <g fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="1">
+      <rect x="44" y="280" width="52" height="24" rx="4"/><rect x="104" y="280" width="52" height="24" rx="4"/><rect x="164" y="280" width="52" height="24" rx="4"/>
+      <rect x="44" y="312" width="52" height="24" rx="4"/><rect x="104" y="312" width="52" height="24" rx="4"/><rect x="164" y="312" width="52" height="24" rx="4"/>
+      <rect x="44" y="344" width="52" height="24" rx="4"/><rect x="104" y="344" width="52" height="24" rx="4"/><rect x="164" y="344" width="52" height="24" rx="4"/>
     </g>
-    <g fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1.5">
-      <path d="M80 440 v24 a50 9 0 0 0 100 0 v-24 z" /><ellipse cx="130" cy="440" rx="50" ry="9" />
+    <g fill="var(--skr-fill-4-bg)" stroke="var(--skr-color-border)" stroke-width="1.5">
+      <path d="M80 440 v24 a50 9 0 0 0 100 0 v-24 z"/><ellipse cx="130" cy="440" rx="50" ry="9"/>
     </g>
   </g>
-  <g stroke="var(--avd-academy-color-danger)" stroke-width="5" stroke-linecap="round">
-    <line x1="34" y1="226" x2="226" y2="478" />
-    <line x1="226" y1="226" x2="34" y2="478" />
+  <g stroke="var(--skr-color-danger)" stroke-width="5" stroke-linecap="round">
+    <line x1="34" y1="226" x2="226" y2="478"/>
+    <line x1="226" y1="226" x2="34" y2="478"/>
   </g>
-  <text x="130" y="506" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-ink-muted)">Monolith</text>
-
+  <text x="130" y="506" text-anchor="middle" font-size="17" fill="var(--skr-color-ink-muted)">Monolith</text>
   <!-- Der Uebergang -->
-  <line x1="250" y1="330" x2="340" y2="330" stroke="var(--avd-academy-color-accent)" stroke-width="3" marker-end="url(#pf-dir3)" />
-  <text x="295" y="308" text-anchor="middle" font-size="20" font-weight="600" fill="var(--avd-academy-color-accent)">Agilität</text>
-  <text x="295" y="358" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">unabhängig</text>
-  <text x="295" y="376" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">liefern</text>
-
+  <line x1="250" y1="330" x2="340" y2="330" stroke="var(--skr-color-accent)" stroke-width="3" marker-end="url(#pf-dir3)"/>
+  <text x="295" y="308" text-anchor="middle" font-size="20" font-weight="600" fill="var(--skr-color-accent)">Agilität</text>
+  <text x="295" y="358" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">unabhängig</text>
+  <text x="295" y="376" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">liefern</text>
   <!-- Benutzeroberflaeche, jetzt eigenstaendig -->
-  <rect x="420" y="14" width="800" height="58" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <rect x="420" y="14" width="800" height="58" rx="10"
+        fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
   <text x="820" y="42" text-anchor="middle" font-size="20" fill="currentColor">Benutzeroberfläche</text>
-  <text x="820" y="62" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">eigenes Team, eigenes Release</text>
-
-  <text x="420" y="128" font-size="19" font-weight="600" fill="var(--avd-academy-color-accent)">Microservices</text>
-
+  <text x="820" y="62" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">eigenes Team, eigenes Release</text>
+  <text x="420" y="128" font-size="19" font-weight="600" fill="var(--skr-color-accent)">Microservices</text>
   <!-- Oberflaeche ruft einzelne Services -->
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir3)">
-    <line x1="600" y1="72" x2="600" y2="148" />
-    <line x1="820" y1="72" x2="820" y2="148" />
-    <line x1="1040" y1="72" x2="1040" y2="148" />
+  <g stroke="var(--skr-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir3)">
+    <line x1="600" y1="72" x2="600" y2="148"/>
+    <line x1="820" y1="72" x2="820" y2="148"/>
+    <line x1="1040" y1="72" x2="1040" y2="148"/>
   </g>
-  <text x="1060" y="118" font-size="15" fill="var(--avd-academy-color-accent)">HTTP</text>
-
+  <text x="1060" y="118" font-size="15" fill="var(--skr-color-accent)">HTTP</text>
   <!-- Sechs Services: Kasten, darunter Team und Datenbank AUSSERHALB -->
   <g>
-    <g fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2">
-      <rect x="420" y="150" width="240" height="62" rx="10" />
-      <rect x="700" y="150" width="240" height="62" rx="10" />
-      <rect x="980" y="150" width="240" height="62" rx="10" />
-      <rect x="420" y="378" width="240" height="62" rx="10" />
-      <rect x="700" y="378" width="240" height="62" rx="10" />
-      <rect x="980" y="378" width="240" height="62" rx="10" />
+    <g fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2">
+      <rect x="420" y="150" width="240" height="62" rx="10"/>
+      <rect x="700" y="150" width="240" height="62" rx="10"/>
+      <rect x="980" y="150" width="240" height="62" rx="10"/>
+      <rect x="420" y="378" width="240" height="62" rx="10"/>
+      <rect x="700" y="378" width="240" height="62" rx="10"/>
+      <rect x="980" y="378" width="240" height="62" rx="10"/>
     </g>
     <g font-size="19" font-weight="600" text-anchor="middle" fill="currentColor">
       <text x="540" y="188">Kundenkonto</text>
@@ -249,23 +222,23 @@
       <text x="1100" y="416">Lager</text>
     </g>
     <!-- Anschluesse an Team und Datenbank -->
-    <g stroke="var(--avd-academy-color-border)" stroke-width="1.5">
-      <line x1="490" y1="212" x2="490" y2="236" /><line x1="590" y1="212" x2="590" y2="236" />
-      <line x1="770" y1="212" x2="770" y2="236" /><line x1="870" y1="212" x2="870" y2="236" />
-      <line x1="1050" y1="212" x2="1050" y2="236" /><line x1="1150" y1="212" x2="1150" y2="236" />
-      <line x1="490" y1="440" x2="490" y2="464" /><line x1="590" y1="440" x2="590" y2="464" />
-      <line x1="770" y1="440" x2="770" y2="464" /><line x1="870" y1="440" x2="870" y2="464" />
-      <line x1="1050" y1="440" x2="1050" y2="464" /><line x1="1150" y1="440" x2="1150" y2="464" />
+    <g stroke="var(--skr-color-border)" stroke-width="1.5">
+      <line x1="490" y1="212" x2="490" y2="236"/><line x1="590" y1="212" x2="590" y2="236"/>
+      <line x1="770" y1="212" x2="770" y2="236"/><line x1="870" y1="212" x2="870" y2="236"/>
+      <line x1="1050" y1="212" x2="1050" y2="236"/><line x1="1150" y1="212" x2="1150" y2="236"/>
+      <line x1="490" y1="440" x2="490" y2="464"/><line x1="590" y1="440" x2="590" y2="464"/>
+      <line x1="770" y1="440" x2="770" y2="464"/><line x1="870" y1="440" x2="870" y2="464"/>
+      <line x1="1050" y1="440" x2="1050" y2="464"/><line x1="1150" y1="440" x2="1150" y2="464"/>
     </g>
     <g>
-      <use href="#team3" x="490" y="252" /><use href="#db3" x="590" y="252" />
-      <use href="#team3" x="770" y="252" /><use href="#db3" x="870" y="252" />
-      <use href="#team3" x="1050" y="252" /><use href="#db3" x="1150" y="252" />
-      <use href="#team3" x="490" y="480" /><use href="#db3" x="590" y="480" />
-      <use href="#team3" x="770" y="480" /><use href="#db3" x="870" y="480" />
-      <use href="#team3" x="1050" y="480" /><use href="#db3" x="1150" y="480" />
+      <use href="#team3" x="490" y="252"/><use href="#db3" x="590" y="252"/>
+      <use href="#team3" x="770" y="252"/><use href="#db3" x="870" y="252"/>
+      <use href="#team3" x="1050" y="252"/><use href="#db3" x="1150" y="252"/>
+      <use href="#team3" x="490" y="480"/><use href="#db3" x="590" y="480"/>
+      <use href="#team3" x="770" y="480"/><use href="#db3" x="870" y="480"/>
+      <use href="#team3" x="1050" y="480"/><use href="#db3" x="1150" y="480"/>
     </g>
-    <g font-size="13" text-anchor="middle" fill="var(--avd-academy-color-ink-muted)">
+    <g font-size="13" text-anchor="middle" fill="var(--skr-color-ink-muted)">
       <text x="490" y="288">Team</text><text x="590" y="288">Daten</text>
       <text x="770" y="288">Team</text><text x="870" y="288">Daten</text>
       <text x="1050" y="288">Team</text><text x="1150" y="288">Daten</text>
@@ -274,218 +247,210 @@
       <text x="1050" y="516">Team</text><text x="1150" y="516">Daten</text>
     </g>
   </g>
-
   <!-- Service zu Service -->
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir3)">
-    <line x1="1000" y1="212" x2="930" y2="374" />
-    <line x1="720" y1="212" x2="650" y2="374" />
-    <line x1="1200" y1="212" x2="1200" y2="374" />
+  <g stroke="var(--skr-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir3)">
+    <line x1="1000" y1="212" x2="930" y2="374"/>
+    <line x1="720" y1="212" x2="650" y2="374"/>
+    <line x1="1200" y1="212" x2="1200" y2="374"/>
   </g>
-  <text x="946" y="286" font-size="15" font-weight="600" fill="var(--avd-academy-color-accent)" text-anchor="end">s2s</text>
-
+  <text x="946" y="286" font-size="15" font-weight="600" fill="var(--skr-color-accent)" text-anchor="end">s2s</text>
   <!-- Services zum Messaging -->
-  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#pf-msg3)">
-    <line x1="640" y1="440" x2="640" y2="592" />
-    <line x1="920" y1="440" x2="920" y2="592" />
-    <line x1="1200" y1="440" x2="1200" y2="592" />
+  <g stroke="var(--skr-color-ink-muted)" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#pf-msg3)">
+    <line x1="640" y1="440" x2="640" y2="592"/>
+    <line x1="920" y1="440" x2="920" y2="592"/>
+    <line x1="1200" y1="440" x2="1200" y2="592"/>
   </g>
-  <rect x="420" y="594" width="800" height="62" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" stroke-dasharray="9 6" />
+  <rect x="420" y="594" width="800" height="62" rx="10"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-ink-muted)" stroke-width="2" stroke-dasharray="9 6"/>
   <text x="820" y="622" text-anchor="middle" font-size="19" fill="currentColor">Messaging (z. B. Kafka, RabbitMQ)</text>
-  <text x="820" y="644" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">indirekt und lose gekoppelt – nicht Thema dieses Kurses</text>
-
-  <g font-size="14" fill="var(--avd-academy-color-ink-muted)">
-    <line x1="30" y1="620" x2="70" y2="620" stroke="var(--avd-academy-color-accent)" stroke-width="2.5" />
+  <text x="820" y="644" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">indirekt und lose gekoppelt – nicht Thema dieses Kurses</text>
+  <g font-size="14" fill="var(--skr-color-ink-muted)">
+    <line x1="30" y1="620" x2="70" y2="620" stroke="var(--skr-color-accent)" stroke-width="2.5"/>
     <text x="80" y="625">direkter Aufruf</text>
-    <line x1="30" y1="650" x2="70" y2="650" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" stroke-dasharray="9 6" />
+    <line x1="30" y1="650" x2="70" y2="650" stroke="var(--skr-color-ink-muted)" stroke-width="2.5" stroke-dasharray="9 6"/>
     <text x="80" y="655">über Nachrichten</text>
   </g>
 </svg>
 <figcaption>Jeder Service bekommt sein eigenes Team, seine eigene Datenbank und seinen eigenen Release-Takt.</figcaption>
 </figure>
-
 <h2 id="zwei-arten-miteinander-zu-reden">Zwei Arten, miteinander zu reden</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 560" role="img" aria-label="Links: Bestellung ruft Zahlung direkt per HTTP auf und wartet auf die Antwort. Rechts: Bestellung meldet ein Ereignis an ein Messaging-System, Versand und Lager holen es sich von dort.">
   <title>Direkter Aufruf per HTTP gegenüber indirekter Kommunikation über Nachrichten</title>
   <defs>
     <marker id="pf-dir" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
     <marker id="pf-ind" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-ink-muted)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-ink-muted)"/>
     </marker>
   </defs>
-
   <!-- Direkt -->
-  <text x="300" y="34" text-anchor="middle" font-size="22" font-weight="600" fill="var(--avd-academy-color-accent)">direkt · synchron</text>
-  <g fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2">
-    <rect x="30" y="150" width="220" height="86" rx="10" />
-    <rect x="350" y="150" width="220" height="86" rx="10" />
+  <text x="300" y="34" text-anchor="middle" font-size="22" font-weight="600" fill="var(--skr-color-accent)">direkt · synchron</text>
+  <g fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2">
+    <rect x="30" y="150" width="220" height="86" rx="10"/>
+    <rect x="350" y="150" width="220" height="86" rx="10"/>
   </g>
   <text x="140" y="200" text-anchor="middle" font-size="20" fill="currentColor">Bestellung</text>
   <text x="460" y="200" text-anchor="middle" font-size="20" fill="currentColor">Zahlung</text>
-  <line x1="250" y1="176" x2="348" y2="176" stroke="var(--avd-academy-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir)" />
-  <text x="299" y="164" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-accent)">Anfrage</text>
-  <line x1="350" y1="212" x2="252" y2="212" stroke="var(--avd-academy-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir)" />
-  <text x="299" y="232" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-accent)">Antwort</text>
-  <rect x="30" y="300" width="540" height="96" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="1.5" />
+  <line x1="250" y1="176" x2="348" y2="176" stroke="var(--skr-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir)"/>
+  <text x="299" y="164" text-anchor="middle" font-size="14" fill="var(--skr-color-accent)">Anfrage</text>
+  <line x1="350" y1="212" x2="252" y2="212" stroke="var(--skr-color-accent)" stroke-width="2.5" marker-end="url(#pf-dir)"/>
+  <text x="299" y="232" text-anchor="middle" font-size="14" fill="var(--skr-color-accent)">Antwort</text>
+  <rect x="30" y="300" width="540" height="96" rx="10"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="1.5"/>
   <text x="300" y="332" text-anchor="middle" font-size="17" fill="currentColor">Die Bestellung wartet auf die Antwort.</text>
-  <text x="300" y="360" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger-ink)">Ist die Zahlung nicht erreichbar,</text>
-  <text x="300" y="382" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-danger-ink)">scheitert auch die Bestellung.</text>
-
-  <line x1="612" y1="60" x2="612" y2="470" stroke="var(--avd-academy-color-border)" stroke-width="2" />
-
+  <text x="300" y="360" text-anchor="middle" font-size="17" fill="var(--skr-color-danger-ink)">Ist die Zahlung nicht erreichbar,</text>
+  <text x="300" y="382" text-anchor="middle" font-size="17" fill="var(--skr-color-danger-ink)">scheitert auch die Bestellung.</text>
+  <line x1="612" y1="60" x2="612" y2="470" stroke="var(--skr-color-border)" stroke-width="2"/>
   <!-- Indirekt -->
-  <text x="925" y="34" text-anchor="middle" font-size="22" font-weight="600" fill="var(--avd-academy-color-ink-muted)">indirekt · asynchron</text>
-  <rect x="815" y="70" width="220" height="76" rx="10" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <text x="925" y="34" text-anchor="middle" font-size="22" font-weight="600" fill="var(--skr-color-ink-muted)">indirekt · asynchron</text>
+  <rect x="815" y="70" width="220" height="76" rx="10"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="925" y="115" text-anchor="middle" font-size="20" fill="currentColor">Bestellung</text>
-  <line x1="925" y1="146" x2="925" y2="196" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)" />
-  <text x="945" y="178" font-size="14" fill="var(--avd-academy-color-ink-muted)">„ist bezahlt“</text>
-  <rect x="660" y="198" width="530" height="66" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" stroke-dasharray="8 5" />
+  <line x1="925" y1="146" x2="925" y2="196" stroke="var(--skr-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)"/>
+  <text x="945" y="178" font-size="14" fill="var(--skr-color-ink-muted)">„ist bezahlt“</text>
+  <rect x="660" y="198" width="530" height="66" rx="10"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-ink-muted)" stroke-width="2" stroke-dasharray="8 5"/>
   <text x="925" y="238" text-anchor="middle" font-size="19" fill="currentColor">Messaging</text>
-  <line x1="770" y1="264" x2="770" y2="314" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)" />
-  <line x1="1080" y1="264" x2="1080" y2="314" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)" />
-  <g fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2">
-    <rect x="660" y="316" width="220" height="80" rx="10" />
-    <rect x="970" y="316" width="220" height="80" rx="10" />
+  <line x1="770" y1="264" x2="770" y2="314" stroke="var(--skr-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)"/>
+  <line x1="1080" y1="264" x2="1080" y2="314" stroke="var(--skr-color-ink-muted)" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#pf-ind)"/>
+  <g fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2">
+    <rect x="660" y="316" width="220" height="80" rx="10"/>
+    <rect x="970" y="316" width="220" height="80" rx="10"/>
   </g>
   <text x="770" y="362" text-anchor="middle" font-size="20" fill="currentColor">Versand</text>
   <text x="1080" y="362" text-anchor="middle" font-size="20" fill="currentColor">Lager</text>
   <text x="925" y="440" text-anchor="middle" font-size="17" fill="currentColor">Die Bestellung wartet auf niemanden.</text>
   <text x="925" y="464" text-anchor="middle" font-size="17" fill="currentColor">Wer die Nachricht braucht, holt sie sich – auch später.</text>
-
-  <rect x="30" y="496" width="1180" height="52" rx="10" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="2" />
+  <rect x="30" y="496" width="1180" height="52" rx="10"
+        fill="var(--skr-color-accent-soft)" stroke="var(--skr-color-accent)" stroke-width="2"/>
   <text x="620" y="528" text-anchor="middle" font-size="18" fill="currentColor">In diesem Kurs geht es um die <tspan font-weight="600">linke Seite</tspan>. Messaging ist ein eigenes Thema.</text>
 </svg>
 </figure>
-
 <h2 id="was-ihr-gewinnt--und-was-es-kostet">Was Ihr gewinnt – und was es kostet</h2>
-
 <table>
-  <thead>
-    <tr>
-      <th>Gewinn</th>
-      <th>Preis</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Kleine Teams arbeiten unabhängig</td>
-      <td>Alles gibt es jetzt mehrfach – ohne Automatisierung unbezahlbar</td>
-    </tr>
-    <tr>
-      <td>Ein einzelner Teil ist verstehbar und ersetzbar</td>
-      <td>Die Infrastruktur wird komplexer als die Anwendung</td>
-    </tr>
-    <tr>
-      <td>Technologien frei wählbar</td>
-      <td>Daten liegen verteilt – wem gehören sie?</td>
-    </tr>
-    <tr>
-      <td>Einzeln skalierbar, einzeln ausfallbar</td>
-      <td><strong>Aus Methodenaufrufen werden Schnittstellen</strong></td>
-    </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Gewinn</th>
+					<th>Preis</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Kleine Teams arbeiten unabhängig</td>
+					<td>Alles gibt es jetzt mehrfach – ohne Automatisierung unbezahlbar</td>
+			</tr>
+			<tr>
+					<td>Ein einzelner Teil ist verstehbar und ersetzbar</td>
+					<td>Die Infrastruktur wird komplexer als die Anwendung</td>
+			</tr>
+			<tr>
+					<td>Technologien frei wählbar</td>
+					<td>Daten liegen verteilt – wem gehören sie?</td>
+			</tr>
+			<tr>
+					<td>Einzeln skalierbar, einzeln ausfallbar</td>
+					<td><strong>Aus Methodenaufrufen werden Schnittstellen</strong></td>
+			</tr>
+	</tbody>
 </table>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 190" role="img" aria-label="Zwei Services nebeneinander, dazwischen eine hervorgehobene Linie mit der Beschriftung Schnittstelle.">
   <title>Zwischen zwei Services steht eine Schnittstelle – der Vertrag zwischen zwei Teams</title>
-  <rect x="120" y="46" width="300" height="90" rx="12" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <rect x="120" y="46" width="300" height="90" rx="12"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="270" y="99" text-anchor="middle" font-size="22" fill="currentColor">Bestellung</text>
-  <rect x="820" y="46" width="300" height="90" rx="12" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <rect x="820" y="46" width="300" height="90" rx="12"
+        fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
   <text x="970" y="99" text-anchor="middle" font-size="22" fill="currentColor">Zahlung</text>
-  <line x1="420" y1="91" x2="820" y2="91" stroke="var(--avd-academy-color-accent)" stroke-width="6" />
-  <rect x="500" y="62" width="240" height="58" rx="10" fill="var(--avd-academy-color-accent)" stroke="none" />
-  <text x="620" y="98" text-anchor="middle" font-size="22" font-weight="600" fill="var(--avd-academy-color-accent-contrast)">Schnittstelle</text>
-  <text x="620" y="166" text-anchor="middle" font-size="17" fill="var(--avd-academy-color-ink-muted)">Im Monolithen war das ein Methodenaufruf. Jetzt ist es ein Vertrag zwischen zwei Teams.</text>
+  <line x1="420" y1="91" x2="820" y2="91" stroke="var(--skr-color-accent)" stroke-width="6"/>
+  <rect x="500" y="62" width="240" height="58" rx="10"
+        fill="var(--skr-color-accent)" stroke="none"/>
+  <text x="620" y="98" text-anchor="middle" font-size="22" font-weight="600" fill="var(--skr-color-accent-contrast)">Schnittstelle</text>
+  <text x="620" y="166" text-anchor="middle" font-size="17" fill="var(--skr-color-ink-muted)">Im Monolithen war das ein Methodenaufruf. Jetzt ist es ein Vertrag zwischen zwei Teams.</text>
 </svg>
 </figure>
-
 <h2 id="rest-baut-auf-http-auf">REST baut auf HTTP auf</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 430" role="img" aria-label="Drei gestapelte Schichten: unten das Internet, darauf HTTP als Übertragungsprotokoll mit festgelegter Syntax und Semantik, das Validatoren prüfen und Generatoren verarbeiten können; oben darauf REST als Architekturstil, den nur Menschen beurteilen – unterstützt von KI, die gegenliest und mitentwirft. Ein Pfeil von Roy Fielding, 2000, legt die REST-Schicht oben drauf.">
   <title>REST liegt als Architekturstil auf HTTP, und HTTP liegt auf dem Internet</title>
   <defs>
     <marker id="pf-stack" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
   </defs>
-
   <!-- Fundament -->
-  <rect x="60" y="336" width="780" height="70" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <rect x="60" y="336" width="780" height="70" rx="12"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2"/>
   <text x="450" y="366" text-anchor="middle" font-size="20" font-weight="600" fill="currentColor">Das Internet</text>
-  <text x="450" y="391" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">Browser, Proxies, Caches, Gateways – alle sprechen es längst</text>
-
+  <text x="450" y="391" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">Browser, Proxies, Caches, Gateways – alle sprechen es längst</text>
   <!-- HTTP -->
-  <rect x="100" y="212" width="700" height="104" rx="12" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="3" />
+  <rect x="100" y="212" width="700" height="104" rx="12"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="3"/>
   <text x="450" y="258" text-anchor="middle" font-size="32" font-weight="700" fill="currentColor">HTTP</text>
-  <text x="450" y="288" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">Spezifikation in RFCs, seit 1991</text>
-
+  <text x="450" y="288" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">Spezifikation in RFCs, seit 1991</text>
   <!-- REST -->
-  <rect x="150" y="92" width="600" height="98" rx="12" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="3" />
-  <text x="450" y="136" text-anchor="middle" font-size="32" font-weight="700" fill="var(--avd-academy-color-accent)">REST</text>
+  <rect x="150" y="92" width="600" height="98" rx="12"
+        fill="var(--skr-color-accent-soft)" stroke="var(--skr-color-accent)" stroke-width="3"/>
+  <text x="450" y="136" text-anchor="middle" font-size="32" font-weight="700" fill="var(--skr-color-accent)">REST</text>
   <text x="450" y="166" text-anchor="middle" font-size="15" fill="currentColor">Architekturstil: Regeln dafür, <tspan font-style="italic">wie</tspan> man HTTP gut benutzt</text>
-
   <!-- Fielding legt es oben drauf – der Kasten ist der Link auf Kapitel 5 -->
   <a href="https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="noopener">
-    <rect x="50" y="10" width="300" height="62" rx="10" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-accent)" stroke-width="2" />
-    <text x="200" y="35" text-anchor="middle" font-size="16" font-weight="600" fill="var(--avd-academy-color-accent)" text-decoration="underline">Roy T. Fielding, 2000</text>
-    <text x="200" y="58" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">Dissertation, Kapitel 5</text>
+    <rect x="50" y="10" width="300" height="62" rx="10"
+          fill="var(--skr-color-bg)" stroke="var(--skr-color-accent)" stroke-width="2"/>
+    <text x="200" y="35" text-anchor="middle" font-size="16" font-weight="600" fill="var(--skr-color-accent)"
+          text-decoration="underline">Roy T. Fielding, 2000</text>
+    <text x="200" y="58" text-anchor="middle" font-size="13" fill="var(--skr-color-ink-muted)">Dissertation, Kapitel 5</text>
   </a>
-  <path d="M350 44 C 410 44, 415 74, 452 88" fill="none" stroke="var(--avd-academy-color-accent)" stroke-width="2.5" marker-end="url(#pf-stack)" />
-  <text x="480" y="60" font-size="14" fill="var(--avd-academy-color-accent)">legt es oben drauf</text>
-
+  <path d="M350 44 C 410 44, 415 74, 452 88" fill="none"
+        stroke="var(--skr-color-accent)" stroke-width="2.5" marker-end="url(#pf-stack)"/>
+  <text x="480" y="60" font-size="14" fill="var(--skr-color-accent)">legt es oben drauf</text>
   <!-- Markierungen -->
-  <g stroke="var(--avd-academy-color-border)" stroke-width="2">
-    <line x1="755" y1="130" x2="872" y2="122" />
-    <line x1="805" y1="238" x2="872" y2="218" />
-    <line x1="805" y1="292" x2="872" y2="314" />
+  <g stroke="var(--skr-color-border)" stroke-width="2">
+    <line x1="755" y1="130" x2="872" y2="122"/>
+    <line x1="805" y1="238" x2="872" y2="218"/>
+    <line x1="805" y1="292" x2="872" y2="314"/>
   </g>
-
-  <rect x="876" y="88" width="348" height="74" rx="10" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="2" />
-  <text x="896" y="116" font-size="17" font-weight="600" fill="var(--avd-academy-color-accent)">menschlich überprüfbar</text>
+  <rect x="876" y="88" width="348" height="74" rx="10"
+        fill="var(--skr-color-accent-soft)" stroke="var(--skr-color-accent)" stroke-width="2"/>
+  <text x="896" y="116" font-size="17" font-weight="600" fill="var(--skr-color-accent)">menschlich überprüfbar</text>
   <text x="896" y="140" font-size="14" fill="currentColor">Review, Guidelines, Diskussion im Team</text>
   <text x="896" y="157" font-size="14" fill="currentColor">KI liest gegen <tspan font-weight="600">und entwirft mit</tspan></text>
-
-  <rect x="876" y="182" width="348" height="78" rx="10" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <rect x="876" y="182" width="348" height="78" rx="10"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="896" y="210" font-size="17" font-weight="600" fill="currentColor">Übertragungsprotokoll</text>
-  <text x="896" y="233" font-size="14" fill="var(--avd-academy-color-ink-muted)">Syntax <tspan font-weight="600">und</tspan> Semantik sind</text>
-  <text x="896" y="251" font-size="14" fill="var(--avd-academy-color-ink-muted)">festgeschrieben</text>
-
-  <rect x="876" y="278" width="348" height="78" rx="10" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <text x="896" y="233" font-size="14" fill="var(--skr-color-ink-muted)">Syntax <tspan font-weight="600">und</tspan> Semantik sind</text>
+  <text x="896" y="251" font-size="14" fill="var(--skr-color-ink-muted)">festgeschrieben</text>
+  <rect x="876" y="278" width="348" height="78" rx="10"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="896" y="306" font-size="17" font-weight="600" fill="currentColor">technisch überprüfbar</text>
-  <text x="896" y="329" font-size="14" fill="var(--avd-academy-color-ink-muted)">Validatoren prüfen die Nachricht,</text>
-  <text x="896" y="347" font-size="14" fill="var(--avd-academy-color-ink-muted)"><tspan font-weight="600">Generatoren</tspan> erzeugen Code daraus</text>
+  <text x="896" y="329" font-size="14" fill="var(--skr-color-ink-muted)">Validatoren prüfen die Nachricht,</text>
+  <text x="896" y="347" font-size="14" fill="var(--skr-color-ink-muted)"><tspan font-weight="600">Generatoren</tspan> erzeugen Code daraus</text>
 </svg>
 </figure>
-
 <blockquote>
-  <p><strong>Es gibt nichts zu installieren.</strong> REST ist kein Framework und keine
+<p><strong>Es gibt nichts zu installieren.</strong> REST ist kein Framework und keine
 Bibliothek – und „JSON über HTTP“ ist noch lange kein REST: Alles an eine
 einzige Adresse zu schicken ist syntaktisch tadellos und trotzdem meilenweit
 davon entfernt.</p>
 </blockquote>
-
 <h2 id="warum-ausgerechnet-http">Warum ausgerechnet HTTP?</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 400" role="img" aria-label="Kette aus Browser, Proxy, Cache, Gateway und Server. Darunter der Hinweis, dass alle Zwischenstationen HTTP bereits verstehen – aber nur, wenn die Semantik eingehalten wird.">
   <title>Zwischen Client und Server sitzen Stationen, die HTTP bereits verstehen</title>
   <defs>
     <marker id="pf-kette" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
   </defs>
   <g font-size="20" text-anchor="middle">
     <g stroke-width="2">
-      <rect x="20" y="70" width="200" height="90" rx="12" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" />
-      <rect x="270" y="70" width="200" height="90" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" />
-      <rect x="520" y="70" width="200" height="90" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" />
-      <rect x="770" y="70" width="200" height="90" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" />
-      <rect x="1020" y="70" width="200" height="90" rx="12" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" />
+      <rect x="20" y="70" width="200" height="90" rx="12" fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)"/>
+      <rect x="270" y="70" width="200" height="90" rx="12" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)"/>
+      <rect x="520" y="70" width="200" height="90" rx="12" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)"/>
+      <rect x="770" y="70" width="200" height="90" rx="12" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)"/>
+      <rect x="1020" y="70" width="200" height="90" rx="12" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)"/>
     </g>
     <g fill="currentColor">
       <text x="120" y="122">Browser</text>
@@ -495,156 +460,144 @@ davon entfernt.</p>
       <text x="1120" y="122">Server</text>
     </g>
   </g>
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="3" marker-end="url(#pf-kette)">
-    <line x1="220" y1="115" x2="266" y2="115" />
-    <line x1="470" y1="115" x2="516" y2="115" />
-    <line x1="720" y1="115" x2="766" y2="115" />
-    <line x1="970" y1="115" x2="1016" y2="115" />
+  <g stroke="var(--skr-color-accent)" stroke-width="3" marker-end="url(#pf-kette)">
+    <line x1="220" y1="115" x2="266" y2="115"/>
+    <line x1="470" y1="115" x2="516" y2="115"/>
+    <line x1="720" y1="115" x2="766" y2="115"/>
+    <line x1="970" y1="115" x2="1016" y2="115"/>
   </g>
   <text x="620" y="232" text-anchor="middle" font-size="21" fill="currentColor">Alle dazwischen verstehen HTTP schon – <tspan font-weight="600">ohne dass jemand sie anpasst.</tspan></text>
-  <rect x="200" y="268" width="840" height="104" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-danger)" stroke-width="2" />
-  <text x="620" y="304" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger-ink)">Aber nur, wenn man die <tspan font-weight="700">Semantik</tspan> einhält.</text>
+  <rect x="200" y="268" width="840" height="104" rx="12"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-danger)" stroke-width="2"/>
+  <text x="620" y="304" text-anchor="middle" font-size="20" fill="var(--skr-color-danger-ink)">Aber nur, wenn man die <tspan font-weight="700">Semantik</tspan> einhält.</text>
   <text x="620" y="334" text-anchor="middle" font-size="17" fill="currentColor">Die Syntax macht eine Nachricht <tspan font-style="italic">gültig</tspan>.</text>
   <text x="620" y="358" text-anchor="middle" font-size="17" fill="currentColor">Die Semantik entscheidet, ob sie das <tspan font-style="italic">Richtige</tspan> bedeutet.</text>
 </svg>
 </figure>
-
 <h2 id="zustandslos-jede-anfrage-steht-für-sich">Zustandslos: jede Anfrage steht für sich</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 470" role="img" aria-label="Ein Client sendet Anfragen an einen Lastverteiler, der sie an drei Instanzen desselben Service weiterreicht. Alle drei greifen auf dieselbe Datenquelle zu – das kann eine Datenbank sein, ein anderer Service oder etwas anderes. Eine durchgestrichene Markierung „Session“ zeigt, dass keine Instanz sich etwas merkt.">
   <title>Zustandslosigkeit: jede Instanz kann jede Anfrage beantworten</title>
   <defs>
     <marker id="pf-zl" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
     <marker id="pf-zl2" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-ink-muted)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-ink-muted)"/>
     </marker>
   </defs>
-
-  <rect x="20" y="196" width="170" height="88" rx="12" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <rect x="20" y="196" width="170" height="88" rx="12"
+        fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
   <text x="105" y="247" text-anchor="middle" font-size="20" fill="currentColor">Client</text>
-  <line x1="190" y1="240" x2="266" y2="240" stroke="var(--avd-academy-color-accent)" stroke-width="3" marker-end="url(#pf-zl)" />
-  <text x="228" y="227" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-accent)">Anfrage</text>
-
-  <rect x="270" y="196" width="190" height="88" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <line x1="190" y1="240" x2="266" y2="240" stroke="var(--skr-color-accent)" stroke-width="3" marker-end="url(#pf-zl)"/>
+  <text x="228" y="227" text-anchor="middle" font-size="14" fill="var(--skr-color-accent)">Anfrage</text>
+  <rect x="270" y="196" width="190" height="88" rx="12"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2"/>
   <text x="365" y="235" text-anchor="middle" font-size="18" fill="currentColor">Lastverteiler</text>
-  <text x="365" y="261" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">nimmt, wer frei ist</text>
-
-  <g stroke="var(--avd-academy-color-accent)" stroke-width="3" marker-end="url(#pf-zl)">
-    <line x1="460" y1="224" x2="576" y2="100" />
-    <line x1="460" y1="240" x2="576" y2="240" />
-    <line x1="460" y1="256" x2="576" y2="380" />
+  <text x="365" y="261" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">nimmt, wer frei ist</text>
+  <g stroke="var(--skr-color-accent)" stroke-width="3" marker-end="url(#pf-zl)">
+    <line x1="460" y1="224" x2="576" y2="100"/>
+    <line x1="460" y1="240" x2="576" y2="240"/>
+    <line x1="460" y1="256" x2="576" y2="380"/>
   </g>
-  <g fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2">
-    <rect x="580" y="62" width="220" height="76" rx="10" />
-    <rect x="580" y="202" width="220" height="76" rx="10" />
-    <rect x="580" y="342" width="220" height="76" rx="10" />
+  <g fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2">
+    <rect x="580" y="62" width="220" height="76" rx="10"/>
+    <rect x="580" y="202" width="220" height="76" rx="10"/>
+    <rect x="580" y="342" width="220" height="76" rx="10"/>
   </g>
   <g font-size="19" text-anchor="middle" fill="currentColor">
     <text x="690" y="107">Instanz A</text>
     <text x="690" y="247">Instanz B</text>
     <text x="690" y="387">Instanz C</text>
   </g>
-
   <!-- Alle drei greifen auf DIESELBE Datenquelle zu -->
-  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="2.5" marker-end="url(#pf-zl2)">
-    <line x1="800" y1="100" x2="870" y2="230" />
-    <line x1="800" y1="240" x2="870" y2="240" />
-    <line x1="800" y1="380" x2="870" y2="250" />
+  <g stroke="var(--skr-color-ink-muted)" stroke-width="2.5" marker-end="url(#pf-zl2)">
+    <line x1="800" y1="100" x2="870" y2="230"/>
+    <line x1="800" y1="240" x2="870" y2="240"/>
+    <line x1="800" y1="380" x2="870" y2="250"/>
   </g>
-
-  <rect x="878" y="34" width="344" height="398" rx="14" fill="none" stroke="var(--avd-academy-tone-4)" stroke-width="2.5" />
+  <rect x="878" y="34" width="344" height="398" rx="14"
+        fill="none" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2.5"/>
   <text x="1050" y="62" text-anchor="middle" font-size="20" font-weight="600" fill="currentColor">Datenquelle</text>
-  <text x="1050" y="84" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">was der Service gerade braucht</text>
-
-  <g fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2">
-    <path d="M958 114 v42 a92 15 0 0 0 184 0 v-42 z" />
-    <ellipse cx="1050" cy="114" rx="92" ry="15" />
+  <text x="1050" y="84" text-anchor="middle" font-size="13" fill="var(--skr-color-ink-muted)">was der Service gerade braucht</text>
+  <g fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2">
+    <path d="M958 114 v42 a92 15 0 0 0 184 0 v-42 z"/>
+    <ellipse cx="1050" cy="114" rx="92" ry="15"/>
   </g>
   <text x="1050" y="150" text-anchor="middle" font-size="17" fill="currentColor">Datenbank</text>
-
-  <text x="1050" y="195" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">oder</text>
-
-  <rect x="940" y="208" width="220" height="68" rx="10" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <text x="1050" y="195" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">oder</text>
+  <rect x="940" y="208" width="220" height="68" rx="10"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="1050" y="236" text-anchor="middle" font-size="17" fill="currentColor">anderer Service</text>
-  <text x="1050" y="260" text-anchor="middle" font-size="15" font-weight="600" fill="var(--avd-academy-color-accent)">s2s</text>
-
-  <text x="1050" y="302" text-anchor="middle" font-size="14" fill="var(--avd-academy-color-ink-muted)">oder</text>
-
-  <rect x="940" y="316" width="220" height="76" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" stroke-dasharray="8 5" />
+  <text x="1050" y="260" text-anchor="middle" font-size="15" font-weight="600" fill="var(--skr-color-accent)">s2s</text>
+  <text x="1050" y="302" text-anchor="middle" font-size="14" fill="var(--skr-color-ink-muted)">oder</text>
+  <rect x="940" y="316" width="220" height="76" rx="10"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-ink-muted)" stroke-width="2" stroke-dasharray="8 5"/>
   <text x="1050" y="344" text-anchor="middle" font-size="17" fill="currentColor">etwas anderes</text>
-  <text x="1050" y="366" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">Cache, Dateisystem,</text>
-  <text x="1050" y="382" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">Fremdsystem …</text>
-
+  <text x="1050" y="366" text-anchor="middle" font-size="13" fill="var(--skr-color-ink-muted)">Cache, Dateisystem,</text>
+  <text x="1050" y="382" text-anchor="middle" font-size="13" fill="var(--skr-color-ink-muted)">Fremdsystem …</text>
   <!-- Was es NICHT gibt -->
   <g>
-    <rect x="270" y="318" width="190" height="56" rx="10" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-danger)" stroke-width="2" />
-    <text x="365" y="354" text-anchor="middle" font-size="20" fill="var(--avd-academy-color-danger-ink)">Session</text>
-    <line x1="274" y1="370" x2="456" y2="322" stroke="var(--avd-academy-color-danger)" stroke-width="4" stroke-linecap="round" />
+    <rect x="270" y="318" width="190" height="56" rx="10"
+          fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-danger)" stroke-width="2"/>
+    <text x="365" y="354" text-anchor="middle" font-size="20" fill="var(--skr-color-danger-ink)">Session</text>
+    <line x1="274" y1="370" x2="456" y2="322" stroke="var(--skr-color-danger)" stroke-width="4" stroke-linecap="round"/>
   </g>
-  <text x="365" y="400" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">keine Sitzung im Speicher</text>
-  <text x="20" y="432" font-size="15" fill="var(--avd-academy-color-ink-muted)">Anfrage 1 → Instanz A</text>
-  <text x="20" y="456" font-size="15" fill="var(--avd-academy-color-ink-muted)">Anfrage 2 → Instanz C</text>
+  <text x="365" y="400" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">keine Sitzung im Speicher</text>
+  <text x="20" y="432" font-size="15" fill="var(--skr-color-ink-muted)">Anfrage 1 → Instanz A</text>
+  <text x="20" y="456" font-size="15" fill="var(--skr-color-ink-muted)">Anfrage 2 → Instanz C</text>
 </svg>
 </figure>
-
 <p>Ein Server hat genau <strong>zwei</strong> Quellen: die <strong>Anfrage</strong> und eine <strong>Datenquelle</strong> –
 Datenbank, anderer Service oder etwas ganz anderes. <em>Gemeint ist die <strong>Instanz</strong> –
 nicht zu verwechseln mit „HTTP ist zustandslos“, das ist das Protokoll.</em></p>
-
 <blockquote>
-  <p><strong>Was aus keiner Datenquelle abrufbar ist, muss mit <u>jeder</u> Anfrage vom
+<p><strong>Was aus keiner Datenquelle abrufbar ist, muss mit <u>jeder</u> Anfrage vom
 Client mitkommen – und ist damit Teil der Schnittstelle.</strong></p>
 </blockquote>
-
 <h2 id="wer-rest-lernen-will-muss-http-verstehen">Wer REST lernen will, muss HTTP verstehen</h2>
-
 <figure class="bild">
 <svg viewBox="0 0 1240 300" role="img" aria-label="Die beiden Schichten REST und HTTP erneut, mit einem Pfeil auf die HTTP-Schicht und der Beschriftung „hier fangen wir an“.">
   <title>Der Kurs beginnt eine Ebene unter REST – bei HTTP</title>
   <defs>
     <marker id="pf-ende" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--avd-academy-color-accent)" />
+      <path d="M0,0 L9,3.5 L0,7 z" fill="var(--skr-color-accent)"/>
     </marker>
   </defs>
-  <rect x="330" y="26" width="580" height="84" rx="12" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-border)" stroke-width="2" stroke-dasharray="9 6" />
-  <text x="620" y="64" text-anchor="middle" font-size="30" font-weight="700" fill="var(--avd-academy-color-ink-muted)">REST</text>
-  <text x="620" y="92" text-anchor="middle" font-size="15" fill="var(--avd-academy-color-ink-muted)">die Regeln dafür kommen später</text>
-
-  <rect x="250" y="140" width="740" height="110" rx="12" fill="var(--avd-academy-fill-1-bg)" stroke="var(--avd-academy-color-accent)" stroke-width="4" />
+  <rect x="330" y="26" width="580" height="84" rx="12"
+        fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-border)" stroke-width="2" stroke-dasharray="9 6"/>
+  <text x="620" y="64" text-anchor="middle" font-size="30" font-weight="700" fill="var(--skr-color-ink-muted)">REST</text>
+  <text x="620" y="92" text-anchor="middle" font-size="15" fill="var(--skr-color-ink-muted)">die Regeln dafür kommen später</text>
+  <rect x="250" y="140" width="740" height="110" rx="12"
+        fill="var(--skr-fill-1-bg)" stroke="var(--skr-color-accent)" stroke-width="4"/>
   <text x="620" y="188" text-anchor="middle" font-size="36" font-weight="700" fill="currentColor">HTTP</text>
   <text x="620" y="220" text-anchor="middle" font-size="17" fill="currentColor">Nachrichten, Header, Body, Statuscodes</text>
-
-  <line x1="140" y1="195" x2="242" y2="195" stroke="var(--avd-academy-color-accent)" stroke-width="4" marker-end="url(#pf-ende)" />
-  <text x="140" y="176" font-size="19" font-weight="600" fill="var(--avd-academy-color-accent)" text-anchor="end">hier</text>
-  <text x="140" y="200" font-size="19" font-weight="600" fill="var(--avd-academy-color-accent)" text-anchor="end">fangen</text>
-  <text x="140" y="224" font-size="19" font-weight="600" fill="var(--avd-academy-color-accent)" text-anchor="end">wir an</text>
+  <line x1="140" y1="195" x2="242" y2="195" stroke="var(--skr-color-accent)" stroke-width="4" marker-end="url(#pf-ende)"/>
+  <text x="140" y="176" font-size="19" font-weight="600" fill="var(--skr-color-accent)" text-anchor="end">hier</text>
+  <text x="140" y="200" font-size="19" font-weight="600" fill="var(--skr-color-accent)" text-anchor="end">fangen</text>
+  <text x="140" y="224" font-size="19" font-weight="600" fill="var(--skr-color-accent)" text-anchor="end">wir an</text>
 </svg>
 </figure>
-
 <p>REST ist eine Haltung gegenüber HTTP. Wer die Haltung übernehmen will, ohne das
 Protokoll zu kennen, kann die Regeln nur auswendig lernen – und merkt nie, wann
 eine davon nicht passt.</p>
-
 <p><strong>Deshalb geht es jetzt eine Ebene tiefer: Was steht eigentlich genau drin, wenn
 eine Nachricht über so eine Linie geht?</strong></p>
 
   </main>
-
-  <nav class="avd-academy-present__controls" aria-label="Foliennavigation" hidden data-avd-academy-present-controls>
-    <button type="button" class="avd-academy-present__nav" data-avd-academy-present-prev
-            title="Vorherige Folie (←)" aria-label="Vorherige Folie">‹</button>
-    <button type="button" class="avd-academy-present__nav" data-avd-academy-present-next
-            title="Nächste Folie (→)" aria-label="Nächste Folie">›</button>
+  <nav class="skr-present__controls" aria-label="Foliennavigation" hidden data-skr-present-controls>
+    <button type="button" class="skr-present__nav" data-skr-present-prev
+            title="Vorherige Folie (←)" aria-label="Vorherige Folie"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button type="button" class="skr-present__nav" data-skr-present-next
+            title="Nächste Folie (→)" aria-label="Nächste Folie"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>
   </nav>
-
-  <div class="avd-academy-present__progress" aria-hidden="true">
-    <div class="avd-academy-present__progress-fill" data-avd-academy-present-progress></div>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
+  <div class="skr-present__progress" aria-hidden="true">
+    <div class="skr-present__progress-fill" data-skr-present-progress></div>
   </div>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
+
 </body>
 </html>

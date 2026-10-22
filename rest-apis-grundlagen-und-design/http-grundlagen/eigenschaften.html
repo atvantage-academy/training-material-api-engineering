@@ -1,107 +1,102 @@
-<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions reading-progress">
+<!DOCTYPE html>
+<html lang="de" data-skr-effects="page-transitions reading-progress">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>HTTP: Eigenschaften und Nachrichtenaufbau · ATVANTAGE Academy</title><meta name="description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>HTTP: Eigenschaften und Nachrichtenaufbau · ATVANTAGE Academy</title>
+<meta name="description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="HTTP: Eigenschaften und Nachrichtenaufbau">
 <meta property="og:description" content="Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.html","title":"HTTP: Eigenschaften und Nachrichtenaufbau","layout":"visualization","description":"Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" href="../../skriptorium/guide.css?v=d99cc970">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Was HTTP ausmacht, wie eine Nachricht aufgebaut ist – und wo Du beides im eigenen Browser live nachsehen kannst.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.css","src":"eigenschaften.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.js","src":"eigenschaften.js","type":"script"}],"pageId":null,"runtimeFragments":["^/(\\?.*)?$","^/[A-Za-z0-9_-]+(\\?.*)?$"],"siteIndex":"/skriptorium/site.json","title":"HTTP: Eigenschaften und Nachrichtenaufbau","topics":null,"url":"/rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
-<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide avd-academy-guide--viz">
-<div class="avd-academy-reading-progress" aria-hidden="true"></div>
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags">
-      </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-print
-                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
-      </div>
-    </div><h1 id="avd-academy-page-title">HTTP: Eigenschaften und Nachrichtenaufbau</h1>
-  </section><div class="avd-academy-guide-layout">
-    <main class="avd-academy-guide-main" id="avd-academy-content">
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
+  <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+  <link rel="stylesheet" href="../../skriptorium/page-transitions.css?v=716872f0">
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.css?v=3f0fc2c4">
+<script src="../../rest-apis-grundlagen-und-design/http-grundlagen/eigenschaften.js?v=05604a72" defer></script>
+
+</head><body class="skr-guide skr-guide--sidebar-empty" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization" data-skr-lang="de" data-skr-audience="learner">
+<div class="skr-reading-progress" aria-hidden="true"></div>
+  <a class="skr-skip-link" href="#skr-content">Zum Inhalt springen</a><section class="skr-guide-hero skr-guide-hero--slim"
+         aria-labelledby="skr-page-title">
+  <div class="skr-guide-hero__meta">
+    <div class="skr-guide-hero__tags">
+    </div>
+    <div class="skr-guide-hero__actions">
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+
+    </div>
+  </div><h1 id="skr-page-title">HTTP: Eigenschaften und Nachrichtenaufbau</h1>
+</section>
+
+  <div class="skr-guide-layout">
+    <main class="skr-guide-main" id="skr-content">
 <div class="hg">
-
 <div class="hg__start">
 <div class="hg__start__bild">
 <svg viewBox="0 0 420 250" role="img" aria-label="Ein Browserfenster mit Adresszeile; darunter ist der Reiter „Netzwerk“ geöffnet und zeigt eine Liste einzelner HTTP-Nachrichten, eine davon hervorgehoben.">
   <title>Die Entwicklerwerkzeuge zeigen jede einzelne HTTP-Nachricht</title>
-  <rect x="8" y="8" width="404" height="234" rx="10" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
-  <rect x="8" y="8" width="404" height="30" rx="10" fill="var(--avd-academy-color-bg-subtle)" />
-  <rect x="8" y="28" width="404" height="10" fill="var(--avd-academy-color-bg-subtle)" />
-  <g fill="var(--avd-academy-color-ink-muted)"><circle cx="26" cy="23" r="4" /><circle cx="40" cy="23" r="4" /><circle cx="54" cy="23" r="4" /></g>
-  <rect x="70" y="14" width="330" height="18" rx="9" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" />
-  <text x="80" y="27" font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink-muted)">shop.example.com</text>
-
-  <rect x="8" y="46" width="404" height="52" fill="var(--avd-academy-fill-3-bg)" opacity="0.5" />
-  <text x="210" y="77" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-ink-muted)">die Seite</text>
-
-  <line x1="8" y1="106" x2="412" y2="106" stroke="var(--avd-academy-color-border)" stroke-width="2" />
-  <text x="22" y="124" font-size="12" font-weight="600" fill="var(--avd-academy-color-accent)">Netzwerk</text>
-  <line x1="18" y1="130" x2="86" y2="130" stroke="var(--avd-academy-color-accent)" stroke-width="2" />
-
-  <g font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink)">
-    <rect x="18" y="140" width="384" height="20" rx="4" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="1.5" />
+  <rect x="8" y="8" width="404" height="234" rx="10" fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="2"/>
+  <rect x="8" y="8" width="404" height="30" rx="10" fill="var(--skr-color-bg-subtle)"/>
+  <rect x="8" y="28" width="404" height="10" fill="var(--skr-color-bg-subtle)"/>
+  <g fill="var(--skr-color-ink-muted)"><circle cx="26" cy="23" r="4"/><circle cx="40" cy="23" r="4"/><circle cx="54" cy="23" r="4"/></g>
+  <rect x="70" y="14" width="330" height="18" rx="9" fill="var(--skr-color-bg)" stroke="var(--skr-color-border)"/>
+  <text x="80" y="27" font-size="10" font-family="monospace" fill="var(--skr-color-ink-muted)">shop.example.com</text>
+  <rect x="8" y="46" width="404" height="52" fill="var(--skr-fill-3-bg)" opacity="0.5"/>
+  <text x="210" y="77" text-anchor="middle" font-size="13" fill="var(--skr-color-ink-muted)">die Seite</text>
+  <line x1="8" y1="106" x2="412" y2="106" stroke="var(--skr-color-border)" stroke-width="2"/>
+  <text x="22" y="124" font-size="12" font-weight="600" fill="var(--skr-color-accent)">Netzwerk</text>
+  <line x1="18" y1="130" x2="86" y2="130" stroke="var(--skr-color-accent)" stroke-width="2"/>
+  <g font-size="10" font-family="monospace" fill="var(--skr-color-ink)">
+    <rect x="18" y="140" width="384" height="20" rx="4" fill="var(--skr-color-accent-soft)" stroke="var(--skr-color-accent)" stroke-width="1.5"/>
     <text x="26" y="154">GET  /produkte          200  text/html</text>
     <text x="26" y="176">GET  /style.css         200  text/css</text>
     <text x="26" y="196">GET  /logo.svg          200  image/svg</text>
@@ -111,120 +106,100 @@
 </svg>
 </div>
 <div class="hg__start__text">
-      <h3 id="mach-zuerst-die-entwicklerwerkzeuge-auf">Mach zuerst die Entwicklerwerkzeuge auf</h3>
-
-      <p>Alles auf dieser Seite kannst Du dort <strong>in Deinem eigenen Browser</strong> sehen – an
+<h3 id="mach-zuerst-die-entwicklerwerkzeuge-auf">Mach zuerst die Entwicklerwerkzeuge auf</h3>
+<p>Alles auf dieser Seite kannst Du dort <strong>in Deinem eigenen Browser</strong> sehen – an
 jeder Website, sofort.</p>
-
-      <ol>
-        <li><code>F12</code> drücken (macOS: <code>⌘ ⌥ I</code>)</li>
-        <li>Reiter <strong>Netzwerk</strong> / <strong>Network</strong></li>
-        <li>Seite <strong>neu laden</strong></li>
-      </ol>
-
-      <p>Jede Zeile ist <strong>eine</strong> Nachricht und ihre Antwort.</p>
-    </div>
+<ol>
+<li><code>F12</code> drücken (macOS: <code>⌘ ⌥ I</code>)</li>
+<li>Reiter <strong>Netzwerk</strong> / <strong>Network</strong></li>
+<li>Seite <strong>neu laden</strong>
+Jede Zeile ist <strong>eine</strong> Nachricht und ihre Antwort.</li>
+</ol>
 </div>
-
+</div>
 <h2 class="hg__h2">Vier Eigenschaften, aus denen alles Weitere folgt</h2>
-
 <p class="hg__lead">Klick eine Karte an – darunter steht, was daraus folgt.</p>
-
-<div class="hg__karten" data-hg-karten="">
-
+<div class="hg__karten" data-hg-karten>
 <div class="hg__karte">
 <svg viewBox="0 0 400 200" role="img" aria-label="Links der Browser, rechts der Server, beide mit lesbaren Textzeilen; dazwischen ein Tunnel mit Schloss, in dem die Zeichen unleserlich sind.">
   <title>Textbasiert: an beiden Enden lesbar, auf dem Weg verschlüsselt</title>
   <g stroke-width="2">
-    <rect x="6" y="46" width="104" height="108" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" />
-    <rect x="290" y="46" width="104" height="108" rx="10" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" />
+    <rect x="6" y="46" width="104" height="108" rx="10" fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)"/>
+    <rect x="290" y="46" width="104" height="108" rx="10" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)"/>
   </g>
   <g font-size="9" font-family="monospace" fill="currentColor">
     <text x="18" y="76">GET /produkte</text><text x="18" y="92">Host: shop…</text><text x="18" y="108">Accept-…</text>
     <text x="302" y="76">200 OK</text><text x="302" y="92">Content-Ty…</text><text x="302" y="108">&lt;html&gt;…</text>
   </g>
-  <text x="58" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">lesbar</text>
-  <text x="342" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">lesbar</text>
-
-  <rect x="118" y="62" width="164" height="76" rx="38" fill="var(--avd-academy-color-bg-subtle)" stroke="var(--avd-academy-color-success)" stroke-width="2" />
-  <text x="200" y="88" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-success)">🔒 TLS</text>
-  <text x="200" y="112" text-anchor="middle" font-size="10" font-family="monospace" fill="var(--avd-academy-color-ink-muted)">x9#kQ2·mZ7</text>
-  <text x="200" y="172" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">verschlüsselt</text>
-  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="2">
-    <line x1="110" y1="100" x2="116" y2="100" /><line x1="284" y1="100" x2="290" y2="100" />
+  <text x="58" y="172" text-anchor="middle" font-size="11" fill="var(--skr-color-ink-muted)">lesbar</text>
+  <text x="342" y="172" text-anchor="middle" font-size="11" fill="var(--skr-color-ink-muted)">lesbar</text>
+  <rect x="118" y="62" width="164" height="76" rx="38" fill="var(--skr-color-bg-subtle)" stroke="var(--skr-color-success)" stroke-width="2"/>
+  <text x="200" y="88" text-anchor="middle" font-size="13" font-weight="600" fill="var(--skr-color-success)">🔒 TLS</text>
+  <text x="200" y="112" text-anchor="middle" font-size="10" font-family="monospace" fill="var(--skr-color-ink-muted)">x9#kQ2·mZ7</text>
+  <text x="200" y="172" text-anchor="middle" font-size="11" fill="var(--skr-color-ink-muted)">verschlüsselt</text>
+  <g stroke="var(--skr-color-ink-muted)" stroke-width="2">
+    <line x1="110" y1="100" x2="116" y2="100"/><line x1="284" y1="100" x2="290" y2="100"/>
   </g>
 </svg>
 <h3>Textbasiert</h3>
 <p class="hg__karte__kurz">Eine HTTP-Nachricht ist lesbarer Text – deshalb kannst Du sie mitlesen.</p>
 <button type="button" class="hg__mehr" data-hg-mehr="textbasiert" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
-        <p>Kein Binärformat, kein Werkzeugzwang: Du kannst eine Nachricht in ein Ticket
-kopieren und von Hand nachbauen. Fehlersuche ist hier billig.</p>
-
-        <p><strong>Und HTTPS?</strong> Dasselbe HTTP, nur durch <strong>TLS</strong> verpackt. Verschlüsselt wird der
+<p>Kein Binärformat, kein Werkzeugzwang: Du kannst eine Nachricht in ein Ticket
+kopieren und von Hand nachbauen. Fehlersuche ist hier billig.
+<strong>Und HTTPS?</strong> Dasselbe HTTP, nur durch <strong>TLS</strong> verpackt. Verschlüsselt wird der
 <em>Transportweg</em> – an beiden Enden liegt wieder Klartext. Genau deshalb zeigen die
 Entwicklerwerkzeuge die Nachricht lesbar an: Sie sitzen an einem der Enden, nicht
 auf der Leitung.</p>
-      </div>
 </div>
-
+</div>
 <div class="hg__karte">
 <svg viewBox="0 0 400 252" role="img" aria-label="Browser und Server, dazwischen zwei Anfrage-Antwort-Paare. Auf der Leitung zwischen den Paaren steht ein durchgestrichenes Gedächtnis; der Server selbst behält seine Datenquelle.">
   <title>Zustandslos: die Leitung merkt sich nichts – der Server darf es</title>
   <defs>
-    <marker id="pf-zs-h" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--avd-academy-color-accent)" /></marker>
-    <marker id="pf-zs-r" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--avd-academy-color-ink-muted)" /></marker>
+    <marker id="pf-zs-h" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--skr-color-accent)"/></marker>
+    <marker id="pf-zs-r" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="var(--skr-color-ink-muted)"/></marker>
   </defs>
-
-  <rect x="4" y="18" width="74" height="198" rx="9" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <rect x="4" y="18" width="74" height="198" rx="9" fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
   <text x="41" y="120" text-anchor="middle" font-size="11" fill="currentColor">Browser</text>
-
-  <rect x="316" y="18" width="80" height="198" rx="9" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <rect x="316" y="18" width="80" height="198" rx="9" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
   <text x="356" y="46" text-anchor="middle" font-size="11" fill="currentColor">Server</text>
-  <g fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="1.5">
-    <path d="M336 96 v26 a20 7 0 0 0 40 0 v-26 z" /><ellipse cx="356" cy="96" rx="20" ry="7" />
+  <g fill="var(--skr-color-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="1.5">
+    <path d="M336 96 v26 a20 7 0 0 0 40 0 v-26 z"/><ellipse cx="356" cy="96" rx="20" ry="7"/>
   </g>
-  <text x="356" y="152" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">darf sich</text>
-  <text x="356" y="164" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">etwas merken</text>
-
+  <text x="356" y="152" text-anchor="middle" font-size="9" fill="var(--skr-color-ink-muted)">darf sich</text>
+  <text x="356" y="164" text-anchor="middle" font-size="9" fill="var(--skr-color-ink-muted)">etwas merken</text>
   <text x="196" y="24" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor">Anfrage · id=abc123</text>
-  <line x1="82" y1="34" x2="310" y2="34" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)" />
-  <line x1="310" y1="56" x2="82" y2="56" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)" />
-  <text x="196" y="70" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">Antwort</text>
-
+  <line x1="82" y1="34" x2="310" y2="34" stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)"/>
+  <line x1="310" y1="56" x2="82" y2="56" stroke="var(--skr-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)"/>
+  <text x="196" y="70" text-anchor="middle" font-size="9" fill="var(--skr-color-ink-muted)">Antwort</text>
   <g>
-    <rect x="104" y="94" width="186" height="50" rx="8" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-danger)" stroke-width="1.5" stroke-dasharray="5 4" />
-    <text x="197" y="114" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-danger-ink)">Gedächtnis der Leitung</text>
-    <text x="197" y="130" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-danger-ink)">gibt es nicht</text>
-    <line x1="108" y1="140" x2="286" y2="98" stroke="var(--avd-academy-color-danger)" stroke-width="2.5" stroke-linecap="round" />
+    <rect x="104" y="94" width="186" height="50" rx="8" fill="var(--skr-color-bg)" stroke="var(--skr-color-danger)" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="197" y="114" text-anchor="middle" font-size="11" fill="var(--skr-color-danger-ink)">Gedächtnis der Leitung</text>
+    <text x="197" y="130" text-anchor="middle" font-size="10" fill="var(--skr-color-danger-ink)">gibt es nicht</text>
+    <line x1="108" y1="140" x2="286" y2="98" stroke="var(--skr-color-danger)" stroke-width="2.5" stroke-linecap="round"/>
   </g>
-
   <text x="196" y="172" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor">Anfrage · id=abc123</text>
-  <line x1="82" y1="182" x2="310" y2="182" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)" />
-  <line x1="310" y1="204" x2="82" y2="204" stroke="var(--avd-academy-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)" />
-  <text x="196" y="218" text-anchor="middle" font-size="9" fill="var(--avd-academy-color-ink-muted)">Antwort</text>
-
+  <line x1="82" y1="182" x2="310" y2="182" stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#pf-zs-h)"/>
+  <line x1="310" y1="204" x2="82" y2="204" stroke="var(--skr-color-ink-muted)" stroke-width="2" marker-end="url(#pf-zs-r)"/>
+  <text x="196" y="218" text-anchor="middle" font-size="9" fill="var(--skr-color-ink-muted)">Antwort</text>
   <text x="200" y="244" text-anchor="middle" font-size="11" fill="currentColor">Die Kennung muss <tspan font-weight="600">jedes Mal mitkommen</tspan>.</text>
 </svg>
 <h3>Zustandslos</h3>
 <p class="hg__karte__kurz">Nicht der Server vergisst – die <em>Leitung</em> trägt keine Erinnerung von einem Nachrichtenpaar zum nächsten.</p>
 <button type="button" class="hg__mehr" data-hg-mehr="zustandslos" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
-        <p>HTTP verbindet zwei Anfrage-Antwort-Paare <strong>nicht</strong>. Für das Protokoll ist die
+<p>HTTP verbindet zwei Anfrage-Antwort-Paare <strong>nicht</strong>. Für das Protokoll ist die
 vorherige Nachricht nicht vorhanden – also muss <strong>jede Anfrage aus sich heraus
-verständlich sein</strong> und alles mitbringen, was zu ihrer Bearbeitung nötig ist.</p>
-
-        <p><strong>Der Server darf sich sehr wohl etwas merken</strong> – in einer Datenbank, einem Cache,
+verständlich sein</strong> und alles mitbringen, was zu ihrer Bearbeitung nötig ist.
+<strong>Der Server darf sich sehr wohl etwas merken</strong> – in einer Datenbank, einem Cache,
 einem Sitzungsspeicher. Er erfährt nur nicht von allein, zu wem eine Anfrage
-gehört: Das muss in der Anfrage stehen.</p>
-
-        <p><strong>Deshalb gibt es Cookies.</strong> Der Server schickt eine Kennung mit, der Browser gibt
+gehört: Das muss in der Anfrage stehen.
+<strong>Deshalb gibt es Cookies.</strong> Der Server schickt eine Kennung mit, der Browser gibt
 sie bei <em>jeder</em> weiteren Anfrage zurück. So entsteht der Zusammenhang <strong>auf</strong> dem
 Protokoll, nicht in ihm.</p>
-
-        <p class="hg__poplink"><button type="button" class="hg__pop" data-hg-pop="zustandslos">Zwei Dinge, die beide „zustandslos“ heißen</button></p>
-      </div>
-
+<p class="hg__poplink"><button type="button" class="hg__pop" data-hg-pop="zustandslos">Zwei Dinge, die beide „zustandslos“ heißen</button></p>
+</div>
 <dialog class="hg__dialog" id="hg-pop-zustandslos" aria-labelledby="hg-pop-zustandslos-t">
 <h4 id="hg-pop-zustandslos-t">Zwei Dinge, die beide „zustandslos“ heißen</h4>
 <p><em>HTTP ist zustandslos</em> heißt: <strong>die Leitung</strong> trägt nichts von
@@ -233,141 +208,120 @@ wie Cookies es tun.</p>
 <p><em>Ein Service ist zustandslos</em> ist dagegen eine <strong>Entwurfsentscheidung</strong>:
 Die Instanz hält nichts im Speicher, damit jede Instanz jede Anfrage beantworten kann.</p>
 <p><strong>Das Protokoll ist es immer. Der Service ist es, wenn man ihn so baut.</strong></p>
-<button type="button" class="hg__dialog__zu" data-hg-pop-zu="">Schließen</button>
+<button type="button" class="hg__dialog__zu" data-hg-pop-zu>Schließen</button>
 </dialog>
 </div>
-
 <div class="hg__karte">
 <svg viewBox="0 0 400 200" role="img" aria-label="Browser und Server, dazwischen ein Pfeil hin und ein Pfeil zurück als Paar; darunter ein durchgestrichener Pfeil vom Server zum Browser.">
   <title>Request–Response: immer paarweise, nie vom Server aus</title>
   <defs>
-    <marker id="pf-rr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker>
-    <marker id="pf-rr2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-danger)" /></marker>
+    <marker id="pf-rr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--skr-color-accent)"/></marker>
+    <marker id="pf-rr2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--skr-color-danger)"/></marker>
   </defs>
   <g stroke-width="2">
-    <rect x="6" y="36" width="110" height="56" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" />
-    <rect x="284" y="36" width="110" height="56" rx="10" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" />
+    <rect x="6" y="36" width="110" height="56" rx="10" fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)"/>
+    <rect x="284" y="36" width="110" height="56" rx="10" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)"/>
   </g>
   <text x="61" y="70" text-anchor="middle" font-size="12" fill="currentColor">Browser</text>
   <text x="339" y="70" text-anchor="middle" font-size="12" fill="currentColor">Server</text>
-  <line x1="120" y1="54" x2="280" y2="54" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-rr)" />
-  <text x="200" y="46" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-accent)">Anfrage</text>
-  <line x1="280" y1="78" x2="120" y2="78" stroke="var(--avd-academy-color-accent)" stroke-width="2" marker-end="url(#pf-rr)" />
-  <text x="200" y="94" text-anchor="middle" font-size="10" fill="var(--avd-academy-color-accent)">Antwort</text>
-  <path d="M126 40 h-8 v52 h8" fill="none" stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" />
+  <line x1="120" y1="54" x2="280" y2="54" stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#pf-rr)"/>
+  <text x="200" y="46" text-anchor="middle" font-size="10" fill="var(--skr-color-accent)">Anfrage</text>
+  <line x1="280" y1="78" x2="120" y2="78" stroke="var(--skr-color-accent)" stroke-width="2" marker-end="url(#pf-rr)"/>
+  <text x="200" y="94" text-anchor="middle" font-size="10" fill="var(--skr-color-accent)">Antwort</text>
+  <path d="M126 40 h-8 v52 h8" fill="none" stroke="var(--skr-color-ink-muted)" stroke-width="1.5"/>
   <text x="200" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor">immer ein Paar</text>
-
-  <line x1="280" y1="154" x2="120" y2="154" stroke="var(--avd-academy-color-danger)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#pf-rr2)" />
-  <line x1="184" y1="168" x2="216" y2="140" stroke="var(--avd-academy-color-danger)" stroke-width="3" stroke-linecap="round" />
-  <text x="200" y="186" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-danger-ink)">nie von sich aus</text>
+  <line x1="280" y1="154" x2="120" y2="154" stroke="var(--skr-color-danger)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#pf-rr2)"/>
+  <line x1="184" y1="168" x2="216" y2="140" stroke="var(--skr-color-danger)" stroke-width="3" stroke-linecap="round"/>
+  <text x="200" y="186" text-anchor="middle" font-size="11" fill="var(--skr-color-danger-ink)">nie von sich aus</text>
 </svg>
 <h3>Request – Response</h3>
 <p class="hg__karte__kurz">Genau zwei Arten von Nachrichten, und sie kommen immer paarweise.</p>
 <button type="button" class="hg__mehr" data-hg-mehr="request-response" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
-        <p>Auf jede Anfrage folgt genau eine Antwort. Der Server spricht <strong>nie von sich aus</strong>.</p>
-
-        <p>Wer das braucht – eine Meldung ohne vorherige Frage –, braucht etwas anderes
+<p>Auf jede Anfrage folgt genau eine Antwort. Der Server spricht <strong>nie von sich aus</strong>.
+Wer das braucht – eine Meldung ohne vorherige Frage –, braucht etwas anderes
 (WebSockets, Server-Sent Events). Für alles in diesem Kurs gilt: erst fragen, dann
 antworten.</p>
-      </div>
 </div>
-
+</div>
 <div class="hg__karte">
 <svg viewBox="0 0 400 230" role="img" aria-label="Zwei Antworten des Servers untereinander: oben eine Weiterleitung 302 Found mit hervorgehobenem Location-Header, unten eine 200-Antwort mit einem hervorgehobenen Link im HTML-Body. Von beiden führt ein gestrichelter Pfeil nach rechts auf die nächste Anfrage des Clients, die genau diese Adresse aufruft.">
   <title>Hyper: die Antwort trägt den nächsten Schritt mit – im Header oder im Body</title>
   <defs>
-    <marker id="pf-hy" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--avd-academy-color-accent)" /></marker>
+    <marker id="pf-hy" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="var(--skr-color-accent)"/></marker>
   </defs>
-
-  <text x="6" y="14" font-size="10" fill="var(--avd-academy-color-ink-muted)">im Header</text>
-  <rect x="6" y="20" width="196" height="56" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
-  <rect x="12" y="52" width="184" height="14" rx="3" fill="var(--avd-academy-color-accent-soft)" />
+  <text x="6" y="14" font-size="10" fill="var(--skr-color-ink-muted)">im Header</text>
+  <rect x="6" y="20" width="196" height="56" rx="8" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
+  <rect x="12" y="52" width="184" height="14" rx="3" fill="var(--skr-color-accent-soft)"/>
   <g font-size="9" font-family="monospace" fill="currentColor">
     <text x="18" y="42">302 Found</text>
     <text x="18" y="62">Location: /produkte/12345</text>
   </g>
-
-  <text x="6" y="96" font-size="10" fill="var(--avd-academy-color-ink-muted)">im Body</text>
-  <rect x="6" y="102" width="196" height="74" rx="8" fill="var(--avd-academy-fill-4-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
-  <rect x="12" y="152" width="184" height="14" rx="3" fill="var(--avd-academy-color-accent-soft)" />
+  <text x="6" y="96" font-size="10" fill="var(--skr-color-ink-muted)">im Body</text>
+  <rect x="6" y="102" width="196" height="74" rx="8" fill="var(--skr-fill-4-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
+  <rect x="12" y="152" width="184" height="14" rx="3" fill="var(--skr-color-accent-soft)"/>
   <g font-size="9" font-family="monospace" fill="currentColor">
     <text x="18" y="124">200 OK</text>
     <text x="18" y="140">Content-Type: text/html</text>
     <text x="18" y="162">  &lt;a href="/produkte/12345"&gt;</text>
   </g>
-
-  <path d="M204 60 C 230 60 234 88 256 94" fill="none" stroke="var(--avd-academy-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)" />
-  <path d="M204 158 C 230 158 234 124 256 116" fill="none" stroke="var(--avd-academy-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)" />
-
-  <rect x="262" y="82" width="132" height="52" rx="10" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
+  <path d="M204 60 C 230 60 234 88 256 94" fill="none" stroke="var(--skr-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)"/>
+  <path d="M204 158 C 230 158 234 124 256 116" fill="none" stroke="var(--skr-color-accent)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#pf-hy)"/>
+  <rect x="262" y="82" width="132" height="52" rx="10" fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
   <g font-size="9" font-family="monospace" fill="currentColor">
     <text x="328" y="106" text-anchor="middle">GET /produkte/12345</text>
     <text x="328" y="122" text-anchor="middle">Host: shop.example.com</text>
   </g>
-  <text x="328" y="152" text-anchor="middle" font-size="11" fill="var(--avd-academy-color-ink-muted)">nächste Anfrage</text>
-
-  <text x="200" y="212" text-anchor="middle" font-size="11" font-weight="600" fill="var(--avd-academy-color-accent)">Der Client muss die Adresse nicht kennen – sie steht in der Antwort</text>
+  <text x="328" y="152" text-anchor="middle" font-size="11" fill="var(--skr-color-ink-muted)">nächste Anfrage</text>
+  <text x="200" y="212" text-anchor="middle" font-size="11" font-weight="600" fill="var(--skr-color-accent)">Der Client muss die Adresse nicht kennen – sie steht in der Antwort</text>
 </svg>
 <h3>Hyper</h3>
 <p class="hg__karte__kurz">Das <strong>H</strong> in HTTP: Die Antwort bringt die Verweise mit, die den nächsten Aufruf möglich machen.</p>
 <button type="button" class="hg__mehr" data-hg-mehr="hyper" aria-expanded="false">Was daraus folgt</button>
 <div class="hg__karte__detail">
-        <p><strong>Hypertext</strong> ist Text, der Verweise auf anderen Text enthält – klickbar statt
+<p><strong>Hypertext</strong> ist Text, der Verweise auf anderen Text enthält – klickbar statt
 linear zu lesen. <strong>Hypermedia</strong> ist dasselbe Prinzip für alle Inhaltsarten: Bilder,
-Formulare, Videos.</p>
-
-        <p>Für den Aufrufer heißt das: Er muss die nächste Adresse weder kennen noch selbst
+Formulare, Videos.
+Für den Aufrufer heißt das: Er muss die nächste Adresse weder kennen noch selbst
 zusammenbauen – <strong>sie steht in der Antwort.</strong> Mal im <strong>Header</strong>, mal im <strong>Body</strong>.
-Der Client nimmt sie heraus und stellt damit die nächste Anfrage.</p>
-
-        <p>Der Header dafür heißt <code>Location</code>, und er kommt in zwei Lagen vor: bei einer
+Der Client nimmt sie heraus und stellt damit die nächste Anfrage.
+Der Header dafür heißt <code>Location</code>, und er kommt in zwei Lagen vor: bei einer
 <strong>Weiterleitung</strong> (<code>302 Found</code> – „das, was Du suchst, liegt dort“) und beim
 <strong>Anlegen</strong> (<code>201 Created</code> – „das Neue liegt jetzt dort“). Im Body ist es ein Link
-in HTML oder ein Feld in JSON.</p>
-
-        <p>Genau das tut ein Browser den ganzen Tag: Er liest eine Seite, findet darin Adressen
-und holt nach, was er braucht – Bilder, Stylesheets, die nächste Seite.</p>
-
-        <p><strong>Der Punkt für später:</strong> In HTML sind diese Verweise selbstverständlich. In
+in HTML oder ein Feld in JSON.
+Genau das tut ein Browser den ganzen Tag: Er liest eine Seite, findet darin Adressen
+und holt nach, was er braucht – Bilder, Stylesheets, die nächste Seite.
+<strong>Der Punkt für später:</strong> In HTML sind diese Verweise selbstverständlich. In
 JSON-APIs sind sie es <strong>nicht</strong> – dort baut der Aufrufer die Adressen meist selbst
 zusammen und muss sie deshalb kennen.</p>
-      </div>
 </div>
-
 </div>
-
+</div>
 <h2 class="hg__h2">Der Aufbau ist in beiden Richtungen derselbe</h2>
-
 <div class="hg__aufbau">
-
 <div class="hg__schema">
 <svg viewBox="0 0 300 372" role="img" aria-label="Ein Briefumschlag: oben die Klappe, darunter darauf geschrieben die Startzeile und die Header. Darunter eine gestrichelte Linie als Leerzeile. Ganz unten ein Zettel – das ist der Body.">
   <title>Auf dem Umschlag stehen die Header, im Umschlag liegt der Zettel</title>
-
-  <rect x="14" y="14" width="272" height="188" rx="8" fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2" />
-  <path d="M14 16 L150 62 L286 16" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
-
-  <rect x="30" y="74" width="240" height="26" rx="5" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-1)" stroke-width="2" />
+  <rect x="14" y="14" width="272" height="188" rx="8"
+        fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2"/>
+  <path d="M14 16 L150 62 L286 16" fill="none" stroke="var(--skr-didaktikon-tone-3)" stroke-width="1.5" opacity=".5"/>
+  <rect x="30" y="74" width="240" height="26" rx="5" fill="var(--skr-color-bg)" stroke="var(--skr-didaktikon-tone-1)" stroke-width="2"/>
   <text x="150" y="92" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Startzeile</text>
-
   <text x="30" y="126" font-size="12" font-weight="600" fill="currentColor">Header</text>
-  <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" opacity=".6">
-    <line x1="30" y1="140" x2="256" y2="140" /><line x1="30" y1="156" x2="230" y2="156" /><line x1="30" y1="172" x2="244" y2="172" />
+  <g stroke="var(--skr-color-ink-muted)" stroke-width="1.5" opacity=".6">
+    <line x1="30" y1="140" x2="256" y2="140"/><line x1="30" y1="156" x2="230" y2="156"/><line x1="30" y1="172" x2="244" y2="172"/>
   </g>
-  <text x="150" y="192" text-anchor="middle" font-size="11" font-style="italic" fill="var(--avd-academy-color-ink-muted)">alles auf den Umschlag geschrieben</text>
-
-  <line x1="14" y1="224" x2="286" y2="224" stroke="var(--avd-academy-color-danger)" stroke-width="2" stroke-dasharray="7 5" />
-  <text x="150" y="218" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-danger-ink)">Leerzeile – hier hört der Umschlag auf</text>
-
+  <text x="150" y="192" text-anchor="middle" font-size="11" font-style="italic" fill="var(--skr-color-ink-muted)">alles auf den Umschlag geschrieben</text>
+  <line x1="14" y1="224" x2="286" y2="224" stroke="var(--skr-color-danger)" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="150" y="218" text-anchor="middle" font-size="12" fill="var(--skr-color-danger-ink)">Leerzeile – hier hört der Umschlag auf</text>
   <g>
-    <path d="M46 240 h180 l22 22 v96 h-202 z" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
-    <path d="M226 240 v22 h22" fill="none" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+    <path d="M46 240 h180 l22 22 v96 h-202 z" fill="var(--skr-color-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
+    <path d="M226 240 v22 h22" fill="none" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
     <text x="150" y="270" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Body</text>
-    <g stroke="var(--avd-academy-color-ink-muted)" stroke-width="1.5" opacity=".6">
-      <line x1="64" y1="288" x2="234" y2="288" /><line x1="64" y1="304" x2="234" y2="304" /><line x1="64" y1="320" x2="190" y2="320" />
+    <g stroke="var(--skr-color-ink-muted)" stroke-width="1.5" opacity=".6">
+      <line x1="64" y1="288" x2="234" y2="288"/><line x1="64" y1="304" x2="234" y2="304"/><line x1="64" y1="320" x2="190" y2="320"/>
     </g>
-    <text x="150" y="348" text-anchor="middle" font-size="11" font-style="italic" fill="var(--avd-academy-color-ink-muted)">der Zettel, der drinsteckt</text>
+    <text x="150" y="348" text-anchor="middle" font-size="11" font-style="italic" fill="var(--skr-color-ink-muted)">der Zettel, der drinsteckt</text>
   </g>
 </svg>
 <p class="hg__schema__fuss"><strong>Auf dem Umschlag stehen die Header</strong> –
@@ -376,71 +330,56 @@ Die Post liest den Umschlag und befördert danach; den Zettel liest sie nicht. G
 arbeiten Proxies, Caches und Gateways: Sie entscheiden anhand der Header und reichen
 den Body unbesehen weiter.</p>
 </div>
-
 <div class="hg__nachrichten">
-
 <p class="hg__lead hg__lead--eng"><strong>Klick einen Bestandteil an</strong> – darunter steht, wozu er da ist.</p>
-
 <div class="hg__msg">
 <p class="hg__msg__kopf">Anfrage <span>Browser → Server</span></p>
 <div class="hg__code" data-hg-msg="anfrage"></div>
 <p class="hg__msg__fuss">oben der Umschlag · unten der Zettel darin</p>
 </div>
-
 <div class="hg__msg">
 <p class="hg__msg__kopf">Antwort <span>Server → Browser</span></p>
 <div class="hg__code" data-hg-msg="antwort"></div>
 <p class="hg__msg__fuss">oben der Umschlag · unten der Zettel darin</p>
 </div>
-
-<div class="hg__detail" data-hg-detail="" aria-live="polite">
+<div class="hg__detail" data-hg-detail aria-live="polite">
   <p class="hg__hint">Klick einen Bestandteil an.</p>
 </div>
-
 </div>
-
 </div>
-
 <div class="hg__druck"></div>
-
 <h2 class="hg__h2">GET und POST in klassischen Webanwendungen</h2>
-
 <figure class="hg__bild">
 <svg viewBox="0 0 760 290" role="img" aria-label="Links GET: die Suchanfrage steht in der Adresszeile, der Umschlag bleibt leer. Rechts POST: die Adresszeile bleibt schlicht, die Daten stecken im Umschlag.">
   <title>Bei GET stehen die Daten in der Adresse, bei POST im Body</title>
-  <text x="180" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--avd-academy-color-accent)">GET</text>
-  <text x="580" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--avd-academy-color-accent)">POST</text>
-  <text x="180" y="46" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">Link, Lesezeichen, Suchformular</text>
-  <text x="580" y="46" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">Eingabeformular: bestellen, anmelden</text>
-
-  <rect x="20" y="62" width="320" height="36" rx="18" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <text x="180" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--skr-color-accent)">GET</text>
+  <text x="580" y="26" text-anchor="middle" font-size="20" font-weight="700" fill="var(--skr-color-accent)">POST</text>
+  <text x="180" y="46" text-anchor="middle" font-size="12" fill="var(--skr-color-ink-muted)">Link, Lesezeichen, Suchformular</text>
+  <text x="580" y="46" text-anchor="middle" font-size="12" fill="var(--skr-color-ink-muted)">Eingabeformular: bestellen, anmelden</text>
+  <rect x="20" y="62" width="320" height="36" rx="18" fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="2"/>
   <text x="36" y="85" font-size="12" font-family="monospace" fill="currentColor">/suche</text>
-  <rect x="86" y="68" width="96" height="24" rx="5" fill="var(--avd-academy-color-accent-soft)" stroke="var(--avd-academy-color-accent)" stroke-width="1.5" />
+  <rect x="86" y="68" width="96" height="24" rx="5" fill="var(--skr-color-accent-soft)" stroke="var(--skr-color-accent)" stroke-width="1.5"/>
   <text x="134" y="85" text-anchor="middle" font-size="12" font-family="monospace" fill="currentColor">?q=kaffee</text>
   <text x="180" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Daten in der Adresse</text>
-
-  <rect x="420" y="62" width="320" height="36" rx="18" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="2" />
+  <rect x="420" y="62" width="320" height="36" rx="18" fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="2"/>
   <text x="436" y="85" font-size="12" font-family="monospace" fill="currentColor">/bestellungen</text>
-  <text x="580" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-ink-muted)">Adresse bleibt schlicht</text>
-
-  <g fill="var(--avd-academy-fill-3-bg)" stroke="var(--avd-academy-tone-3)" stroke-width="2">
-    <rect x="86" y="140" width="188" height="84" rx="8" />
-    <rect x="486" y="140" width="188" height="84" rx="8" />
+  <text x="580" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="var(--skr-color-ink-muted)">Adresse bleibt schlicht</text>
+  <g fill="var(--skr-fill-3-bg)" stroke="var(--skr-didaktikon-tone-3)" stroke-width="2">
+    <rect x="86" y="140" width="188" height="84" rx="8"/>
+    <rect x="486" y="140" width="188" height="84" rx="8"/>
   </g>
-  <path d="M86 142 L180 176 L274 142" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
-  <path d="M486 142 L580 176 L674 142" fill="none" stroke="var(--avd-academy-tone-3)" stroke-width="1.5" opacity=".5" />
-  <rect x="104" y="182" width="152" height="32" rx="4" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-color-border)" stroke-width="1.5" stroke-dasharray="5 4" />
-  <text x="180" y="203" text-anchor="middle" font-size="12" fill="var(--avd-academy-color-ink-muted)">kein Zettel drin</text>
-  <rect x="504" y="182" width="152" height="32" rx="4" fill="var(--avd-academy-color-bg)" stroke="var(--avd-academy-tone-4)" stroke-width="2" />
+  <path d="M86 142 L180 176 L274 142" fill="none" stroke="var(--skr-didaktikon-tone-3)" stroke-width="1.5" opacity=".5"/>
+  <path d="M486 142 L580 176 L674 142" fill="none" stroke="var(--skr-didaktikon-tone-3)" stroke-width="1.5" opacity=".5"/>
+  <rect x="104" y="182" width="152" height="32" rx="4" fill="var(--skr-color-bg)" stroke="var(--skr-color-border)" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="180" y="203" text-anchor="middle" font-size="12" fill="var(--skr-color-ink-muted)">kein Zettel drin</text>
+  <rect x="504" y="182" width="152" height="32" rx="4" fill="var(--skr-color-bg)" stroke="var(--skr-didaktikon-tone-4)" stroke-width="2"/>
   <text x="580" y="203" text-anchor="middle" font-size="11" font-family="monospace" fill="currentColor">artikel=…&amp;menge=1</text>
-  <text x="580" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-accent)">Daten im Body</text>
-  <text x="180" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--avd-academy-color-ink-muted)">Body bleibt leer</text>
-
+  <text x="580" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--skr-color-accent)">Daten im Body</text>
+  <text x="180" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--skr-color-ink-muted)">Body bleibt leer</text>
   <text x="180" y="274" text-anchor="middle" font-size="13" fill="currentColor">holt etwas · wiederholbar · teilbar</text>
-  <text x="580" y="274" text-anchor="middle" font-size="13" fill="var(--avd-academy-color-danger-ink)">verändert etwas · nicht wiederholbar</text>
+  <text x="580" y="274" text-anchor="middle" font-size="13" fill="var(--skr-color-danger-ink)">verändert etwas · nicht wiederholbar</text>
 </svg>
 </figure>
-
 <div class="hg__scroll">
 <table class="hg__tab">
   <thead><tr><th scope="col"></th><th scope="col">GET</th><th scope="col">POST</th></tr></thead>
@@ -452,386 +391,23 @@ den Body unbesehen weiter.</p>
   </tbody>
 </table>
 </div>
-
-<div class="avd-academy-callout avd-academy-callout--warning">
-    <p><strong>Deshalb gibt es den Redirect</strong> (deutsch: Weiterleitung). Wer nach einem <code>POST</code>
+<div class="skr-callout skr-callout--warning">
+<p><strong>Deshalb gibt es den Redirect</strong> (deutsch: Weiterleitung). Wer nach einem <code>POST</code>
 einfach die Seite zurückschickt, macht jedes <kbd>F5</kbd> zur Falle. Also antwortet
 der Server mit <code>302 Found</code> und einem <code>Location</code>-Header; der Browser folgt mit einem
 <code>GET</code>, und ab da ist Neuladen harmlos. Denselben Griff sieht man auf Startseiten:
 <code>/</code> leitet auf <code>/de/start</code> weiter.</p>
-  </div>
-
+</div>
 <p class="hg__lead">Wie das Schritt für Schritt abläuft, zeigt die
-<a href="/training-material-api-engineering/rest-apis-grundlagen-und-design/http-grundlagen/simulation.html">Simulation zu den vier Abläufen</a>.</p>
-
+<a href="../../rest-apis-grundlagen-und-design/http-grundlagen/simulation.html">Simulation zu den vier Abläufen</a>.</p>
 </div>
 
-<style>
-.hg { margin-block: var(--avd-academy-space-6, 1.5rem); }
-.hg__lead { color: var(--avd-academy-color-ink); }
-.hg__lead--eng { margin-top: 0; }
-
-/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
-   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
-   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
-   Markdown-Fluss geht das auf; hier steht davor ein eigenes Raster-<div> ohne
-   Aussenabstand. Ein blosses `.hg__h2` (0-1-0) verliert gegen die Theme-Regel. */
-.hg h2.hg__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
-
-/* Einstieg: Bild und Anleitung nebeneinander */
-.hg__start { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: center;
-  border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle);
-  border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem); }
-@media (max-width: 48rem) { .hg__start { grid-template-columns: 1fr; } }
-.hg__start svg { width: 100%; height: auto; max-width: 420px; }
-.hg__start__text h3 { margin-top: 0; }
-.hg__start__text ol { margin-bottom: .6rem; }
-.hg__start__text p:last-child { margin-bottom: 0; }
-
-/* Die vier Eigenschaften */
-/* Feste 2x2-Anordnung statt auto-fit: Mit VIER Karten ergab auto-fit je nach
-   Breite 3+1, und die vierte stand allein in einer Reihe. Zwei Spalten sind
-   ausserdem breiter - die Skizzen werden groesser, und genau darauf kommt es an,
-   wenn die Seite projiziert wird. */
-.hg__karten { display: grid; grid-template-columns: 1fr; gap: var(--avd-academy-space-4, 1rem); }
-@media (min-width: 46rem) { .hg__karten { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.hg__karte { border: 1px solid var(--avd-academy-color-border); border-top: 4px solid var(--avd-academy-color-accent);
-  border-radius: var(--avd-academy-radius, 8px); padding: var(--avd-academy-space-4, 1rem); background: var(--avd-academy-color-bg); }
-.hg__karte svg { width: 100%; height: auto; display: block; margin-bottom: .6rem; color: var(--avd-academy-color-ink); }
-.hg__karte h3 { margin: 0 0 .3rem; font-size: var(--avd-academy-fs-md, 1.05rem); }
-.hg__karte__kurz { margin: 0 0 .8rem; }
-.hg__mehr { font: inherit; font-size: var(--avd-academy-fs-sm, .9rem); font-weight: var(--avd-academy-fw-medium, 500);
-  cursor: pointer; padding: .35em 1em; border-radius: var(--avd-academy-radius-sm, 4px);
-  border: 1px solid var(--avd-academy-color-accent); background: transparent; color: var(--avd-academy-color-accent); }
-.hg__mehr:hover { background: var(--avd-academy-color-accent-soft); }
-.hg__mehr:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
-.hg__mehr::after { content: " ▾"; }
-.hg__mehr[aria-expanded="true"]::after { content: " ▴"; }
-.hg__karte__detail { display: none; margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--avd-academy-color-border); font-size: var(--avd-academy-fs-sm, .92rem); }
-.hg__karte__detail.is-offen { display: block; }
-.hg__karte__detail p:last-child { margin-bottom: 0; }
-
-/* Aufbau: Schema und Beispiel nebeneinander */
-.hg__aufbau { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: var(--avd-academy-space-6, 1.5rem); align-items: start; }
-@media (max-width: 54rem) { .hg__aufbau { grid-template-columns: 1fr; } }
-.hg__schema svg { width: 100%; height: auto; color: var(--avd-academy-color-ink); }
-.hg__schema__fuss { font-size: var(--avd-academy-fs-sm, .88rem); color: var(--avd-academy-color-ink); margin-top: .6rem; }
-.hg__nachrichten { display: grid; gap: var(--avd-academy-space-3, .75rem); }
-.hg__msg { border: 1px solid var(--avd-academy-color-border); border-radius: var(--avd-academy-radius, 8px); overflow: hidden; }
-.hg__msg__kopf { margin: 0; padding: .45rem .8rem; background: var(--avd-academy-color-bg-subtle); border-bottom: 1px solid var(--avd-academy-color-border); font-weight: var(--avd-academy-fw-bold, 700); font-size: .92rem; }
-.hg__msg__kopf span { font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); font-size: .85em; margin-left: .4rem; }
-.hg__code { font-family: var(--avd-academy-font-mono, monospace); font-size: .78rem; line-height: 1.65; padding: .5rem 0 .6rem; background: color-mix(in srgb, var(--avd-academy-fill-3-bg) 55%, var(--avd-academy-color-bg)); }
-/* Der Body ist der ZETTEL IM UMSCHLAG – deshalb sitzt er als eigenes Blatt auf
-   der Umschlagflaeche, eingerueckt und heller. */
-.hg__teil--zettel { margin: .35rem .6rem 0; padding: .35rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
-  background: var(--avd-academy-color-bg); border: 1px solid var(--avd-academy-tone-4); border-left-width: 3px; }
-.hg__msg__fuss { margin: 0; padding: .35rem .8rem; font-size: .72rem; font-style: italic;
-  color: var(--avd-academy-color-ink-muted); background: var(--avd-academy-color-bg-subtle);
-  border-top: 1px solid var(--avd-academy-color-border); }
-/* `min-height`: Jede Zeile der Nachricht ist anklickbar, und WCAG 2.5.8 verlangt
-   24 Pixel. Mit .1rem Innenabstand waren es 23,8 - die Zeilen liegen ausserdem
-   direkt aneinander, es gibt also keinen Abstand, der das ausgleicht. */
-.hg__teil { display: block; width: 100%; text-align: left; border: 0; border-left: 3px solid transparent; background: transparent; font: inherit; color: var(--avd-academy-color-ink); cursor: pointer; padding: .1rem .8rem; min-height: 24px; white-space: pre-wrap; word-break: break-word; transition: var(--avd-academy-transition, all .15s ease); }
-.hg__teil:hover { background: var(--avd-academy-color-accent-soft); }
-.hg__teil:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px; }
-.hg__teil.is-aktiv { background: var(--avd-academy-color-accent-soft); border-left-color: var(--avd-academy-color-accent); }
-.hg__teil--leer { color: var(--avd-academy-color-ink-muted); font-style: italic; }
-.hg__marke { color: color-mix(in srgb, var(--avd-academy-color-accent) 82%, var(--avd-academy-color-ink)); font-weight: 600; }
-.hg__detail { padding: var(--avd-academy-space-3, .75rem) var(--avd-academy-space-4, 1rem); border-left: 4px solid var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px); min-height: 7rem; }
-.hg__detail h3 { margin-top: 0; font-size: var(--avd-academy-fs-md, 1rem); }
-.hg__detail p { font-size: var(--avd-academy-fs-sm, .92rem); }
-.hg__detail p:last-child { margin-bottom: 0; }
-.hg__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
-.hg__merke { border-top: 1px dashed var(--avd-academy-color-border); padding-top: .5rem; color: var(--avd-academy-color-ink-muted); }
-.hg__merke strong { color: var(--avd-academy-color-ink); }
-
-.hg__bild svg { width: 100%; height: auto; color: var(--avd-academy-color-ink); }
-.hg__bild { margin: 0 0 var(--avd-academy-space-4, 1rem); }
-
-.hg__scroll { overflow-x: auto; }
-.hg__tab { border-collapse: collapse; width: 100%; min-width: 34rem; }
-.hg__tab th, .hg__tab td { border: 1px solid var(--avd-academy-color-border); padding: .5rem .8rem; text-align: left; }
-.hg__tab thead th { background: var(--avd-academy-color-bg-subtle); }
-.hg__tab tbody th { background: var(--avd-academy-color-bg-subtle); font-weight: var(--avd-academy-fw-medium, 500); width: 16rem; }
-.hg__ja { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
-.hg__nein { color: var(--avd-academy-color-danger-ink); }
-
-/* --- Der Nachtrag hinter einem Klick -----------------------------------------
-   Der Unterschied zwischen „HTTP ist zustandslos" und „der Service ist
-   zustandslos" stand als Warn-Kasten UNTER den Karten - dort ging er unter, weil
-   niemand nach dem Lesen der Karten noch weiterscrollt. Er gehoert zur Karte, ist
-   aber zu lang fuer sie. Deshalb hinter einem Klick; im Ausdruck steht er
-   vollstaendig an genau dieser Stelle.
-
-   <dialog> statt eigenem Overlay: Hintergrund, Esc zum Schliessen und der
-   Fokusfang kommen vom Browser und muessen nicht nachgebaut werden. */
-.hg__poplink { margin: .9rem 0 0; }
-.hg__pop {
-  font: inherit; font-size: var(--avd-academy-fs-sm, .92rem);
-  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  color: var(--avd-academy-color-accent);
-  text-decoration: underline; text-underline-offset: .2em;
-}
-.hg__pop::before { content: "ⓘ\00a0"; text-decoration: none; }
-.hg__pop:hover { text-decoration-thickness: 2px; }
-.hg__pop:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 3px; border-radius: 2px; }
-
-.hg__dialog {
-  /* Mitte ausdruecklich setzen: Die UA-Regel `margin: auto` traegt nur, solange
-     kein Vorfahr einen eigenen Enthaltungsblock aufmacht. Hier tat sie es nicht -
-     der Kasten stand oben links. */
-  position: fixed; inset: 0; margin: auto;
-  max-width: 38rem; width: calc(100% - 2rem); height: fit-content;
-  border: 1px solid var(--avd-academy-color-border);
-  border-top: 4px solid var(--avd-academy-tone-alert);
-  border-radius: var(--avd-academy-radius, 8px);
-  background: var(--avd-academy-color-bg); color: var(--avd-academy-color-ink);
-  padding: var(--avd-academy-space-5, 1.25rem);
-  box-shadow: 0 10px 40px rgb(0 0 0 / .35);
-}
-.hg__dialog::backdrop { background: rgb(0 0 0 / .55); }
-.hg__dialog h4 { margin: 0 0 .7rem; font-size: var(--avd-academy-fs-md, 1.05rem); }
-.hg__dialog p { margin: 0 0 .7rem; }
-.hg__dialog p:last-of-type { margin-bottom: 0; }
-.hg__dialog__zu {
-  margin-top: var(--avd-academy-space-4, 1rem);
-  font: inherit; font-size: var(--avd-academy-fs-sm, .92rem); cursor: pointer;
-  padding: .35em 1.1em; border-radius: var(--avd-academy-radius-sm, 4px);
-  border: 1px solid var(--avd-academy-color-accent);
-  background: var(--avd-academy-color-accent);
-  color: var(--avd-academy-color-accent-contrast);
-}
-.hg__dialog__zu:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 3px; }
-
-/* Nur fuer den Ausdruck: die Erklaerungen, die am Bildschirm im Panel erscheinen. */
-.hg__druck { display: none; }
-
-@media (prefers-reduced-motion: reduce) { .hg * { transition: none !important; } }
-
-/* --- AUSDRUCK ---------------------------------------------------------------
-   Aufgeklapptes bleibt aufgeklappt, Bedienelemente verschwinden, und was am
-   Bildschirm hinter einem Klick liegt, steht auf dem Papier vollstaendig da. */
-@media print {
-  .hg__mehr { display: none; }
-  .hg__karte__detail { display: block !important; }
-  /* Der Nachtrag steht auf dem Papier an seiner Stelle - in der Karte, an die er
-     gehoert - statt hinter einem Klick, den es auf Papier nicht gibt. */
-  .hg__pop, .hg__poplink, .hg__dialog__zu { display: none; }
-  .hg__dialog {
-    display: block; position: static; inset: auto;
-    max-width: none; width: auto; height: auto;
-    margin: .8rem 0 0; padding: .6rem .9rem; box-shadow: none;
-  }
-  .hg__detail { display: none; }
-  .hg__druck { display: block; }
-  .hg__teil { background: none !important; border-left-color: transparent !important; }
-  .hg__karte, .hg__msg, .hg__schema, .hg__bild, .hg__start { break-inside: avoid; }
-  .hg__aufbau, .hg__karten { break-inside: auto; }
-  .hg__druck dt { font-weight: 700; margin-top: .6rem; }
-  .hg__druck dd { margin: 0 0 .2rem 0; }
-}
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  var NACHRICHTEN = {
-    anfrage: [
-      { art: "start", zeilen: ["GET /produkte/kaffeemuehle HTTP/1.1"],
-        titel: "Startzeile der Anfrage",
-        text: "<strong>Methode</strong> (was soll geschehen), <strong>Pfad</strong> (womit), <strong>Version</strong>.",
-        merke: "Methode und Pfad ergeben zusammen den Satz: „Hol mir die Kaffeemühle.“" },
-      { art: "header", zeilen: ["Host: shop.example.com", "User-Agent: Mozilla/5.0 (Macintosh; …)", "Referer: https://shop.example.com/produkte"],
-        titel: "Header der Anfrage",
-        text: "Angaben <em>über</em> die Nachricht, je Zeile ein <code>Name: Wert</code>. <code>Host</code> sagt, welche Website gemeint ist – ein Server bedient oft viele.",
-        merke: "Auf dem Umschlag stehen die Header – Absender, Empfänger, Hinweise. Die Post liest sie und befördert danach." },
-      { art: "leer", zeilen: [""],
-        titel: "Die Leerzeile",
-        text: "Das <strong>einzige</strong> Trennzeichen zwischen Headern und Body. Der Empfänger liest Zeile für Zeile, bis eine leer ist – alles danach ist Inhalt.",
-        merke: "Wichtiger, als sie aussieht." },
-      { art: "body", zeilen: ["(kein Body – GET holt nur)"],
-        titel: "Body der Anfrage",
-        text: "Der <strong>Zettel im Umschlag</strong> – bei <code>GET</code> bleibt er leer, weil alles Nötige schon auf dem Umschlag steht.",
-        merke: "Beim <code>POST</code> eines Formulars stehen hier die eingegebenen Daten." }
-    ],
-    antwort: [
-      { art: "start", zeilen: ["HTTP/1.1 200 OK"],
-        titel: "Startzeile der Antwort",
-        text: "Erst die <strong>Version</strong>, dann der <strong>Statuscode</strong> und ein kurzer Text für Menschen.",
-        merke: "<code>2xx</code> geklappt · <code>3xx</code> woanders nachsehen · <code>4xx</code> <strong>Du</strong> · <code>5xx</code> <strong>ich</strong>." },
-      { art: "header", zeilen: ["Content-Type: text/html; charset=utf-8", "Content-Length: 1526", "Date: Mon, 14 Sep 2026 08:12:44 GMT"],
-        titel: "Header der Antwort",
-        text: "<code>Content-Type</code> sagt, <em>was</em> im Body liegt – ohne diese Zeile weiß der Browser nicht, ob er eine Seite anzeigen oder eine Datei anbieten soll.",
-        merke: "Bei einem <strong>Redirect</strong> steht hier <code>Location</code>." },
-      { art: "leer", zeilen: [""],
-        titel: "Die Leerzeile",
-        text: "Dieselbe Rolle wie in der Anfrage.",
-        merke: "Der Aufbau ist in <strong>beiden Richtungen identisch</strong> – nur die Startzeile unterscheidet sich." },
-      { art: "body", zeilen: ["<!DOCTYPE html>", "<html lang=\"de\"> … </html>"],
-        titel: "Body der Antwort",
-        text: "Der <strong>Zettel im Umschlag</strong>: der eigentliche Inhalt – hier HTML, es könnte ein Bild sein oder JSON. <em>Was</em> darauf steht, verrät der <code>Content-Type</code> auf dem Umschlag.",
-        merke: "Darin stecken Verweise auf weitere Adressen, die der Browser <strong>einzeln nachholt</strong> – deshalb sind es für eine Seite selten unter fünfzig Nachrichten." }
-    ]
-  };
-
-  var wurzel = document.querySelector(".hg");
-  if (!wurzel) return;
-
-  /* --- Die vier Eigenschaften: aufklappen ---------------------------------- */
-  /* Nachtrag hinter einem Klick. Ohne showModal() waere <dialog> nur ein Kasten
-     im Fluss - erst damit kommen Hintergrund, Esc und Fokusfang vom Browser. */
-  wurzel.querySelectorAll("[data-hg-pop]").forEach(function (knopf) {
-    var dialog = document.getElementById("hg-pop-" + knopf.getAttribute("data-hg-pop"));
-    if (!dialog || typeof dialog.showModal !== "function") { knopf.hidden = true; return; }
-    knopf.addEventListener("click", function () { dialog.showModal(); });
-    var zu = dialog.querySelector("[data-hg-pop-zu]");
-    if (zu) { zu.addEventListener("click", function () { dialog.close(); }); }
-    /* Klick auf den Hintergrund schliesst: Der Klick landet auf dem <dialog>
-       selbst, nicht auf seinem Inhalt. */
-    dialog.addEventListener("click", function (ev) {
-      if (ev.target === dialog) { dialog.close(); }
-    });
-    dialog.addEventListener("close", function () { knopf.focus(); });
-  });
-
-  wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
-    var detail = knopf.nextElementSibling;
-    function schalte(offen) {
-      detail.classList.toggle("is-offen", offen);
-      knopf.setAttribute("aria-expanded", offen ? "true" : "false");
-      knopf.textContent = offen ? "Weniger" : "Was daraus folgt";
-    }
-    knopf.addEventListener("click", function () {
-      schalte(!detail.classList.contains("is-offen"));
-      merken();
-    });
-    knopf._hg = schalte;
-  });
-
-  /* --- Die Nachricht: Bestandteile anklickbar ------------------------------ */
-  var detail = wurzel.querySelector("[data-hg-detail]");
-  var druck = wurzel.querySelector(".hg__druck");
-  var alle = [];
-
-  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-
-  Object.keys(NACHRICHTEN).forEach(function (schluessel) {
-    var ziel = wurzel.querySelector('[data-hg-msg="' + schluessel + '"]');
-    NACHRICHTEN[schluessel].forEach(function (teil) {
-      var knopf = document.createElement("button");
-      knopf.type = "button";
-      knopf.className = "hg__teil hg__teil--" + (teil.art === "body" ? "zettel" : "umschlag") +
-        (teil.art === "leer" || teil.zeilen[0].charAt(0) === "(" ? " hg__teil--leer" : "");
-      knopf.setAttribute("aria-label", teil.titel + " – erklären");
-      knopf.innerHTML = teil.zeilen.map(function (z) {
-        if (z === "") return "&nbsp;";
-        var t = esc(z);
-        if (teil.art === "header") t = t.replace(/^([A-Za-z-]+)(:)/, '<span class="hg__marke">$1</span>$2');
-        if (teil.art === "start") t = t.replace(/^(GET|POST)\b/, '<span class="hg__marke">$1</span>')
-                                       .replace(/\b(200)\b/, '<span class="hg__marke">$1</span>');
-        return t;
-      }).join("\n");
-      knopf.addEventListener("click", function () { zeige(teil, knopf); merken(); });
-      /* Kennung fuer die Adresse: `anfrage-header` statt einer Nummer. */
-      knopf.dataset.hgTeil = schluessel + "-" + teil.art;
-      knopf._hgTeil = teil;
-      alle.push(knopf);
-      ziel.appendChild(knopf);
-    });
-  });
-
-  function zeige(teil, knopf) {
-    alle.forEach(function (k) { k.classList.toggle("is-aktiv", k === knopf); });
-    detail.innerHTML = "<h3>" + teil.titel + "</h3><p>" + teil.text + "</p>" +
-      (teil.merke ? '<p class="hg__merke">' + teil.merke + "</p>" : "");
-  }
-
-  /* --- Zustand in der Adresse ---------------------------------------------
-     ZWEI DINGE STEHEN HIER ZUR WAHL: welcher Bestandteil der Nachricht erklaert
-     wird (`teil`) und welche „Was daraus folgt"-Abschnitte offen sind (die reihen
-     sich in den gemeinsamen Schluessel `open` des Themes ein). Ein Kapitel des
-     Regiebuchs kann damit auf „die Leerzeile" zeigen statt auf die Seite.
-
-     Angemeldet wird bei `AvdAcademyState` (Theme ab 2.46.0) - es gibt nur EIN
-     Fragment je Seite, und wer allein hineinschreibt, loescht den Zustand der
-     uebrigen Bausteine. Erst bei DOMContentLoaded, weil das Theme-Skript `defer`
-     traegt und damit nach diesem hier laeuft.
-
-     BEWUSST NICHT IN DER ADRESSE: die beiden `<dialog>`-Nachtraege. Ein modaler
-     Dialog, der sich beim Laden von selbst oeffnet, faengt den Fokus, bevor
-     jemand weiss, worum es geht. */
-  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
-
-  function anmelden() {
-    if (!window.AvdAcademyState) { return; }
-
-    window.AvdAcademyState.register({
-      key: "teil",
-      read: function () {
-        var a = alle.filter(function (k) { return k.classList.contains("is-aktiv"); })[0];
-        return a ? a.dataset.hgTeil : "";
-      },
-      apply: function (wert) {
-        var k = alle.filter(function (x) { return x.dataset.hgTeil === wert; })[0];
-        if (k) { zeige(k._hgTeil, k); }
-      }
-    });
-
-    wurzel.querySelectorAll(".hg__mehr").forEach(function (knopf) {
-      var detail = knopf.nextElementSibling;
-      window.AvdAcademyState.openable({
-        id: "folgt-" + knopf.getAttribute("data-hg-mehr"),
-        istOffen: function () { return detail.classList.contains("is-offen"); },
-        setzen: function (auf) { knopf._hg(auf); }
-      });
-    });
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", anmelden);
-  } else {
-    anmelden();
-  }
-
-  /* Fuer den Ausdruck: alle Erklaerungen als Liste. Am Bildschirm ausgeblendet. */
-  var dl = document.createElement("dl");
-  ["anfrage", "antwort"].forEach(function (k) {
-    NACHRICHTEN[k].forEach(function (t) {
-      var dt = document.createElement("dt");
-      dt.textContent = t.titel;
-      var dd = document.createElement("dd");
-      dd.innerHTML = t.text + (t.merke ? " " + t.merke : "");
-      dl.appendChild(dt); dl.appendChild(dd);
-    });
-  });
-  var h = document.createElement("h3");
-  h.textContent = "Die Bestandteile im Einzelnen";
-  druck.appendChild(h);
-  druck.appendChild(dl);
-})();
-</script>
-
-
-
     </main>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
   </div>
-
-  <footer class="avd-academy-footer">
-  <div class="avd-academy-footer__grid">
-    <div><strong>ATVANTAGE Academy</strong>
-      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
-    </div><div>
-      <strong>Kontakt</strong>
-      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
-      </p>
-    </div></div>
-  <div class="avd-academy-footer__legal">
-    © <span data-avd-academy-year>2026</span> ATVANTAGE
-  </div>
-</footer>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
 
 </body>
 </html>

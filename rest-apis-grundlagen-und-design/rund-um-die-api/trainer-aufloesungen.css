@@ -1,0 +1,43 @@
+/* Stylesheet der Seite 06-rund-um-die-api/trainer-aufloesungen.md – über `styles:` im Front Matter geladen. */
+/* Trainer-Auflösungen: ein Nachschlagewerk, kein Lehrmedium. Dichte Tabellen,
+   große Skizzen, und die Merksätze sichtbar abgesetzt – der Trainer sucht hier
+   im Zweifel mitten im Vortrag nach einer Zeile. */
+.ta { margin-block: var(--skr-space-6, 1.5rem); }
+.ta h2 { margin-top: var(--skr-space-12, 3rem); }
+.ta h3.ta__h3 { margin-top: var(--skr-space-8, 2rem); font-size: var(--skr-fs-md, 1.05rem); }
+.ta__lead { margin: 0 0 var(--skr-space-4, 1rem); }
+
+.ta__bild { margin: var(--skr-space-4, 1rem) 0; }
+.ta__bild svg { display: block; width: 100%; height: auto; color: var(--skr-color-ink); }
+
+.ta__scroll { overflow-x: auto; margin: var(--skr-space-4, 1rem) 0; }
+.ta__tab { border-collapse: collapse; width: 100%; min-width: 40rem; }
+.ta__tab th, .ta__tab td { border: 1px solid var(--skr-color-border); padding: .5rem .8rem; text-align: left; vertical-align: top; }
+.ta__tab thead th { background: var(--skr-color-bg-subtle); }
+.ta__tab tbody th { font-weight: var(--skr-fw-bold, 700); white-space: nowrap; }
+.ta__tab--mono tbody th { font-family: var(--skr-font-mono, monospace); }
+.ta__tab small { display: block; color: var(--skr-color-ink-muted); font-size: .85em; margin-top: .15rem; }
+
+/* Zum Alarm-Ton hin gemischt statt roh: --skr-color-danger traegt als
+   Schrift in keinem Schema (siehe A-004, Befund 2). */
+.ta__yes { color: color-mix(in srgb, var(--skr-color-success) 60%, var(--skr-color-ink)); }
+.ta__no { color: color-mix(in srgb, var(--skr-color-danger) 60%, var(--skr-color-ink)); }
+.ta__maybe { color: color-mix(in srgb, var(--skr-color-warning) 48%, var(--skr-color-ink)); }
+/* `code` in einer Urteilszelle erbt sonst die Urteilsfarbe UND bekommt die eigene
+   Code-Flaeche darunter – gemessen 4,34:1. Es soll die Fliesstextfarbe behalten. */
+.ta__yes code, .ta__no code, .ta__maybe code { color: var(--skr-color-ink); }
+
+.ta__merke {
+  margin: var(--skr-space-4, 1rem) 0;
+  padding: .7rem 1rem;
+  border-left: 3px solid var(--skr-color-accent);
+  background: color-mix(in srgb, var(--skr-color-accent) 7%, transparent);
+}
+.ta__hinweis { color: var(--skr-color-ink-muted); }
+/* In SVG faerbt `fill`, nicht `color` – deshalb eigens gesetzt. */
+text.ta__hinweis { fill: var(--skr-color-ink-muted); }
+
+@media print {
+  .ta__scroll { overflow-x: visible; }
+  .ta__bild, .ta__scroll, .ta__merke { break-inside: avoid; }
+}

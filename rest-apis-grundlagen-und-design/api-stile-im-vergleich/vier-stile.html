@@ -1,97 +1,93 @@
-<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions reading-progress">
+<!DOCTYPE html>
+<html lang="de" data-skr-effects="page-transitions reading-progress">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander · ATVANTAGE Academy</title><meta name="description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander · ATVANTAGE Academy</title>
+<meta name="description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander">
 <meta property="og:description" content="SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.html","title":"API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander","layout":"visualization","description":"SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" href="../../skriptorium/guide.css?v=d99cc970">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"SOAP, REST, GraphQL und gRPC in einer Kreuzeltabelle – und darunter derselbe Anwendungsfall viermal, zum Durchschalten.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.css","src":"vier-stile.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.js","src":"vier-stile.js","type":"script"}],"pageId":null,"runtimeFragments":["^/(\\?.*)?$","^/[A-Za-z0-9_-]+(\\?.*)?$"],"siteIndex":"/skriptorium/site.json","title":"API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander","topics":null,"url":"/rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
-<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide avd-academy-guide--viz">
-<div class="avd-academy-reading-progress" aria-hidden="true"></div>
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags">
-      </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-print
-                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
-      </div>
-    </div><h1 id="avd-academy-page-title">API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander</h1>
-  </section><div class="avd-academy-guide-layout">
-    <main class="avd-academy-guide-main" id="avd-academy-content">
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
+  <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+  <link rel="stylesheet" href="../../skriptorium/page-transitions.css?v=716872f0">
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.css?v=a37613a5">
+<script src="../../rest-apis-grundlagen-und-design/api-stile-im-vergleich/vier-stile.js?v=4436d94b" defer></script>
+
+</head><body class="skr-guide skr-guide--sidebar-empty" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization" data-skr-lang="de" data-skr-audience="learner">
+<div class="skr-reading-progress" aria-hidden="true"></div>
+  <a class="skr-skip-link" href="#skr-content">Zum Inhalt springen</a><section class="skr-guide-hero skr-guide-hero--slim"
+         aria-labelledby="skr-page-title">
+  <div class="skr-guide-hero__meta">
+    <div class="skr-guide-hero__tags">
+    </div>
+    <div class="skr-guide-hero__actions">
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+
+    </div>
+  </div><h1 id="skr-page-title">API-Stile: SOAP, REST, GraphQL und gRPC nebeneinander</h1>
+</section>
+
+  <div class="skr-guide-layout">
+    <main class="skr-guide-main" id="skr-content">
 <p>Oben die <strong>Kreuzeltabelle</strong>: dieselben Fragen an alle vier Stile. Darunter
 <strong>dieselben vier Aufgaben viermal</strong> – oben den Stil umschalten, links die Aufgabe
 wählen.</p>
-
-<div class="avd-academy-callout avd-academy-callout--info">
-  <p><strong>Die Tabelle beantwortet nicht, welcher Stil besser ist.</strong> Sie zeigt, <em>worin</em> sie
+<div class="skr-callout skr-callout--info">
+<p><strong>Die Tabelle beantwortet nicht, welcher Stil besser ist.</strong> Sie zeigt, <em>worin</em> sie
 sich unterscheiden – und fast jede Zeile ist zugleich ein Vorteil und ein Preis.
 Die Entscheidung fällt an den Zeilen, die im konkreten Fall wehtun.</p>
 </div>
-
 <div class="vs">
-
 <div class="vs__tabelle-scroll">
 <table class="vs__tabelle">
 <thead>
@@ -184,27 +180,22 @@ Die Entscheidung fällt an den Zeilen, die im konkreten Fall wehtun.</p>
 </tbody>
 </table>
 </div>
-
 <h2 class="vs__h2" id="aufgaben">Dieselben vier Aufgaben, viermal</h2>
-
 <p class="vs__lead">Ein Kunde mit Name, Geburtsdatum, <strong>Anschriften</strong> und
 Bezahlinformationen. Oben den Stil wählen, links die Aufgabe – rechts steht die
 <strong>rohe Nachricht</strong>, so wie sie über die Leitung geht: Anfrage, Antwort
 und der Fehlerfall dazu.</p>
-
 <p class="vs__lead"><strong>Sichtbar ist zunächst nur der Kopf.</strong> Das ist
 genau die Sicht, die ein Proxy, ein Gateway oder ein Zugriffsprotokoll hat: Wer
 nicht in den Body schaut, sieht nicht mehr als das. Die Bodies lassen sich
 aufklappen – und die Frage beim Durchgehen ist jedes Mal dieselbe: <em>Hätte ich
 an dieser Stelle gemerkt, dass etwas schiefgegangen ist?</em></p>
-
 <div class="vs__stile" role="tablist" aria-label="API-Stil">
   <button type="button" class="vs__stil is-aktiv" role="tab" aria-selected="true" data-stil="soap">SOAP</button>
   <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="rest">REST</button>
   <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="graphql">GraphQL</button>
   <button type="button" class="vs__stil" role="tab" aria-selected="false" data-stil="grpc">gRPC</button>
 </div>
-
 <div class="vs__werk">
   <div class="vs__faelle" role="tablist" aria-orientation="vertical" aria-label="Anwendungsfall">
     <button type="button" class="vs__fall is-aktiv" role="tab" aria-selected="true" data-fall="alles">
@@ -220,37 +211,31 @@ an dieser Stelle gemerkt, dass etwas schiefgegangen ist?</em></p>
       <strong>Einen Kunden löschen</strong><small></small>
     </button>
   </div>
-
   <div class="vs__buehne" role="tabpanel" aria-live="polite">
     <p class="vs__marke vs__marke--auf">Anfrage</p>
     <pre class="vs__code" data-vs-kopf="anfrage"></pre>
-    <details class="vs__falt" data-vs-falt="anfrage">
-      <summary><span data-vs-zahl=""></span></summary>
-      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
-    </details>
-
+<details class="vs__falt" data-vs-falt="anfrage">
+      <summary><span data-vs-zahl></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf></pre>
+</details>
     <p class="vs__marke vs__marke--ok">Antwort · Erfolgsfall</p>
     <pre class="vs__code" data-vs-kopf="antwort"></pre>
-    <details class="vs__falt" data-vs-falt="antwort">
-      <summary><span data-vs-zahl=""></span></summary>
-      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
-    </details>
-
-    <p class="vs__marke vs__marke--fehler" data-vs-fehlertitel=""></p>
+<details class="vs__falt" data-vs-falt="antwort">
+      <summary><span data-vs-zahl></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf></pre>
+</details>
+    <p class="vs__marke vs__marke--fehler" data-vs-fehlertitel></p>
     <pre class="vs__code" data-vs-kopf="fehler"></pre>
-    <details class="vs__falt" data-vs-falt="fehler">
-      <summary><span data-vs-zahl=""></span></summary>
-      <pre class="vs__code vs__code--rumpf" data-vs-rumpf=""></pre>
-    </details>
-
-    <p class="vs__hinweis" data-vs-hinweis=""></p>
+<details class="vs__falt" data-vs-falt="fehler">
+      <summary><span data-vs-zahl></span></summary>
+      <pre class="vs__code vs__code--rumpf" data-vs-rumpf></pre>
+</details>
+    <p class="vs__hinweis" data-vs-hinweis></p>
   </div>
 </div>
-
 <p class="vs__schluss"><strong>Geh einmal alle vier Stile durch, ohne einen Body
 aufzuklappen.</strong> Die fachliche Lage ist jedes Mal dieselbe: Den Kunden gibt es
 nicht. Im Kopf steht davon:</p>
-
 <ul class="vs__fazit">
 <li><strong>REST</strong> – <code>404 Not Found</code>. Fertig, mehr braucht man nicht
 zu lesen.</li>
@@ -262,987 +247,25 @@ anderes und meint, dass die <em>Nachricht</em> nicht verarbeitbar war.</li>
 <li><strong>gRPC</strong> – <code>:status = 200</code>. Der echte Status steht in
 einem <em>Trailer</em>, also hinter dem Body.</li>
 </ul>
-
 <p class="vs__schluss"><strong>Drei von vier Stilen melden einen Fehlschlag als
 Erfolg</strong> – jedenfalls für jeden, der nur den Kopf liest. Und das sind genau die
 Stellen, an denen man im Betrieb hinsieht: Zugriffsprotokoll, Gateway-Metrik,
 Alarm auf <code>5xx</code>. Wer einen dieser drei Stile betreibt, braucht eine
 Auswertung, die in den Body schaut – mit HTTP-Bordmitteln kommt er nicht weit.</p>
-
 </div>
-
-<style>
-  .vs { --vs-ja: #187452; --vs-nein: #b3402c; --vs-teils: #806414; }
-  [data-avd-academy-theme="dark"] .vs,
-  .vs:where([data-avd-academy-theme="dark"] *) { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-avd-academy-theme="light"]) .vs { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
-  }
-
-  .vs__tabelle-scroll { overflow-x: auto; margin: 1.5rem 0 2.5rem; }
-  .vs__tabelle { border-collapse: collapse; width: 100%; min-width: 52rem; font-size: .88rem; }
-  .vs__tabelle th, .vs__tabelle td {
-    border: 1px solid var(--avd-academy-color-border);
-    padding: .55rem .7rem; vertical-align: top; text-align: left;
-  }
-  .vs__tabelle thead th {
-    background: var(--avd-academy-color-bg-subtle);
-    font-size: 1rem; text-align: center;
-  }
-  .vs__tabelle tbody th {
-    background: var(--avd-academy-color-bg-subtle);
-    width: 12rem; font-weight: 600;
-  }
-  .vs__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--avd-academy-color-bg-subtle) 45%, transparent); }
-  .vs__k { display: block; font-weight: 700; margin-bottom: .15rem; }
-  .vs__k--ja    { color: var(--vs-ja); }
-  .vs__k--nein  { color: var(--vs-nein); }
-  .vs__k--teils { color: var(--vs-teils); }
-  .vs__k--ja::before    { content: "✓ "; }
-  .vs__k--nein::before  { content: "✗ "; }
-  .vs__k--teils::before { content: "~ "; }
-
-  /* Abstand NACH OBEN fuer die Abschnitts-Ueberschriften. Das Theme setzt h2
-     auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
-     von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
-     Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
-     Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
-     sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
-     Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
-     Container (`--avd-academy-space-12`). */
-  .vs h2.vs__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
-  .vs__lead { color: var(--avd-academy-color-ink-muted); }
-
-  .vs__stile { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0 0; }
-  .vs__stil {
-    font: inherit; font-weight: 600; cursor: pointer;
-    padding: .55rem 1.2rem; border-radius: var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) 0 0;
-    border: 1px solid var(--avd-academy-color-border); border-bottom: none;
-    background: var(--avd-academy-color-bg-subtle); color: var(--avd-academy-color-ink-muted);
-  }
-  .vs__stil.is-aktiv {
-    background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
-    border-color: var(--avd-academy-color-accent);
-  }
-
-  .vs__werk {
-    display: grid; grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
-    border: 1px solid var(--avd-academy-color-border);
-    border-radius: 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
-    overflow: hidden;
-  }
-  @media (max-width: 40rem) { .vs__werk { grid-template-columns: minmax(0, 1fr); } }
-
-  .vs__faelle { display: flex; flex-direction: column; border-right: 1px solid var(--avd-academy-color-border); }
-  .vs__fall {
-    font: inherit; cursor: pointer; text-align: left;
-    padding: .8rem 1rem; border: none; border-bottom: 1px solid var(--avd-academy-color-border);
-    background: transparent; color: inherit;
-    border-left: 4px solid transparent;
-  }
-  .vs__fall:last-child { border-bottom: none; }
-  .vs__fall strong { display: block; font-size: .92rem; }
-  .vs__fall small { color: var(--avd-academy-color-ink-muted); font-size: .78rem; }
-  .vs__fall.is-aktiv { border-left-color: var(--avd-academy-color-accent); background: var(--avd-academy-color-bg-subtle); }
-
-  .vs__buehne { padding: 1rem 1.2rem 1.2rem; min-width: 0; }
-  .vs__marke {
-    margin: 0 0 .35rem; font-size: .7rem; font-weight: 700;
-    letter-spacing: .09em; text-transform: uppercase;
-  }
-  .vs__marke--auf    { color: var(--avd-academy-color-ink-muted); }
-  .vs__marke--ok     { color: var(--vs-ja); margin-top: 1rem; }
-  .vs__marke--fehler { color: var(--vs-nein); margin-top: 1rem; text-transform: none; letter-spacing: .02em; font-size: .78rem; }
-
-  /* Rohe Nachricht: das Theme faerbt nur Java, also faerbt die Seite selbst. */
-  /* Ein Mitschnitt sieht in beiden Farbschemata gleich aus - deshalb traegt der
-     Block seine Farben selbst statt sie aus den Tokens zu ziehen. Alle Werte
-     unten liegen auf #1d2426 ueber 6:1. */
-  .vs__code {
-    margin: 0; padding: .7rem .9rem; overflow-x: auto;
-    font-family: var(--avd-academy-font-mono, monospace);
-    font-size: .76rem; line-height: 1.55; white-space: pre;
-    background: #1d2426; color: #e6edf0;
-    border: 1px solid #2e383b;
-    border-radius: var(--avd-academy-radius-sm, 4px);
-  }
-  .vs__code .hl-m   { color: #4fd1a5; font-weight: 700; }
-  .vs__code .hl-p   { color: #ffffff; font-weight: 700; }
-  .vs__code .hl-v   { color: #94a8ad; }
-  .vs__code .hl-s2  { color: #4fd1a5; font-weight: 700; }
-  .vs__code .hl-s4,
-  .vs__code .hl-s5  { color: #ff8a70; font-weight: 700; }
-  .vs__code .hl-h   { color: #e0be5c; }
-  .vs__code .hl-k   { color: #8dc0ff; }
-  .vs__code .hl-str { color: #a5e075; }
-  .vs__code .hl-num { color: #e0be5c; }
-  .vs__code .hl-tag { color: #8dc0ff; }
-  .vs__code .hl-kw  { color: #e0be5c; font-weight: 700; }
-  .vs__code .hl-c   { color: #94a8ad; font-style: italic; }
-
-  /* Der Body haengt optisch am Kopf - deshalb oben buendig, kein Abstand. */
-  .vs__falt { margin: 0; }
-  .vs__falt > summary {
-    cursor: pointer; list-style: none;
-    font-size: .74rem; letter-spacing: .04em;
-    padding: .3rem .9rem; margin-top: -1px;
-    color: #94a8ad; background: #1d2426;
-    border: 1px solid #2e383b;
-    border-radius: 0 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
-  }
-  .vs__falt > summary::-webkit-details-marker { display: none; }
-  .vs__falt > summary::before { content: "▸ "; }
-  .vs__falt[open] > summary { border-radius: 0; }
-  .vs__falt[open] > summary::before { content: "▾ "; }
-  .vs__falt > summary:hover { color: #e6edf0; }
-  .vs__code--rumpf {
-    border-top: none; margin-top: -1px;
-    border-radius: 0 0 var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px);
-  }
-  /* Der Kopf allein steht ohne Rundung unten, solange ein Body darunter haengt. */
-  .vs__code:has(+ .vs__falt:not([hidden])) { border-radius: var(--avd-academy-radius-sm, 4px) var(--avd-academy-radius-sm, 4px) 0 0; }
-
-  .vs__hinweis { font-size: .86rem; margin: 1rem 0 0; }
-  .vs__schluss { margin-top: 1.5rem; }
-  .vs__fazit { margin: .8rem 0 0; }
-  .vs__fazit li { margin-bottom: .3rem; }
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  function Z() { return Array.prototype.join.call(arguments, "\n"); }
-
-  var SOAP_HUELLE = '<soap:Envelope\n    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-
-  /* ------------------------------------------------------------------ Daten
-     Je Stil und Aufgabe die rohe Nachricht: Anfrage, Erfolgsantwort und der
-     Fehlerfall dazu - in derselben Form, in der sie ueber die Leitung geht. */
-
-  var DATEN = {
-
-    /* =============================================================== SOAP */
-    soap: {
-      alles: {
-        anfrage: Z(
-          "POST /CustomerService HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: text/xml; charset=utf-8",
-          'SOAPAction: "getCustomer"',
-          "Content-Length: 231",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerRequest xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "    </getCustomerRequest>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerResponse xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "      <name>Meier</name>",
-          "      <geburtsdatum>1984-03-02</geburtsdatum>",
-          "      <anschriften>",
-          "        <anschrift><strasse>Hauptstr. 1</strasse><ort>Köln</ort></anschrift>",
-          "      </anschriften>",
-          "      <zahlungsarten>",
-          "        <zahlungsart><art>KREDITKARTE</art><letzte4>4242</letzte4></zahlungsart>",
-          "      </zahlungsarten>",
-          "    </getCustomerResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerResponse xmlns="urn:shop:kunden:v1">',
-          "      <fehler>",
-          "        <code>KUNDE_UNBEKANNT</code>",
-          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
-          "      </fehler>",
-          "    </getCustomerResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        hinweis: "Die Adresse ist für alle vier Aufgaben dieselbe; was gemeint ist, steht im Umschlag und im Kopf <code>SOAPAction</code>. <strong>Und der unbekannte Kunde ist eine <code>200</code></strong> – ein fachliches Ergebnis wird als Feld in der normalen Antwort modelliert, nicht als Protokollfehler. Ein <code>soap:Fault</code> wäre etwas anderes: Der kommt laut SOAP 1.1 mit <code>500</code> und meint, dass die <em>Nachricht</em> nicht verarbeitbar war."
-      },
-      ohne: {
-        anfrage: Z(
-          "POST /CustomerService HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: text/xml; charset=utf-8",
-          'SOAPAction: "getCustomerBasic"',
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerBasicRequest xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "    </getCustomerBasicRequest>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerBasicResponse xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "      <name>Meier</name>",
-          "      <geburtsdatum>1984-03-02</geburtsdatum>",
-          "    </getCustomerBasicResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <getCustomerBasicResponse xmlns="urn:shop:kunden:v1">',
-          "      <fehler>",
-          "        <code>KUNDE_UNBEKANNT</code>",
-          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
-          "      </fehler>",
-          "    </getCustomerBasicResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        hinweis: "<strong>Eine Feldauswahl gibt es nicht.</strong> Wer weniger will, braucht eine <em>zweite Operation</em> im WSDL – mit eigenem Typ, eigenem Antwortelement und eigenem Fehlerfeld. Und bis jeder Client neu erzeugt ist, kennt sie niemand. <strong>Zwei Operationen für dieselbe Sache, und ab jetzt für immer beide pflegen.</strong>"
-      },
-      anlegen: {
-        anfrage: Z(
-          "POST /CustomerService HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: text/xml; charset=utf-8",
-          'SOAPAction: "createCustomer"',
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <createCustomerRequest xmlns="urn:shop:kunden:v1">',
-          "      <name>Meier</name>",
-          "      <geburtsdatum>1984-03-02</geburtsdatum>",
-          "    </createCustomerRequest>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <createCustomerResponse xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "    </createCustomerResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        fehlertitel: "Antwort · die Daten sind nicht gültig",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <createCustomerResponse xmlns="urn:shop:kunden:v1">',
-          "      <fehler>",
-          "        <code>VALIDIERUNG</code>",
-          "        <text>Die Angaben sind unvollständig.</text>",
-          "        <feld name=\"geburtsdatum\">Pflichtangabe fehlt</feld>",
-          "        <feld name=\"name\">darf nicht leer sein</feld>",
-          "      </fehler>",
-          "    </createCustomerResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        hinweis: "Die neue Kennung steht im Antwort-Umschlag, nicht in einem <code>Location</code>-Kopf – <strong>es gibt keine Adresse, auf die sie zeigen könnte</strong>.<br><br><strong>Auch die Validierung ist ein <code>200</code></strong>: Die Feldfehler stehen strukturiert in der normalen Antwort. Ein <code>soap:Fault</code> wäre etwas anderes und käme laut SOAP 1.1 mit <code>500</code> – der meint aber, dass die <em>Nachricht</em> nicht verarbeitbar war, nicht dass ihr <em>Inhalt</em> fachlich nicht durchgeht. <strong>In allen vier Aufgaben steht im Kopf also dasselbe: <code>200 OK</code>.</strong>"
-      },
-      loeschen: {
-        anfrage: Z(
-          "POST /CustomerService HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: text/xml; charset=utf-8",
-          'SOAPAction: "deleteCustomer"',
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <deleteCustomerRequest xmlns="urn:shop:kunden:v1">',
-          "      <id>4711</id>",
-          "    </deleteCustomerRequest>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <deleteCustomerResponse xmlns="urn:shop:kunden:v1"/>',
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: text/xml; charset=utf-8",
-          "",
-          SOAP_HUELLE,
-          "  <soap:Body>",
-          '    <deleteCustomerResponse xmlns="urn:shop:kunden:v1">',
-          "      <fehler>",
-          "        <code>KUNDE_UNBEKANNT</code>",
-          "        <text>Es gibt keinen Kunden mit der Kennung 4711.</text>",
-          "      </fehler>",
-          "    </deleteCustomerResponse>",
-          "  </soap:Body>",
-          "</soap:Envelope>"),
-        hinweis: "Löschen ist hier ein <code>POST</code> wie alles andere. <strong>Ob der Aufruf wiederholbar ist, sieht man der Nachricht nicht an</strong> – das steht allenfalls in der Dokumentation. Bei <code>DELETE</code> wäre es ein Merkmal der Methode."
-      }
-    },
-
-    /* =============================================================== REST */
-    rest: {
-      alles: {
-        anfrage: Z(
-          "GET /customers/4711 HTTP/1.1",
-          "Host: api.shop.example",
-          "Accept: application/json"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          'ETag: "a1b2c3"',
-          "Cache-Control: max-age=60",
-          "",
-          "{",
-          '  "id": "4711",',
-          '  "name": "Meier",',
-          '  "geburtsdatum": "1984-03-02",',
-          '  "anschriften": [',
-          '    { "strasse": "Hauptstr. 1", "ort": "Köln" }',
-          "  ],",
-          '  "zahlungsarten": [',
-          '    { "art": "KREDITKARTE", "letzte4": "4242" }',
-          "  ]",
-          "}"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 404 Not Found",
-          "Content-Type: application/problem+json",
-          "",
-          "{",
-          '  "type": "https://api.shop.example/probleme/kunde-unbekannt",',
-          '  "title": "Kunde nicht gefunden",',
-          '  "status": 404,',
-          '  "detail": "Es gibt keinen Kunden mit der Kennung 4711.",',
-          '  "instance": "/customers/4711"',
-          "}"),
-        hinweis: "Ein <code>GET</code> auf eine eigene Adresse: im Browser aufrufbar, für jede Zwischenstation cachebar (<code>ETag</code>, <code>Cache-Control</code>), und der <strong>Statuscode allein sagt schon, was los ist</strong>. Das Fehlerformat ist standardisiert – <strong>RFC 9457</strong>, Medientyp <code>application/problem+json</code>."
-      },
-      ohne: {
-        anfrage: Z(
-          "GET /customers/4711?fields=id,name,geburtsdatum HTTP/1.1",
-          "Host: api.shop.example",
-          "Accept: application/json"),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "id": "4711",',
-          '  "name": "Meier",',
-          '  "geburtsdatum": "1984-03-02"',
-          "}"),
-        fehlertitel: "Antwort · das Feld kennt der Server nicht",
-        fehler: Z(
-          "HTTP/1.1 400 Bad Request",
-          "Content-Type: application/problem+json",
-          "",
-          "{",
-          '  "type": "https://api.shop.example/probleme/unbekanntes-feld",',
-          '  "title": "Unbekanntes Feld in fields",',
-          '  "status": 400,',
-          '  "detail": "telefon ist kein Feld von Customer.",',
-          '  "erlaubt": [ "id", "name", "geburtsdatum", "anschriften", "zahlungsarten" ]',
-          "}"),
-        hinweis: "<strong>Hier hat REST keine Antwort von der Stange.</strong> <code>?fields=</code> ist verbreitet, aber nicht standardisiert – jede API erfindet es neu, und jede erfindet auch den Fehlerfall dazu neu.<br><br><strong>Und es hat eine Folge, die fast immer übersehen wird:</strong> Es gibt nur <em>ein</em> Schema für diese Antwort, und das wird im Gateway gegen jede Antwort validiert. Steht dort <code>required: [id, name, geburtsdatum]</code>, dann ist eine gefilterte Antwort <strong>schemawidrig</strong> – das Gateway wirft die eigene Antwort weg. Wer <code>fields=</code> anbietet, muss also entweder alle Felder außer der Kennung optional machen – <em>und damit die Zusage aufgeben, dass ein Name kommt</em> – oder je Feldkombination ein eigenes Schema pflegen. Genau deshalb ist der saubere Weg meist ein anderer: die Anschriften gar nicht erst einbetten und <code>GET /customers/4711/addresses</code> als eigene Subressource anbieten. Zwei Ressourcen, zwei Schemata, beide vollständig."
-      },
-      anlegen: {
-        anfrage: Z(
-          "POST /customers HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "name": "Meier",',
-          '  "geburtsdatum": "1984-03-02"',
-          "}"),
-        antwort: Z(
-          "HTTP/1.1 201 Created",
-          "Location: /customers/4711",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "id": "4711",',
-          '  "name": "Meier",',
-          '  "geburtsdatum": "1984-03-02"',
-          "}"),
-        fehlertitel: "Antwort · die Daten sind nicht gültig",
-        fehler: Z(
-          "HTTP/1.1 400 Bad Request",
-          "Content-Type: application/problem+json",
-          "",
-          "{",
-          '  "type": "https://api.shop.example/probleme/validierung",',
-          '  "title": "Eingabe nicht verarbeitbar",',
-          '  "status": 400,',
-          '  "fehler": [',
-          '    { "feld": "geburtsdatum", "grund": "Pflichtangabe fehlt" },',
-          '    { "feld": "name", "grund": "darf nicht leer sein" }',
-          "  ]",
-          "}"),
-        hinweis: "<code>201</code> und <code>Location</code> gehören zusammen: Die Kennung vergibt der Server und <strong>nennt die Adresse, unter der die neue Ressource ab jetzt liegt</strong>. Deshalb ist <code>POST</code> hier nicht idempotent – zweimal abgeschickt, zwei Kunden. Und <strong>beide</strong> Feldfehler kommen in <em>einer</em> Antwort; sonst braucht der Aufrufer mehrere Anläufe für dasselbe Formular."
-      },
-      loeschen: {
-        anfrage: Z(
-          "DELETE /customers/4711 HTTP/1.1",
-          "Host: api.shop.example"),
-        antwort: Z(
-          "HTTP/1.1 204 No Content"),
-        fehlertitel: "Antwort · beim zweiten Mal",
-        fehler: Z(
-          "HTTP/1.1 404 Not Found",
-          "Content-Type: application/problem+json",
-          "",
-          "{",
-          '  "type": "https://api.shop.example/probleme/kunde-unbekannt",',
-          '  "title": "Kunde nicht gefunden",',
-          '  "status": 404,',
-          '  "instance": "/customers/4711"',
-          "}"),
-        hinweis: "<strong>Die ganze Erfolgsantwort ist eine Zeile.</strong> Kein Body, kein Format, keine Absprache – der Statuscode <em>ist</em> die Antwort. Und der Aufruf ist idempotent: Der Zustand danach ist derselbe, egal wie oft er ankommt. Dass beim zweiten Mal <code>404</code> kommt, ändert daran nichts – der Zustand ist gemeint, nicht die Antwort."
-      }
-    },
-
-    /* ============================================================ GraphQL */
-    graphql: {
-      alles: {
-        anfrage: Z(
-          "POST /graphql HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: application/json",
-          "Accept: application/json",
-          "",
-          '{"query":"query { customer(id: \\"4711\\") { id name geburtsdatum' +
-            ' anschriften { strasse ort } zahlungsarten { art letzte4 } } }"}'),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": {',
-          '    "customer": {',
-          '      "id": "4711",',
-          '      "name": "Meier",',
-          '      "geburtsdatum": "1984-03-02",',
-          '      "anschriften": [ { "strasse": "Hauptstr. 1", "ort": "Köln" } ],',
-          '      "zahlungsarten": [ { "art": "KREDITKARTE", "letzte4": "4242" } ]',
-          "    }",
-          "  }",
-          "}"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": { "customer": null },',
-          '  "errors": [',
-          "    {",
-          '      "message": "Kunde 4711 unbekannt",',
-          '      "path": [ "customer" ],',
-          '      "extensions": { "code": "NOT_FOUND" }',
-          "    }",
-          "  ]",
-          "}"),
-        hinweis: "So sieht die Abfrage <strong>wirklich</strong> aus: ein JSON-Objekt mit der Query als Zeichenkette, Anführungszeichen maskiert. Lesbar formatiert wäre das <code>query { customer(id: \"4711\") { id name … } }</code> – aber über die Leitung geht die Zeile oben. <strong>Und der Fehler ist eine <code>200</code></strong>: Ob es geklappt hat, steht im Feld <code>errors</code>."
-      },
-      ohne: {
-        anfrage: Z(
-          "POST /graphql HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: application/json",
-          "",
-          '{"query":"query { customer(id: \\"4711\\") { id name geburtsdatum } }"}'),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": {',
-          '    "customer": {',
-          '      "id": "4711",',
-          '      "name": "Meier",',
-          '      "geburtsdatum": "1984-03-02"',
-          "    }",
-          "  }",
-          "}"),
-        fehlertitel: "Antwort · das Feld gibt es im Schema nicht",
-        fehler: Z(
-          "HTTP/1.1 400 Bad Request",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "errors": [',
-          "    {",
-          '      "message": "Cannot query field \\"telefon\\" on type \\"Customer\\".",',
-          '      "locations": [ { "line": 1, "column": 42 } ],',
-          '      "extensions": { "code": "GRAPHQL_VALIDATION_FAILED" }',
-          "    }",
-          "  ]",
-          "}"),
-        hinweis: "<strong>Das ist der Grund, warum es GraphQL gibt.</strong> Dieselbe Adresse, dieselbe Signatur – der Client lässt zwei Felder weg und bekommt weniger. Ohne zweite Operation, ohne neue Adresse, ohne Release. Interessant ist der Fehlerfall: Ein <em>Schreibfehler im Feldnamen</em> wird vor der Ausführung bemerkt und kommt hier sogar mit <code>400</code> – das ist die eine Stelle, an der GraphQL den Statuscode benutzt."
-      },
-      anlegen: {
-        anfrage: Z(
-          "POST /graphql HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: application/json",
-          "",
-          '{"query":"mutation($e: CustomerInput!) { createCustomer(input: $e) { id } }",',
-          ' "variables":{"e":{"name":"Meier","geburtsdatum":"1984-03-02"}}}'),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": {',
-          '    "createCustomer": { "id": "4711" }',
-          "  }",
-          "}"),
-        fehlertitel: "Antwort · die Daten sind nicht gültig",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": { "createCustomer": null },',
-          '  "errors": [',
-          "    {",
-          '      "message": "geburtsdatum ist eine Pflichtangabe",',
-          '      "path": [ "createCustomer" ],',
-          '      "extensions": {',
-          '        "code": "BAD_USER_INPUT",',
-          '        "feld": "geburtsdatum"',
-          "      }",
-          "    }",
-          "  ]",
-          "}"),
-        hinweis: "Lesen und Ändern unterscheidet nur das Schlüsselwort <code>mutation</code>; Eingaben gehören in <code>variables</code>, nicht in die Query-Zeichenkette. Welche Felder zurückkommen, sagt auch hier der Client – hier nur die neue Kennung. <strong>Einen <code>Location</code>-Kopf gibt es nicht</strong>, und es gäbe auch keine Adresse dafür."
-      },
-      loeschen: {
-        anfrage: Z(
-          "POST /graphql HTTP/1.1",
-          "Host: api.shop.example",
-          "Content-Type: application/json",
-          "",
-          '{"query":"mutation { deleteCustomer(id: \\"4711\\") { erfolg } }"}'),
-        antwort: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": {',
-          '    "deleteCustomer": { "erfolg": true }',
-          "  }",
-          "}"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/1.1 200 OK",
-          "Content-Type: application/json",
-          "",
-          "{",
-          '  "data": { "deleteCustomer": null },',
-          '  "errors": [',
-          '    { "message": "Kunde 4711 unbekannt",',
-          '      "path": [ "deleteCustomer" ],',
-          '      "extensions": { "code": "NOT_FOUND" } }',
-          "  ]",
-          "}"),
-        hinweis: "Beide Antworten sind <code>200 OK</code> – die erfolgreiche und die gescheiterte. <strong>Ein Proxy, ein Log oder ein Alarm auf <code>5xx</code> sieht hier ausschließlich Erfolge.</strong> Wer GraphQL betreibt, braucht eine Auswertung, die in den Body schaut; mit HTTP-Bordmitteln kommt er nicht weit."
-      }
-    },
-
-    /* =============================================================== gRPC */
-    grpc: {
-      alles: {
-        anfrage: Z(
-          "HTTP/2 · Stream 1 · HEADERS",
-          "",
-          ":method = POST",
-          ":scheme = https",
-          ":authority = api.shop.example",
-          ":path = /kunden.v1.CustomerService/GetCustomer",
-          "content-type = application/grpc+proto",
-          "te = trailers",
-          "",
-          "DATA (Protobuf, binär):",
-          "00 00 00 00 06  0a 04 34 37 31 31",
-          "",
-          "00           unkomprimiert",
-          "00 00 00 06  Länge der Nachricht: 6 Bytes",
-          "0a           Feld 1 (id), Typ \"Bytes\"",
-          "04           4 Zeichen folgen",
-          "34 37 31 31  \"4711\""),
-        antwort: Z(
-          "HTTP/2 · Stream 1 · HEADERS",
-          "",
-          ":status = 200",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA (Protobuf, binär):",
-          "00 00 00 00 2b  0a 04 34 37 31 31  12 05 4d 65 69 65 72",
-          "1a 0a 31 39 38 34 2d 30 33 2d 30 32  22 12 0a 0b 48 ...",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 0",
-          "grpc-message ="),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/2 · Stream 1 · HEADERS",
-          "",
-          ":status = 200",
-          "content-type = application/grpc+proto",
-          "",
-          "(kein DATA-Frame)",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 5",
-          "grpc-message = Kunde 4711 unbekannt",
-          "",
-          "5 = NOT_FOUND"),
-        hinweis: "Die Adresse entsteht aus Dienst- und Methodennamen; niemand tippt das von Hand, der Client wird aus der <code>.proto</code> erzeugt. <strong>Und jetzt die Pointe: Auch der Fehler ist auf HTTP-Ebene eine <code>200</code>.</strong> Der eigentliche Status steht in einem <em>Trailer</em> – der kommt <em>nach</em> dem Body, und die meisten Werkzeuge zwischen Client und Server lesen ihn gar nicht."
-      },
-      ohne: {
-        anfrage: Z(
-          "HTTP/2 · Stream 3 · HEADERS",
-          "",
-          ":method = POST",
-          ":path = /kunden.v1.CustomerService/GetCustomer",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – GetCustomerRequest mit FieldMask:",
-          "  id         = \"4711\"",
-          "  field_mask = { paths: [\"id\", \"name\", \"birth_date\"] }",
-          "",
-          "(hier lesbar dargestellt – über die Leitung geht Protobuf)"),
-        antwort: Z(
-          "HTTP/2 · Stream 3 · HEADERS",
-          "",
-          ":status = 200",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – Customer:",
-          "  id         = \"4711\"",
-          "  name       = \"Meier\"",
-          "  birth_date = \"1984-03-02\"",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 0"),
-        fehlertitel: "Antwort · der Pfad in der Maske stimmt nicht",
-        fehler: Z(
-          "HTTP/2 · Stream 3 · HEADERS",
-          "",
-          ":status = 200",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 3",
-          "grpc-message = field_mask: unbekannter Pfad \"telefon\"",
-          "",
-          "3 = INVALID_ARGUMENT"),
-        hinweis: "<code>FieldMask</code> ist standardisiert (<code>google.protobuf.FieldMask</code>) – aber <strong>der Server muss sie selbst auswerten</strong>. Tut er es nicht, kommt trotzdem alles zurück, und niemand merkt es. Anders als bei GraphQL erzwingt das Format nichts; die Maske ist ein Wunsch, kein Vertrag."
-      },
-      anlegen: {
-        anfrage: Z(
-          "HTTP/2 · Stream 5 · HEADERS",
-          "",
-          ":method = POST",
-          ":path = /kunden.v1.CustomerService/CreateCustomer",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – CreateCustomerRequest:",
-          "  name          = \"Meier\"",
-          "  geburtsdatum  = \"1984-03-02\""),
-        antwort: Z(
-          "HTTP/2 · Stream 5 · HEADERS",
-          "",
-          ":status = 200",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – Customer:",
-          "  id            = \"4711\"",
-          "  name          = \"Meier\"",
-          "  geburtsdatum  = \"1984-03-02\"",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 0"),
-        fehlertitel: "Antwort · die Daten sind nicht gültig",
-        fehler: Z(
-          "HTTP/2 · Stream 5 · HEADERS",
-          "",
-          ":status = 200",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 3",
-          "grpc-message = Validierung fehlgeschlagen",
-          "grpc-status-details-bin = CAMSFVZhbGlkaWVydW5nIGZlaGxnZXNj...",
-          "",
-          "3 = INVALID_ARGUMENT · die Feldfehler stecken base64-kodiert",
-          "im Trailer grpc-status-details-bin (google.rpc.Status)"),
-        hinweis: "Der neue Kunde kommt als vollständige Nachricht zurück; einen <code>Location</code>-Kopf gibt es nicht. <strong>Und die Feldfehler stehen base64-kodiert in einem Trailer</strong> – lesbar erst, wenn man sie dekodiert und gegen die <code>.proto</code> hält. Das ist der Preis für die Kompaktheit."
-      },
-      loeschen: {
-        anfrage: Z(
-          "HTTP/2 · Stream 7 · HEADERS",
-          "",
-          ":method = POST",
-          ":path = /kunden.v1.CustomerService/DeleteCustomer",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – DeleteCustomerRequest:",
-          "  id = \"4711\""),
-        antwort: Z(
-          "HTTP/2 · Stream 7 · HEADERS",
-          "",
-          ":status = 200",
-          "content-type = application/grpc+proto",
-          "",
-          "DATA – google.protobuf.Empty (0 Bytes Nutzlast)",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 0"),
-        fehlertitel: "Antwort · den Kunden gibt es nicht",
-        fehler: Z(
-          "HTTP/2 · Stream 7 · HEADERS",
-          "",
-          ":status = 200",
-          "",
-          "TRAILERS",
-          "",
-          "grpc-status = 5",
-          "grpc-message = Kunde 4711 unbekannt",
-          "",
-          "5 = NOT_FOUND"),
-        hinweis: "<strong>Der Status ist ein gRPC-Status, kein HTTP-Status.</strong> Die beiden haben nichts miteinander zu tun: <code>grpc-status = 5</code> steht in einem Trailer, auf HTTP-Ebene war die Antwort eine <code>200</code>. Wer zwischen Client und Server ein Gateway stellt, muss ihm das beibringen."
-      }
-    }
-  };
-
-  /* --------------------------------------------------- Syntaxhervorhebung
-     Das Theme faerbt nur Java. Rohe HTTP-Nachrichten faerbt die Seite
-     deshalb selbst: Kopfzeilen zeilenweise, den Rumpf nach seiner Art.   */
-
-  function esc(t) {
-    return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-
-  function kopfzeile(zeile) {
-    var m;
-    if ((m = zeile.match(/^([A-Z]+) (\S+) (HTTP\/[\d.]+)$/))) {
-      return '<span class="hl-m">' + m[1] + '</span> ' +
-             '<span class="hl-p">' + esc(m[2]) + '</span> ' +
-             '<span class="hl-v">' + m[3] + "</span>";
-    }
-    if ((m = zeile.match(/^(HTTP\/[\d.]+) (\d)(\d\d)(.*)$/))) {
-      return '<span class="hl-v">' + m[1] + '</span> ' +
-             '<span class="hl-s' + m[2] + '">' + m[2] + m[3] + esc(m[4]) + "</span>";
-    }
-    if ((m = zeile.match(/^(:?[a-zA-Z][a-zA-Z0-9-]*)(\s*[:=]\s*)(.*)$/))) {
-      return '<span class="hl-h">' + m[1] + "</span>" + m[2] + esc(m[3]);
-    }
-    return esc(zeile);
-  }
-
-  function json(t) {
-    return t
-      .replace(/"([^"\\]*(?:\\.[^"\\]*)*)"(\s*:)/g, '<span class="hl-k">"$1"</span>$2')
-      .replace(/([:\[,]\s*)"([^"\\]*(?:\\.[^"\\]*)*)"/g, '$1<span class="hl-str">"$2"</span>')
-      .replace(/([:\[,]\s*)(-?\d+(?:\.\d+)?|true|false|null)\b/g, '$1<span class="hl-num">$2</span>');
-  }
-
-  function xml(t) {
-    /* Reihenfolge ist wichtig: erst die Zeichenketten, dann die Tags. Umgekehrt
-       faerbt die Zeichenketten-Regel das eben eingefuegte class="hl-tag" mit. */
-    return t
-      .replace(/"([^"]*)"/g, '<span class="hl-str">"$1"</span>')
-      .replace(/(&lt;\/?)([\w:.-]+)/g, '$1<span class="hl-tag">$2</span>');
-  }
-
-  /* Trennt am ersten Leerzeilen-Umbruch: davor der Kopf - das, was eine
-     Zwischenstation ohne Hineinschauen sieht -, danach der Rumpf. */
-  function teile(text) {
-    var zeilen = text.split("\n");
-    var kopf = [], rumpf = [], imKopf = true;
-
-    for (var i = 0; i < zeilen.length; i++) {
-      if (imKopf && zeilen[i] === "") { imKopf = false; continue; }
-      (imKopf ? kopf : rumpf).push(zeilen[i]);
-    }
-    return {
-      kopf: kopf.map(kopfzeile).join("\n"),
-      zeilen: rumpf.length,
-      rumpf: rumpf.length ? faerbeRumpf(rumpf) : ""
-    };
-  }
-
-  function faerbeRumpf(rumpf) {
-    var r = rumpf.join("\n"), erstes = r.replace(/^\s+/, "").charAt(0);
-    if (erstes === "{" || erstes === "[") r = json(esc(r));
-    else if (erstes === "<") r = xml(esc(r));
-    else {
-      /* Gemischter Rumpf (gRPC): Kopfzeilen faerben, Erklaerzeilen daempfen. */
-      r = rumpf.map(function (z) {
-        if (/^\(|^\d = |^[0-9a-f]{2}[\s0-9a-f]*(\.\.\.)?$/.test(z))
-          return '<span class="hl-c">' + esc(z) + "</span>";
-        if (/^(HTTP\/2|DATA|TRAILERS)/.test(z))
-          return '<span class="hl-kw">' + esc(z) + "</span>";
-        if (/^[0-9a-f]{2}[0-9a-f\s]*\s{2}\S/.test(z))
-          return '<span class="hl-c">' + esc(z) + "</span>";
-        if (/^(:?[a-zA-Z][a-zA-Z0-9-]*)(\s*[:=]\s*)/.test(z)) return kopfzeile(z);
-        if (/^\s+\w+\s*=/.test(z))
-          return z.replace(/^(\s+)(\w+)(\s*=\s*)(.*)$/, '$1<span class="hl-k">$2</span>$3<span class="hl-str">$4</span>');
-        return esc(z);
-      }).join("\n");
-    }
-    return r;
-  }
-
-  /* ---------------------------------------------------------- Bedienung */
-
-  var wurzel = document.querySelector(".vs");
-  if (!wurzel) return;
-
-  var stil = "soap", fall = "alles";
-  var fehlertitel = wurzel.querySelector("[data-vs-fehlertitel]");
-  var hinweisFeld = wurzel.querySelector("[data-vs-hinweis]");
-
-  function setze(name, text) {
-    var t = teile(text);
-    wurzel.querySelector('[data-vs-kopf="' + name + '"]').innerHTML = t.kopf;
-
-    var falt = wurzel.querySelector('[data-vs-falt="' + name + '"]');
-    falt.hidden = !t.zeilen;
-    if (!t.zeilen) return;
-    falt.querySelector("[data-vs-zahl]").textContent =
-      "Body · " + t.zeilen + (t.zeilen === 1 ? " Zeile" : " Zeilen");
-    falt.querySelector("[data-vs-rumpf]").innerHTML = t.rumpf;
-  }
-
-  function zeichne() {
-    var d = DATEN[stil][fall];
-    setze("anfrage", d.anfrage);
-    setze("antwort", d.antwort);
-    setze("fehler",  d.fehler);
-    fehlertitel.textContent = d.fehlertitel;
-    hinweisFeld.innerHTML   = d.hinweis;
-
-    wurzel.querySelectorAll("[data-stil]").forEach(function (b) {
-      var an = b.dataset.stil === stil;
-      b.classList.toggle("is-aktiv", an);
-      b.setAttribute("aria-selected", an ? "true" : "false");
-    });
-    wurzel.querySelectorAll("[data-fall]").forEach(function (b) {
-      var an = b.dataset.fall === fall;
-      b.classList.toggle("is-aktiv", an);
-      b.setAttribute("aria-selected", an ? "true" : "false");
-    });
-  }
-
-  wurzel.addEventListener("click", function (e) {
-    var s = e.target.closest("[data-stil]");
-    if (s) { stil = s.dataset.stil; zeichne(); merken(); return; }
-    var f = e.target.closest("[data-fall]");
-    if (f) { fall = f.dataset.fall; zeichne(); merken(); }
-  });
-
-  /* --- Zustand in der Adresse ---------------------------------------------
-     STIL UND FALL SIND ZWEI ACHSEN - und genau die Kombination ist das, worauf
-     ein Kapitel zeigen will („GraphQL, wenn nur zwei Felder gebraucht werden").
-     Ohne Zustand in der Adresse landet jeder Verweis bei SOAP/alles, und ein
-     Neuladen waehrend der Schulung wirft das Gespraech zurueck.
-
-     Angemeldet wird bei `AvdAcademyState` des Themes (ab 2.46.0) statt selbst ins
-     Fragment zu schreiben: Es gibt nur eines je Seite. Erst bei DOMContentLoaded,
-     weil das Theme-Skript `defer` traegt und damit nach diesem hier laeuft. */
-  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
-
-  function anmelden() {
-    if (!window.AvdAcademyState) { return; }
-    function achse(schluessel, holen, setzen) {
-      window.AvdAcademyState.register({
-        key: schluessel,
-        read: holen,
-        apply: function (wert) {
-          /* Nur bekannte Werte - eine von Hand getippte Adresse darf Unsinn
-             enthalten, und dann bleibt es beim Ausgangszustand. */
-          if (!wurzel.querySelector("[data-" + schluessel + '="' + wert.replace(/[^a-z0-9-]/gi, "") + '"]')) { return; }
-          setzen(wert);
-          zeichne();
-        }
-      });
-    }
-    achse("stil", function () { return stil; }, function (w) { stil = w; });
-    achse("fall", function () { return fall; }, function (w) { fall = w; });
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", anmelden);
-  } else {
-    anmelden();
-  }
-
-  zeichne();
-})();
-</script>
-
 <blockquote>
-  <p><strong>Merksatz:</strong> Die Frage ist nicht, welcher Stil der beste ist, sondern <strong>wer den
+<p><strong>Merksatz:</strong> Die Frage ist nicht, welcher Stil der beste ist, sondern <strong>wer den
 Client baut</strong>. Kennt man ihn und sitzt er im selben Rechenzentrum, ist gRPC
 schwer zu schlagen. Kennt man ihn nicht, ist alles, was ein Browser ohne
 Vorbereitung versteht, jede Menge wert.</p>
 </blockquote>
 
-
     </main>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
   </div>
-
-  <footer class="avd-academy-footer">
-  <div class="avd-academy-footer__grid">
-    <div><strong>ATVANTAGE Academy</strong>
-      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
-    </div><div>
-      <strong>Kontakt</strong>
-      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
-      </p>
-    </div></div>
-  <div class="avd-academy-footer__legal">
-    © <span data-avd-academy-year>2026</span> ATVANTAGE
-  </div>
-</footer>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
 
 </body>
 </html>

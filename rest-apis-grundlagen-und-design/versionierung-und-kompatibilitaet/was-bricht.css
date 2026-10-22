@@ -1,0 +1,107 @@
+/* Stylesheet der Seite 08-versionierung-und-kompatibilitaet/was-bricht.md – über `styles:` im Front Matter geladen. */
+.wb { --wb-ok: #187452; --wb-praxis: #806414; --wb-bruch: #b3402c; }
+[data-skr-theme="dark"] .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-skr-theme="light"]) .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+}
+
+.wb__steuer { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1.5rem 0 1rem; }
+.wb__alle {
+  font: inherit; font-size: .85rem; cursor: pointer;
+  padding: .4rem .9rem; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px solid var(--skr-color-border);
+  background: var(--skr-color-bg-subtle); color: inherit;
+}
+.wb__legende { margin-left: auto; display: flex; flex-wrap: wrap; gap: .5rem; }
+.wb__marke {
+  font-size: .74rem; font-weight: 700; letter-spacing: .02em;
+  padding: .15rem .5rem; border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.wb__marke--ok     { color: var(--wb-ok); }
+.wb__marke--praxis { color: var(--wb-praxis); }
+.wb__marke--bruch  { color: var(--wb-bruch); }
+
+.wb__liste { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+.wb__karte {
+  border: 1px solid var(--skr-color-border);
+  border-left: 5px solid var(--skr-color-border);
+  border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-color-bg-subtle);
+  transition: border-left-color .3s ease;
+}
+.wb__karte.ist-ok     { border-left-color: var(--wb-ok); }
+.wb__karte.ist-praxis { border-left-color: var(--wb-praxis); }
+.wb__karte.ist-bruch  { border-left-color: var(--wb-bruch); }
+
+.wb__kopf {
+  width: 100%; font: inherit; text-align: left; cursor: pointer;
+  display: flex; align-items: baseline; gap: .8rem;
+  padding: .85rem 1rem; background: transparent; border: none; color: inherit;
+}
+.wb__nr {
+  flex: none; width: 1.7rem; height: 1.7rem; line-height: 1.7rem; text-align: center;
+  border-radius: 50%; font-size: .82rem; font-weight: 700;
+  background: var(--skr-color-accent); color: var(--skr-color-accent-contrast);
+}
+.wb__was { flex: 1 1 auto; }
+.wb__was code { font-size: .88em; }
+.wb__pfeil { flex: none; color: var(--skr-color-ink-muted); transition: transform .25s ease; }
+.wb__karte.ist-offen .wb__pfeil { transform: rotate(90deg); }
+
+.wb__auf { display: none; padding: 0 1rem 1rem 3.5rem; }
+.wb__karte.ist-offen .wb__auf { display: block; animation: wb-auf .3s ease-out; }
+@keyframes wb-auf { from { opacity: 0; transform: translateY(-.3rem); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .wb__karte.ist-offen .wb__auf { animation: none; } }
+
+.wb__urteil { font-weight: 700; margin: 0 0 .4rem; }
+.ist-ok     .wb__urteil { color: var(--wb-ok); }
+.ist-praxis .wb__urteil { color: var(--wb-praxis); }
+.ist-bruch  .wb__urteil { color: var(--wb-bruch); }
+.wb__warum { margin: 0 0 .6rem; }
+.wb__weg {
+  margin: 0; font-size: .88rem; padding: .55rem .8rem;
+  border-left: 3px solid var(--skr-color-accent);
+  background: var(--skr-color-bg);
+}
+.wb__weg strong { display: block; font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; color: var(--skr-color-ink-muted); }
+
+/* Abstand NACH OBEN fuer die Abschnitts-Ueberschriften. Das Theme setzt h2
+   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
+   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
+   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
+   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
+   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
+   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
+   Container (`--skr-space-12`). */
+.wb h2.wb__h2 { margin-top: var(--skr-space-12, 3rem); }
+.wb__regeln { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1rem; }
+.wb__regel {
+  border: 1px solid var(--skr-color-border);
+  border-radius: var(--skr-radius-sm, 4px);
+  padding: .9rem 1.1rem; background: var(--skr-color-bg-subtle);
+}
+.wb__regel h3 { margin: 0 0 .4rem; font-size: 1rem; }
+.wb__regel p { margin: 0; font-size: .9rem; }
+.wb__schluss { margin-top: 1.5rem; }
+.wb h3.wb__h3 { margin-top: var(--skr-space-8, 2rem); font-size: var(--skr-fs-md, 1.05rem); }
+.wb__lead { color: var(--skr-color-ink-muted); }
+.wb__nb { font-size: .9rem; }
+
+.wb__tabelle-scroll { overflow-x: auto; margin: 1.2rem 0; }
+.wb__tabelle { border-collapse: collapse; width: 100%; min-width: 60rem; font-size: .84rem; }
+.wb__tabelle th, .wb__tabelle td {
+  border: 1px solid var(--skr-color-border);
+  padding: .5rem .65rem; vertical-align: top; text-align: left;
+}
+.wb__tabelle thead th { background: var(--skr-color-bg-subtle); font-size: .9rem; }
+.wb__tabelle thead th small {
+  display: block; font-weight: 400; font-size: .72rem;
+  color: var(--skr-color-ink-muted); margin-top: .15rem;
+}
+.wb__tabelle tbody th { background: var(--skr-color-bg-subtle); width: 11rem; font-weight: 600; }
+.wb__tabelle tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--skr-color-bg-subtle) 45%, transparent); }
+.wb__m { display: block; font-weight: 700; margin-bottom: .15rem; }
+.wb__m--ok     { color: var(--wb-ok); }
+.wb__m--praxis { color: var(--wb-praxis); }
+.wb__m--bruch  { color: var(--wb-bruch); }

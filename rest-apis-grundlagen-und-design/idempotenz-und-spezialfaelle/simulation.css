@@ -1,0 +1,30 @@
+/* Stylesheet der Seite 04-idempotenz-und-spezialfaelle/simulation.md – über `styles:` im Front Matter geladen. */
+.buehne {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+  align-items: start;
+  align-content: center;
+  min-height: 100%;
+}
+.buehne .skr-didaktikon-simulation-panel__body { min-height: 11rem; }
+.leitung {
+  display: flex; flex-direction: column; gap: .5rem; justify-content: center;
+  min-height: 11rem; text-align: center;
+}
+.leitung__pfeil { font-size: 1.6rem; line-height: 1; color: var(--skr-color-ink-muted); }
+.leitung__paket {
+  font-family: var(--skr-font-mono, monospace); font-size: .85rem;
+  padding: .5rem .6rem; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px dashed var(--skr-color-border);
+  background: var(--skr-color-bg-subtle);
+  word-break: break-all;
+}
+.leitung__paket.is-weg {
+  border-color: var(--skr-color-danger);
+  color: var(--skr-color-danger);
+  text-decoration: line-through;
+}
+.leitung__still { color: var(--skr-color-ink-muted); font-size: .85rem; font-style: italic; }
+.notiz { font-size: .85rem; color: var(--skr-color-ink-muted); margin-top: .6rem; }
+.notiz strong { color: var(--skr-color-ink); }

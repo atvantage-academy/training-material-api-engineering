@@ -1,110 +1,104 @@
-<!DOCTYPE html><html lang="de" data-avd-academy-effects="page-transitions reading-progress">
+<!DOCTYPE html>
+<html lang="de" data-skr-effects="page-transitions reading-progress">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>Ressourcen und Methoden: welches Verb auf welche Ressource? · ATVANTAGE Academy</title><meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>Ressourcen und Methoden: welches Verb auf welche Ressource? · ATVANTAGE Academy</title>
+<meta name="description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Ressourcen und Methoden: welches Verb auf welche Ressource?">
 <meta property="og:description" content="Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.html","title":"Ressourcen und Methoden: welches Verb auf welche Ressource?","layout":"visualization","description":"Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" href="../../skriptorium/guide.css?v=d99cc970">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Welche HTTP-Methode ergibt auf welcher Ressourcenart Sinn – und warum? Zum Selbstausfüllen und Nachschlagen.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.css","src":"methoden-matrix.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.js","src":"methoden-matrix.js","type":"script"}],"pageId":null,"runtimeFragments":["^/(\\?.*)?$","^/[A-Za-z0-9_-]+(\\?.*)?$"],"siteIndex":"/skriptorium/site.json","title":"Ressourcen und Methoden: welches Verb auf welche Ressource?","topics":null,"url":"/rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <link rel="stylesheet" href="/training-material-api-engineering/theme/academy/guide.css?v=590fafce">
-<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/page-transitions.css?v=83436606">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head><body class="avd-academy-guide avd-academy-guide--viz">
-<div class="avd-academy-reading-progress" aria-hidden="true"></div>
-  <a class="avd-academy-skip-link" href="#avd-academy-content">Zum Inhalt springen</a><section class="avd-academy-guide-hero avd-academy-guide-hero--slim"
-           aria-labelledby="avd-academy-page-title"><div class="avd-academy-guide-hero__meta">
-      <div class="avd-academy-guide-hero__tags">
-      </div>
-      <div class="avd-academy-guide-hero__actions"><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--print"
-                data-avd-academy-print
-                title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
-      </div>
-    </div><h1 id="avd-academy-page-title">Ressourcen und Methoden: welches Verb auf welche Ressource?</h1>
-  </section><div class="avd-academy-guide-layout">
-    <main class="avd-academy-guide-main" id="avd-academy-content">
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
+  <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+  <link rel="stylesheet" href="../../skriptorium/page-transitions.css?v=716872f0">
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.css?v=1f501fea">
+<script src="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.js?v=aa95a904" defer></script>
+
+</head><body class="skr-guide skr-guide--sidebar-empty" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization" data-skr-lang="de" data-skr-audience="learner">
+<div class="skr-reading-progress" aria-hidden="true"></div>
+  <a class="skr-skip-link" href="#skr-content">Zum Inhalt springen</a><section class="skr-guide-hero skr-guide-hero--slim"
+         aria-labelledby="skr-page-title">
+  <div class="skr-guide-hero__meta">
+    <div class="skr-guide-hero__tags">
+    </div>
+    <div class="skr-guide-hero__actions">
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+
+    </div>
+  </div><h1 id="skr-page-title">Ressourcen und Methoden: welches Verb auf welche Ressource?</h1>
+</section>
+
+  <div class="skr-guide-layout">
+    <main class="skr-guide-main" id="skr-content">
 <p>Vier Ressourcenarten, fünf Methoden, zwanzig Fragen. <strong>Rate zuerst selbst</strong>, dann
 deck die Zelle auf – dahinter steht nicht nur das Ergebnis, sondern die Begründung.</p>
-
 <p>Die Spaltenköpfe sind <strong>eine einzige Adresse</strong>, die von links nach rechts wächst:
 <code>/products</code> → <code>/products/12345</code> → <code>/products/12345/images</code> →
 <code>/products/12345/images/preview</code>. Jede Spalte hängt unter der davor. Welche Adresse
 gemeint ist, steht beim Aufdecken vollständig über der Begründung.</p>
-
 <p>Die vier Spalten entstehen dabei aus <strong>zwei</strong> Unterscheidungen, und beide tragen
 unabhängig voneinander: Eine <strong>Listenressource</strong> hält beliebig viele gleichartige Einträge, eine
 <strong>Einzelressource</strong> genau einen. Davon unabhängig ist eine <strong>Hauptressource</strong> für sich
 adressierbar, während eine <strong>Unterressource</strong> unter einer anderen hängt und ohne sie
 nicht existiert. Achte beim Aufdecken darauf, welche der beiden Unterscheidungen die
 Zelle entscheidet – es ist öfter die erste, als man erwartet.</p>
-
 <div class="mm">
-
 <div class="mm__bar">
-  <button type="button" class="mm__btn" data-mm-all="">Alles aufdecken</button>
-  <button type="button" class="mm__btn mm__btn--ghost" data-mm-reset="">Zurücksetzen</button>
-  <span class="mm__count" data-mm-count="">0 von 20 aufgedeckt</span>
+  <button type="button" class="mm__btn" data-mm-all>Alles aufdecken</button>
+  <button type="button" class="mm__btn mm__btn--ghost" data-mm-reset>Zurücksetzen</button>
+  <span class="mm__count" data-mm-count>0 von 20 aufgedeckt</span>
 </div>
-
 <div class="mm__scroll">
-<table class="mm__grid" data-mm-grid="">
+<table class="mm__grid" data-mm-grid>
   <caption class="mm__caption">Beispiel: Produktverwaltung eines Online-Shops</caption>
   <thead>
     <tr>
@@ -118,17 +112,13 @@ Zelle entscheidet – es ist öfter die erste, als man erwartet.</p>
   <tbody></tbody>
 </table>
 </div>
-
-<div class="mm__detail" data-mm-detail="" aria-live="polite">
+<div class="mm__detail" data-mm-detail aria-live="polite">
   <p class="mm__hint">Wähle eine Zelle – die Begründung erscheint hier.</p>
 </div>
-
 <h2 class="mm__h2">Und wie leert man dann eine Liste?</h2>
-
 <p class="mm__foot">DELETE ist dafür die falsche Methode – die Aufgabe bleibt aber
 bestehen. Drei Entwürfe, die alle vorkommen. <strong>Keiner ist umsonst zu haben:</strong>
 Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
-
 <div class="mm__scroll">
 <table class="mm__props">
   <thead>
@@ -156,18 +146,14 @@ Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
   </tbody>
 </table>
 </div>
-
 <p class="mm__foot"><strong>Die Probe für alle drei:</strong> Was antwortet
 <code>GET /products</code> danach? <code>200 OK</code> mit <code>[]</code>. Die Liste ist
 leer, aber sie ist da. Käme <code>404</code>, hättest Du sie wirklich gelöscht – und das
 war nicht die Aufgabe.</p>
-
 <h2 class="mm__h2">Was eine ID leisten muss</h2>
-
 <p class="mm__foot">Eine Einzelressource wird über ihre ID adressiert –
 <code>/products/<strong>12345</strong></code>. Ob eine ID taugt, entscheidet sich an
 fünf Fragen. Die zweite ist die, an der die meisten Entwürfe scheitern.</p>
-
 <div class="mm__scroll">
 <table class="mm__props mm__props--wort">
   <thead>
@@ -202,7 +188,6 @@ fünf Fragen. Die zweite ist die, an der die meisten Entwürfe scheitern.</p>
   </tbody>
 </table>
 </div>
-
 <p class="mm__foot"><strong>Der Fall, an dem es am deutlichsten wird.</strong> Die
 Bilder eines Produkts werden durchnummeriert: <code>…/images/0</code>,
 <code>…/images/1</code>, <code>…/images/2</code>. Das sieht aus wie eine ID, ist aber
@@ -211,36 +196,30 @@ alten <code>/2</code> wird das neue <code>/1</code>. Jeder gespeicherte Verweis 
 ab diesem Moment auf ein <em>anderes</em> Bild, und nirgendwo tritt ein Fehler auf:
 Die Adresse ist ja weiterhin gültig. <strong>Eine ID sagt nicht, wo etwas steht,
 sondern was es ist.</strong></p>
-
 <p class="mm__foot">Die Probe: Gib jedem Bild beim Hochladen eine eigene Kennung
 (<code>…/images/7f3a</code>) statt einer Nummer in der Reihe. Dann darf gelöscht,
 sortiert und eingefügt werden, ohne dass ein einziger Verweis kaputtgeht.</p>
-
 <h3 class="mm__h3">Sechs Kandidaten</h3>
-
 <div class="mm__scroll">
 <table class="mm__props mm__props--wort">
   <thead>
     <tr><th scope="col">Kandidat</th><th scope="col">Taugt?</th><th scope="col">Begründung</th></tr>
   </thead>
   <tbody>
-    <tr><th scope="row">Fachlicher Schlüssel<br /><small>Kundennummer, ISBN, IBAN</small></th><td class="mm__yes">ja</td><td>Eindeutig, stabil, URL-tauglich – und außerhalb des Systems schon bekannt. Deshalb kann der Client sie bestimmen und mit <code>PUT</code> anlegen. <em>Bedingung:</em> Sie muss wirklich stabil sein, nicht nur heute.</td></tr>
+    <tr><th scope="row">Fachlicher Schlüssel<br><small>Kundennummer, ISBN, IBAN</small></th><td class="mm__yes">ja</td><td>Eindeutig, stabil, URL-tauglich – und außerhalb des Systems schon bekannt. Deshalb kann der Client sie bestimmen und mit <code>PUT</code> anlegen. <em>Bedingung:</em> Sie muss wirklich stabil sein, nicht nur heute.</td></tr>
     <tr><th scope="row">UUID</th><td class="mm__yes">ja</td><td>Erfüllt die ersten vier mühelos und lässt sich ohne Rückfrage beim Server erzeugen – auch offline. Preis: nicht vorlesbar und nicht zu merken.</td></tr>
-    <tr><th scope="row">Laufende Nummer<br /><small><code>1</code>, <code>2</code>, <code>3</code> …</small></th><td class="mm__maybe">mit Vorbehalt</td><td>Eindeutig und unveränderlich – aber sie verrät die Menge und lädt zum Durchzählen ein. Intern meist unproblematisch, nach außen selten eine gute Wahl.</td></tr>
-    <tr><th scope="row">Slug<br /><small><code>kaffeemuehle-classic</code></small></th><td class="mm__maybe">mit Vorbehalt</td><td>Lesbar und URL-tauglich, gut für Suchmaschinen – aber er hängt am Namen, und Namen ändern sich. Nur tragfähig, wenn die alte Adresse danach weiterleitet.</td></tr>
+    <tr><th scope="row">Laufende Nummer<br><small><code>1</code>, <code>2</code>, <code>3</code> …</small></th><td class="mm__maybe">mit Vorbehalt</td><td>Eindeutig und unveränderlich – aber sie verrät die Menge und lädt zum Durchzählen ein. Intern meist unproblematisch, nach außen selten eine gute Wahl.</td></tr>
+    <tr><th scope="row">Slug<br><small><code>kaffeemuehle-classic</code></small></th><td class="mm__maybe">mit Vorbehalt</td><td>Lesbar und URL-tauglich, gut für Suchmaschinen – aber er hängt am Namen, und Namen ändern sich. Nur tragfähig, wenn die alte Adresse danach weiterleitet.</td></tr>
     <tr><th scope="row">E-Mail-Adresse</th><td class="mm__no">nein</td><td>Eindeutig ist sie. Aber Menschen wechseln sie, der Punkt darin bricht viele Frameworks – und sie ist ein Personendatum, das ab dann überall mitläuft.</td></tr>
-    <tr><th scope="row">Position in der Liste<br /><small><code>0</code>, <code>1</code>, <code>2</code></small></th><td class="mm__no">nein</td><td>Gar keine Identität, sondern eine Stelle. Sie ändert sich, sobald davor etwas gelöscht oder eingefügt wird – lautlos.</td></tr>
+    <tr><th scope="row">Position in der Liste<br><small><code>0</code>, <code>1</code>, <code>2</code></small></th><td class="mm__no">nein</td><td>Gar keine Identität, sondern eine Stelle. Sie ändert sich, sobald davor etwas gelöscht oder eingefügt wird – lautlos.</td></tr>
   </tbody>
 </table>
 </div>
-
 <p class="mm__foot">Und eine Frage für den Alltag, die in keiner Spezifikation steht:
 <strong>Kannst Du die ID am Telefon vorlesen?</strong> Eine UUID kann das nicht. Ob
 das zählt, hängt davon ab, wer die API bedient – ein Support-Team oder ein anderes
 Programm.</p>
-
 <h2 class="mm__h2">Die Methoden für sich genommen</h2>
-
 <div class="mm__scroll">
 <table class="mm__props">
   <thead>
@@ -255,12 +234,10 @@ Programm.</p>
   </tbody>
 </table>
 </div>
-
 <p class="mm__foot"><strong>Sicher</strong> heißt: verändert nichts – man darf es
 beliebig oft und ungefragt tun (Caches und Suchmaschinen verlassen sich darauf).
 <strong>Idempotent</strong> heißt: mehrfach ausgeführt ist das Ergebnis dasselbe wie
 einmal ausgeführt. Jede sichere Methode ist idempotent; umgekehrt gilt das nicht.</p>
-
 <p class="mm__foot"><strong>„Nicht zwingend“ ist keine Absage.</strong> Bei GET, PUT und
 DELETE <em>garantiert</em> die Methode die Idempotenz – der Aufrufer darf sich darauf
 verlassen, ohne nachzufragen. Bei POST und PATCH tut sie es nicht: Ob zweimal Senden
@@ -270,366 +247,20 @@ Guidelines</a> empfehlen ausdrücklich, POST und PATCH <strong>trotzdem idempote
 entwerfen</strong> – über einen fachlichen Zweitschlüssel oder einen vom Aufrufer
 mitgeschickten Idempotenzschlüssel. Der Preis: Es steht dann nicht mehr in der Methode,
 sondern nur in der Dokumentation. Wer sie nicht liest, weiß es nicht.</p>
-
 <p class="mm__foot"><strong>Zum Body in der Anfrage.</strong> Bei PUT ist er
 <strong>Pflicht</strong> – ohne Inhalt gibt es nichts, wodurch ersetzt werden könnte. Bei
 POST und PATCH ist er <em>optional</em>: Eine Aktionsressource wie
 <code>POST /products/actions/empty</code> braucht keinen, weil die Adresse schon alles
 sagt. GET und DELETE tragen keinen; was mitgeschickt wird, darf der Server ignorieren –
 und tut es in der Praxis auch.</p>
-
 </div>
 
-<style>
-.mm { --mm-gap: 0.75rem; margin-block: var(--avd-academy-space-6, 1.5rem); }
-.mm__bar { display: flex; flex-wrap: wrap; gap: var(--mm-gap); align-items: center; margin-bottom: var(--avd-academy-space-4, 1rem); }
-.mm__btn {
-  font: inherit; font-weight: var(--avd-academy-fw-medium, 500); cursor: pointer;
-  padding: 0.45em 1.1em; border-radius: var(--avd-academy-radius, 8px);
-  border: 1px solid var(--avd-academy-color-accent);
-  background: var(--avd-academy-color-accent); color: var(--avd-academy-color-accent-contrast);
-  transition: var(--avd-academy-transition, all .15s ease);
-}
-.mm__btn--ghost { background: transparent; color: var(--avd-academy-color-accent); }
-.mm__btn:hover { filter: brightness(1.08); }
-.mm__btn:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: 2px; }
-.mm__count { color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); }
-
-.mm__scroll { overflow-x: auto; }
-.mm__grid, .mm__props { border-collapse: collapse; width: 100%; min-width: 44rem; }
-.mm__caption { caption-side: top; text-align: left; color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); padding-bottom: .5rem; }
-.mm__grid th, .mm__grid td { border: 1px solid var(--avd-academy-color-border); padding: 0; }
-.mm__grid thead th { background: var(--avd-academy-color-bg-subtle); padding: .6rem .7rem; text-align: left; vertical-align: top; font-weight: var(--avd-academy-fw-medium, 500); }
-.mm__grid thead th code { font-family: var(--avd-academy-font-mono, monospace); font-size: .9em; }
-.mm__grid thead th small { display: block; color: var(--avd-academy-color-ink-muted); font-weight: var(--avd-academy-fw-normal, 400); font-size: .8em; margin-top: .15rem; }
-.mm__corner { color: var(--avd-academy-color-ink-muted); font-size: .8em; font-weight: var(--avd-academy-fw-normal, 400); }
-.mm__grid tbody th { background: var(--avd-academy-color-bg-subtle); padding: .6rem .8rem; text-align: left; font-family: var(--avd-academy-font-mono, monospace); font-weight: var(--avd-academy-fw-bold, 700); white-space: nowrap; }
-
-.mm__cell {
-  display: block; width: 100%; min-height: 3.4rem; border: 0; cursor: pointer;
-  font: inherit; background: transparent; color: var(--avd-academy-color-ink);
-  padding: .5rem; text-align: center; transition: var(--avd-academy-transition, all .15s ease);
-}
-.mm__cell:hover { background: var(--avd-academy-color-accent-soft); }
-.mm__cell:focus-visible { outline: 2px solid var(--avd-academy-color-accent); outline-offset: -2px; }
-.mm__cell[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--avd-academy-color-accent); }
-.mm__mark { display: block; font-size: 1.35rem; line-height: 1.1; font-weight: var(--avd-academy-fw-bold, 700); }
-.mm__word { display: block; font-size: .72rem; color: var(--avd-academy-color-ink-muted); margin-top: .15rem; }
-.mm__cell:not(.is-open) .mm__mark { color: var(--avd-academy-color-ink-muted); font-weight: var(--avd-academy-fw-normal, 400); }
-.mm__cell.is-open.t-ok .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
-.mm__cell.is-open.t-warn .mm__mark { color: color-mix(in srgb, var(--avd-academy-color-warning) 72%, var(--avd-academy-color-ink)); }
-.mm__cell.is-open.t-no .mm__mark { color: var(--avd-academy-color-danger-ink); }
-.mm__cell.is-open.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 8%, transparent); }
-.mm__cell.is-open.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 10%, transparent); }
-.mm__cell.is-open.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 8%, transparent); }
-
-.mm__detail {
-  margin-top: var(--avd-academy-space-4, 1rem); padding: var(--avd-academy-space-4, 1rem) var(--avd-academy-space-6, 1.5rem);
-  border-left: 4px solid var(--avd-academy-color-accent);
-  background: var(--avd-academy-color-bg-subtle); border-radius: var(--avd-academy-radius, 8px);
-  min-height: 8rem;
-}
-.mm__detail h3 { margin: 0 0 .4rem; font-size: var(--avd-academy-fs-lg, 1.15rem); }
-.mm__detail h3 code { font-family: var(--avd-academy-font-mono, monospace); }
-.mm__detail p { margin: 0 0 .6rem; }
-.mm__detail p:last-child { margin-bottom: 0; }
-.mm__hint { color: var(--avd-academy-color-ink-muted); font-style: italic; }
-.mm__verdict { display: inline-block; font-weight: var(--avd-academy-fw-bold, 700); padding: .1em .6em; border-radius: var(--avd-academy-radius-sm, 4px); margin-bottom: .5rem; }
-.mm__verdict.t-ok { background: color-mix(in srgb, var(--avd-academy-color-success) 18%, transparent); color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
-.mm__verdict.t-warn { background: color-mix(in srgb, var(--avd-academy-color-warning) 20%, transparent); color: var(--avd-academy-color-warning); }
-.mm__verdict.t-no { background: color-mix(in srgb, var(--avd-academy-color-danger) 18%, transparent); color: var(--avd-academy-color-danger-ink); }
-.mm__ex { font-family: var(--avd-academy-font-mono, monospace); font-size: .88em; background: var(--avd-academy-code-bg, rgba(127,127,127,.12)); padding: .5rem .7rem; border-radius: var(--avd-academy-radius-sm, 4px); display: block; white-space: pre-wrap; }
-
-/* SPEZIFITAET MIT ABSICHT (0-2-1): Das Theme setzt `.avd-academy-guide-main h2`
-   auf `margin: 0 0 0.25rem` (guide.css) - eine h2 bekommt ihre Luft also NICHT
-   von oben, sondern aus dem `margin-bottom` des VORGAENGERS. Im normalen
-   Markdown-Fluss (p, ul, blockquote) geht das auf; hier steht vor der
-   Ueberschrift aber ein eigenes Raster-<div> ohne Aussenabstand, und dann klebt
-   sie am Block darueber. Ein blosses `.xx__h2` (0-1-0) verliert gegen die
-   Theme-Regel und bleibt wirkungslos. Wert wie in `site.css` fuer die uebrigen
-   Container (`--avd-academy-space-12`). */
-.mm h2.mm__h2 { margin-top: var(--avd-academy-space-12, 3rem); }
-.mm h3.mm__h3 { margin-top: var(--avd-academy-space-8, 2rem); font-size: var(--avd-academy-fs-md, 1.05rem); }
-.mm__props th, .mm__props td { border: 1px solid var(--avd-academy-color-border); padding: .5rem .8rem; text-align: left; }
-.mm__props thead th { background: var(--avd-academy-color-bg-subtle); }
-.mm__props tbody th { font-family: var(--avd-academy-font-mono, monospace); }
-/* Monospace passt zu Methodennamen und Adressen. Wo in der Kopfspalte FLIESSTEXT
-   steht - Kriterien, Kandidaten -, ist sie falsch: „URL-tauglich" wirkt dort wie
-   Code, und der Bindestrich liest sich als Minuszeichen. */
-.mm__props--wort tbody th { font-family: inherit; font-weight: var(--avd-academy-fw-bold, 700); }
-.mm__props--wort tbody th small { display: block; font-weight: var(--avd-academy-fw-normal, 400); color: var(--avd-academy-color-ink-muted); font-size: .85em; margin-top: .15rem; }
-.mm__props--wort tbody th small code { font-family: var(--avd-academy-font-mono, monospace); }
-.mm__yes { color: color-mix(in srgb, var(--avd-academy-color-success) 72%, var(--avd-academy-color-ink)); }
-.mm__no { color: var(--avd-academy-color-danger-ink); }
-.mm__maybe { color: color-mix(in srgb, var(--avd-academy-color-warning) 48%, var(--avd-academy-color-ink)); }
-.mm__foot { color: var(--avd-academy-color-ink-muted); font-size: var(--avd-academy-fs-sm, .9rem); margin-top: var(--avd-academy-space-3, .75rem); }
-
-@media (prefers-reduced-motion: reduce) { .mm * { transition: none !important; } }
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  var SPALTEN = [
-    { id: "liste",     url: "/products",                 art: "Listenressource · Hauptressource" },
-    { id: "einzeln",   url: "/products/12345",           art: "Einzelressource · Hauptressource" },
-    { id: "unterliste",url: "/products/12345/images",    art: "Listenressource · Unterressource" },
-    { id: "abgeleitet",url: "/products/12345/images/preview", art: "Einzelressource · Unterressource" }
-  ];
-
-  // ton: ok = tragfähig, warn = geht, will aber begründet sein, no = ergibt keinen Sinn
-  var ZELLEN = {
-    "GET|liste":        { mark: "R", wort: "Read", ton: "ok",
-      urteil: "Der Normalfall",
-      text: "Die Liste lesen – mit Filtern, Sortierung und Paginierung als Query-Parameter. GET ist <em>sicher</em>: Es verändert nichts, deshalb dürfen Caches und Suchmaschinen es ungefragt ausführen.",
-      bsp: "GET /products?category=books&page=1\n200 OK" },
-    "GET|einzeln":      { mark: "R", wort: "Read", ton: "ok",
-      urteil: "Der Normalfall",
-      text: "Eine Einzelressource lesen. Gibt es die ID nicht, ist die Antwort <code>404</code> – nicht <code>200</code> mit einem leeren Objekt.",
-      bsp: "GET /products/12345\n200 OK\n404 Not Found" },
-    "GET|unterliste":   { mark: "R", wort: "Read", ton: "warn",
-      urteil: "Ja – aber frag Dich, warum es sie gibt",
-      text: "Technisch unstrittig. Die eigentliche Entwurfsfrage ist eine andere: Warum ist <code>images</code> überhaupt eine eigene Adresse und nicht ein Feld im Produkt? Gute Gründe: Es sind viele, sie sind groß, sie ändern sich unabhängig, oder sie haben eigene Rechte. Kein guter Grund: „so liegt es in der Datenbank“.",
-      bsp: "GET /products/12345/images\n200 OK" },
-    "GET|abgeleitet":   { mark: "R", wort: "Read", ton: "ok",
-      urteil: "Der klassische Fall für eine abgeleitete Ressource",
-      text: "Das Vorschaubild zu den Bildern dieses Produkts – nichts Gespeichertes, sondern etwas Berechnetes, und trotzdem eine Ressource: Es hat eine Adresse, ist lesbar und cachebar. Genau dafür ist REST gut. Der häufige Anfängerfehler wäre <code>POST /products/12345/images/generatePreview</code>: ein Verb in der URL für etwas, das man einfach lesen kann.<br><br>Beachte, wo sie hängt: <strong>unter</strong> der Bilderliste, nicht neben ihr. Die Vorschau gibt es nur, weil es die Bilder gibt.",
-      bsp: "GET /products/12345/images/preview\n200 OK\nContent-Type: image/png" },
-
-    "POST|liste":       { mark: "C", wort: "Create", ton: "ok",
-      urteil: "Der Normalfall zum Anlegen",
-      text: "POST heißt: „Wende Deine eigene Logik auf das Mitgeschickte an.“ Bei einer Liste ist das „nimm es auf“ – <strong>und vergib die ID</strong>. Deshalb ist POST nicht idempotent: Zweimal gesendet, zweimal angelegt. Die Antwort ist <code>201</code> mit einem <code>Location</code>-Header auf das Neue.",
-      bsp: "POST /products\n{ \"name\": \"Kaffeemühle\" }\n\n201 Created\nLocation: /products/12345" },
-    "POST|einzeln":     { mark: "✗", wort: "ohne Bedeutung", ton: "no",
-      urteil: "Nicht verboten – aber es gibt nichts zu tun",
-      text: "Was sollte „wende Deine Logik auf das Mitgeschickte an“ bei einem <em>bestimmten</em> Produkt bedeuten? Es gibt nichts, dem man etwas hinzufügen könnte. Antwort: <code>405 Method Not Allowed</code>.<br><br><strong>Die Ausnahme, die Du kennen solltest:</strong> POST auf eine Einzelressource ist der übliche Griff für <em>Aktionen</em>, die keine CRUD-Operation sind – <code>POST /orders/77/actions/cancel</code>. Dann adressiert man aber die Aktion als eigene <strong>Aktionsressource</strong>, nicht die Einzelressource selbst.",
-      bsp: "POST /products/12345\n405 Method Not Allowed" },
-    "POST|unterliste":  { mark: "C", wort: "Create", ton: "ok",
-      urteil: "Der Normalfall zum Hinzufügen",
-      text: "Ein Bild hinzufügen, der Server vergibt die ID. Identisch zur Hauptliste – eine Unterliste ist eine Liste.",
-      bsp: "POST /products/12345/images\n201 Created\nLocation: /products/12345/images/7" },
-    "POST|abgeleitet":  { mark: "✗", wort: "ohne Bedeutung", ton: "no",
-      urteil: "Es gibt nichts anzulegen",
-      text: "Die Vorschau ist berechnet – sie entsteht nicht dadurch, dass jemand sie einreicht. Wer hier POST braucht, hat in Wahrheit eine Aktion gemeint („neu berechnen“). Die gehört dann als eigene Ressource modelliert, oder sie ist gar nicht nötig: Beim nächsten GET ist sie ohnehin aktuell.",
-      bsp: "POST /products/12345/images/preview\n405 Method Not Allowed" },
-
-    "PUT|liste":        { mark: "U?", wort: "Replace", ton: "warn",
-      urteil: "Definiert, aber gefährlich",
-      text: "PUT ersetzt die Ressource <em>vollständig</em> durch das Mitgeschickte. Auf einer Liste heißt das: „Ab jetzt sind das alle Produkte, die es gibt.“ Das ist eindeutig definiert – und selten das, was jemand will. Wer es anbietet, sollte sehr genau wissen, warum.",
-      bsp: "PUT /products\n[ … alle Produkte … ]\n\n→ alles, was nicht dabei ist, ist weg" },
-    "PUT|einzeln":      { mark: "U/C", wort: "Replace / Create", ton: "ok",
-      urteil: "Ersetzen – und anlegen, wenn der Client die ID bestimmt",
-      text: "PUT ist <em>idempotent</em>: Dieselbe Anfrage zweimal führt zum selben Zustand. Deshalb ist PUT der richtige Griff, wenn der <strong>Client</strong> die ID kennt – etwa bei einem fachlichen Schlüssel. Achtung beim Ersetzen: Was Du nicht mitschickst, ist danach weg.",
-      bsp: "PUT /customers/john@acme.com\n{ \"name\": \"John\" }\n\n201 beim ersten Mal, 200/204 danach" },
-    "PUT|unterliste":   { mark: "U?", wort: "Replace", ton: "warn",
-      urteil: "Hier oft sinnvoller als auf der Hauptliste",
-      text: "„Genau diese Bilder soll das Produkt haben“ ist ein realistischer Wunsch – und die Menge ist überschaubar und gehört einem einzigen Besitzer. Das ist der Unterschied zur globalen Liste: Der Schaden ist begrenzt und der Besitzer ist eindeutig.",
-      bsp: "PUT /products/12345/images\n[ … die gewünschten Bilder … ]" },
-    "PUT|abgeleitet":   { mark: "U/C", wort: "Replace / Create", ton: "warn",
-      urteil: "Nur, wenn die Vorschau hinterlegbar ist",
-      text: "Ist die Vorschau rein berechnet, gibt es nichts zu setzen – dann <code>405</code>. Darf man sie aber überschreiben („nimm dieses Bild statt des automatisch erzeugten“), ist PUT genau richtig: Es gibt <strong>eine</strong> davon, der Client bestimmt den Inhalt, mehrfach gesendet ändert sich nichts.",
-      bsp: "PUT /products/12345/images/preview\nContent-Type: image/png\n204 No Content" },
-
-    "PATCH|liste":      { mark: "U", wort: "Update", ton: "warn",
-      urteil: "Möglich, aber ungewöhnlich",
-      text: "PATCH auf eine Liste bedeutet „ändere etwas an der Liste, ohne sie zu ersetzen“ – dafür braucht man ein Änderungsformat (JSON Patch, <code>application/json-patch+json</code>). Das ist mächtig und schwer verständlich. In den meisten Entwürfen kommt es nicht vor.",
-      bsp: "PATCH /products\nContent-Type: application/json-patch+json" },
-    "PATCH|einzeln":    { mark: "U", wort: "Update", ton: "ok",
-      urteil: "Der Normalfall zum Ändern einzelner Felder",
-      text: "Der Unterschied zu PUT in einem Satz: <strong>PUT ersetzt, PATCH ändert.</strong> Kunde 5 heißt „Maier“ mit Vorname „Tom“. <code>PUT</code> mit <code>{\"name\":\"Schmidt\"}</code> → Vorname ist weg. <code>PATCH</code> mit demselben Body → Vorname bleibt. Dafür ist PATCH aufwendiger zu implementieren (Zusammenführen) und nicht automatisch idempotent.",
-      bsp: "PATCH /products/12345\nContent-Type: application/merge-patch+json\n{ \"price\": 19.90 }" },
-    "PATCH|unterliste": { mark: "U", wort: "Update", ton: "warn",
-      urteil: "Wie bei der Hauptliste – selten",
-      text: "Dasselbe Bild wie oben: Es braucht ein Änderungsformat, und meist ist es einfacher, das einzelne Element zu ändern (<code>PATCH /products/12345/images/7</code>).",
-      bsp: "PATCH /products/12345/images" },
-    "PATCH|abgeleitet": { mark: "U", wort: "Update", ton: "warn",
-      urteil: "Nur, wenn sie überhaupt Felder hat",
-      text: "Ein Bild hat keine Teilfelder, die man einzeln ändern könnte – dann ergibt PATCH keinen Sinn. Ist die Vorschau dagegen ein Objekt mit Einstellungen (Ausschnitt, Größe), ist PATCH der übliche Weg.",
-      bsp: "PATCH /products/12345/images/preview\n{ \"crop\": \"square\" }" },
-
-    "DELETE|liste":     { mark: "✗", wort: "geht nicht", ton: "no",
-      urteil: "Löschen und Leeren sind nicht dasselbe",
-      text: "Eine Ressource zu löschen heißt: Sie ist danach <strong>weg</strong> – ein anschließendes <code>GET</code> antwortet <code>404</code>. Genau das lässt sich mit einer Listenressource nicht machen. <code>/products</code> ist die Produktliste des Shops; sie existiert, solange es den Shop gibt – ob Produkte darin stehen oder keine. Nach einem <code>DELETE</code> wäre sie also immer noch da, nur leer. Und eine leere Liste antwortet <code>200</code> mit <code>[]</code>, nicht <code>404</code>.<br><br>Wer hier DELETE verlangt, meint deshalb nicht <em>löschen</em>, sondern <strong>leeren</strong> – und dafür ist DELETE die falsche Methode. Die Aufgabe bleibt damit aber bestehen: <em>Wie leert man eine Liste?</em> Drei Entwürfe stehen unter der Matrix.",
-      bsp: "DELETE /products\n405 Method Not Allowed\n\nGET /products\n200 OK\n[]   ← die Liste gibt es weiterhin" },
-    "DELETE|einzeln":   { mark: "D", wort: "Delete", ton: "ok",
-      urteil: "Der Normalfall",
-      text: "Löschen, Antwort <code>204</code> ohne Body. DELETE ist <em>idempotent</em>: Beim zweiten Mal ist die Ressource immer noch weg – ob man dann <code>204</code> oder <code>404</code> antwortet, ist eine Entwurfsentscheidung. (Zweimal senden darf jedenfalls nicht zwei verschiedene Ressourcen löschen – genau das ist der Grund, warum <code>DELETE /customers/oldest</code> ein Fehler ist.)",
-      bsp: "DELETE /products/12345\n204 No Content" },
-    "DELETE|unterliste":{ mark: "✗", wort: "geht nicht", ton: "no",
-      urteil: "Unterressource hin oder her – es bleibt eine Liste",
-      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>/products/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die drei Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
-      bsp: "DELETE /products/12345/images\n405 Method Not Allowed\n\nGET /products/12345/images\n200 OK\n[]" },
-    "DELETE|abgeleitet":{ mark: "D", wort: "Delete", ton: "warn",
-      urteil: "Nur, wenn es etwas zu löschen gibt",
-      text: "Bei einer rein berechneten Vorschau: nichts zu löschen, <code>405</code>. Bei einer hinterlegten: „nimm meine hochgeladene Vorschau weg und berechne wieder selbst“ – das ist eine saubere Bedeutung für DELETE.",
-      bsp: "DELETE /products/12345/images/preview\n204 No Content" }
-  };
-
-  var METHODEN = ["GET", "POST", "PUT", "PATCH", "DELETE"];
-
-  var wurzel = document.querySelector(".mm");
-  if (!wurzel) return;
-  var tabelle = wurzel.querySelector("[data-mm-grid] tbody");
-  var detail = wurzel.querySelector("[data-mm-detail]");
-  var zaehler = wurzel.querySelector("[data-mm-count]");
-  var knoepfe = [];
-
-  METHODEN.forEach(function (methode) {
-    var zeile = document.createElement("tr");
-    var kopf = document.createElement("th");
-    kopf.scope = "row";
-    kopf.textContent = methode;
-    zeile.appendChild(kopf);
-
-    SPALTEN.forEach(function (spalte) {
-      var zelle = document.createElement("td");
-      var daten = ZELLEN[methode + "|" + spalte.id];
-      var knopf = document.createElement("button");
-      knopf.type = "button";
-      knopf.className = "mm__cell";
-      knopf.setAttribute("aria-pressed", "false");
-      knopf.setAttribute("aria-label", methode + " auf " + spalte.url + " – aufdecken");
-      knopf.innerHTML = '<span class="mm__mark">?</span><span class="mm__word"></span>';
-      knopf.addEventListener("click", function () { oeffne(knopf, methode, spalte, daten); merken(); });
-      knopf._mm = { methode: methode, spalte: spalte, daten: daten };
-      /* Kennung fuer die Adresse: `get-liste` statt einer Zellennummer. */
-      knopf.dataset.mmId = (methode + "-" + spalte.id).toLowerCase();
-      knoepfe.push(knopf);
-      zelle.appendChild(knopf);
-      zeile.appendChild(zelle);
-    });
-
-    tabelle.appendChild(zeile);
-  });
-
-  function decke(knopf) {
-    var d = knopf._mm;
-    if (knopf.classList.contains("is-open")) return false;
-    knopf.classList.add("is-open", "t-" + d.daten.ton);
-    knopf.querySelector(".mm__mark").textContent = d.daten.mark;
-    knopf.querySelector(".mm__word").textContent = d.daten.wort;
-    knopf.setAttribute("aria-label", d.methode + " auf " + d.spalte.url + ": " + d.daten.urteil);
-    return true;
-  }
-
-  function oeffne(knopf, methode, spalte, daten) {
-    decke(knopf);
-    knoepfe.forEach(function (k) { k.setAttribute("aria-pressed", k === knopf ? "true" : "false"); });
-    detail.innerHTML =
-      '<h3><code>' + methode + " " + spalte.url + "</code></h3>" +
-      '<p class="mm__verdict t-' + daten.ton + '">' + daten.urteil + "</p>" +
-      "<p>" + daten.text + "</p>" +
-      '<code class="mm__ex">' + daten.bsp.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</code>";
-    zaehle();
-  }
-
-  function zaehle() {
-    var offen = knoepfe.filter(function (k) { return k.classList.contains("is-open"); }).length;
-    zaehler.textContent = offen + " von " + knoepfe.length + " aufgedeckt";
-  }
-
-  function verdecke(k) {
-    k.className = "mm__cell";
-    k.setAttribute("aria-pressed", "false");
-    k.setAttribute("aria-label", k._mm.methode + " auf " + k._mm.spalte.url + " – aufdecken");
-    k.querySelector(".mm__mark").textContent = "?";
-    k.querySelector(".mm__word").textContent = "";
-  }
-
-  wurzel.querySelector("[data-mm-all]").addEventListener("click", function () {
-    knoepfe.forEach(decke);
-    zaehle();
-    merken();
-  });
-
-  wurzel.querySelector("[data-mm-reset]").addEventListener("click", function () {
-    knoepfe.forEach(verdecke);
-    detail.innerHTML = '<p class="mm__hint">Wähle eine Zelle – die Begründung erscheint hier.</p>';
-    zaehle();
-    merken();
-  });
-
-  /* --- Zustand in der Adresse ---------------------------------------------
-     EINE HALB AUFGEDECKTE MATRIX IST DER ZUSTAND DES GESPRAECHS. Wer im Kurs acht
-     Zellen aufgedeckt hat und neu laedt, faengt sonst wieder bei zwanzig
-     Fragezeichen an - und ein Verweis aus dem Regiebuch kann nicht auf
-     „DELETE auf der Liste" zeigen.
-
-     ZWEI SCHLUESSEL: `matrix` fuehrt die aufgedeckten Zellen, `zelle` die, deren
-     Begruendung unten steht. Sind alle offen, steht `matrix=alle` da statt
-     zwanzig Kennungen - eine Adresse, die man noch vorlesen kann.
-
-     Angemeldet wird bei `AvdAcademyState` (Theme ab 2.46.0) statt selbst ins
-     Fragment zu schreiben; erst bei DOMContentLoaded, weil das Theme-Skript
-     `defer` traegt. */
-  function merken() { if (window.AvdAcademyState) { window.AvdAcademyState.update(); } }
-
-  function anmelden() {
-    if (!window.AvdAcademyState) { return; }
-
-    window.AvdAcademyState.register({
-      key: "matrix",
-      read: function () {
-        var offen = knoepfe.filter(function (k) { return k.classList.contains("is-open"); });
-        if (!offen.length) { return ""; }
-        if (offen.length === knoepfe.length) { return "alle"; }
-        return offen.map(function (k) { return k.dataset.mmId; }).join(",");
-      },
-      apply: function (wert) {
-        var alle = wert === "alle";
-        var liste = wert ? wert.split(",") : [];
-        knoepfe.forEach(function (k) {
-          var soll = alle || liste.indexOf(k.dataset.mmId) !== -1;
-          if (soll) { decke(k); } else { verdecke(k); }
-        });
-        zaehle();
-      }
-    });
-
-    window.AvdAcademyState.register({
-      key: "zelle",
-      read: function () {
-        var a = knoepfe.filter(function (k) { return k.getAttribute("aria-pressed") === "true"; })[0];
-        return a ? a.dataset.mmId : "";
-      },
-      apply: function (wert) {
-        var k = knoepfe.filter(function (x) { return x.dataset.mmId === wert; })[0];
-        if (k) { oeffne(k, k._mm.methode, k._mm.spalte, k._mm.daten); }
-      }
-    });
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", anmelden);
-  } else {
-    anmelden();
-  }
-
-  zaehle();
-})();
-</script>
-
-
-
     </main>
-  </div><div class="avd-academy-print-contact" aria-hidden="true">
-    <span>Kontakt: https://academy.atvantage-academy.workers.dev/</span>
-    <span>academy@atvantage.com</span>
   </div>
-
-  <footer class="avd-academy-footer">
-  <div class="avd-academy-footer__grid">
-    <div><strong>ATVANTAGE Academy</strong>
-      <p>Schulungsunterlagen der ATVANTAGE Academy.</p>
-    </div><div>
-      <strong>Kontakt</strong>
-      <p><a href="https://academy.atvantage-academy.workers.dev/" target="_blank" rel="noopener">Website</a><br><a href="mailto:academy@atvantage.com">academy@atvantage.com</a><br>
-      </p>
-    </div></div>
-  <div class="avd-academy-footer__legal">
-    © <span data-avd-academy-year>2026</span> ATVANTAGE
-  </div>
-</footer>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
 
 </body>
 </html>

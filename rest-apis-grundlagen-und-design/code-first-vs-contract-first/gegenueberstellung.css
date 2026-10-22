@@ -1,0 +1,47 @@
+/* Stylesheet der Seite 11-code-first-vs-contract-first/gegenueberstellung.md – über `styles:` im Front Matter geladen. */
+.cf { margin-block: var(--skr-space-6, 1.5rem); }
+.cf__wege { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--skr-space-6, 1.5rem); }
+.cf__weg { border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius, 8px); padding: var(--skr-space-4, 1rem); background: var(--skr-color-bg-subtle); }
+.cf__weg h2 { margin-top: 0; font-size: var(--skr-fs-lg, 1.15rem); }
+.cf__weg p { margin-bottom: 0; }
+.cf__svg { width: 100%; max-width: 320px; display: block; margin: 0 auto .8rem; color: var(--skr-color-ink); }
+/* SPEZIFITÄT MIT ABSICHT (0-2-1): Vor der Überschrift steht ein eigenes Raster-<div>
+   ohne Außenabstand, sie bekommt ihre Luft deshalb hier von oben. Ein bloßes
+   `.xx__h2` (0-1-0) verlöre gegen die Überschriftenregeln des Skriptoriums. */
+.cf h2.cf__h2 { margin-top: var(--skr-space-12, 3rem); }
+.cf__lead { color: var(--skr-color-ink-muted); }
+/* Argumente als Reiterleiste: links das Argument, rechts die Ausfuehrung.
+   Beim DRUCKEN faellt die Aufteilung weg - dann steht jedes Argument als
+   eigenes Kapitel untereinander (siehe @media print am Ende). */
+.skr-tabs__panel p:last-child, .skr-tabs__panel ul:last-child { margin-bottom: 0; }
+/* DER TON JE GRUPPE. Die Komponente zeigt die Wahl als linke Kante in der
+   Akzentfarbe; hier bekommt sie die Bedeutung der Gruppe - Behauptungen warnend,
+   Argumente bestaetigend. Ein eigener Rahmen je Eintrag entfaellt damit: Die
+   Ueberschrift ueber der Gruppe sagt ohnehin, um welche Sorte es geht. */
+.cf--claims > .skr-tabs__bar > .skr-tabs__tab[aria-selected="true"] { border-left-color: var(--skr-color-warning); }
+.cf--pros   > .skr-tabs__bar > .skr-tabs__tab[aria-selected="true"] { border-left-color: var(--skr-color-success); }
+
+.cf__objection { font-size: var(--skr-fs-sm, .92rem); border-top: 1px dashed var(--skr-color-border); padding-top: .6rem; color: var(--skr-color-ink-muted); }
+.cf__objection strong { color: var(--skr-color-ink); }
+
+.cf__quiz { display: grid; gap: .6rem; margin-bottom: var(--skr-space-4, 1rem); }
+.cf__frage { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius, 8px); padding: .7rem .9rem; background: var(--skr-color-bg-subtle); }
+.cf__frage p { margin: 0; flex: 1 1 18rem; }
+.cf__wahl { display: flex; gap: .4rem; flex: 0 0 auto; }
+.cf__opt { font: inherit; font-size: var(--skr-fs-sm, .9rem); cursor: pointer; padding: .3em 1em; border-radius: var(--skr-radius-sm, 4px); border: 1px solid var(--skr-color-border); background: transparent; color: var(--skr-color-ink); transition: var(--skr-transition, all .15s ease); }
+.cf__opt:hover { border-color: var(--skr-color-accent); }
+.cf__opt[aria-pressed="true"] { background: var(--skr-color-accent); border-color: var(--skr-color-accent); color: var(--skr-color-accent-contrast); }
+.cf__opt:focus-visible { outline: 2px solid var(--skr-color-accent); outline-offset: 2px; }
+.cf__ergebnis { border-left: 4px solid var(--skr-color-accent); background: var(--skr-color-bg-subtle); border-radius: var(--skr-radius, 8px); padding: var(--skr-space-4, 1rem) var(--skr-space-6, 1.5rem); min-height: 6rem; }
+.cf__ergebnis h3 { margin-top: 0; }
+.cf__ergebnis p:last-child { margin-bottom: 0; }
+.cf__hint { color: var(--skr-color-ink-muted); font-style: italic; }
+.cf__fazit { border-left: 4px solid var(--skr-color-success); background: var(--skr-color-bg-subtle); border-radius: var(--skr-radius, 8px); padding: var(--skr-space-4, 1rem) var(--skr-space-6, 1.5rem); }
+.cf__fazit p:last-child { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .cf * { transition: none !important; } }
+
+/* GEDRUCKT gibt es keine Reiter. Dann steht jedes Argument als eigenes
+   Kapitel untereinander - Ueberschrift plus Text, wie in einem Handout. */
+@media print {
+  .cf__quiz, .cf__ergebnis { break-inside: avoid; }
+}

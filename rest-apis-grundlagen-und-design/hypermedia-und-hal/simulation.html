@@ -1,537 +1,173 @@
-<!DOCTYPE html><html lang="de">
+<!DOCTYPE html>
+<html lang="de">
 <head>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem("avd-academy-theme");
-    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-avd-academy-theme", t);
-  } catch (e) {}
-  addEventListener("unhandledrejection", function (e) {
-    var r = e.reason;
-    if (r && r.name === "InvalidStateError" && /ViewTransition opt-in disabled/.test(r.message || "")) e.preventDefault();
-  });
-})();
-</script><title>Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf? · ATVANTAGE Academy</title><meta name="description" content="Dieselbe Bestellung, derselbe Ablauf – einmal mit den Regeln im Client und einmal mit Verweisen in der Antwort."><meta property="og:site_name" content="ATVANTAGE Academy">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=dfcd09dd"></script>
+<title>Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf? · ATVANTAGE Academy</title>
+<meta name="description" content="Dieselbe Bestellung, derselbe Ablauf – einmal mit den Regeln im Client und einmal mit Verweisen in der Antwort.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
 <meta property="og:title" content="Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?">
 <meta property="og:description" content="Dieselbe Bestellung, derselbe Ablauf – einmal mit den Regeln im Client und einmal mit Verweisen in der Antwort.">
-<meta property="og:type" content="website"><link rel="preload" href="/training-material-api-engineering/theme/academy/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/fonts.css?v=d37c8ecb"><link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/colors.css?v=b0afc83e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/typography.css?v=1b512d1a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/spacing.css?v=ffc57a80">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/components.css?v=fb3020a8">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/atvantage/tokens/base.css?v=01ad66fa"><link rel="stylesheet" href="/training-material-api-engineering/theme/academy/tokens.css?v=e7c08f24">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/base.css?v=32c1897e">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/components.css?v=60856a0a">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/site.css?v=63868197"><link rel="stylesheet" media="print" href="/training-material-api-engineering/theme/academy/print.css?v=fa38b084">
-<meta name="generator" content="ATVANTAGE Academy Theme 4.5.3">
-<script type="application/json" id="avd-academy-build-info">{"theme":"4.5.3","schemas":{"config":"1.3.0","frontmatter":"1.1.0","layout":"1.0.0"},"audience":"learner","languages":["de"],"internal":false}</script><script type="application/json" id="avd-academy-page-info">{"pageId":null,"language":"de","url":"/training-material-api-engineering/rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.html","title":"Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?","layout":"simulation","description":"Dieselbe Bestellung, derselbe Ablauf – einmal mit den Regeln im Client und einmal mit Verweisen in der Antwort.","duration":null,"topics":null,"languages":["de"],"clientApi":"full","defaultLanguage":"de","siteIndex":"/training-material-api-engineering/theme/site.json"}</script>
-<script src="/training-material-api-engineering/theme/academy/atvantage.js?v=b1738f9e" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/site.js?v=514cf6b3" defer></script>
-<script src="/training-material-api-engineering/theme/jekyll/search-trail.js?v=c7eb3d26" data-avd-academy-search-trail
-        data-base="/training-material-api-engineering/" data-index="/training-material-api-engineering/theme/search/de.json?v=1791547203" defer></script>
-<link rel="stylesheet" href="/training-material-api-engineering/theme/academy/highlight.css?v=2b412283">
-<script type="module">
-  const _hlbase = "/training-material-api-engineering/theme/academy/hljs/";
-  const _hlsprachen = ["java", "http", "json", "xml"];
-  Promise.all([import(_hlbase + "core.min.js"), ..._hlsprachen.map((s) => import(_hlbase + s + ".min.js"))])
-    .then(([core, ...grammatiken]) => {
-      const hljs = core.default;
-      _hlsprachen.forEach((s, i) => hljs.registerLanguage(s, grammatiken[i].default));
-      const _auswahl = _hlsprachen.map((s) => "pre code.language-" + s).join(",");
-      const _faerben = (wurzel) => (wurzel || document)
-        .querySelectorAll(_auswahl)
-        .forEach((el) => { if (!el.dataset.highlighted) { hljs.highlightElement(el); } });
-      _faerben(document);
-      window.AvdHighlight = { hljs, apply: _faerben, languages: _hlsprachen.slice() };
-      document.dispatchEvent(new CustomEvent("avd-academy-highlight-ready"));
-      document.querySelectorAll("pre code.language-http .hljs-number").forEach((el) => {
-        const code = parseInt(el.textContent, 10);
-        if (code >= 100 && code <= 599) {
-          el.classList.add("avd-academy-http-status--" + Math.floor(code / 100) + "xx");
-        }
-      });
-    });
-</script>
-<link rel="apple-touch-icon" sizes="180x180" href="/training-material-api-engineering/theme/atvantage/assets/icon-180.png">
-<link rel="icon" href="/training-material-api-engineering/theme/atvantage/assets/icon-32.png">
-<link rel="icon" sizes="16x16" href="/training-material-api-engineering/theme/atvantage/assets/icon-16.png">
-<link rel="stylesheet" href="/training-material-api-engineering/theme/jekyll/simulation.css?v=af5c6650"><script src="/training-material-api-engineering/theme/jekyll/simulation.js?v=d7bb5e7e"></script>
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/custom.css?v=4a155a65">
-  <link rel="stylesheet" href="/training-material-api-engineering/assets/regiebuch.css?v=7995a5ab"></head>
-<body class="avd-academy-sim" data-avd-academy-sim data-avd-academy-sim-title="Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?"
-      data-avd-academy-sim-speed="1"
-      data-avd-academy-sim-step-interval="3400">
-  <a class="avd-academy-skip-link" href="#avd-academy-sim-stage">Zum Inhalt springen</a>
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=e74fbfe2">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=b86ac9ad">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=c2b6fab2">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=d11b6ac6">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=856e77e0">
+<meta name="generator" content="Skriptorium 1.5.0">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"1.0.0"}],"internal":false,"languages":["de"],"skriptorium":"1.5.0","theme":"didaktikon","themes":[{"name":"didaktikon","version":"1.0.0"},{"name":"atvantage","version":"1.0.0"},{"name":"default","version":"1.5.0"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Dieselbe Bestellung, derselbe Ablauf – einmal mit den Regeln im Client und einmal mit Verweisen in der Antwort.","duration":null,"fields":{"didaktikon":{"simulation":{"intro":"Eine Bestellung wandert von „offen“ nach „bezahlt“. Links steht der Client mit dem, was er anbietet, rechts die Bestellung auf dem Server. Die Frage ist beide Male dieselbe: Woher weiß der Client, welche Knöpfe er zeigen darf?","speed":1,"step":{"interval":3400}}}},"language":"de","languages":["de"],"layout":"didaktikon.simulation","pageAssets":[{"path":"rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.css","src":"simulation.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.js","src":"simulation.js","type":"script"}],"pageId":null,"runtimeFragments":["^/\\d+$","^/[A-Za-z0-9_-]+/\\d+$","^/overview/?$"],"siteIndex":"/skriptorium/site.json","title":"Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?","topics":null,"url":"/rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizNext":"Weiter","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt"}</script>
 
-  <header class="avd-academy-sim__bar">
-    <img class="avd-academy-sim__logo" src="/training-material-api-engineering/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="avd-academy-sim__logo-mask" role="img" aria-label="ATVANTAGE Academy"
-          style="--avd-academy-logo-src: url('/training-material-api-engineering/assets/logo-schulung.svg'); --avd-academy-logo-ratio: 260 / 24;"></span><span class="avd-academy-sim__title">Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?</span>
-    <span class="avd-academy-sim__counter" data-avd-academy-sim-counter aria-live="off"></span>
-    <div class="avd-academy-sim__tools"><button type="button" class="avd-academy-sim__back" data-avd-academy-back hidden
-              title="Zurück" aria-label="Zurück">← Zurück</button><button type="button" class="avd-academy-qr" data-avd-academy-qr hidden
-                title="Diese Seite auf Deinem Smartphone öffnen"
-                aria-label="Diese Seite auf Deinem Smartphone öffnen"></button><button type="button" class="avd-academy-tool avd-academy-tool--theme" data-avd-academy-theme-toggle
-              title="Farbschema umschalten (hell/dunkel)"
-              aria-label="Dunkles Farbschema">◐</button><button type="button" class="avd-academy-tool avd-academy-tool--full"
-              data-avd-academy-sim-full
-              title="Vollbild (Taste F)" aria-label="Vollbild">⛶</button></div>
-  </header><nav class="avd-academy-sim__tabs" data-avd-academy-sim-tabs hidden aria-label="Szenarien"></nav>
+<script src="../../skriptorium/client.js?v=82492cae" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=21983c4e" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
 
-  <main class="avd-academy-sim__main"><div class="avd-academy-sim__stage" id="avd-academy-sim-stage" data-avd-academy-sim-stage>
-      <style>
-  .buehne {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    gap: clamp(.7rem, .3rem + 1.4vw, 1.4rem);
-    align-items: stretch;
-    align-content: center;
-    min-height: 100%;
-  }
-  .buehne .avd-academy-sim-panel { display: flex; flex-direction: column; }
-  .buehne .avd-academy-sim-panel__body { min-height: 17rem; }
+<link rel="stylesheet" href="../../extensions/didaktikon/simulation.css?v=d0d00574">
+<script src="../../extensions/didaktikon/simulation.js?v=4fc373c7"></script>
 
-  .kn { display: flex; flex-direction: column; gap: .45rem; }
-  .kn__leer { font-size: .85rem; font-style: italic; color: var(--avd-academy-color-ink-muted); }
-  .kn__knopf {
-    display: block; text-align: center; font-weight: 600; font-size: .92rem;
-    padding: .55rem .6rem; border-radius: var(--avd-academy-radius-sm, 4px);
-    border: 2px solid var(--avd-academy-color-accent);
-    background: var(--avd-academy-color-bg-subtle);
-    transition: opacity .35s ease, transform .35s ease;
-  }
-  .kn__knopf small {
-    display: block; font-weight: 400; font-size: .72rem;
-    font-family: var(--avd-academy-font-mono, monospace);
-    color: var(--avd-academy-color-ink-muted);
-  }
-  .kn__knopf.is-new { animation: kn-rein .4s ease-out; }
-  .kn__knopf.is-gone { opacity: 0; transform: scale(.9); }
-  .kn__knopf.is-error { border-color: var(--avd-academy-color-danger, #c0392b); }
-  @keyframes kn-rein { from { opacity: 0; transform: translateY(-.4rem) scale(.96); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .kn__knopf.is-new { animation: none; } }
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.css?v=964eb6e1">
+<script src="../../rest-apis-grundlagen-und-design/hypermedia-und-hal/simulation.js?v=9b5da8c1" defer></script>
 
-  .herkunft {
-    margin-top: .8rem; padding-top: .5rem;
-    border-top: 1px dashed var(--avd-academy-color-border);
-    font-size: .76rem; color: var(--avd-academy-color-ink-muted);
-  }
-  .herkunft code { font-size: .72rem; }
-
-  .avd-academy-sim-code { font-size: .72rem; line-height: 1.45; margin: 0; overflow-x: auto; }
-  @media (min-width: 62rem) {
-    .buehne { grid-template-columns: 1fr 1.35fr 1fr; }
-  }
-  .lt {
-    text-align: center; font-size: .78rem;
-    font-family: var(--avd-academy-font-mono, monospace);
-    color: var(--avd-academy-color-ink-muted);
-    padding-bottom: .5rem; min-height: 1.4rem;
-  }
-  .lt strong { color: var(--avd-academy-color-accent); font-family: inherit; }
-</style>
-
-<div class="buehne" data-avd-academy-sim-scene="ohne">
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
-    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was der Nutzer sieht</span></h2>
-    <div class="avd-academy-sim-panel__body">
+</head>
+<body class="skr-didaktikon-simulation" data-skr-layout="didaktikon.simulation" data-skr-layouts="didaktikon.simulation" data-skr-lang="de" data-skr-audience="learner" data-skr-didaktikon-simulation data-skr-didaktikon-simulation-title="Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?">
+  <a class="skr-skip-link" href="#skr-didaktikon-simulation-stage">Zum Inhalt springen</a>
+  <header class="skr-didaktikon-simulation__bar">
+    <img class="skr-logo skr-didaktikon-simulation__logo" src="../../themes/didaktikon/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="skr-logo-mask skr-didaktikon-simulation__logo-mask" role="img" aria-label="ATVANTAGE Academy" data-skr-logo-mask></span><span class="skr-didaktikon-simulation__title">Hypermedia: Wer weiß, dass man jetzt nicht mehr stornieren darf?</span>
+    <span class="skr-didaktikon-simulation__counter" data-skr-didaktikon-simulation-counter aria-live="off"></span>
+    <div class="skr-didaktikon-simulation__tools">
+      <button type="button" class="skr-didaktikon-simulation__back" data-skr-back hidden
+        title="Zurück" aria-label="Zurück"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+        ><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Zurück</button>
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--theme" data-skr-theme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--full"
+        data-skr-didaktikon-simulation-full=""
+        title="Vollbild (Taste F)" aria-label="Vollbild"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+        ><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+</div>
+  </header>
+  <nav class="skr-didaktikon-simulation__tabs" data-skr-didaktikon-simulation-tabs hidden aria-label="Szenarien"></nav>
+  <main class="skr-didaktikon-simulation__main">
+    <div class="skr-didaktikon-simulation__stage" id="skr-didaktikon-simulation-stage" data-skr-didaktikon-simulation-stage>
+      <div class="buehne" data-skr-didaktikon-simulation-scene="ohne">
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-1">
+    <h2 class="skr-didaktikon-simulation-panel__title">Client <span class="skr-didaktikon-simulation-panel__hint">was der Nutzer sieht</span></h2>
+    <div class="skr-didaktikon-simulation-panel__body">
       <div class="kn" id="ohne-knoepfe"></div>
       <p class="herkunft" id="ohne-herkunft"></p>
     </div>
   </div>
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
-    <h2 class="avd-academy-sim-panel__title">Antwort <span class="avd-academy-sim-panel__hint">application/json</span></h2>
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-3">
+    <h2 class="skr-didaktikon-simulation-panel__title">Antwort <span class="skr-didaktikon-simulation-panel__hint">application/json</span></h2>
     <p class="lt" id="ohne-leitung"></p>
-    <div class="avd-academy-sim-panel__body">
-      <pre class="avd-academy-sim-code"><code id="ohne-json"></code></pre>
-    </div>
+    <div class="skr-didaktikon-simulation-panel__body">
+      <pre class="skr-didaktikon-simulation-code"><code id="ohne-json"></code></pre>
+</div>
   </div>
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
-    <h2 class="avd-academy-sim-panel__title">Bestellung <span class="avd-academy-sim-panel__hint">auf dem Server</span></h2>
-    <div class="avd-academy-sim-panel__body" id="ohne-server"></div>
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-4">
+    <h2 class="skr-didaktikon-simulation-panel__title">Bestellung <span class="skr-didaktikon-simulation-panel__hint">auf dem Server</span></h2>
+    <div class="skr-didaktikon-simulation-panel__body" id="ohne-server"></div>
   </div>
 </div>
-
-<div class="buehne" data-avd-academy-sim-scene="mit">
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-1">
-    <h2 class="avd-academy-sim-panel__title">Client <span class="avd-academy-sim-panel__hint">was der Nutzer sieht</span></h2>
-    <div class="avd-academy-sim-panel__body">
+<div class="buehne" data-skr-didaktikon-simulation-scene="mit">
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-1">
+    <h2 class="skr-didaktikon-simulation-panel__title">Client <span class="skr-didaktikon-simulation-panel__hint">was der Nutzer sieht</span></h2>
+    <div class="skr-didaktikon-simulation-panel__body">
       <div class="kn" id="mit-knoepfe"></div>
       <p class="herkunft" id="mit-herkunft"></p>
     </div>
   </div>
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-3">
-    <h2 class="avd-academy-sim-panel__title">Antwort <span class="avd-academy-sim-panel__hint">application/hal+json</span></h2>
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-3">
+    <h2 class="skr-didaktikon-simulation-panel__title">Antwort <span class="skr-didaktikon-simulation-panel__hint">application/hal+json</span></h2>
     <p class="lt" id="mit-leitung"></p>
-    <div class="avd-academy-sim-panel__body">
-      <pre class="avd-academy-sim-code"><code id="mit-json"></code></pre>
-    </div>
+    <div class="skr-didaktikon-simulation-panel__body">
+      <pre class="skr-didaktikon-simulation-code"><code id="mit-json"></code></pre>
+</div>
   </div>
-  <div class="avd-academy-sim-panel avd-academy-sim-panel--ton-4">
-    <h2 class="avd-academy-sim-panel__title">Bestellung <span class="avd-academy-sim-panel__hint">auf dem Server</span></h2>
-    <div class="avd-academy-sim-panel__body" id="mit-server"></div>
+  <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-4">
+    <h2 class="skr-didaktikon-simulation-panel__title">Bestellung <span class="skr-didaktikon-simulation-panel__hint">auf dem Server</span></h2>
+    <div class="skr-didaktikon-simulation-panel__body" id="mit-server"></div>
   </div>
 </div>
 
-<script>
-(function () {
-  "use strict";
-  var sim = window.AvdSimulation;
-
-  function start() {
-    return {
-      knoepfe: [],
-      herkunft: "",
-      json: "",
-      leitung: "",
-      server: [
-        { schluessel: "status", label: "Status", name: "offen", wert: "" },
-        { schluessel: "regel",  label: "Regel",  name: "stornieren erlaubt, solange nicht bezahlt", wert: "" }
-      ]
-    };
-  }
-
-  function zeichne(s, ctx) {
-    var sz = ctx.scenario;
-
-    sim.list(document.getElementById(sz + "-knoepfe"), s.knoepfe, {
-      animated: ctx.animated,
-      key: function (x) { return x.id; },
-      create: function () {
-        var el = document.createElement("div");
-        el.className = "kn__knopf";
-        el.innerHTML = '<span></span><small></small>';
-        return el;
-      },
-      update: function (el, x) {
-        el.querySelector("span").textContent = x.text;
-        el.querySelector("small").textContent = x.ziel;
-        el.classList.toggle("is-error", !!x.tot);
-        el.classList.toggle("is-pulse", !!x.tot);
-      }
-    });
-
-    var leer = document.getElementById(sz + "-knoepfe");
-    if (leer && !s.knoepfe.length && !leer.querySelector(".kn__leer")) {
-      leer.insertAdjacentHTML("beforeend", '<p class="kn__leer">noch nichts geladen</p>');
-    }
-    if (leer && s.knoepfe.length) {
-      var weg = leer.querySelector(".kn__leer");
-      if (weg) weg.remove();
-    }
-
-    document.getElementById(sz + "-herkunft").innerHTML = s.herkunft;
-    document.getElementById(sz + "-leitung").innerHTML = s.leitung;
-
-    var json = document.getElementById(sz + "-json");
-    if (json.textContent !== s.json) {
-      json.textContent = s.json;
-      if (ctx.animated) sim.pulse(json.parentNode);
-    }
-
-    sim.list(document.getElementById(sz + "-server"), s.server, {
-      animated: ctx.animated,
-      key: function (x) { return x.schluessel + "-" + x.name; },
-      create: function () {
-        var el = document.createElement("div");
-        el.className = "avd-academy-sim-cell";
-        el.innerHTML = '<span class="avd-academy-sim-cell__label"></span>' +
-                       '<span class="avd-academy-sim-cell__name"></span>' +
-                       '<span class="avd-academy-sim-cell__value"></span>';
-        return el;
-      },
-      update: function (el, x) {
-        el.querySelector(".avd-academy-sim-cell__label").textContent = x.label;
-        el.querySelector(".avd-academy-sim-cell__name").textContent = x.name;
-        el.querySelector(".avd-academy-sim-cell__value").textContent = x.wert || "";
-        el.classList.toggle("is-active", !!x.aktiv);
-        el.classList.toggle("is-error", !!x.konflikt);
-      }
-    });
-  }
-
-  /* ============================================================ Ohne Hypermedia */
-
-  var JSON_OFFEN =
-    '{\n' +
-    '  "id": "4711",\n' +
-    '  "status": "offen",\n' +
-    '  "summe": 84.50\n' +
-    '}';
-
-  var JSON_BEZAHLT =
-    '{\n' +
-    '  "id": "4711",\n' +
-    '  "status": "bezahlt",\n' +
-    '  "summe": 84.50\n' +
-    '}';
-
-  sim.registerScenario({
-    id: "ohne",
-    title: "Ohne Hypermedia",
-    description: "Die Antwort trägt nur Daten. Welche Knöpfe erlaubt sind, steht im Client – als if-Abfrage.",
-    state: start,
-    render: zeichne,
-    steps: [
-      {
-        title: "Die Ausgangslage",
-        text: "<p>Bestellung <b>4711</b>, Status <b>offen</b>, 84,50 €. Der Kunde hat sie gerade abgeschickt.</p>" +
-              "<p>Auf dem Server steht die fachliche Regel: <b>Stornieren geht, solange nicht bezahlt ist.</b> Merk sie Dir – gleich steht sie an einer zweiten Stelle noch einmal.</p>",
-        apply: function () {}
-      },
-      {
-        title: "Der Client holt die Bestellung",
-        text: "<p><code>GET /orders/4711</code>. Die Antwort enthält, was eine ganz normale JSON-API liefert: <b>Daten, sonst nichts.</b></p>",
-        apply: function (s) {
-          s.leitung = "GET /orders/4711 → <strong>200 OK</strong>";
-          s.json = JSON_OFFEN;
-        }
-      },
-      {
-        title: "Und jetzt entscheidet der Client",
-        text: "<p>Aus <code>status: \"offen\"</code> allein folgt kein Knopf. Also steht im Client eine Abfrage: <i>wenn offen, dann zeige Bezahlen und Stornieren.</i></p>" +
-              "<p><b>Die Adressen kennt er ebenfalls auswendig</b> – sie sind beim Entwickeln aus der Dokumentation abgeschrieben worden.</p>",
-        apply: function (s) {
-          s.knoepfe = [
-            { id: "pay",    text: "Bezahlen",   ziel: "POST /orders/4711/payment" },
-            { id: "cancel", text: "Stornieren", ziel: "DELETE /orders/4711" }
-          ];
-          s.herkunft = 'aus dem Client-Code:<br><code>if (status === "offen") { … }</code>';
-        }
-      },
-      {
-        title: "Der Kunde bezahlt",
-        text: "<p><code>POST /orders/4711/payment</code> – der Server nimmt die Zahlung an und setzt den Status auf <b>bezahlt</b>.</p>",
-        apply: function (s) {
-          s.leitung = "POST /orders/4711/payment → <strong>200 OK</strong>";
-          s.json = JSON_BEZAHLT;
-          s.server[0] = { schluessel: "status", label: "Status", name: "bezahlt", wert: "", aktiv: true };
-          s.knoepfe = [
-            { id: "cancel", text: "Stornieren", ziel: "DELETE /orders/4711" },
-            { id: "invoice", text: "Rechnung", ziel: "GET /orders/4711/invoice" }
-          ];
-          s.herkunft = 'aus dem Client-Code:<br><code>if (status === "bezahlt") { … }</code>';
-        }
-      },
-      {
-        title: "Ein halbes Jahr später ändert sich die Regel",
-        text: "<p>Der Fachbereich entscheidet: <b>Nach Zahlungseingang wird nicht mehr storniert</b> – dafür gibt es die Retoure. Der Server setzt das noch am selben Tag durch.</p>" +
-              "<p>Der Client weiß davon nichts. <b>Er zeigt den Knopf weiter.</b></p>",
-        apply: function (s) {
-          s.server[0].aktiv = false;
-          s.server[1] = { schluessel: "regel", label: "Regel", name: "stornieren nur vor Zahlungseingang", wert: "neu", aktiv: true };
-          s.knoepfe[0].tot = true;
-          s.leitung = "";
-        }
-      },
-      {
-        title: "Der Nutzer klickt – und bekommt einen Fehler",
-        text: "<p><code>DELETE /orders/4711</code> → <b>409 Conflict</b>. Der Server hat recht, der Client hatte unrecht, und der Kunde hat einen Knopf gedrückt, den es nicht hätte geben dürfen.</p>" +
-              "<p>Das ist <b>kein Programmierfehler</b>. Der Client tut genau das, was vor sechs Monaten richtig war.</p>",
-        apply: function (s) {
-          s.leitung = "DELETE /orders/4711 → <strong>409 Conflict</strong>";
-          s.json = '{\n  "type": "…/order-already-paid",\n  "title": "Bezahlte Bestellung",\n  "status": 409\n}';
-          s.server[1].konflikt = true;
-        }
-      },
-      {
-        title: "Und das dreimal",
-        text: "<p>Es gibt nicht einen Client, sondern <b>drei</b>: die Weboberfläche, die App im Store und den Partner, der die API selbst anspricht.</p>" +
-              "<p>Dieselbe Abfrage steht dreimal an drei Stellen. Sie muss dreimal geändert, dreimal getestet und dreimal ausgeliefert werden – und beim Partner entscheidet <b>er</b>, wann.</p>",
-        apply: function (s) {
-          s.herkunft = 'dieselbe Abfrage steht in:<br><code>web-ui</code> · <code>mobile-app</code> · <code>partner-client</code>';
-          s.leitung = "";
-        }
-      },
-      {
-        title: "Der Zustand steht rechts, die Regel dazu links",
-        text: "<p><b>Der Server kennt den Zustand. Was in diesem Zustand erlaubt ist, weiß der Client.</b> Solange beide dasselbe denken, fällt das nicht auf – und genau deshalb fällt es erst auf, wenn es zu spät ist.</p>" +
-              "<p>Der Fehler ist nicht die <code>if</code>-Abfrage. Der Fehler ist, dass die Antwort dem Client nichts mitgibt, woran er sich halten könnte.</p>",
-        apply: function (s) { s.leitung = ""; },
-        duration: 6500
-      }
-    ]
-  });
-
-  /* ============================================================ Mit Hypermedia */
-
-  var HAL_OFFEN =
-    '{\n' +
-    '  "id": "4711",\n' +
-    '  "status": "offen",\n' +
-    '  "summe": 84.50,\n' +
-    '  "_links": {\n' +
-    '    "self":   {"href": "/orders/4711"},\n' +
-    '    "pay":    {"href": "/orders/4711/payment"},\n' +
-    '    "cancel": {"href": "/orders/4711"}\n' +
-    '  }\n' +
-    '}';
-
-  var HAL_BEZAHLT =
-    '{\n' +
-    '  "id": "4711",\n' +
-    '  "status": "bezahlt",\n' +
-    '  "summe": 84.50,\n' +
-    '  "_links": {\n' +
-    '    "self":    {"href": "/orders/4711"},\n' +
-    '    "invoice": {"href": "/orders/4711/invoice"},\n' +
-    '    "return":  {"href": "/orders/4711/returns"}\n' +
-    '  }\n' +
-    '}';
-
-  var HAL_NEUE_ADRESSE =
-    '{\n' +
-    '  "id": "4711",\n' +
-    '  "status": "offen",\n' +
-    '  "summe": 84.50,\n' +
-    '  "_links": {\n' +
-    '    "self":   {"href": "/orders/4711"},\n' +
-    '    "pay":    {"href": "/payments?order=4711"},\n' +
-    '    "cancel": {"href": "/orders/4711"}\n' +
-    '  }\n' +
-    '}';
-
-  sim.registerScenario({
-    id: "mit",
-    title: "Mit Hypermedia",
-    description: "Dieselbe Bestellung – aber die Antwort sagt, was gerade geht. Der Client baut seine Knöpfe daraus.",
-    state: start,
-    render: zeichne,
-    steps: [
-      {
-        title: "Dieselbe Ausgangslage",
-        text: "<p>Bestellung <b>4711</b>, Status <b>offen</b>, dieselbe Regel auf dem Server. Auch der Client ist derselbe – <b>eine Sache macht er anders</b>.</p>" +
-              "<p>Er hat keine Abfrage auf den Status. Er zeigt einfach an, was in der Antwort steht.</p>",
-        apply: function () {}
-      },
-      {
-        title: "Die Antwort bringt Verweise mit",
-        text: "<p><code>GET /orders/4711</code> – dieselben Daten wie eben, dazu ein Block <code>_links</code>. Das ist <b>HAL</b>: ein schlichtes Format für genau diese Verweise, Medientyp <code>application/hal+json</code>.</p>" +
-              "<p><code>self</code> ist die eigene Adresse, <code>pay</code> und <code>cancel</code> sind <b>das, was jetzt geht</b>.</p>",
-        apply: function (s) {
-          s.leitung = "GET /orders/4711 → <strong>200 OK</strong>";
-          s.json = HAL_OFFEN;
-        }
-      },
-      {
-        title: "Der Client zeichnet, was da ist",
-        text: "<p>Zwei Verweise außer <code>self</code>, also zwei Knöpfe. <b>Keine Abfrage auf den Status</b>, keine zusammengebaute Adresse – die steht im <code>href</code>.</p>" +
-              "<p>Der Client kennt die <b>Wörter</b> <code>pay</code> und <code>cancel</code> und weiß, wie er sie beschriftet. Mehr braucht er nicht.</p>",
-        apply: function (s) {
-          s.knoepfe = [
-            { id: "pay",    text: "Bezahlen",   ziel: "_links.pay.href" },
-            { id: "cancel", text: "Stornieren", ziel: "_links.cancel.href" }
-          ];
-          s.herkunft = 'aus der Antwort:<br><code>Object.keys(antwort._links)</code>';
-        }
-      },
-      {
-        title: "Der Kunde bezahlt",
-        text: "<p>Der Client schickt sein <code>POST</code> an die Adresse aus <code>_links.pay.href</code> – <b>er hat sie nirgends gespeichert</b>, er hat sie eben erst bekommen.</p>" +
-              "<p>Die Antwort ist die neue Darstellung der Bestellung: Status <b>bezahlt</b> – und ein anderer <code>_links</code>-Block.</p>",
-        apply: function (s) {
-          s.leitung = "POST /orders/4711/payment → <strong>200 OK</strong>";
-          s.json = HAL_BEZAHLT;
-          s.server[0] = { schluessel: "status", label: "Status", name: "bezahlt", wert: "", aktiv: true };
-        }
-      },
-      {
-        title: "Der Storno-Knopf verschwindet von selbst",
-        text: "<p><code>cancel</code> steht nicht mehr in der Antwort – also zeichnet der Client ihn nicht. Dafür sind <code>invoice</code> und <code>return</code> dazugekommen.</p>" +
-              "<p><b>Niemand hat den Client angefasst.</b> Er weiß bis heute nicht, dass es eine Regel „nur vor Zahlungseingang“ überhaupt gibt.</p>",
-        apply: function (s) {
-          s.knoepfe = [
-            { id: "invoice", text: "Rechnung",  ziel: "_links.invoice.href" },
-            { id: "return",  text: "Retoure",   ziel: "_links.return.href" }
-          ];
-          s.server[0].aktiv = false;
-        }
-      },
-      {
-        title: "Jetzt die Regeländerung von vorhin",
-        text: "<p>Der Fachbereich verschärft: <b>Stornieren nur noch in den ersten 15 Minuten.</b> Der Server nimmt <code>cancel</code> danach einfach nicht mehr in die Antwort auf.</p>" +
-              "<p>Alle drei Clients ziehen mit – <b>ohne Release, ohne Test, ohne Absprache mit dem Partner</b>. Die Regel steht an genau einer Stelle.</p>",
-        apply: function (s) {
-          s.server[1] = { schluessel: "regel", label: "Regel", name: "stornieren nur in den ersten 15 Minuten", wert: "neu", aktiv: true };
-          s.herkunft = 'gilt gleichermaßen für:<br><code>web-ui</code> · <code>mobile-app</code> · <code>partner-client</code>';
-          s.leitung = "";
-        }
-      },
-      {
-        title: "Nebenbei: der Server zieht um",
-        text: "<p>Die Zahlung wandert in einen eigenen Service, die Adresse wird <code>/payments?order=4711</code>. <b>Im Client ändert sich nichts</b> – er hat die alte Adresse nie besessen.</p>" +
-              "<p>Das ist der zweite Gewinn, und im Alltag oft der größere: <b>Adressen sind wieder Implementierungsdetail</b> statt Teil des Vertrags.</p>",
-        apply: function (s) {
-          s.json = HAL_NEUE_ADRESSE;
-          s.leitung = "GET /orders/4711 → <strong>200 OK</strong>";
-          s.server[0] = { schluessel: "status", label: "Status", name: "offen", wert: "" };
-          s.server[1].aktiv = false;
-          s.knoepfe = [
-            { id: "pay",    text: "Bezahlen",   ziel: "_links.pay.href" },
-            { id: "cancel", text: "Stornieren", ziel: "_links.cancel.href" }
-          ];
-        }
-      },
-      {
-        title: "Was Hypermedia nicht abnimmt",
-        text: "<p>Der Client weiß jetzt <b>wohin</b> und <b>wann</b>. Er weiß immer noch nicht, <b>was</b> <code>cancel</code> bedeutet, was er als Body mitschicken muss und was danach gilt.</p>" +
-              "<p>Das steht nirgends in den Daten – es bleibt Absprache zwischen den Teams. <b>Die Verweise nehmen dem Client die Adressen ab, nicht das Vokabular.</b></p>",
-        apply: function (s) {
-          s.leitung = "";
-          s.herkunft = 'weiterhin im Client:<br><code>„cancel“ → Knopf „Stornieren“</code>';
-        },
-        duration: 6500
-      }
-    ]
-  });
-})();
-</script>
-
-
-    </div><div class="avd-academy-sim__intro" data-avd-academy-sim-intro hidden
-         data-lead="Eine Bestellung wandert von „offen“ nach „bezahlt“. Links steht der Client mit dem, was er anbietet, rechts die Bestellung auf dem Server. Die Frage ist beide Male dieselbe: Woher weiß der Client, welche Knöpfe er zeigen darf?"></div><div class="avd-academy-sim__caption" data-avd-academy-sim-caption hidden aria-hidden="true">
-      <p class="avd-academy-sim__caption-title" data-avd-academy-sim-caption-title></p>
-      <div class="avd-academy-sim__caption-text" data-avd-academy-sim-caption-text></div>
     </div>
-    <aside class="avd-academy-sim__aside" aria-label="Erklärung zum aktuellen Schritt">
-      <h2 class="avd-academy-sim__note-title" data-avd-academy-sim-note-title></h2>
-      <div class="avd-academy-sim__note" data-avd-academy-sim-note aria-live="polite"></div>
+    <div class="skr-didaktikon-simulation__intro" data-skr-didaktikon-simulation-intro hidden></div>
+    <div class="skr-didaktikon-simulation__caption" data-skr-didaktikon-simulation-caption hidden aria-hidden="true">
+      <p class="skr-didaktikon-simulation__caption-title" data-skr-didaktikon-simulation-caption-title></p>
+      <div class="skr-didaktikon-simulation__caption-text" data-skr-didaktikon-simulation-caption-text></div>
+    </div>
+    <aside class="skr-didaktikon-simulation__aside" aria-label="Erklärung zum aktuellen Schritt">
+      <h2 class="skr-didaktikon-simulation__note-title" data-skr-didaktikon-simulation-note-title></h2>
+      <div class="skr-didaktikon-simulation__note" data-skr-didaktikon-simulation-note aria-live="polite"></div>
     </aside>
   </main>
-
-  <div class="avd-academy-sim__progress" aria-hidden="true">
-    <div class="avd-academy-sim__progress-fill" data-avd-academy-sim-progress></div>
+  <div class="skr-didaktikon-simulation__progress" aria-hidden="true">
+    <div class="skr-didaktikon-simulation__progress-fill" data-skr-didaktikon-simulation-progress></div>
   </div>
-
-  <footer class="avd-academy-sim__controls" aria-label="Simulation steuern" data-avd-academy-sim-controls>
-    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-reset
+  <footer class="skr-didaktikon-simulation__controls" aria-label="Simulation steuern" data-skr-didaktikon-simulation-controls>
+    <button type="button" class="skr-didaktikon-simulation__btn" data-skr-didaktikon-simulation-reset
             title="Zurück auf Anfang (Taste R)" aria-label="Zurück auf Anfang">⟲</button>
-    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-prev
-            title="Schritt zurück (←)" aria-label="Schritt zurück">‹</button><div class="avd-academy-sim__play-group">
-      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--play" data-avd-academy-sim-play
+    <button type="button" class="skr-didaktikon-simulation__btn" data-skr-didaktikon-simulation-prev
+            title="Schritt zurück (←)" aria-label="Schritt zurück">‹</button>
+    <div class="skr-didaktikon-simulation__play-group">
+      <button type="button" class="skr-didaktikon-simulation__btn skr-didaktikon-simulation__btn--play" data-skr-didaktikon-simulation-play
               title="Abspielen (Leertaste)" aria-label="Abspielen">
-        <span class="avd-academy-sim__btn-icon" data-avd-academy-sim-play-icon>▶</span>
-        <span class="avd-academy-sim__btn-text" data-avd-academy-sim-play-text>Abspielen</span>
+        <span class="skr-didaktikon-simulation__btn-icon" data-skr-didaktikon-simulation-play-icon>▶</span>
+        <span class="skr-didaktikon-simulation__btn-text" data-skr-didaktikon-simulation-play-text>Abspielen</span>
       </button>
-      <button type="button" class="avd-academy-sim__btn avd-academy-sim__btn--speed" data-avd-academy-sim-speed-toggle
+      <button type="button" class="skr-didaktikon-simulation__btn skr-didaktikon-simulation__btn--speed" data-skr-didaktikon-simulation-speed-toggle
               title="Tempo wählen (Taste T)" aria-label="Tempo wählen"
               aria-haspopup="true" aria-expanded="false">
-        <span data-avd-academy-sim-speed-label>1×</span>
-        <span class="avd-academy-sim__caret" aria-hidden="true">▴</span>
+        <span data-skr-didaktikon-simulation-speed-label></span>
+        <span class="skr-didaktikon-simulation__caret" aria-hidden="true">▴</span>
       </button>
-      <ul class="avd-academy-sim__speed-menu" data-avd-academy-sim-speed-menu hidden role="menu"
-          aria-label="Tempo"><li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="0.5">0,5×<span> langsam</span></button></li>
-        <li role="none"><button type="button" role="menuitemradio" aria-checked="true"  data-avd-academy-sim-speed-value="1">1×<span> normal</span></button></li>
-        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="2">2×<span> zügig</span></button></li>
-        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-avd-academy-sim-speed-value="5">5×<span> im Zeitraffer</span></button></li>
+      <ul class="skr-didaktikon-simulation__speed-menu" data-skr-didaktikon-simulation-speed-menu hidden role="menu"
+          aria-label="Tempo">
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-skr-didaktikon-simulation-speed-value="0.5"><span data-skr-didaktikon-simulation-speed-number></span><span> langsam</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="true"  data-skr-didaktikon-simulation-speed-value="1"><span data-skr-didaktikon-simulation-speed-number></span><span> normal</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-skr-didaktikon-simulation-speed-value="2"><span data-skr-didaktikon-simulation-speed-number></span><span> zügig</span></button></li>
+        <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-skr-didaktikon-simulation-speed-value="5"><span data-skr-didaktikon-simulation-speed-number></span><span> im Zeitraffer</span></button></li>
       </ul>
     </div>
-    <button type="button" class="avd-academy-sim__btn" data-avd-academy-sim-next
+    <button type="button" class="skr-didaktikon-simulation__btn" data-skr-didaktikon-simulation-next
             title="Schritt vor (→)" aria-label="Schritt vor">›</button>
-  </footer><p class="avd-academy-sim__capture-hint" data-avd-academy-sim-capture-hint hidden aria-hidden="true">
+  </footer>
+  <p class="skr-didaktikon-simulation__capture-hint" data-skr-didaktikon-simulation-capture-hint hidden aria-hidden="true">
     Capture-Modus · <b>C</b> beenden · <b>T</b> Text einblenden
-  </p><p class="avd-academy-sim__print-hint" aria-hidden="true">
+  </p>
+  <p class="skr-didaktikon-simulation__print-hint" aria-hidden="true">
     Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.
   </p>
 </body>

@@ -1,0 +1,180 @@
+/* Stylesheet der Seite 02-http-grundlagen/simulation.md – über `styles:` im Front Matter geladen. */
+.buehne {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+  align-items: start; align-content: center; min-height: 100%;
+}
+
+/* --- Browser ----------------------------------------------------------- */
+.adresszeile {
+  display: flex; align-items: center; gap: .4rem;
+  font-family: var(--skr-font-mono, monospace); font-size: .74rem;
+  padding: .4rem .55rem; margin-bottom: .6rem;
+  border: 1px solid var(--skr-color-border); border-radius: 999px;
+  background: var(--skr-color-bg); word-break: break-all;
+  transition: border-color .3s ease, background-color .3s ease;
+}
+.adresszeile__schloss { color: color-mix(in srgb, var(--skr-color-success) 72%, var(--skr-color-ink)); flex: 0 0 auto; }
+.adresszeile.is-neu { border-color: var(--skr-color-accent); background: var(--skr-color-accent-soft); }
+.seite { min-height: 13rem; }
+.seite__zeile { padding: .16rem 0; font-size: .9rem; }
+.seite__zeile--titel { font-weight: var(--skr-fw-bold, 700); font-size: 1rem; margin-bottom: .25rem; }
+.seite__zeile--link { color: var(--skr-color-accent); text-decoration: underline; cursor: pointer; border-radius: 3px; }
+.seite__zeile--link.is-geklickt { background: var(--skr-color-accent-soft); }
+
+/* --- Formular: der Code steht am Rahmen, nicht im Feld ------------------ */
+.formular {
+  position: relative; margin: 1rem 0 .5rem; padding: 1.1rem .7rem .7rem;
+  border: 1px dashed var(--skr-color-ink-muted); border-radius: var(--skr-radius-sm, 4px);
+}
+.formular__code {
+  position: absolute; top: -.62rem; left: .5rem; padding: 0 .35rem;
+  background: var(--skr-color-bg);
+  font-family: var(--skr-font-mono, monospace); font-size: .66rem;
+  color: var(--skr-color-ink-muted);
+}
+.eingabe { display: block; position: relative; margin: .9rem 0 .8rem; }
+.eingabe__code {
+  position: absolute; top: -.72rem; left: .35rem; padding: 0 .3rem;
+  background: var(--skr-color-bg);
+  font-family: var(--skr-font-mono, monospace); font-size: .64rem;
+  color: var(--skr-color-ink-muted);
+}
+.eingabe__feld {
+  display: block; min-height: 1.9rem; padding: .32rem .5rem;
+  border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-color-bg);
+  font-family: var(--skr-font-mono, monospace); font-size: .82rem;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / .08);
+}
+.eingabe__feld.is-aktiv { border-color: var(--skr-color-accent); box-shadow: inset 0 1px 2px rgb(0 0 0 / .08), 0 0 0 3px var(--skr-color-accent-soft); }
+.eingabe__wert { display: inline-block; }
+.eingabe__feld.is-tippt .eingabe__wert { animation: hg-tippen .9s steps(12, end) both; }
+@keyframes hg-tippen { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.karet { display: inline-block; width: .55ch; margin-left: 1px; background: var(--skr-color-accent); animation: hg-blinken 1s steps(2, start) infinite; }
+@keyframes hg-blinken { 50% { opacity: 0; } }
+
+.knopf {
+  display: inline-block; font-size: .8rem; font-weight: 600;
+  padding: .34rem .95rem; border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-color-accent); color: var(--skr-color-accent-contrast);
+  position: relative;
+}
+.knopf.is-gedrueckt { animation: hg-druck .5s ease both; }
+/* Der Tastendruck ist eine Benutzerhandlung wie der Klick auf den Knopf –
+   und muss genauso zu sehen sein. Sonst steht F5 nur im Schritttitel, und
+   auf der Buehne faengt eine Nachricht ohne erkennbaren Anlass an zu
+   fliegen. */
+.taste { display: flex; align-items: center; gap: .45rem; margin: 0 0 .7rem; font-size: .78rem; color: var(--skr-color-ink-muted); }
+.taste__kappe {
+  display: inline-block; padding: .16rem .5rem;
+  font-family: var(--skr-font-mono, monospace); font-size: .74rem; font-weight: 700;
+  color: var(--skr-color-ink);
+  border: 1px solid var(--skr-color-border); border-bottom-width: 3px;
+  border-radius: var(--skr-radius-sm, 4px); background: var(--skr-color-bg);
+}
+.taste.is-gedrueckt .taste__kappe { animation: hg-taste .55s ease both; }
+@keyframes hg-taste {
+  0%   { transform: none;              box-shadow: 0 0 0 0 var(--skr-color-accent-soft); }
+  35%  { transform: translateY(2px);   box-shadow: 0 0 0 9px var(--skr-color-accent-soft); border-bottom-width: 1px; }
+  100% { transform: none;              box-shadow: 0 0 0 16px transparent; }
+}
+@keyframes hg-druck {
+  0%   { transform: none;       box-shadow: 0 0 0 0 var(--skr-color-accent-soft); }
+  35%  { transform: scale(.9);  box-shadow: 0 0 0 10px var(--skr-color-accent-soft); }
+  100% { transform: none;       box-shadow: 0 0 0 18px transparent; }
+}
+
+/* --- Leitung: ein Protokoll, keine Einzelaufnahme -----------------------
+   Nachrichten verschwinden nicht, sie werden blass. Nur die Nachricht des
+   AKTUELLEN Schritts steht vollständig da; ältere schrumpfen auf ihre
+   Startzeile. So bleibt der Ablauf als Ganzes lesbar, ohne dass die Spalte
+   ins Unermessliche waechst. */
+.prot { min-height: 13rem; }
+.prot__still { margin: 3.5rem 0; text-align: center; font-style: italic; color: var(--skr-color-ink-muted); }
+.prot__liste { display: flex; flex-direction: column; gap: .35rem; max-height: 23rem; overflow-y: auto; }
+.prot__e {
+  display: grid; grid-template-columns: 1rem 1fr; gap: .35rem; align-items: start;
+  font-family: var(--skr-font-mono, monospace); font-size: .74rem;
+}
+.prot__pfeil { line-height: 1.5; text-align: center; color: var(--skr-color-accent); }
+.prot__e--zurueck .prot__pfeil { color: color-mix(in srgb, var(--skr-didaktikon-tone-4) 70%, var(--skr-color-ink)); }
+.prot__e--alt { opacity: .62; }
+.prot__kurz {
+  padding: .12rem .3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-bottom: 1px dotted var(--skr-color-border);
+}
+.prot__voll {
+  line-height: 1.6; padding: .5rem .55rem .55rem;
+  border: 1px solid var(--skr-didaktikon-tone-3); border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-fill-3-bg);
+}
+.prot__e--warn .prot__voll { border-color: var(--skr-color-danger); }
+.prot__umschlag { white-space: pre-wrap; word-break: break-word; }
+.prot__zettel {
+  white-space: pre-wrap; word-break: break-word;
+  margin: .45rem .2rem 0; padding: .35rem .5rem;
+  background: var(--skr-color-bg);
+  border: 1px solid var(--skr-didaktikon-tone-4); border-left-width: 3px;
+  border-radius: var(--skr-radius-sm, 4px);
+}
+.prot__zettel--leer { color: var(--skr-color-ink-muted); font-style: italic; border-style: dashed; }
+.prot__legende { margin: .35rem 0 0; font-size: .68rem; font-style: italic; text-align: center; color: var(--skr-color-ink-muted); }
+.prot__e.is-new.prot__e--hin     { animation: hg-flug-hin .7s cubic-bezier(.22,.8,.3,1) both; }
+.prot__e.is-new.prot__e--zurueck { animation: hg-flug-zurueck .7s cubic-bezier(.22,.8,.3,1) both; }
+@keyframes hg-flug-hin     { from { transform: translateX(-46px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes hg-flug-zurueck { from { transform: translateX( 46px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* --- Server: schreibt ebenfalls mit ------------------------------------- */
+.slog__still { margin: .4rem 0 0; font-style: italic; color: var(--skr-color-ink-muted); }
+.slog { display: flex; flex-direction: column; gap: .25rem; max-height: 21rem; overflow-y: auto; }
+.slog__e {
+  display: grid; grid-template-columns: .55rem auto 1fr; gap: .4rem; align-items: baseline;
+  padding: .2rem .35rem; font-size: .78rem;
+  border-left: 3px solid transparent; border-radius: var(--skr-radius-sm, 4px);
+}
+.slog__e--alt { opacity: .62; }
+.slog__e--aktiv { border-left-color: var(--skr-color-accent); background: var(--skr-color-accent-soft); }
+.slog__e--aktiv.slog__e--fehler { border-left-color: var(--skr-color-danger); background: color-mix(in srgb, var(--skr-color-danger) 12%, var(--skr-color-bg)); }
+.slog__punkt {
+  /* An der ERSTEN Zeile ausrichten, nicht mittig: Bei einem umbrechenden
+     Eintrag saesse der Punkt sonst zwischen den Zeilen. */
+  width: .5rem; height: .5rem; border-radius: 50%; align-self: start; margin-top: .42rem;
+  background: var(--skr-color-ink-muted);
+}
+.slog__e--aktiv .slog__punkt { background: var(--skr-color-accent); }
+.slog__e--aktiv.slog__e--fehler .slog__punkt { background: var(--skr-color-danger); }
+.slog__e.is-new .slog__punkt { animation: hg-puls .8s ease-in-out 2; }
+@keyframes hg-puls { 50% { transform: scale(1.8); opacity: .55; } }
+.slog__art {
+  font-size: .62rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--skr-color-ink-muted);
+}
+.slog__e.is-new { animation: hg-eintreffen .45s ease both; }
+@keyframes hg-eintreffen { from { transform: translateX(-10px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.bestand__titel {
+  margin: .9rem 0 .3rem; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--skr-color-ink-muted);
+}
+
+.hinweis {
+  margin-top: .6rem; padding: .5rem .6rem; font-size: .82rem;
+  border-left: 3px solid var(--skr-color-danger);
+  background: var(--skr-color-bg-subtle);
+}
+.hinweis--ok { border-left-color: color-mix(in srgb, var(--skr-color-success) 72%, var(--skr-color-ink)); }
+.hinweis--lesen { border-left-color: var(--skr-color-accent); font-family: var(--skr-font-mono, monospace); font-size: .76rem; }
+.marke {
+  display: inline-block; margin-top: .55rem; padding: .2rem .6rem; font-size: .74rem;
+  border-radius: 999px; background: var(--skr-color-accent-soft);
+  color: color-mix(in srgb, var(--skr-color-accent) 82%, var(--skr-color-ink));
+  animation: hg-auftauchen .5s ease both;
+}
+@keyframes hg-auftauchen { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .prot__e, .slog__e, .slog__punkt, .knopf.is-gedrueckt, .taste.is-gedrueckt .taste__kappe,
+  .eingabe__feld.is-tippt .eingabe__wert, .marke, .karet { animation: none !important; }
+}
