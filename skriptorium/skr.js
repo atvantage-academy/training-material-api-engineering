@@ -13,7 +13,8 @@
    `ctx` je Extension: `readonly`, `guard(part, fn)`, `sidebarCard(id, options)`
    – eine Karte in der Seitenleiste der Seite (siehe unten) –, `text(key, values)`
    – ein Text des Pakets in der Sprache der Seite – und `page.fields` – die Felder, die
-   die Extension für das Layout der Seite erklärt, mit ihren Werten.
+   die Extension für das Layout der Seite erklärt und für den Browser freigibt, mit ihren
+   Werten; `page.field(name)` – der Wert eines davon.
 
    REIHENFOLGE: Skripte mit `defer` laufen nach dem Lesen des Dokuments, in der Reihenfolge
    ihrer Einbindung – der Kern (client.js), dann Layout, Bausteine und Extensions –, und
@@ -191,9 +192,15 @@
         guard: function (part, fn) { return guard("ext." + name + "." + part, fn); },
         sidebarCard: function (id, o) { return card(extensionName + "." + id, o || {}); },
         text: function (key, values) { return text(extensionName, key, values); },
+        /* Die Felder der Extension für das Layout der Seite, die für den Browser freigegeben
+           sind (`x-skr-browser`) – `field(name)` liefert den Wert eines Feldes, ohne Wert oder
+           ohne Freigabe `undefined`. */
         get page() {
-          var fieldDefs = (block("skr-page-info").fields || {})[extensionName] || {};
-          return { fields: freeze(JSON.parse(JSON.stringify(fieldDefs))) };
+          var fields = freeze(JSON.parse(JSON.stringify((block("skr-page-info").fields || {})[extensionName] || {})));
+          return Object.freeze({
+            fields: fields,
+            field: function (name) { return Object.prototype.hasOwnProperty.call(fields, name) ? fields[name] : undefined; }
+          });
         }
       });
       var parts = api(ctx) || {};

@@ -79,14 +79,23 @@
      leer (`open=`) bedeutet dann "alles zu", sonst ließe sich ein geschlossener
      Standard-Aufklapper nicht ausdrücken.
 
-     AUF LAYOUTS MIT EIGENEN FRAGMENTEN HÄLT DIESE STELLE STILL. Meldet ein Layout
-     Fragmente an, die erst im Browser entstehen (`fragments`, etwa `#/3`
-     der Präsentation), gehört das Fragment ihm, und ein zweiter Schreiber
-     zerschösse die Folien- oder Schrittnummer.
+     LAYOUTS MIT EIGENEN FRAGMENTEN DELEGIEREN IHREN TEIL. Meldet ein Layout
+     Fragmente an, die erst im Browser entstehen (`fragments`, etwa `#/3` der
+     Präsentation), schreibt es sie nicht selbst, sondern meldet sich hier an:
+
+         skr.state.layout({ read, apply })
+             - `read` liefert den Teil des Layouts (`3`), `apply` stellt ihn her.
+
+     Dann gehört ihm der Teil zwischen `#/` und `?` - an der Stelle, an der sonst
+     die Sprungmarke steht -, den Bausteinen der Teil ab `?`: `#/3?open=a,b`. So
+     bleibt es bei EINEM Schreiber, und keiner zerschießt dem anderen seinen Teil.
+     Ein Layout, das Fragmente anmeldet, ohne sich anzumelden, behält das Fragment
+     für sich allein: Dort hält diese Stelle still.
      ========================================================================== */
   var State = (function () {
     var parts = [];        /* {key, read, apply, standard} */
     var disclosures = [];    /* {id, exclusive, isOpen, set} */
+    var owner = null;     /* das Layout, dem der Teil vor `?` gehört: {read, apply} */
     var ready = false;    /* erst nach dem ersten `apply()` wird geschrieben */
     var applying = false;
 
@@ -96,12 +105,29 @@
       try { return ((JSON.parse(block.textContent) || {}).runtimeFragments || []).length > 0; } catch (e) { return false; }
     }
 
+    /* Was das Layout liefert, steht genau so in der Adresse; leer heißt: kein Teil. */
+    function ownerPath() {
+      var value;
+      try { value = owner.read(); } catch (e) { return ""; }
+      return (value === null || value === undefined) ? "" : String(value);
+    }
+
+    /* Den Teil des Layouts herstellen - VOR den Bausteinen, denn die stehen womöglich
+       auf einer Folie oder in einem Schritt, den erst das Layout herstellt. */
+    function applyOwner() {
+      if (!owner) { return; }
+      var path = address().path;
+      if (!path) { return; }
+      try { owner.apply(path); } catch (e) { /* ein Layout darf scheitern */ }
+    }
+
     /* Aus dem Fragment werden Sprungmarke und Werte. Alles, was nicht mit `/`
-       beginnt, ist eine gewöhnliche Sprungmarke und hat keine Werte. */
+       beginnt, ist eine gewöhnliche Sprungmarke und hat keine Werte. Hat sich ein
+       Layout angemeldet, ist der Teil vor `?` seiner (`path`) und keine Sprungmarke. */
     function address() {
       var raw = location.hash || "";
       if (raw.charAt(0) === "#") { raw = raw.slice(1); }
-      if (raw.charAt(0) !== "/") { return { anchor: decode(raw), values: {} }; }
+      if (raw.charAt(0) !== "/") { return { anchor: owner ? "" : decode(raw), path: "", values: {} }; }
       raw = raw.slice(1);
       var sep = raw.indexOf("?");
       var anchor = decode(sep === -1 ? raw : raw.slice(0, sep));
@@ -114,7 +140,7 @@
           values[k] = decode(i === -1 ? "" : pair.slice(i + 1));
         });
       }
-      return { anchor: anchor, values: values };
+      return owner ? { anchor: "", path: anchor, values: values } : { anchor: anchor, path: "", values: values };
     }
 
     /* Eine von Hand getippte Adresse darf kaputt sein - sie führt dann in den
@@ -126,6 +152,12 @@
     function encode(text) {
       /* Kommas bleiben lesbar: `open=a,b` ist eine Liste, keine Kodierung. */
       return encodeURIComponent(text).replace(/%2C/g, ",");
+    }
+
+    /* Der Teil des Layouts behält seine Schrägstriche: `schritte/2` steht so in der
+       Adresse, wie das Layout es unter `fragments` anmeldet. */
+    function encodePath(text) {
+      return encode(text).replace(/%2F/g, "/");
     }
 
     function valuesNow() {
@@ -146,15 +178,17 @@
          `update()` in dem Moment, in dem die halbe Seite hergestellt ist. Wer
          dann schreibt, ueberschreibt die Adresse mit einem Zwischenstand - und
          der Rest der Liste ist danach weg. */
-      if (!ready || applying || foreignFragment()) { return; }
+      if (!ready || applying || (!owner && foreignFragment())) { return; }
       var now = address();
       var values = valuesNow();
       var key = Object.keys(values);
+      /* Mit Layout steht vorn sein Teil, sonst die Sprungmarke. */
+      var head = owner ? encodePath(ownerPath()) : encode(now.anchor);
       var fresh;
       if (!key.length) {
-        fresh = now.anchor ? "#" + encode(now.anchor) : "";
+        fresh = !head ? "" : owner ? "#/" + head : "#" + head;
       } else {
-        fresh = "#/" + encode(now.anchor) + "?" + key.map(function (k) {
+        fresh = "#/" + head + "?" + key.map(function (k) {
           return encode(k) + "=" + encode(values[k]);
         }).join("&");
       }
@@ -166,12 +200,27 @@
       window.dispatchEvent(new CustomEvent("skr-urlchange"));
     }
 
+    /* NUR DER TEIL DES LAYOUTS, der Rest ab `?` bleibt, wie er dasteht: Ein Baustein,
+       der sich erst später anmeldet, fände seinen Wert sonst nicht mehr vor. */
+    function writeOwner() {
+      if (!owner || !ready) { return; }
+      var raw = location.hash || "";
+      var rest = raw.charAt(1) === "/" ? raw.replace(/^[^?]*/, "") : "";
+      var head = ownerPath();
+      var fresh = head || rest ? "#/" + encodePath(head) + rest : "";
+      if (fresh === raw) { return; }
+      if (!window.history || !window.history.replaceState) { return; }
+      window.history.replaceState(null, "", fresh || (location.pathname + location.search));
+      window.dispatchEvent(new CustomEvent("skr-urlchange"));
+    }
+
     /* NUR SCHLÜSSEL, DIE DASTEHEN, werden angewendet. Ein fehlender Schlüssel ist
        keine Aussage "alles zu", sondern gar keine - sonst schlösse der erste
        Seitenaufruf jeden Abschnitt, den der Autor offen geschrieben hat. */
     function apply() {
       applying = true;
       window.setTimeout(function () { applying = false; }, 0);
+      applyOwner();
       var values = address().values;
       parts.forEach(function (t) {
         if (!Object.prototype.hasOwnProperty.call(values, t.key)) { return; }
@@ -184,7 +233,7 @@
        Zustand aufgeht. Deshalb erst anwenden, dann springen. */
     function jump() {
       var raw = location.hash || "";
-      if (raw.slice(0, 2) !== "#/") { return; }
+      if (raw.slice(0, 2) !== "#/" || owner) { return; }
       var anchor = address().anchor;
       if (!anchor) { return; }
       var target = document.getElementById(anchor);
@@ -276,14 +325,33 @@
         parts.push(t);
         backfill(t);
       },
-      /* Nach jeder Bedienung aufrufen. */
+      /* Das Layout, dem der Teil des Fragments vor `?` gehört (`#/3?…`). Höchstens
+         eines je Seite. Sein Teil wird sofort hergestellt - das Layout soll nicht
+         erst mit der ersten Folie aufbauen und dann springen. */
+      layout: function (o) {
+        if (!o || typeof o.read !== "function" || typeof o.apply !== "function") { return; }
+        if (owner) {
+          if (window.console) { window.console.warn("skr.state.layout: an dieser Seite hat sich schon ein Layout angemeldet"); }
+          return;
+        }
+        owner = o;
+        applyOwner();
+      },
+      /* Nach jeder Bedienung aufrufen - Bausteine wie Layouts. */
       update: writeState,
       /* Die Sprungmarke der Adresse - für Bausteine, die tiefe Verweise auf
-         Inhalte in sich selbst auflösen müssen. */
+         Inhalte in sich selbst auflösen müssen. Gehört der Teil einem Layout, leer. */
       anchor: function () { return address().anchor; },
       /* Zustand aus der Adresse herstellen. Ruft das Theme selbst auf: einmal nach
          dem Aufbau der Seite und bei jedem `hashchange`. */
-      restore: function () { apply(); jump(); },
+      restore: function () {
+        apply();
+        jump();
+        /* MIT LAYOUT STEHT SEIN TEIL IMMER DA (`#/1` schon beim Laden, `#/99` wird
+           zur letzten Folie). Erst nach dem Herstellen: Bis dahin ist nicht klar,
+           wo das Layout steht. */
+        if (owner) { window.setTimeout(writeOwner, 0); }
+      },
       /* Ab hier darf geschrieben werden (nach dem ersten Herstellen). */
       ready: function () { ready = true; }
     };
@@ -862,6 +930,105 @@
 
      ZWEITENS: Faehrt das Menue der dritten Ebene nach rechts oder nach links aus?
      Das entscheidet der Platz bis zum Fensterrand, und den kennt erst der Browser. */
+  /* --- Beschriftung der Rollen: in der Mitte gekürzt --------------------------
+     Ein Segment des Umschalters hat eine Höchstbreite und schrumpft, wenn es eng wird
+     (components.css). Lange Titel – etwa „Gast – Rolle“ eines zusammengesetzten Gasts –
+     beginnen oft gleich; am Ende gekürzt sähen alle Segmente gleich aus. Deshalb kürzt
+     das Skript IN DER MITTE: Anfang und Ende bleiben sichtbar, dazwischen steht „…“.
+     Der volle Titel bleibt der zugängliche Name (`aria-label`) und steht im Tooltip –
+     vor der Beschreibung der Rolle, die sonst allein dort steht. Ohne Skript kürzt das
+     CSS am Ende.
+
+     Gemessen wird in zwei Schritten: erst alle Segmente mit vollem Titel, damit jedes
+     seine verfügbare Breite zeigt (sie hängt von den Nachbarn ab), dann je Segment die
+     längste Kürzung, die hineinpasst – per Halbierung über die Zahl der Zeichen.
+
+     ZU ENG FÜR SEGMENTE: Bleiben in einem Segment weniger Zeichen als
+     `--skr-header-role-min-chars` (Token, ohne Angabe 10), oder läuft der Umschalter
+     über, steht statt seiner die Auswahlliste (`skr-header--role-select`); ihre
+     Einträge sind auf dieselbe Weise gekürzt. */
+  function roleMinChars(header) {
+    var n = parseInt(getComputedStyle(header).getPropertyValue("--skr-header-role-min-chars"), 10);
+    return n > 0 ? n : 10;
+  }
+
+  function middleCut(label, n) {
+    var head = Math.ceil(n / 2);
+    return label.slice(0, head).replace(/\s+$/, "") + "…" + label.slice(label.length - (n - head)).replace(/^\s+/, "");
+  }
+
+  /* Längste Kürzung, die `fits` erfüllt; ohne Kürzung passend: der volle Titel. */
+  function fitLabel(label, fits) {
+    if (fits(label)) return { text: label, chars: label.length, cut: false };
+    var lo = 1, hi = label.length - 1, best = { text: middleCut(label, 1), chars: 1, cut: true };
+    while (lo <= hi) {
+      var mid = (lo + hi) >> 1;
+      var text = middleCut(label, mid);
+      if (fits(text)) { best = { text: text, chars: mid, cut: true }; lo = mid + 1; }
+      else hi = mid - 1;
+    }
+    return best;
+  }
+
+  function fitRoleSegments(buttons) {
+    var fewest = Infinity;
+    buttons.forEach(function (k) {
+      if (!k.hasAttribute("data-skr-role-label")) {
+        k.setAttribute("data-skr-role-label", k.textContent.trim());
+        k.setAttribute("data-skr-role-description", k.getAttribute("title") || "");
+      }
+      k.textContent = k.getAttribute("data-skr-role-label");
+    });
+    var rooms = Array.prototype.map.call(buttons, function (k) { return k.clientWidth; });
+    buttons.forEach(function (k, i) {
+      var label = k.getAttribute("data-skr-role-label");
+      var description = k.getAttribute("data-skr-role-description");
+      var fit = fitLabel(label, function (text) { k.textContent = text; return k.scrollWidth <= rooms[i] + 1; });
+      k.textContent = fit.text;
+      if (fit.cut) { k.setAttribute("aria-label", label); fewest = Math.min(fewest, fit.chars); }
+      else k.removeAttribute("aria-label");
+      var title = fit.cut ? label + (description ? " – " + description : "") : description;
+      if (title) k.setAttribute("title", title); else k.removeAttribute("title");
+    });
+    return fewest;
+  }
+
+  /* Die Auswahlliste zeigt den Titel der gewählten Option; gekürzt wird über
+     `option.label`, gemessen mit der Schrift der Liste auf einer Leinwand. */
+  function fitRoleSelect(select) {
+    var style = getComputedStyle(select);
+    var room = select.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    var ctx = document.createElement("canvas").getContext("2d");
+    ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
+    Array.prototype.forEach.call(select.options, function (o) {
+      if (!o.hasAttribute("data-skr-role-label")) o.setAttribute("data-skr-role-label", o.textContent.trim());
+      var label = o.getAttribute("data-skr-role-label");
+      var fit = fitLabel(label, function (text) { return ctx.measureText(text).width <= room; });
+      if (fit.cut) o.label = fit.text; else o.removeAttribute("label");
+    });
+    var chosen = select.options[select.selectedIndex];
+    if (chosen) {
+      var label = chosen.getAttribute("data-skr-role-label");
+      var description = chosen.getAttribute("title");
+      select.title = label + (description ? " – " + description : "");
+    }
+  }
+
+  function fitRoleLabels() {
+    var header = document.querySelector("[data-skr-header]");
+    var group = document.querySelector("[data-skr-roles]");
+    if (!header || !group) return;
+    var buttons = group.querySelectorAll("[data-skr-role-choice]");
+    var select = header.querySelector("[data-skr-role-select]");
+    header.classList.remove("skr-header--role-select");
+    var fewest = fitRoleSegments(buttons);
+    var overflow = group.scrollWidth > group.clientWidth + 1;
+    if (select && (fewest < roleMinChars(header) || overflow)) {
+      header.classList.add("skr-header--role-select");
+      fitRoleSelect(select);
+    }
+  }
+
   /* --- Rollen der Navigation (`nav.roles`) -----------------------------------
      Die Rolle steht an <html data-skr-role> (gesetzt im Kopf, vor dem ersten
      Malen); das CSS dort blendet die Einträge der übrigen Rollen aus. Der
@@ -873,19 +1040,25 @@
     /* Je Site gemerkt – unter dem Pfad ihrer Wurzel: Mehrere Unterlagen unter einer
        Domain wählen getrennt. Derselbe Schlüssel wie im Kopf der Seite (head.html). */
     var key = "skr-role:" + new URL(window.skr._root()).pathname;
+    var select = document.querySelector("[data-skr-role-select]");
     function show(role) {
       buttons.forEach(function (k) {
         k.setAttribute("aria-checked", k.getAttribute("data-skr-role-choice") === role ? "true" : "false");
       });
+      if (select) select.value = role;
+    }
+    function choose(role) {
+      document.documentElement.setAttribute("data-skr-role", role);
+      try { localStorage.setItem(key, role); } catch (e) { /* ohne Speicher */ }
+      show(role);
+      window.dispatchEvent(new Event("resize"));
     }
     show(document.documentElement.getAttribute("data-skr-role"));
+    fitRoleLabels();
+    if (select) select.addEventListener("change", function () { choose(select.value); });
     buttons.forEach(function (k, i) {
       k.addEventListener("click", function () {
-        var role = k.getAttribute("data-skr-role-choice");
-        document.documentElement.setAttribute("data-skr-role", role);
-        try { localStorage.setItem(key, role); } catch (e) { /* ohne Speicher */ }
-        show(role);
-        window.dispatchEvent(new Event("resize"));
+        choose(k.getAttribute("data-skr-role-choice"));
       });
       /* Pfeiltasten wie in jeder Gruppe von Optionsfeldern. */
       k.addEventListener("keydown", function (e) {
@@ -904,43 +1077,64 @@
     var nav = header.querySelector(".skr-header__nav");
     if (!nav) return;
 
-    /* PASST DIE LEISTE IN EINE ZEILE?
-       Nicht ausgerechnet, sondern abgelesen: Liegt der letzte Eintrag tiefer als
-       der erste, hat die Leiste umgebrochen. Das ist genau die Frage, und es ist
-       die einzige Rechnung, die nicht daneben liegen kann - eine Schaetzung aus
-       Header-Breite minus Wortmarke minus Werkzeuge vergisst Innenabstaende und
-       Abstaende und sagte bei 950 px noch "passt", waehrend die Leiste bereits
-       dreizeilig war (gemessen).
-
-       Gemessen wird OHNE `--compact`: Mit der Klasse liegt die Leiste als Spalte,
-       und jede Zeile stuende tiefer als die vorige - das Ergebnis waere immer
-       "umgebrochen" und der Zustand schwankte. Zwischen Abnehmen und Wiederanlegen
-       liegt kein `await` und kein Ereignis, der Browser malt also nichts davon. */
-    function fitsInOneLine() {
-      var previousCompact = header.classList.contains("skr-header--compact");
-      header.classList.remove("skr-header--compact");
+    /* BRICHT DIE LEISTE UM? Nicht ausgerechnet, sondern abgelesen: Liegt ein
+       sichtbarer Eintrag tiefer als der erste, hat die Leiste umgebrochen – gemessen
+       im Zustand, der gerade anliegt. Eine Schätzung aus Header-Breite minus
+       Wortmarke minus Werkzeuge vergisst Innenabstände und Abstände und sagte bei
+       950 px noch „passt“, während die Leiste bereits dreizeilig war (gemessen). */
+    function navWraps() {
       /* Nur, was sichtbar ist: Mit Rollen liegen die Einträge der anderen Rollen
          ausgeblendet in der Leiste und haben keine Lage. */
       var children = Array.prototype.filter.call(nav.children, function (k) { return k.offsetParent !== null; });
-      var wrap = false;
-      if (children.length > 1) {
-        var top = children[0].offsetTop;
-        for (var i = 1; i < children.length; i++) {
-          if (children[i].offsetTop > top + 2) { wrap = true; break; }
-        }
+      if (children.length < 2) return false;
+      var top = children[0].offsetTop;
+      for (var i = 1; i < children.length; i++) {
+        if (children[i].offsetTop > top + 2) return true;
       }
-      if (previousCompact) header.classList.add("skr-header--compact");
-      return !wrap;
+      return false;
+    }
+
+    /* DREI ZUSTÄNDE, in dieser Reihenfolge: im Balken, als eigene Zeile darunter
+       (`--stacked`), im Burger (`--compact`). Gemessen wird ohne `--compact` – mit der
+       Klasse liegt die Leiste als Spalte, und jede Zeile stünde tiefer als die vorige.
+       Zwischen Abnehmen und Wiederanlegen liegt kein `await` und kein Ereignis, der
+       Browser malt also nichts davon. */
+    function layoutState() {
+      header.classList.remove("skr-header--compact", "skr-header--stacked");
+      if (!navWraps()) return "bar";
+      header.classList.add("skr-header--stacked");
+      var wraps = navWraps();
+      header.classList.remove("skr-header--stacked");
+      return wraps ? "compact" : "stacked";
+    }
+
+    /* HÖHE DES BALKENS: `--topnav-height` aus Theme oder Kern, gelesen, bevor dieses
+       Skript es am Wurzelelement überschreibt. In der eigenen Zeile trägt es die
+       tatsächliche Höhe der Kopfzeile, damit Sprungziele und Seitenleiste ihr folgen. */
+    var root = document.documentElement;
+    var barHeight = getComputedStyle(root).getPropertyValue("--topnav-height").trim() || "72px";
+    header.style.setProperty("--skr-header-bar-height", barHeight);
+
+    function apply(state) {
+      header.classList.toggle("skr-header--compact", state === "compact");
+      header.classList.toggle("skr-header--stacked", state === "stacked");
+      if (state === "stacked") root.style.setProperty("--topnav-height", header.offsetHeight + "px");
+      else root.style.removeProperty("--topnav-height");
     }
 
     function remeasure() {
       /* Unter der Media-Query-Schwelle misst niemand: Dort gilt ohnehin der
          Burger, und die Leiste ist ausgeblendet - jede Messung waere Unsinn. */
       if (window.matchMedia && window.matchMedia("(max-width: 600px)").matches) {
-        header.classList.remove("skr-header--compact");
+        apply("bar");
+        fitRoleLabels();
         return;
       }
-      header.classList.toggle("skr-header--compact", !fitsInOneLine());
+      /* Erst die Rollen kürzen, dann messen – und nach dem Wechsel des Zustands noch
+         einmal, denn in der eigenen Zeile haben die Rollen mehr Platz. */
+      fitRoleLabels();
+      apply(layoutState());
+      fitRoleLabels();
       /* DAS KLAPPFELD GEHOERT UNTER DEN KNOPF. Wo der steht, weiß nur das
          Layout - CSS kann die Stelle nicht ausrechnen. Deshalb kommt sie als
          Custom Property herein; das Stylesheet setzt sie ein. */
@@ -1576,9 +1770,9 @@
          auf eine Folie, die längst weitergeblättert ist.
 
          Zwei Ereignisse, weil eines nicht genügt: `hashchange` deckt Sprungmarken
-         und Vor/Zurück ab; die Präsentation setzt das Fragment aber per
+         und Vor/Zurück ab; `skr.state` setzt das Fragment aber per
          `history.replaceState`, und das löst kein `hashchange` aus – dafür sendet
-         presentation.js `skr-urlchange`. */
+         es `skr-urlchange`. */
       window.addEventListener("hashchange", render);
       window.addEventListener("skr-urlchange", render);
 
@@ -2488,7 +2682,7 @@
     if (!document.querySelector("[data-skr-present]")) return null;
     function slides() { return document.querySelectorAll(".skr-deck__track > .skr-slide").length; }
     function current() {
-      var m = /^#\/(\d+)$/.exec(location.hash || "");
+      var m = /^#\/(\d+)(?:\?|$)/.exec(location.hash || "");
       return m ? parseInt(m[1], 10) : 1;
     }
     function button(name) {
@@ -2501,7 +2695,9 @@
       goTo: function (n) {
         var number = Math.round(Number(n));
         if (!isFinite(number)) throw new TypeError("skr.presentation.goTo: Foliennummer erwartet");
-        location.hash = "#/" + Math.max(1, Math.min(slides() || 1, number));
+        /* Der Zustand der Seite ab `?` bleibt stehen. */
+        var rest = (location.hash || "").replace(/^[^?]*/, "");
+        location.hash = "#/" + Math.max(1, Math.min(slides() || 1, number)) + rest;
       },
       next: function () { button("next"); },
       prev: function () { button("prev"); }
@@ -2565,15 +2761,17 @@
   function currentLanguage() { return pageBlock().language || null; }
 
   /* EIN SEITENOBJEKT, EINE FORM: `currentPage` und `findPage()` liefern dasselbe. */
-  function pageObject(slug, language, s, languages) {
-    return freeze({
+  function pageObject(slug, language, s, languages, more) {
+    return freeze(Object.assign({
       pageId: slug || null, language: language || null, url: absolute(s.url),
       title: s.title || null, layout: s.layout || null,
       description: s.description === undefined ? null : s.description,
       duration: s.duration === undefined ? null : s.duration,
       topics: Array.isArray(s.topics) ? s.topics.slice() : [],
-      languages: (languages || []).slice()
-    });
+      languages: (languages || []).slice(),
+      /* Eine unübersetzte Fassung (ADR-0200): die Sprache ihres Inhalts, sonst null. */
+      untranslated: s.untranslated || null
+    }, more));
   }
 
   /* Seite nach Kennung und Sprache (Vorgabe: die aktuelle). null, wenn es sie nicht gibt. */
@@ -2581,7 +2779,7 @@
     var per = index && index.pages && index.pages[slug];
     if (!per || !per[language]) return null;
     return pageObject(slug, language, per[language],
-      (index.languages || []).filter(function (c) { return !!per[c]; }));
+      (index.languages || []).filter(function (c) { return !!per[c] && !per[c].untranslated; }));
   }
 
   function pageInfo(slug, language) {
@@ -2657,7 +2855,9 @@
       currentLanguage: (function () { var b = pageBlock(); return b.language && b.language !== b.defaultLanguage ? b.language : null; })(),
       supportedLanguages: freeze((buildInfo().languages || []).slice()),
       defaultLanguage: pageBlock().defaultLanguage || null,
-      currentPage: (function () { var b = pageBlock(); return pageObject(b.pageId, b.language, b, b.languages); })(),
+      /* Die aktuelle Seite trägt dazu ihre Felder je Paket – nur die für den Browser
+         freigegebenen (`x-skr-browser`), so wie der Seitenblock sie nennt. */
+      currentPage: (function () { var b = pageBlock(); return pageObject(b.pageId, b.language, b, b.languages, { fields: JSON.parse(JSON.stringify(b.fields || {})) }); })(),
       findPage: pageInfo,
       navItems: navigation,
       goToPage: g("goToPage", goTo),

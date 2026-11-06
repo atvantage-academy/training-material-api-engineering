@@ -12,6 +12,18 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 }
 .skr-skip-link:focus { top: var(--skr-space-2); }
 
+/* Hinweis über dem Inhalt einer unübersetzten Fassung (ADR-0200) – in der Sprache des
+   Sprachbaums, der Inhalt darunter in seiner eigenen. */
+.skr-untranslated {
+  margin: 0 0 var(--skr-space-4);
+  padding: var(--skr-space-2) var(--skr-space-3);
+  border-left: 3px solid var(--skr-color-accent);
+  background: var(--skr-color-bg-subtle);
+  color: var(--skr-color-ink-muted);
+  font-size: 0.9rem;
+}
+.skr-present__bar .skr-untranslated { margin: 0; padding: 0 var(--skr-space-2); border: 0; background: none; }
+
 .skr-toc { display: flex; flex-direction: column; gap: 10px; }
 .skr-toc a { color: var(--skr-color-ink); text-decoration: none; font-size: 1rem; }
 .skr-toc a:hover { color: var(--skr-color-accent-text); }
