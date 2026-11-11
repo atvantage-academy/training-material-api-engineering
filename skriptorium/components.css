@@ -50,7 +50,7 @@
 
    Bis Theme 2.x trugen die Knöpfe zusätzlich `skr-theme-toggle` und
    `skr-print-btn`. Beide sind mit 3.0 entfallen; wer sie in seiner
-   assets/custom.css selektiert, schreibt auf `.skr-tool--theme` bzw.
+   assets/custom.css selektiert, schreibt auf `.skr-tool--scheme` bzw.
    `.skr-tool--print` um. */
 .skr-tool {
   display: inline-flex; align-items: center; justify-content: center;
@@ -94,6 +94,56 @@
   font-weight: 600;
   letter-spacing: .02em;
 }
+
+/* THEMES ZUR WAHL – neben dem Farbschema, nur wenn die Unterlage mehrere Themes anbietet
+   (tools.html, bedient von client.js). Ein Menü unter dem Knopf, je Theme ein Eintrag mit
+   Vorschaubild oder zwei Farbfeldern (Akzent auf Grund, hell und dunkel – gemessen von
+   client.js, `--skr-swatch-ground`) und dem Namen. Der gewählte trägt `aria-checked`. */
+.skr-themes { position: relative; display: inline-flex; }
+.skr-themes__list {
+  position: absolute; top: 100%; right: 0; z-index: 60;
+  min-width: 12rem; margin: 8px 0 0; padding: 6px;
+  list-style: none;
+  background: var(--skr-topbar-bg);
+  border: 1px solid var(--skr-border-soft);
+  border-radius: var(--skr-radius);
+  box-shadow: var(--skr-shadow-2);
+}
+.skr-themes__list[hidden] { display: none; }
+.skr-themes__item {
+  display: flex; align-items: center; gap: .6rem; width: 100%;
+  padding: .4rem .5rem;
+  border: 1px solid transparent; border-radius: var(--skr-radius);
+  background: transparent; color: var(--skr-header-text, var(--skr-color-headline));
+  font: inherit; font-size: .9rem; text-align: left; cursor: pointer;
+}
+.skr-themes__item:hover,
+.skr-themes__item:focus-visible { border-color: currentColor; }
+.skr-themes__item[aria-checked="true"] { font-weight: 600; }
+/* Der Haken als Maske in currentColor – kein Schriftzeichen. */
+.skr-themes__item[aria-checked="true"]::after {
+  content: ""; width: 1em; height: 1em; margin-left: auto; flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 12 10 18 20 6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 12 10 18 20 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.skr-themes__swatches { display: inline-flex; gap: 3px; flex: 0 0 auto; }
+.skr-themes__swatch {
+  width: 1.4rem; height: 1.4rem; border-radius: 50%;
+  background: var(--skr-color-border);
+  border: 4px solid var(--skr-swatch-ground, var(--skr-color-bg));
+  box-shadow: 0 0 0 1px var(--skr-border-soft);
+}
+.skr-themes__preview { width: 64px; height: 40px; object-fit: cover; border-radius: 3px; flex: 0 0 auto; }
+/* VORSCHAUBILD JE FARBSCHEMA (`preview: {light, dark}`): beide Bilder stehen im Eintrag, das
+   passende zeigt sich – nach der Systemeinstellung oder der Wahl des Umschalters. */
+.skr-themes__preview--dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-skr-scheme="light"]) .skr-themes__preview--light { display: none; }
+  :root:not([data-skr-scheme="light"]) .skr-themes__preview--dark { display: block; }
+}
+:root[data-skr-scheme="dark"] .skr-themes__preview--light { display: none; }
+:root[data-skr-scheme="dark"] .skr-themes__preview--dark { display: block; }
 
 /* Drucken – kompakter Icon-Button wie die Kopier-Buttons: Icon als CSS-Maske in
    currentColor, KEIN Emoji. Beschriftung nur als Tooltip und aria-label.
@@ -500,21 +550,21 @@ code + .skr-reveal--info { vertical-align: baseline; }
 .skr-header__logo { height: var(--skr-logo-height); width: auto; display: block; }
 /* WORTMARKE JE FARBSCHEMA: Hat die Marke eine eigene für das dunkle Schema
    (`brand.logo.dark`), steht sie als zweites Bild daneben und tauscht die helle aus –
-   nach der Systemeinstellung oder der Wahl des Umschalters (`data-skr-theme`).
+   nach der Systemeinstellung oder der Wahl des Umschalters (`data-skr-scheme`).
    Gedruckt wird immer die helle. Gilt in Kopfzeile, Folien und eigenständigen Layouts. */
 .skr-logo--dark { display: none !important; }
 @media screen and (prefers-color-scheme: dark) {
-  :root:not([data-skr-theme="light"]) .skr-logo--light { display: none !important; }
-  :root:not([data-skr-theme="light"]) .skr-logo--dark { display: block !important; }
+  :root:not([data-skr-scheme="light"]) .skr-logo--light { display: none !important; }
+  :root:not([data-skr-scheme="light"]) .skr-logo--dark { display: block !important; }
 }
 @media screen {
-  :root[data-skr-theme="dark"] .skr-logo--light { display: none !important; }
-  :root[data-skr-theme="dark"] .skr-logo--dark { display: block !important; }
+  :root[data-skr-scheme="dark"] .skr-logo--light { display: none !important; }
+  :root[data-skr-scheme="dark"] .skr-logo--dark { display: block !important; }
 }
 
 /* GEFÄRBTE WORTMARKE – nur mit `brand.logo.tint`. Ein <img> lädt das SVG als EIGENES
    Dokument: Dort sind weder die Tokens der Seite noch `currentColor` noch
-   `data-skr-theme` sichtbar. Eine Farbe im SVG selbst wäre ein zweiter Handwert neben
+   `data-skr-scheme` sichtbar. Eine Farbe im SVG selbst wäre ein zweiter Handwert neben
    `--skr-accent-base`.
 
    Deshalb liegt die gefärbte Fassung als MASKE auf einem <span> NEBEN dem Bild. Nicht
@@ -528,6 +578,12 @@ code + .skr-reveal--info { vertical-align: baseline; }
 
    Der span ist STANDARDMÄSSIG UNSICHTBAR und das <img> sichtbar: Kann der Browser keine
    Masken, bleibt es beim unveränderten Bild. */
+/* TEILE EINES THEMES DER AUSWAHL – die Marke je Theme, wenn die Unterlage mehrere anbietet:
+   eine Hülle ohne eigene Box. Ihre Kinder stehen im Layout, als gäbe es sie nicht; Regeln
+   über Geschwister (Bild und Maske) bleiben unter sich. Welche sichtbar ist, entscheidet
+   themes.css (vom Adapter erzeugt). */
+.skr-theme-part { display: contents; }
+
 .skr-header__logo-mask { display: none; }
 
 @supports (mask: url("#x") no-repeat) {

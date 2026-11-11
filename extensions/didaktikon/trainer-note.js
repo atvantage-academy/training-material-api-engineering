@@ -15,6 +15,10 @@
 
    Ohne Skript, ohne `popover` im Browser und im Druck bleibt der Kasten stehen, wie er
    ist: ein Hinweis, der sichtbar ist, schadet Trainer:innen nicht.
+
+   ALS BOX STATT POPUP: Mit `skr-didaktikon-trainer-note--box` am Kasten bleibt er stehen,
+   wie er ist – Studentenhut und Hinweis offen an seiner Stelle. Die Vorgabe bleibt das
+   Popup. Der Wissens-Check fasst so die Bedienung nur für Trainer:innen ein (quiz.js).
    ============================================================================= */
 (function () {
   "use strict";
@@ -34,7 +38,7 @@
     return span;
   }
 
-  document.querySelectorAll(".skr-didaktikon-trainer-note").forEach(function (root, index) {
+  document.querySelectorAll(".skr-didaktikon-trainer-note:not(.skr-didaktikon-trainer-note--box)").forEach(function (root, index) {
     var id = root.id ? root.id + "-popup" : "skr-didaktikon-trainer-note-" + (index + 1);
 
     var popup = document.createElement("div");

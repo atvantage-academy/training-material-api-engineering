@@ -6,8 +6,10 @@
    spezifische Logik gehört in das Skript der jeweiligen Unterlage.
 
    Aktuell enthalten:
-     - Theme-Umschaltung  (Elemente mit [data-skr-theme-toggle])
+     - Farbschema-Umschaltung (Elemente mit [data-skr-scheme-toggle])
+     - Themes zur Wahl     (Menü [data-skr-themes], Einträge [data-skr-theme-choice])
      - "Kopieren"-Buttons an Code-Blöcken (<pre>)
+     - Verkleinerte Bilder vergrößern (Bilder im Inhalt, `skr-zoom`)
      - Mobiles Aufklappen der Header-Navigation ([data-skr-nav-toggle])
      - "Markdown kopieren" auf Übungsseiten ([data-skr-copy-md])
      - QR-Code der Seiten-URL ([data-skr-qr])
@@ -412,7 +414,7 @@
     return !!(carrier && carrier.getAttribute("data-skr-state") === "off");
   }
 
-  /* --- Theme-Umschaltung -------------------------------------------------- */
+  /* --- Farbschema-Umschaltung ---------------------------------------------- */
   /* EIN WEG ZUM ABLAGEFACH - fuer alle drei Kopierknoepfe.
 
      `navigator.clipboard` gibt es NUR im sicheren Kontext. Eine aus dem
@@ -481,32 +483,32 @@
      sie trotzdem noch einmal gelesen: für Seiten ohne dieses Include, etwa die
      eigenständigen Vorlagen. */
   /* Der Weg, den Schalter UND Client-API nehmen: `choose("dark" | "light" | null)`,
-     null heisst Systemeinstellung. Gesetzt von `initThemeToggle`. */
+     null heisst Systemeinstellung. Gesetzt von `initSchemeToggle`. */
   var ColorScheme = { choose: null };
 
-  function initThemeToggle() {
+  function initSchemeToggle() {
     var root = document.documentElement;
     var system = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
     function current() {
-      var chosen = root.getAttribute("data-skr-theme");
+      var chosen = root.getAttribute("data-skr-scheme");
       if (chosen === "dark" || chosen === "light") return chosen;
       return system && system.matches ? "dark" : "light";
     }
-    var buttons = document.querySelectorAll("[data-skr-theme-toggle]");
+    var buttons = document.querySelectorAll("[data-skr-scheme-toggle]");
     function sync() {
       var dark = current() === "dark" ? "true" : "false";
       buttons.forEach(function (btn) { btn.setAttribute("aria-pressed", dark); });
     }
     try {
-      var saved = localStorage.getItem("skr-theme");
-      if (saved) root.setAttribute("data-skr-theme", saved);
+      var saved = localStorage.getItem("skr-scheme");
+      if (saved === "dark" || saved === "light") root.setAttribute("data-skr-scheme", saved);
     } catch (e) { /* egal */ }
     function choose(choice) {
-      if (choice) root.setAttribute("data-skr-theme", choice);
-      else root.removeAttribute("data-skr-theme");
+      if (choice) root.setAttribute("data-skr-scheme", choice);
+      else root.removeAttribute("data-skr-scheme");
       try {
-        if (choice) localStorage.setItem("skr-theme", choice);
-        else localStorage.removeItem("skr-theme");
+        if (choice) localStorage.setItem("skr-scheme", choice);
+        else localStorage.removeItem("skr-scheme");
       } catch (e) { /* egal */ }
       sync();
     }
@@ -517,6 +519,114 @@
       });
     });
     if (system && system.addEventListener) system.addEventListener("change", sync);
+    sync();
+  }
+
+  /* --- Themes zur Wahl -----------------------------------------------------
+     Bietet die Unterlage mehrere Themes an, nennt sie `<meta name="skr-themes">` (das erste
+     ist der Standard). Das gewählte steht als `data-skr-theme` am <html> – ohne Attribut gilt
+     das erste – und im Browser unter `skr-theme`; skr.js setzt es vor dem ersten Malen. Die
+     Stylesheets jedes Themes gelten nur unter ihm, die Teile seiner Marke blendet themes.css
+     ein und aus – umgeschaltet wird allein am Attribut.
+
+     DER WEG, den Menü UND Client-API nehmen: `ThemeChoice.choose(name)`. Ein Wechsel meldet
+     sich mit `skr-themechange` am window; das Theme liest `skr.theme()`. */
+  var ThemeChoice = { choose: null };
+
+  function themeNames() {
+    var m = document.querySelector('meta[name="skr-themes"]');
+    return m ? (m.getAttribute("content") || "").split(/\s+/).filter(Boolean) : [];
+  }
+
+  function currentTheme() {
+    var names = themeNames();
+    var set = document.documentElement.getAttribute("data-skr-theme");
+    return names.indexOf(set) >= 0 ? set : names[0];
+  }
+
+  /* FARBFELDER: Akzent und Grund jedes Themes in beiden Farbschemata, gemessen an einer
+     unsichtbaren Probe – das Attribut wechselt nur für die Messung, in derselben Aufgabe, und
+     ist danach wie zuvor; gemalt wird dazwischen nicht. */
+  function measureSwatches(menu) {
+    var root = document.documentElement;
+    var theme = root.getAttribute("data-skr-theme");
+    var scheme = root.getAttribute("data-skr-scheme");
+    var probe = document.createElement("span");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;transition:none;" +
+      "color:var(--skr-color-accent);background-color:var(--skr-color-bg)";
+    document.body.appendChild(probe);
+    try {
+      menu.querySelectorAll("[data-skr-theme-choice]").forEach(function (item) {
+        root.setAttribute("data-skr-theme", item.getAttribute("data-skr-theme-choice"));
+        item.querySelectorAll("[data-skr-swatch]").forEach(function (swatch) {
+          root.setAttribute("data-skr-scheme", swatch.getAttribute("data-skr-swatch"));
+          var c = getComputedStyle(probe);
+          swatch.style.backgroundColor = c.color;
+          swatch.style.setProperty("--skr-swatch-ground", c.backgroundColor);
+        });
+      });
+    } finally {
+      if (theme === null) root.removeAttribute("data-skr-theme"); else root.setAttribute("data-skr-theme", theme);
+      if (scheme === null) root.removeAttribute("data-skr-scheme"); else root.setAttribute("data-skr-scheme", scheme);
+      probe.remove();
+    }
+  }
+
+  function initThemeChoice() {
+    var names = themeNames();
+    if (names.length < 2) return;
+    var root = document.documentElement;
+    var menus = document.querySelectorAll("[data-skr-themes]");
+    function sync() {
+      var current = currentTheme();
+      document.querySelectorAll("[data-skr-theme-choice]").forEach(function (item) {
+        item.setAttribute("aria-checked", item.getAttribute("data-skr-theme-choice") === current ? "true" : "false");
+      });
+    }
+    ThemeChoice.choose = function (name) {
+      if (name === currentTheme()) return;
+      root.setAttribute("data-skr-theme", name);
+      try { localStorage.setItem("skr-theme", name); } catch (e) { /* egal */ }
+      sync();
+      window.dispatchEvent(new CustomEvent("skr-themechange"));
+    };
+    menus.forEach(function (menu) {
+      var button = menu.querySelector(".skr-tool--themes");
+      var list = menu.querySelector(".skr-themes__list");
+      var items = Array.prototype.slice.call(list.querySelectorAll("[data-skr-theme-choice]"));
+      var measured = false;
+      function close(focus) {
+        if (list.hidden) return;
+        list.hidden = true;
+        button.setAttribute("aria-expanded", "false");
+        if (focus) button.focus();
+      }
+      function open() {
+        if (!measured) { measureSwatches(list); measured = true; }
+        list.hidden = false;
+        button.setAttribute("aria-expanded", "true");
+        var checked = list.querySelector('[aria-checked="true"]') || items[0];
+        if (checked) checked.focus();
+      }
+      button.addEventListener("click", function () { if (list.hidden) open(); else close(true); });
+      items.forEach(function (item) {
+        item.addEventListener("click", function () {
+          ThemeChoice.choose(item.getAttribute("data-skr-theme-choice"));
+          close(true);
+        });
+      });
+      list.addEventListener("keydown", function (e) {
+        var i = items.indexOf(document.activeElement);
+        if (e.key === "Escape") { e.preventDefault(); close(true); }
+        else if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+        else if (e.key === "Home") { e.preventDefault(); items[0].focus(); }
+        else if (e.key === "End") { e.preventDefault(); items[items.length - 1].focus(); }
+        else if (e.key === "Tab") close(false);
+      });
+      document.addEventListener("click", function (e) { if (!menu.contains(e.target)) close(false); });
+    });
     sync();
   }
 
@@ -534,10 +644,10 @@
   var TEXTS = {
     de: { copy: "Kopieren", copied: "Kopiert!", close: "Schließen",
           step: "Arbeitsschritt",
-          moreTabs: "Weitere Reiter", cancel: "Abbrechen" },
+          moreTabs: "Weitere Reiter", cancel: "Abbrechen", zoom: "Vergrößern" },
     en: { copy: "Copy",     copied: "Copied!",  close: "Close",
           step: "Step",
-          moreTabs: "More tabs", cancel: "Cancel" }
+          moreTabs: "More tabs", cancel: "Cancel", zoom: "Enlarge" }
   };
   var T = TEXTS[(document.documentElement.getAttribute("lang") || "de").split("-")[0].toLowerCase()] || TEXTS.de;
 
@@ -621,6 +731,159 @@
     document.addEventListener("click", function (e) {
       if (!e.target.closest(".skr-header")) closeAllNavs();
     });
+  }
+
+  /* --- Bilder vergrößern (`skr-zoom`) --------------------------------------
+     EIN BILD, DAS DIE SEITE VERKLEINERT ZEIGT, LÄSST SICH GROSS ANSEHEN – in einem
+     Popup über der Seite, in voller Größe und bei Bedarf scrollbar. Gilt für jedes
+     Bild im Inhalt (`#skr-content`, `#skr-deck`), auch für die Diagramme aus Mermaid:
+     Deren zwei Fassungen sind Bilder, und geöffnet wird die sichtbare – die des
+     aktuellen Farbschemas.
+
+     VERKLEINERT HEISST: Die Eigengröße ist größer als die Darstellung. Das steht erst
+     fest, wenn das Bild geladen ist, und ändert sich mit der Breite der Spalte – ein
+     ResizeObserver prüft nach. Ein Bild, das in voller Größe dasteht, bleibt ein
+     Bild; der Knopf entsteht nur, wo es etwas zu vergrößern gibt.
+
+     AUSLÖSER IST DAS BILD SELBST: Es wird zum Knopf (`role="button"`, `tabindex`) und
+     öffnet per Klick, `Enter` oder Leertaste. Ist es schon ein Verweis, gehört der
+     Klick dem Verweis; dann steht eine Lupe daneben – außerhalb des <a>, denn ein
+     Knopf im Verweis ist kein gültiges HTML. Den Rahmen um beide (`skr-zoom-frame`)
+     legt das Skript an und nimmt ihn wieder weg, wenn das Bild nicht mehr verkleinert ist.
+
+     ABSCHALTEN: `skr-zoom--none` am Bild, am Verweis oder an einem Element darum.
+     Ausgenommen sind außerdem das Icon einer Karte und Bilder in einem Bedienelement.
+
+     OHNE SKRIPT bleibt alles, wie es ist: Knöpfe, Lupe und Popup entstehen hier.
+     Die Tasten im Popup bleiben im Popup – sonst blätterte die Präsentation dahinter
+     (presentation.js hört am Dokument). Gestaltet in site.css (`skr-zoom`). */
+  var zoomObserver = window.ResizeObserver ? new ResizeObserver(function (entries) {
+    entries.forEach(function (e) { updateZoom(e.target); });
+  }) : null;
+
+  function zoomLabel(img) {
+    var alt = (img.getAttribute("alt") || "").trim();
+    return alt ? T.zoom + ": " + alt : T.zoom;
+  }
+
+  /* Knopf oder Bild – je nachdem, ob es gerade verkleinert dasteht. */
+  function updateZoom(img) {
+    var shown = img.getClientRects().length > 0;
+    var scaled = shown && img.complete && (img.naturalWidth > img.clientWidth + 1 || img.naturalHeight > img.clientHeight + 1);
+    var link = img.closest("a[href]");
+    if (link) {
+      var lens = link.parentElement.classList.contains("skr-zoom-frame") && link.parentElement.querySelector(":scope > .skr-zoom-lens");
+      /* Nicht mehr verkleinert: Rahmen und Lupe gehen, der Verweis steht wieder an seinem Platz. */
+      if (lens && !scaled) {
+        var old = link.parentElement;
+        old.parentNode.insertBefore(link, old);
+        old.remove();
+        return;
+      }
+      if (!lens && scaled) {
+        var frame = document.createElement("span");
+        frame.className = "skr-zoom-frame";
+        link.parentNode.insertBefore(frame, link);
+        frame.appendChild(link);
+        lens = document.createElement("button");
+        lens.type = "button";
+        lens.className = "skr-zoom-lens";
+        lens.setAttribute("aria-haspopup", "dialog");
+        lens.skrZoomImage = img;
+        frame.appendChild(lens);
+      }
+      if (lens) {
+        lens.setAttribute("aria-label", zoomLabel(img));
+        lens.title = T.zoom;
+      }
+      return;
+    }
+    if (scaled) {
+      img.classList.add("skr-zoom");
+      img.setAttribute("role", "button");
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("aria-haspopup", "dialog");
+      img.setAttribute("aria-label", zoomLabel(img));
+    } else if (img.classList.contains("skr-zoom")) {
+      img.classList.remove("skr-zoom");
+      ["role", "tabindex", "aria-haspopup", "aria-label"].forEach(function (a) { img.removeAttribute(a); });
+    }
+  }
+
+  function initZoom(root) {
+    (root && root.querySelectorAll ? root : document).querySelectorAll("#skr-content img, #skr-deck img").forEach(function (img) {
+      /* Das Icon einer Karte (`skr-linkicon`) ist mit Absicht klein – kein Bild zum Vergrößern.
+         Ein Bild in einem Bedienelement (`summary`, `label`, `button`) gehört dessen Klick;
+         ein Knopf darin wäre ein Knopf im Knopf. */
+      if (img.skrZoom || img.closest(".skr-zoom--none, .skr-linkicon, button, summary, label, dialog")) return;
+      img.skrZoom = true;
+      img.addEventListener("load", function () { updateZoom(img); });
+      img.addEventListener("keydown", function (e) {
+        if (!img.classList.contains("skr-zoom") || (e.key !== "Enter" && e.key !== " ")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openZoom(img, img);
+      });
+      if (zoomObserver) zoomObserver.observe(img);
+      updateZoom(img);
+    });
+  }
+
+  /* Wie beim Kopieren: Inhalt, den ein Baustein erst im Browser einhängt, wird mit erfasst. */
+  document.addEventListener("skr-content-added", function (e) { initZoom(e.target); });
+
+  document.addEventListener("click", function (e) {
+    var lens = e.target.closest && e.target.closest(".skr-zoom-lens");
+    if (lens && lens.skrZoomImage) { openZoom(lens.skrZoomImage, lens); return; }
+    var img = e.target.closest && e.target.closest("img.skr-zoom");
+    if (img) openZoom(img, img);
+  });
+
+  function openZoom(img, trigger) {
+    var alt = (img.getAttribute("alt") || "").trim();
+    var d = document.createElement("dialog");
+    d.className = "skr-zoom-dialog";
+    d.setAttribute("aria-label", alt || T.zoom);
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "skr-btn skr-btn--ghost skr-zoom-dialog__close";
+    close.setAttribute("aria-label", T.close);
+    close.title = T.close;
+    close.textContent = "×";
+    var scroll = document.createElement("div");
+    scroll.className = "skr-zoom-dialog__scroll";
+    /* Ein Bereich, der scrollt, muss mit der Tastatur erreichbar sein (axe:
+       `scrollable-region-focusable`). */
+    scroll.tabIndex = 0;
+    var big = document.createElement("img");
+    big.src = img.currentSrc || img.src;
+    big.alt = alt;
+    big.width = img.naturalWidth;
+    big.height = img.naturalHeight;
+    scroll.appendChild(big);
+    d.appendChild(close);
+    d.appendChild(scroll);
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      if (d.open) d.close();
+      d.remove();
+      if (trigger && trigger.focus && document.contains(trigger)) trigger.focus();
+    }
+    close.addEventListener("click", finish);
+    d.addEventListener("cancel", function (e) { e.preventDefault(); finish(); });
+    d.addEventListener("click", function (e) {
+      if (e.target !== d) return;
+      var r = d.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) finish();
+    });
+    ["keydown", "touchstart", "touchmove", "touchend"].forEach(function (type) {
+      d.addEventListener(type, function (e) { e.stopPropagation(); });
+    });
+    document.body.appendChild(d);
+    d.showModal();
+    close.focus();
   }
 
   /* --- Auswahldialog (#394) ------------------------------------------------
@@ -1157,11 +1420,21 @@
     }
 
     var waiting = false;
-    window.addEventListener("resize", function () {
+    function schedule() {
       if (waiting) return;
       waiting = true;
       window.requestAnimationFrame(function () { waiting = false; remeasure(); });
-    });
+    }
+    window.addEventListener("resize", schedule);
+
+    /* UND WENN DIE WORTMARKE DA IST. Ihre Bilder haben keine feste Breite; lädt eines
+       erst nach dem ersten Messen, wird der Balken breiter – ohne `resize`, und
+       `fonts.ready` wartet nicht auf Bilder. Die Leiste blieb dann zweizeilig, bis das
+       Fenster sich änderte (skriptorium#215); aus dem Cache trat es nicht auf.
+       `ResizeObserver` meldet jede Änderung ihrer Breite, auch die Wortmarke eines
+       anderen Themes nach dem Wechsel. */
+    var brand = header.querySelector(".skr-header__brand");
+    if (brand && window.ResizeObserver) new ResizeObserver(schedule).observe(brand);
 
     /* Seite des seitlichen Menues. Beim Oeffnen und beim Ueberfahren pruefen, ob
        rechts noch Platz ist; sonst nach links. */
@@ -1207,9 +1480,10 @@
     }
 
     /* --- Kurze Menues ---------------------------------------------------------
-       Ein Aufklappmenue zeigt hoechstens `nav.menu.rows` Zeilen
-       (von der Kopfzeile als `data-skr-menu-visible`). Jedes Ziel ist eine Zeile,
-       die Ueberschrift eines eingebetteten Menues ebenso; Trennstriche zaehlen nicht.
+       Ein Aufklappmenue zeigt hoechstens so viele Zeilen, wie `--skr-menu-rows` des
+       Themes oder `nav.menu.rows` der Unterlage (an der Kopfzeile `data-skr-menu-visible`)
+       sagt. Jedes Ziel ist eine Zeile, die Ueberschrift eines eingebetteten Menues ebenso;
+       Trennstriche zaehlen nicht.
        Hat es mehr – oder passt es nicht ins Fenster –, wird es auf genau diese Hoehe
        begrenzt, GEMESSEN an der ersten Zeile, die nicht mehr hineingehoert, und bekommt
        oben und unten ein Dreieck. Zeigen auf ein Dreieck laesst es laufen; am Rand ist
@@ -1226,13 +1500,20 @@
       if (header.classList.contains("skr-header--compact")) return false;
       return !(window.matchMedia && window.matchMedia("(max-width: 600px)").matches);
     }
-    /* Der Wert gilt, wie ihn die Konfiguration nennt: Das Schema verlangt ab 1, der Bau
+    /* Der Wert der Unterlage (`nav.menu`, an der Kopfzeile) geht vor, sonst gilt das Token des
+       Themes (`--skr-menu-rows`, `--skr-menu-speed`) – gelesen bei jedem Öffnen, damit es dem
+       gewählten Theme folgt. Er gilt, wie er dasteht: Das Schema verlangt ab 1, der Bau
        bricht sonst ab – das Skript setzt keine eigene Untergrenze. */
+    function setting(attribute, token) {
+      var own = header.getAttribute(attribute);
+      return own !== null ? own : getComputedStyle(header).getPropertyValue(token).trim();
+    }
     function visibleRows() {
-      return parseInt(header.getAttribute("data-skr-menu-visible"), 10);
+      var n = parseInt(setting("data-skr-menu-visible", "--skr-menu-rows"), 10);
+      return n > 0 ? n : 7;
     }
     function pace() {
-      var t = parseFloat(header.getAttribute("data-skr-menu-speed"));
+      var t = parseFloat(setting("data-skr-menu-speed", "--skr-menu-speed"));
       return t > 0 ? t : 1;
     }
     function rowsOf(menu) { return menu.querySelectorAll(ROWS); }
@@ -2642,16 +2923,36 @@
       audience: data.audience === undefined ? null : data.audience,
       languages: data.languages || [],
       themes: data.themes || [],
+      themeOptions: data.themeOptions || (data.theme ? [data.theme] : []),
       extensions: data.extensions || [],
       internal: data.internal === true,
       effects: fx.split(/\s+/).filter(Boolean)
     });
   }
 
+  /* Die Themes der Unterlage – mit einer Auswahl die angebotenen, das erste ist der Standard;
+     sonst das eine. Je Aufruf eine neue Liste. */
+  function themes() {
+    var names = themeNames();
+    return names.length ? names : buildInfo().themeOptions.slice();
+  }
+
+  /* Das Theme lesen oder setzen – beim Namen, wie `themes()` es nennt. Ein Name, den die
+     Unterlage nicht anbietet, ändert nichts und wirft. */
+  function theme(name) {
+    var names = themes();
+    if (arguments.length === 0) return currentTheme() || names[0] || null;
+    if (names.indexOf(name) < 0) {
+      throw new RangeError('skr.theme: "' + name + '" wird nicht angeboten – angeboten: ' + names.join(", "));
+    }
+    if (ThemeChoice.choose) ThemeChoice.choose(name);
+    return name;
+  }
+
   function colorScheme(choice) {
     var root = document.documentElement;
     if (arguments.length === 0) {
-      var set = root.getAttribute("data-skr-theme");
+      var set = root.getAttribute("data-skr-scheme");
       return set === "dark" || set === "light" ? set : "auto";
     }
     if (choice !== "dark" && choice !== "light" && choice !== "auto") {
@@ -2850,6 +3151,11 @@
         if (arguments.length) return g("colorScheme", colorScheme).apply(null, arguments);
         return colorScheme();
       },
+      theme: function () {
+        if (arguments.length) return g("theme", theme).apply(null, arguments);
+        return theme();
+      },
+      themes: themes,
       search: g("search", search),
       qrCode: g("qrCode", qrCode),
       currentLanguage: (function () { var b = pageBlock(); return b.language && b.language !== b.defaultLanguage ? b.language : null; })(),
@@ -2870,8 +3176,10 @@
 
   function init() {
     initBackButtons();
-    initThemeToggle();
+    initSchemeToggle();
+    initThemeChoice();
     initCopyButtons();
+    initZoom();
     initNavToggle();
     initNavDropdown();
     initRoles();
