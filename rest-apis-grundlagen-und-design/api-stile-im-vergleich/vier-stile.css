@@ -1,9 +1,9 @@
 /* Stylesheet der Seite 10-api-stile-im-vergleich/vier-stile.md – über `styles:` im Front Matter geladen. */
 .vs { --vs-ja: #187452; --vs-nein: #b3402c; --vs-teils: #806414; }
-[data-skr-theme="dark"] .vs,
-.vs:where([data-skr-theme="dark"] *) { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+[data-skr-scheme="dark"] .vs,
+.vs:where([data-skr-scheme="dark"] *) { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-skr-theme="light"]) .vs { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
+  :root:not([data-skr-scheme="light"]) .vs { --vs-ja: #4fd1a5; --vs-nein: #ff8a70; --vs-teils: #e0be5c; }
 }
 
 .vs__tabelle-scroll { overflow-x: auto; margin: 1.5rem 0 2.5rem; }

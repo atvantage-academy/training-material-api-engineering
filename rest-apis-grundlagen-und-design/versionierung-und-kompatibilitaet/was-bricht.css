@@ -1,8 +1,8 @@
 /* Stylesheet der Seite 08-versionierung-und-kompatibilitaet/was-bricht.md – über `styles:` im Front Matter geladen. */
 .wb { --wb-ok: #187452; --wb-praxis: #806414; --wb-bruch: #b3402c; }
-[data-skr-theme="dark"] .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+[data-skr-scheme="dark"] .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-skr-theme="light"]) .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
+  :root:not([data-skr-scheme="light"]) .wb { --wb-ok: #4fd1a5; --wb-praxis: #e0be5c; --wb-bruch: #ff8a70; }
 }
 
 .wb__steuer { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1.5rem 0 1rem; }
