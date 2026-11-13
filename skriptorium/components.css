@@ -465,7 +465,8 @@ code + .skr-reveal--info { vertical-align: baseline; }
 /* Das Panel: mittig, begrenzt in Breite und Höhe, innen scrollbar. Ohne das
    Skript (kein `__body`) greift dieselbe Regel für die direkten Kinder – dann
    liegt der Inhalt ebenfalls mittig, nur ohne eigene Fläche pro Block. */
-.skr-reveal[open] > .skr-reveal__body {
+.skr-reveal[open] > .skr-reveal__body,
+.skr-reveal__layer > .skr-reveal__body {
   position: fixed; inset: 0; margin: auto; z-index: 61;
   /* `height: fit-content` ist nötig, nicht Kosmetik: Mit `inset: 0` sind oben UND
      unten gesetzt, dadurch streckt sich das Panel bei `height: auto` über die
@@ -478,12 +479,24 @@ code + .skr-reveal--info { vertical-align: baseline; }
   border-radius: var(--radius-dark, 6px);
   box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
 }
+/* `--lifted`: In einer Präsentation liegt das Panel in einer Ebene
+   (`__layer`), die client.js als Popover in die oberste Ebene des Browsers
+   hebt. Die Ebene füllt das Fenster und dunkelt ab; das Fixierte am `details`
+   entfällt dort. Das Panel darin steht wie sonst – fixiert, nun am Fenster. */
+.skr-reveal--lifted[open]::before { display: none; }
+.skr-reveal__layer {
+  position: fixed; inset: 0; width: auto; height: auto;
+  max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  overflow: visible; color: inherit;
+  background: rgba(2, 6, 23, .6);
+}
 /* `--wide`: ein breiteres Panel fuer BREITEN Inhalt - eine Vergleichstabelle mit
    mehreren Spalten steht in 780px entweder gequetscht oder im Scrollbereich, und
    beides nimmt ihr genau das, wofuer man sie oeffnet. Die Vorgabe bleibt schmal:
    Fuer die haeufige Info-Schaltflaeche mit zwei Saetzen waere eine lange Zeile
    schlechter zu lesen, nicht besser. */
-.skr-reveal--wide[open] > .skr-reveal__body { width: min(96vw, 1180px); }
+.skr-reveal--wide[open] > .skr-reveal__body,
+.skr-reveal--wide > .skr-reveal__layer > .skr-reveal__body { width: min(96vw, 1180px); }
 .skr-reveal__body > :first-child { margin-top: 0; }
 .skr-reveal__body > :last-child { margin-bottom: 0; }
 /* Der Titel wird im Panel wiederholt, damit sichtbar bleibt, was man geöffnet
@@ -752,7 +765,76 @@ a.skr-header__badge:focus-visible { outline: 2px solid currentColor; outline-off
   text-underline-offset: var(--skr-header-nav-underline-offset, auto);
 }
 
+/* --- Bild oder Symbol vor dem Titel (`skr-header__icon`) -------------------
+   Auf jeder Ebene: Verweis, Schalter einer Gruppe, Überschrift einer eingebetteten
+   Gruppe. Größe `--skr-nav-icon-size` (stabil, Vorgabe 1.25em). Ein Bild füllt sein
+   Quadrat (`object-fit: cover`), in seinen eigenen Farben. Ein Symbol des Themes ist
+   eine Maske in der Textfarbe des Eintrags (`currentColor`) und folgt so Überfahren und
+   aktuellem Eintrag von selbst; die Datei setzt symbols.css je Theme als
+   `--skr-symbol-icon` (wie `--skr-doclink-icon`).
+
+   NIE GETRENNT VOM TITEL: Ein Eintrag mit Icon wird ein Flex-Container – das Icon
+   schrumpft nicht, der Titel bricht in seiner eigenen Spalte um, auch im Burger, wo
+   die Einträge umbrechen dürfen. Als Inline-Element stünde das Icon sonst allein am
+   Zeilenende. Einträge ohne Icon bleiben, wie sie sind (`:has`). */
+.skr-header__icon {
+  display: inline-block; flex: none;
+  inline-size: var(--skr-nav-icon-size, 1.25em); block-size: var(--skr-nav-icon-size, 1.25em);
+  vertical-align: -.25em; margin-inline-end: .5em;
+}
+.skr-header__icon--image { object-fit: cover; }
+.skr-header__icon--symbol { background: currentColor; -webkit-mask: var(--skr-symbol-icon) center / contain no-repeat; mask: var(--skr-symbol-icon) center / contain no-repeat; }
+/* Ohne Masken stünde das Symbol als Block in der Textfarbe da – dann entfällt es. Der Eintrag
+   behält seinen Text; das Symbol ist ohnehin aria-hidden. */
+@supports not ((mask: url("#x") no-repeat) or (-webkit-mask: url("#x") no-repeat)) {
+  .skr-header__icon--symbol { display: none; }
+}
+/* Erzwungene Farben setzten die Hintergrundfarbe auf die der Fläche – das Symbol
+   verschwände. Ohne Anpassung erbte es aber nicht die erzwungene Textfarbe des
+   Eintrags, sondern die ursprüngliche (gemessen); darum die Systemfarbe, die der
+   Browser dem Eintrag gibt: Verweis, Schalter, Überschrift. */
+@media (forced-colors: active) {
+  .skr-header__icon--symbol { forced-color-adjust: none; background: CanvasText; }
+  a > .skr-header__icon--symbol { background: LinkText; }
+  button > .skr-header__icon--symbol { background: ButtonText; }
+}
+.skr-header__nav a:has(> .skr-header__icon),
+.skr-header__setlabel:has(> .skr-header__icon) { display: flex; align-items: center; }
+/* Im Schalter einer Gruppe: Dort steht `gap` (`--skr-grouptoggle-gap`, intern)
+   zwischen allen Teilen, der Abstand zum Titel bleibt trotzdem .5em. `space-between` (dritte Ebene, Burger) rückte den Titel
+   zwischen Icon und Pfeil in die Mitte; ein Platzhalter vor dem Pfeil nimmt stattdessen
+   den freien Raum. Er hebt eine Lücke wieder auf, damit der Pfeil ohne freien Raum so
+   dicht am Titel steht wie ohne Icon. Bricht der Titel um (Burger), beginnen seine
+   Zeilen am Icon statt mittig wie im Knopf üblich. */
+.skr-header__grouptoggle:has(> .skr-header__icon) { text-align: start; }
+.skr-header__grouptoggle > .skr-header__icon { margin-inline-end: calc(.5em - var(--skr-grouptoggle-gap)); }
+.skr-header__grouptoggle:has(> .skr-header__icon)::before {
+  content: ""; order: 1; flex: 1 0 0; margin-inline-start: calc(-1 * var(--skr-grouptoggle-gap));
+}
+.skr-header__grouptoggle:has(> .skr-header__icon) > .skr-header__caret { order: 2; }
+
 .skr-header__burger { display: none; }
+
+/* --- Symbol des Themes im Inhalt (`skr-symbol`) -------------------------------
+   Aus `![Text](symbol:«name»)` (_markup/render-image.html): dieselbe Maske wie vor einem Eintrag der
+   Navigation, in der Farbe des umgebenden Textes, so groß wie seine Schrift und auf ihrer
+   Grundlinie – im Satz, in Tabellen, in Verweisen. Die Datei setzt symbols.css je Theme als
+   `--skr-symbol-icon`. */
+.skr-symbol {
+  display: inline-block; inline-size: 1em; block-size: 1em; vertical-align: -.125em;
+  background: currentColor; -webkit-mask: var(--skr-symbol-icon) center / contain no-repeat; mask: var(--skr-symbol-icon) center / contain no-repeat;
+}
+/* Ohne Masken stünde ein Quadrat in der Textfarbe da – dann bleibt nur sein Platz; der Name für
+   Hilfsmittel bleibt erhalten. */
+@supports not ((mask: url("#x") no-repeat) or (-webkit-mask: url("#x") no-repeat)) {
+  .skr-symbol { background: none; }
+}
+/* Erzwungene Farben: wie in der Navigation die Systemfarbe des Textes, in einem Verweis die
+   der Verweise. */
+@media (forced-colors: active) {
+  .skr-symbol { forced-color-adjust: none; background: CanvasText; }
+  a .skr-symbol { background: LinkText; }
+}
 
 /* --- Werkzeuge in der Kopfzeile ------------------------------------------
    Kleine Gruppe am rechten Rand: QR-Code der Seitenadresse + Farbschema-
@@ -801,7 +883,8 @@ a.skr-header__badge:focus-visible { outline: 2px solid currentColor; outline-off
 /* --- Header-Untermenü: Dropdown (breit) / aufklappbar (schmal) ------------ */
 .skr-header__group { position: relative; display: inline-flex; }
 .skr-header__grouptoggle {
-  display: inline-flex; align-items: center; gap: 6px;
+  --skr-grouptoggle-gap: 6px;
+  display: inline-flex; align-items: center; gap: var(--skr-grouptoggle-gap);
   background: none; border: 0; padding: 0; cursor: pointer;
   font: inherit; font-weight: 500; font-size: 1.0625rem;
   color: var(--skr-color-headline);
@@ -1297,6 +1380,12 @@ a.skr-header__badge:focus-visible { outline: 2px solid currentColor; outline-off
 .skr-footer__grid p a {
   display: inline-block; min-height: 24px; padding-block: 4px;
 }
+/* Gruppen von Verweisen (`footer.groups`): Titel über der Liste wie in der Spalte
+   Kontakt, die Verweise untereinander ohne Aufzählungszeichen – ebenso mindestens 24
+   Pixel hoch. Farben wie die übrigen Verweise der Fußzeile. */
+.skr-footer__grouptitle { display: block; }
+.skr-footer__links { list-style: none; margin: 0; padding: 0; line-height: 2; }
+.skr-footer__links a { display: inline-block; min-height: 24px; padding-block: 4px; }
 .skr-footer a:hover { color: var(--skr-color-accent); }
 .skr-footer__legal { margin-top: var(--skr-space-6); text-align: center; color: rgba(255, 255, 255, 0.7); }
 

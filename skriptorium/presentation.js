@@ -196,6 +196,9 @@
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var t = e.target;
     if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    // Ein offenes Panel (`skr-reveal`) liegt über der Folie: Die Tasten gehören
+    // ihm, die Folie dahinter bleibt stehen.
+    if (deck.querySelector("details.skr-reveal[open]")) return;
 
     switch (e.key) {
       case "ArrowRight":
@@ -301,6 +304,7 @@
   // Zeiger wieder über die Folie bewegte.
   document.addEventListener("wheel", function (e) {
     if (e.ctrlKey) return;                                   // Pinch-Zoom
+    if (deck.querySelector("details.skr-reveal[open]")) return; // Panel darüber
     var dx = e.deltaX, dy = e.deltaY;
     if (e.deltaMode === 1) { dx *= 16; dy *= 16; }                                  // Zeilen
     else if (e.deltaMode === 2) { dx *= deck.clientWidth; dy *= deck.clientHeight; } // Seiten
@@ -375,6 +379,7 @@
 
   document.addEventListener("touchstart", function (e) {
     if (e.touches.length !== 1) { if (tActive) { dragOff(); render(); } return; }
+    if (deck.querySelector("details.skr-reveal[open]")) return;   // Panel darüber
     tActive = true; tAxis = 0; tDelta = 0;
     tStartX = e.touches[0].clientX;
     tStartY = e.touches[0].clientY;

@@ -2100,6 +2100,7 @@
      Inhalt ist dann erreichbar, nur nicht mittig. Kein Schulungsinhalt hängt
      also am JavaScript. */
   function initReveals() {
+    var lifted = [];
     document.querySelectorAll("details.skr-reveal").forEach(function (details, index) {
       if (inPresentation(details)) { return; }
       var summary = details.querySelector(":scope > summary");
@@ -2147,9 +2148,35 @@
         body.appendChild(button);
       }
 
+      /* IN DER PRÄSENTATION IN DIE OBERSTE EBENE (#406). Die Schiene der Folien
+         trägt `transform` und wird damit zum Bezugsrahmen alles Fixierten darin:
+         Panel und Abdunkelung lägen neben der verschobenen Schiene, weit außerhalb
+         des Bildes. Eine Ebene (`__layer`) als Popover liegt in der obersten Ebene
+         des Browsers, die nur das Fenster kennt; sie dunkelt ab und fängt den
+         Klick daneben – der `::backdrop` eines Popovers kann das nicht, er lässt
+         Klicks durch. Beim Drucken bleibt sie unten, print.css bettet den Inhalt
+         in die Folie ein. */
+      if (details.closest(".skr-deck") && "showPopover" in body) {
+        var layer = document.createElement("div");
+        layer.className = "skr-reveal__layer";
+        layer.popover = "manual";
+        details.insertBefore(layer, body);
+        layer.appendChild(body);
+        details.classList.add("skr-reveal--lifted");
+        var sync = function () {
+          var show = details.open && !inPrint;
+          if (show !== layer.matches(":popover-open")) {
+            if (show) { layer.showPopover(); } else { layer.hidePopover(); }
+          }
+        };
+        details.addEventListener("toggle", sync);
+        lifted.push(sync);
+        sync();
+      }
+
       /* Klick NEBEN das Panel schließt. Der Klick auf die Abdunkelung landet am
-         `details` selbst (sie ist dessen ::before), Klicks im Panel nicht – die
-         fängt der zweite Handler ab. */
+         `details` selbst (sie ist dessen ::before oder die Ebene darin), Klicks
+         im Panel nicht – die fängt der zweite Handler ab. */
       details.addEventListener("click", function (event) {
         if (!details.open) return;
         if (event.target === summary || summary.contains(event.target)) return;
@@ -2224,12 +2251,14 @@
         d.open = true;
         openedForPrint.push(d);
       });
+      lifted.forEach(function (sync) { sync(); });
     }
     function afterPrint() {
       if (!inPrint) { return; }
       inPrint = false;
       openedForPrint.forEach(function (d) { d.open = false; });
       openedForPrint = [];
+      lifted.forEach(function (sync) { sync(); });
       /* Erst schließen, dann die Namen zurueck: Andersherum schloesse der
          Browser beim Setzen des Namens selbst Geschwister und der Zustand von
          vor dem Druck waere nicht wiederhergestellt, sondern geraten. */
