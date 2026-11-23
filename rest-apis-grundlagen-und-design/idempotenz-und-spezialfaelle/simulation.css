@@ -55,7 +55,6 @@
 .leitung__draht.is-laeuft.is-hin   .leitung__punkt { animation: leitung-hin   1.1s ease-in-out both; }
 .leitung__draht.is-laeuft.is-rueck .leitung__punkt { animation: leitung-rueck 1.1s ease-in-out both; }
 .leitung__draht.is-laeuft.is-weg   .leitung__punkt { animation: leitung-weg   1.1s ease-in-out both; }
-.leitung__draht.is-laeuft.is-danach .leitung__punkt { animation-delay: 1.1s; }
 @keyframes leitung-hin   { from { left: 0; }    to { left: 100%; } }
 @keyframes leitung-rueck { from { left: 100%; } to { left: 0; } }
 @keyframes leitung-weg {
@@ -75,3 +74,9 @@
   color: var(--skr-color-ink-muted); text-decoration: line-through;
 }
 .buehne .skr-didaktikon-simulation-cell.is-geloescht { background: var(--skr-color-bg-subtle); }
+/* Die Notiz unter einer Leitung kommt mit der Nachricht an, nicht vorher. */
+.leitung__draht.is-laeuft + .notiz:not(:empty) { animation: leitung-notiz .3s ease-out 1.1s both; }
+@keyframes leitung-notiz { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .leitung__draht.is-laeuft + .notiz { animation: none; }
+}

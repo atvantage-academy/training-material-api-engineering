@@ -46,9 +46,7 @@
 
   /* Die Leitung ist eine Linie, die Nachricht ein Punkt darauf. Der Punkt
      wandert nur, wenn der Schritt vorwärts kommt (ctx.animated) und sich die
-     Nachricht geändert hat – sonst steht er gleich am Ziel. `danach` lässt ihn
-     erst losgehen, wenn der Punkt auf der anderen Leitung angekommen ist: Der
-     Proxy leitet weiter, nachdem er die Nachricht hat. */
+     Nachricht geändert hat – sonst steht er gleich am Ziel. */
   function zeichneLeitung(el, l, animiert) {
     if (!el) return;
     if (!el.firstChild) {
@@ -70,12 +68,33 @@
     if (!neu) return;                     // läuft schon oder steht schon am Ziel
     draht.className = "leitung__draht" +
       (l && !l.ruhe ? (l.rueckweg ? " is-rueck" : " is-hin") : "") +
-      (l && l.weg ? " is-weg" : "") +
-      (l && l.danach ? " is-danach" : "");
+      (l && l.weg ? " is-weg" : "");
     if (l && !l.ruhe && animiert) {
       void draht.offsetWidth;             // Animation neu starten
       draht.classList.add("is-laeuft");
     }
+  }
+
+  /* ERST ANKOMMEN, DANN ZEIGEN: Je Schritt wandert eine Nachricht über eine
+     Leitung; das Ziel (s.ziel – "proxy", "server" oder "client") ändert sich erst,
+     wenn der Punkt dort ist. Ohne Animation (Springen, reduzierte Bewegung) sofort.
+     `lauf` verwirft eine verspätete Ankunft, wenn inzwischen weitergeklickt wurde. */
+  var ANKUNFT = 1100, lauf = 0;
+
+  function zeichneKunden(el, kunden, ctx) {
+    // Gelöschte bleiben stehen – durchgestrichen und ausgegraut.
+    sim.list(el, kunden, {
+      animated: ctx.animated,
+      key: function (x) { return x.id; },
+      create: zelle,
+      update: function (el, x) {
+        el.querySelector(".skr-didaktikon-simulation-cell__label").textContent = "ID " + x.id;
+        el.querySelector(".skr-didaktikon-simulation-cell__name").textContent = x.name;
+        el.querySelector(".skr-didaktikon-simulation-cell__value").textContent = x.seit;
+        el.classList.toggle("is-active", !!x.markiert && !x.weg);
+        el.classList.toggle("is-geloescht", !!x.weg);
+      }
+    });
   }
 
   sim.setup({
@@ -83,20 +102,17 @@
 
     render: function (s, ctx) {
       var sz = ctx.scenario || "superlativ";
-      zeilen(document.getElementById(sz + "-client"), s.clientZeilen, ctx);
-      zeilen(document.getElementById(sz + "-proxy"), s.proxyZeilen, ctx);
-
-      // Gelöschte bleiben stehen – durchgestrichen und ausgegraut.
-      sim.list(document.getElementById(sz + "-server"), s.kunden, {
-        animated: ctx.animated,
-        key: function (x) { return x.id; },
-        create: zelle,
-        update: function (el, x) {
-          el.querySelector(".skr-didaktikon-simulation-cell__label").textContent = "ID " + x.id;
-          el.querySelector(".skr-didaktikon-simulation-cell__name").textContent = x.name;
-          el.querySelector(".skr-didaktikon-simulation-cell__value").textContent = x.seit;
-          el.classList.toggle("is-active", !!x.markiert && !x.weg);
-          el.classList.toggle("is-geloescht", !!x.weg);
+      var teile = {
+        client: function () { zeilen(document.getElementById(sz + "-client"), s.clientZeilen, ctx); },
+        proxy:  function () { zeilen(document.getElementById(sz + "-proxy"), s.proxyZeilen, ctx); },
+        server: function () { zeichneKunden(document.getElementById(sz + "-server"), s.kunden, ctx); }
+      };
+      var meinLauf = ++lauf;
+      Object.keys(teile).forEach(function (k) {
+        if (ctx.animated && s.ziel === k) {
+          setTimeout(function () { if (meinLauf === lauf) teile[k](); }, ANKUNFT);
+        } else {
+          teile[k]();
         }
       });
 
@@ -107,19 +123,21 @@
 
   /* Die beiden Szenarien unterscheiden sich nur in der Adresse und darin, was
      beim zweiten Versuch auf dem Server passiert. */
+  /* Ein Schritt = ein Transfer über EINE Leitung. Die Szenarien unterscheiden sich
+     nur in der Adresse und darin, was beim zweiten Versuch auf dem Server passiert. */
   function szenario(o) {
-    var A = o.adresse, vorab = o.vorab ? [o.vorab] : [];
+    var A = "DELETE " + o.adresse, vorab = o.vorab ? [o.vorab] : [];
     function client(wert, fehler) {
-      return vorab.concat([{ id: "c1", label: "Anfrage", name: "DELETE " + A, wert: wert, fehler: !!fehler }]);
+      return vorab.concat([{ id: "c1", label: "Anfrage", name: A, wert: wert, fehler: !!fehler }]);
     }
-    var p1 = { id: "p1", label: "1. Versuch", name: "DELETE " + A, wert: "weitergeleitet" };
-    var p1weg = { id: "p1", label: "1. Versuch", name: "DELETE " + A, wert: "Timeout", fehler: true };
+    var p1weg = { id: "p1", label: "1. Versuch", name: A, wert: "Timeout", fehler: true };
 
     return [
       {
         title: "Die Ausgangslage",
         text: o.start,
         apply: function (s) {
+          s.ziel = null;
           if (o.vorab) {
             s.clientZeilen = [o.vorab, { id: "c1", label: "Anfrage", name: "noch nichts geschickt", wert: "" }];
             s.kunden[0].markiert = true;
@@ -127,57 +145,70 @@
         }
       },
       {
-        title: "Der Client schickt den Auftrag – über den Proxy",
+        title: "Der Client schickt den Auftrag an den Proxy",
         text: o.schicken,
         apply: function (s) {
+          s.ziel = "proxy";
           s.clientZeilen = client("wartet …");
-          s.proxyZeilen = [p1];
-          s.leitung1 = { text: "DELETE " + A, rueckweg: false };
-          s.leitung2 = { text: "DELETE " + A, rueckweg: false, danach: true };
+          s.proxyZeilen = [{ id: "p1", label: "1. Versuch", name: A, wert: "empfangen" }];
+          s.leitung1 = { text: A };
+          s.leitung2 = null;
         }
       },
       {
-        title: "Der Server führt aus",
+        title: "Der Proxy leitet weiter – der Server führt aus",
         text: o.ausfuehren,
         apply: function (s) {
+          s.ziel = "server";
+          s.proxyZeilen = [{ id: "p1", label: "1. Versuch", name: A, wert: "weitergeleitet" }];
           s.kunden[0].weg = true;
           s.leitung1 = null;
-          s.leitung2 = { text: "", ruhe: true, notiz: "Auf dem Server ist die Arbeit <strong>getan</strong>." };
+          s.leitung2 = { text: A, notiz: "Auf dem Server ist die Arbeit <strong>getan</strong>." };
         }
       },
       {
         title: "Die Antwort kommt beim Proxy nie an",
         text: o.verloren,
         apply: function (s) {
+          s.ziel = "proxy";
           s.proxyZeilen = [p1weg];
           s.leitung2 = { text: "204 No Content", rueckweg: true, weg: true, notiz: "Der Proxy sieht <strong>nur einen Timeout</strong>." };
         }
       },
       {
-        title: "Also noch einmal – der Proxy wiederholt",
-        text: o.wiederholen,
+        title: o.wiederTitel,
+        text: o.wiederText,
         apply: function (s) {
-          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: "DELETE " + A, wert: "wartet …" }];
+          s.ziel = "server";
+          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: A, wert: "weitergeleitet" }];
           s.clientZeilen = client("wartet noch …");
-          s.leitung1 = null;
-          s.leitung2 = { text: "DELETE " + A, rueckweg: false };
+          if (o.zweitLoescht) s.kunden[1].weg = true;
+          s.leitung2 = { text: A, notiz: o.wiederNotiz };
         }
       },
       {
-        title: o.zweitTitel,
-        text: o.zweitText,
+        title: "Diesmal kommt die Antwort beim Proxy an",
+        text: o.zurueckText,
         apply: function (s) {
-          if (o.zweitLoescht) s.kunden[1].weg = true;
-          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: "DELETE " + A, wert: o.zweitStatus }];
-          s.clientZeilen = client(o.clientWert, o.clientFehler);
+          s.ziel = "proxy";
+          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: A, wert: o.zweitStatus }];
           s.leitung2 = { text: o.zweitStatus, rueckweg: true };
-          s.leitung1 = { text: o.zweitStatus, rueckweg: true, danach: true, notiz: o.clientNotiz };
+        }
+      },
+      {
+        title: "Der Proxy gibt die Antwort an den Client",
+        text: o.clientText,
+        apply: function (s) {
+          s.ziel = "client";
+          s.clientZeilen = client(o.clientWert, o.clientFehler);
+          s.leitung2 = null;
+          s.leitung1 = { text: o.zweitStatus, rueckweg: true, notiz: o.clientNotiz };
         }
       },
       {
         title: o.schlussTitel,
         text: o.schlussText,
-        apply: function (s) { s.leitung1 = null; s.leitung2 = null; },
+        apply: function (s) { s.ziel = null; s.leitung1 = null; s.leitung2 = null; },
         duration: 5000
       }
     ];
@@ -190,12 +221,14 @@
     steps: szenario({
       adresse: "/customers/oldest",
       start: "<p>Drei Kunden im Bestand. Der Fachbereich möchte, dass der <b>älteste</b> gelöscht wird – Anna Berger, seit 2019 dabei.</p><p>Zwischen Client und Server steht ein <b>Proxy</b> – ein Gateway, ein Load Balancer, ein Sidecar. Er ist so eingestellt, dass er bei einem Timeout <b>selbst</b> noch einmal versucht.</p>",
-      schicken: "<p>Ein einziger Aufruf, bequem und lesbar. Der Proxy leitet ihn weiter; der Server soll selbst herausfinden, wer der älteste ist.</p>",
-      ausfuehren: "<p>Der Server sortiert, findet Anna Berger – und löscht sie. Fachlich genau richtig.</p>",
+      schicken: "<p>Ein einziger Aufruf, bequem und lesbar. Er geht zuerst an den <b>Proxy</b> – der Client sieht den Server nie direkt.</p>",
+      ausfuehren: "<p>Der Proxy reicht die Anfrage unverändert durch. Der Server sortiert, findet Anna Berger – und löscht sie. Fachlich genau richtig.</p>",
       verloren: "<p>Ein Verbindungsabbruch, ein überlasteter Knoten – die Antwort geht <b>zwischen Server und Proxy</b> verloren.</p><p><b>Der Proxy weiß jetzt nichts.</b> Er kann nicht unterscheiden, ob der Server gar nichts getan hat oder ob nur die Bestätigung fehlt.</p>",
-      wiederholen: "<p>Der Proxy tut, wofür er eingestellt ist: Er schickt die Anfrage <b>noch einmal</b> – dieselbe, Zeichen für Zeichen.</p><p>Der Client merkt davon nichts. Für ihn ist es noch immer seine erste und einzige Anfrage.</p>",
-      zweitTitel: "Und jetzt ist Bruno der älteste",
-      zweitText: "<p>Der Server sortiert erneut. Anna ist weg – also ist <b>Bruno Cimen</b> der älteste Kunde. Und wird gelöscht.</p><p>Der Client hat <b>eine</b> Anfrage geschickt und <b>eine</b> Antwort bekommen. Dass zwei Kunden fehlen, sieht er nicht.</p>",
+      wiederTitel: "Der Proxy wiederholt – und jetzt ist Bruno der älteste",
+      wiederText: "<p>Der Proxy tut, wofür er eingestellt ist: Er schickt <b>dieselbe Anfrage</b> noch einmal, Zeichen für Zeichen. Der Client merkt davon nichts.</p><p>Der Server sortiert erneut. Anna ist weg – also ist <b>Bruno Cimen</b> der älteste Kunde. Und wird gelöscht.</p>",
+      wiederNotiz: "Zwei Kunden verloren, obwohl nur einer gemeint war.",
+      zurueckText: "<p><code>204 No Content</code> erreicht den Proxy. Für ihn ist die Sache erledigt – der zweite Versuch hat geklappt.</p>",
+      clientText: "<p>Der Client hat <b>eine</b> Anfrage geschickt und bekommt <b>eine</b> Antwort. Dass zwei Kunden fehlen, sieht er nicht.</p>",
       zweitLoescht: true,
       zweitStatus: "204 No Content",
       clientWert: "204 – alles gut?",
@@ -216,11 +249,13 @@
       vorab: { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
       start: "<p>Derselbe Bestand, derselbe Proxy, dieselbe Anforderung. Diesmal fragt der Client aber <b>zuerst</b>, wer der älteste ist: <code>GET /customers?sort=createdAt&amp;limit=1</code>.</p><p>Die Antwort: Anna Berger, ID 1.</p>",
       schicken: "<p>Jetzt trägt die Adresse eine <b>feste ID</b>. Der Client weiß, wen er löscht – und könnte es vorher jemandem zeigen.</p>",
-      ausfuehren: "<p>Anna Berger wird gelöscht. Genau wie im ersten Szenario.</p>",
+      ausfuehren: "<p>Der Proxy leitet weiter, Anna Berger wird gelöscht. Genau wie im ersten Szenario.</p>",
       verloren: "<p>Dieselbe Störung wie vorhin: Die Antwort geht zwischen Server und Proxy verloren, der Proxy sieht nur einen Timeout.</p>",
-      wiederholen: "<p>Derselbe Proxy, dieselbe Einstellung – er wiederholt. Nur heißt die Adresse jetzt <code>/customers/1</code>.</p>",
-      zweitTitel: "Diesmal passiert nichts mehr",
-      zweitText: "<p>Kunde 1 ist schon weg. Der Server hat nichts zu tun und antwortet <code>404</code> – oder wieder <code>204</code>, das ist eine Entwurfsentscheidung.</p><p><b>Der Bestand ist unverändert.</b> Bruno und Cem sind noch da.</p>",
+      wiederTitel: "Der Proxy wiederholt – diesmal passiert nichts",
+      wiederText: "<p>Derselbe Proxy, dieselbe Einstellung – er wiederholt. Nur heißt die Adresse jetzt <code>/customers/1</code>.</p><p>Kunde 1 ist schon weg. Der Server hat nichts zu tun und antwortet <code>404</code> – oder wieder <code>204</code>, das ist eine Entwurfsentscheidung.</p>",
+      wiederNotiz: "Der Bestand bleibt, wie er ist.",
+      zurueckText: "<p><code>404 Not Found</code> erreicht den Proxy. <b>Der Bestand ist unverändert</b> – Bruno und Cem sind noch da.</p>",
+      clientText: "<p>Der Client bekommt <code>404</code>: Kunde 1 war schon weg. Genau das wollte er erreichen.</p>",
       zweitLoescht: false,
       zweitStatus: "404 Not Found",
       clientWert: "404 – war schon weg",
