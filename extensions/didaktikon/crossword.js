@@ -27,7 +27,8 @@
    Lesereihenfolge, wie in jedem gedruckten Rätsel. Das Verfahren stammt aus den
    Vorlagen in k8s-materials und cloud-native-entwicklung/docs.
 
-   DER FORTSCHRITT BLEIBT IM BROWSER (localStorage, #394), nicht in der Adresse.
+   DER FORTSCHRITT BLEIBT IM BROWSER (#394), nicht in der Adresse – über `skr.storage` des
+   Skriptoriums, unter dem Bereich der Unterlage (siehe Zustand).
    ============================================================================= */
 (function () {
   "use strict";
@@ -376,17 +377,13 @@
     var SCHLUESSEL = "skr-didaktikon:crossword:" + location.pathname + ":" + (wurzel.id || index);
     var PRUEFSUMME = pruefsumme(eintraege.map(function (e) { return e.wort; }).join(",") + "|" + loesung);
 
+    var speicher = window.skr.storage;
     function sichern() {
-      try {
-        localStorage.setItem(SCHLUESSEL, JSON.stringify({
-          h: PRUEFSUMME, a: aufgeloest, e: felder.map(function (f) { return f.eingabe.value; })
-        }));
-      } catch (e) { /* ohne Speicher eben ohne Gedächtnis */ }
+      speicher.set(SCHLUESSEL, { h: PRUEFSUMME, a: aufgeloest, e: felder.map(function (f) { return f.eingabe.value; }) });
     }
-    function vergessen() { try { localStorage.removeItem(SCHLUESSEL); } catch (e) { /* dito */ } }
+    function vergessen() { speicher.remove(SCHLUESSEL); }
     function laden() {
-      var s;
-      try { s = JSON.parse(localStorage.getItem(SCHLUESSEL)); } catch (e) { return null; }
+      var s = speicher.get(SCHLUESSEL);
       return (s && s.h === PRUEFSUMME && Array.isArray(s.e) && s.e.length === felder.length) ? s : null;
     }
 

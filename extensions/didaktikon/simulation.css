@@ -359,94 +359,25 @@ div.skr-didaktikon-stage-controls { display: contents; }
   white-space: nowrap;
 }
 
-/* --- Fortschritt + Steuerleiste --------------------------------------------- */
-/* Der Fortschritt am unteren Rand der Fläche, unter der Steuerung – wie bei den Folien. */
-.skr-didaktikon-simulation__progress {
-  flex: 0 0 auto;
-  height: 4px;
-  background: var(--skr-border-soft);
+/* --- Steuerleiste ----------------------------------------------------------- */
+/* LEISTE, KNÖPFE, ZÄHLER UND FORTSCHRITT KOMMEN VON DER BÜHNE (stage.controls, stage.css): die
+   Pille unten rechts, die runden Knöpfe (`skr-stage__nav`), der Zähler (`skr-stage__counter`) und
+   der Balken am unteren Rand. Hier steht nur, was die Simulation dazu braucht – der Zähler trägt
+   Text („Schritt 3 / 7“) und bleibt in einer Zeile, die Leiste bleibt im Fenster. */
+.skr-didaktikon-simulation .skr-stage__controls { max-width: calc(100% - 2 * var(--skr-space-6)); }
+.skr-didaktikon-simulation .skr-stage__counter {
+  padding: 0 var(--skr-space-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.skr-didaktikon-simulation__progress-fill {
-  height: 100%;
-  width: 0;
-  background: var(--skr-color-accent);
-  transition: width 320ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .skr-didaktikon-simulation__progress-fill { transition: none; }
-}
-
-/* DIE STEUERUNG SCHWEBT wie die der Folien unten rechts über der Bühne, knapp über dem
-   Fortschritt – keine eigene Leiste, die der Bühne Höhe nimmt. Eine Pille: links das
-   Blättern mit dem Zähler dazwischen, ganz rechts Abspielen. Ein eigener, durchscheinender
-   Grund in den Farben des Themes hält sie auch über einem Bild lesbar. Sobald die Bühne
-   das als Baustein anbietet, kommt sie von dort (skriptorium#446). */
-.skr-didaktikon-simulation__controls {
-  position: fixed;
-  right: var(--skr-space-6);
-  bottom: calc(var(--skr-space-6) + 4px);
-  z-index: 5;
-  max-width: calc(100% - 2 * var(--skr-space-6));
-}
+.skr-didaktikon-simulation .skr-stage__counter:empty { display: none; }
 /* Platz unter dem Bühnenbild, damit die schwebende Steuerung sein Ende nicht verdeckt. */
 .skr-didaktikon-simulation__stage { padding-bottom: calc(2.75rem + 3 * var(--skr-space-6)); }
 /* Schmale Fenster: Unter der Steuerung liegt dann die Erklärspalte, nicht die Bühne. */
 @media (max-width: 900px) {
   .skr-didaktikon-simulation__stage { padding-bottom: clamp(1rem, 0.6rem + 1.6vw, 2.5rem); }
 }
-.skr-didaktikon-simulation__buttons {
-  display: flex;
-  min-width: 0;
-  max-width: 100%;
-  align-items: center;
-  gap: var(--skr-space-2);
-  padding: var(--skr-space-1);
-  border-radius: 999px;
-  background-color: color-mix(in srgb, var(--skr-topbar-bg) 82%, transparent);
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  backdrop-filter: blur(12px) saturate(1.4);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--skr-color-accent) 35%, var(--skr-border-soft)), var(--skr-shadow-1);
-}
-/* Der Zähler zwischen Zurück und Weiter, wie die Foliennummer. */
-.skr-didaktikon-simulation__counter {
-  min-width: 3.5rem;
-  padding: 0 var(--skr-space-1);
-  text-align: center;
-  font-size: var(--skr-fs-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--skr-color-ink-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.skr-didaktikon-simulation__counter:empty { display: none; }
-.skr-didaktikon-simulation__play-group { margin-left: var(--skr-space-2); }
-.skr-didaktikon-simulation__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--skr-space-2);
-  min-width: 2.75rem;
-  height: 2.75rem;
-  padding: 0 var(--skr-space-3);
-  border-radius: 999px;
-  border: 1px solid var(--skr-color-border);
-  background: var(--skr-color-bg);
-  color: var(--skr-color-ink);
-  font-family: inherit;
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: var(--skr-shadow-1);
-  transition: background var(--skr-transition), color var(--skr-transition),
-              border-color var(--skr-transition);
-}
-.skr-didaktikon-simulation__btn:hover:not(:disabled) {
-  background: var(--skr-color-accent);
-  border-color: var(--skr-color-accent);
-  color: var(--skr-color-accent-contrast);
-}
-.skr-didaktikon-simulation__btn:disabled { opacity: 0.35; cursor: default; }
 
 /* --- Abspielen + Tempo: EIN geteilter Knopf ---------------------------------
    Abspielen ist der Hauptknopf – er trägt als einziger Text und die Akzentfarbe,
@@ -459,6 +390,7 @@ div.skr-didaktikon-stage-controls { display: contents; }
    ohne diese Trennung ginge entweder die Tastaturbedienung oder die Semantik
    verloren. */
 .skr-didaktikon-simulation__play-group {
+  margin-left: var(--skr-space-2);
   position: relative;
   display: inline-flex;
   align-items: stretch;
@@ -480,13 +412,20 @@ div.skr-didaktikon-stage-controls { display: contents; }
 
 /* Die Flächen im Knopf tragen keine eigene Optik – sonst wären wieder zwei
    Knöpfe zu sehen. */
-.skr-didaktikon-simulation__play-group .skr-didaktikon-simulation__btn,
-.skr-didaktikon-simulation__play-group .skr-didaktikon-simulation__btn:hover:not(:disabled) {
+.skr-didaktikon-simulation__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--skr-space-2);
   height: 100%;
+  padding: 0 var(--skr-space-3);
   border: 0;
   background: transparent;
   color: inherit;
-  box-shadow: none;
+  font-family: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .skr-didaktikon-simulation__btn--play {
@@ -852,8 +791,8 @@ div.skr-didaktikon-stage-controls { display: contents; }
 .skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] > header,
 .skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-didaktikon-simulation__head,
 .skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-didaktikon-simulation__aside,
-.skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-didaktikon-simulation__progress,
-.skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-didaktikon-simulation__controls { display: none; }
+.skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-stage__progress,
+.skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-stage__controls { display: none; }
 .skr-didaktikon-simulation[data-skr-didaktikon-simulation-capture] .skr-didaktikon-simulation__stage {
   padding: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
 }
@@ -940,10 +879,7 @@ div.skr-didaktikon-stage-controls { display: contents; }
   .skr-didaktikon-simulation__stage,
   .skr-didaktikon-simulation__aside { overflow: visible; max-height: none; }
   .skr-didaktikon-simulation__aside { border: 0; border-top: 1px solid #cfd4d6; background: none; }
-  .skr-didaktikon-simulation__counter { display: none !important; }
   .skr-tool,
-  .skr-didaktikon-simulation__progress,
-  .skr-didaktikon-simulation__controls,
   .skr-didaktikon-simulation__speed-menu,
   .skr-didaktikon-simulation__caption,
   .skr-didaktikon-simulation__tabs,

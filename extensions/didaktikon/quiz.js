@@ -197,26 +197,26 @@
     var reihenfolge = [], aktuell = 0, punkte = 0, gestartet = false, gewaehlt = [], fertig = false;
 
     /* --- Der Stand im Browser (#394) ------------------------------------------
-       DER FORTSCHRITT ÜBERLEBT DAS NEULADEN: im `localStorage` dieses Browsers, nicht
-       in der Adresse – eine geteilte Adresse zeigt keine fremden Antworten. Gespeichert
-       werden die gemischte Reihenfolge, die gewählten Antworten, die aktuelle Frage und
-       ob ausgewertet ist. Schlüssel: Seite und Check; die Prüfsumme verwirft einen
-       Stand, der nicht mehr zum Inhalt passt. Ohne Speicher (privates Fenster,
-       gesperrt) läuft der Check wie zuvor, nur ohne Gedächtnis. */
+       DER FORTSCHRITT ÜBERLEBT DAS NEULADEN: im Speicher dieses Browsers, nicht in der
+       Adresse – eine geteilte Adresse zeigt keine fremden Antworten. Gespeichert werden die
+       gemischte Reihenfolge, die gewählten Antworten, die aktuelle Frage und ob ausgewertet
+       ist. Über `skr.storage` des Skriptoriums, unter dem Bereich der Unterlage: Unterlagen
+       unter derselben Adresse teilen nichts; einen Stand unter dem früheren Schlüssel ohne
+       Bereich übernimmt der Helfer beim ersten Lesen. Schlüssel: Seite und Check; die
+       Prüfsumme verwirft einen Stand, der nicht mehr zum Inhalt passt. Ohne Speicher
+       (privates Fenster, gesperrt) gilt er bis zum Neuladen. */
     var SCHLUESSEL = "skr-didaktikon:quiz:" + location.pathname + ":" + (wurzel.id || index);
     var PRUEFSUMME = pruefsumme(JSON.stringify(daten));
+    var speicher = window.skr.storage;
     function sichern() {
-      try {
-        localStorage.setItem(SCHLUESSEL, JSON.stringify({
-          h: PRUEFSUMME, a: aktuell, p: punkte, w: gewaehlt, f: fertig,
-          o: reihenfolge.map(function (r) { return r.optionen.map(function (o) { return r.frage.optionen.indexOf(o); }); })
-        }));
-      } catch (e) { /* ohne Speicher eben ohne Gedächtnis */ }
+      speicher.set(SCHLUESSEL, {
+        h: PRUEFSUMME, a: aktuell, p: punkte, w: gewaehlt, f: fertig,
+        o: reihenfolge.map(function (r) { return r.optionen.map(function (o) { return r.frage.optionen.indexOf(o); }); })
+      });
     }
-    function vergessen() { try { localStorage.removeItem(SCHLUESSEL); } catch (e) { /* dito */ } }
+    function vergessen() { speicher.remove(SCHLUESSEL); }
     function laden() {
-      var s;
-      try { s = JSON.parse(localStorage.getItem(SCHLUESSEL)); } catch (e) { return null; }
+      var s = speicher.get(SCHLUESSEL);
       if (!s || s.h !== PRUEFSUMME || !Array.isArray(s.o) || s.o.length !== FRAGEN.length) { return null; }
       var passt = s.o.every(function (ord, i) {
         return Array.isArray(ord) && ord.length === FRAGEN[i].optionen.length &&

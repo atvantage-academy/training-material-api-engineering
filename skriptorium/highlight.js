@@ -21,17 +21,49 @@ Promise.all([import(_hlBase + "core.min.js"), ..._hlLanguages.map((s) => import(
     const hljs = core.default;
     _hlLanguages.forEach((s, i) => hljs.registerLanguage(s, grammars[i].default));
     const _language = (el) => (Array.from(el.classList).find((k) => k.startsWith("language-")) || "").slice(9);
+    const _escaped = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+    const _in = (text, language) => (hljs.getLanguage(language) ? hljs.highlight(text, { language: language, ignoreIllegals: true }).value : _escaped(text));
+    /* Markdown: das Front Matter als YAML, jeder Codeblock darin in seiner Sprache, wenn die
+       Unterlage sie lädt, sonst einfarbig (skriptorium#467). Die Grammatik der Bibliothek färbt
+       beides nur einfarbig und hielte die letzte Zeile des Front Matter vor `---` für eine
+       Überschrift; sie färbt nur den Text dazwischen. */
+    const _FENCE = /^ {0,3}(`{3,}|~{3,})([^\n]*)\n([\s\S]*?)^ {0,3}\1[`~]*[ \t]*$/gm;
+    const _isMarkdown = (language) => (hljs.getLanguage(language) || {}).name === "Markdown";
+    const _markdown = (text) => {
+      let out = "";
+      let rest = text;
+      const head = rest.match(/^---[ \t]*\n(?:([\s\S]*?)\n)?---[ \t]*(?=\n|$)/);
+      if (head) {
+        out += '<span class="hljs-meta">---</span>\n' + (head[1] !== undefined ? _in(head[1], "yaml") + "\n" : "") + '<span class="hljs-meta">---</span>';
+        rest = rest.slice(head[0].length);
+      }
+      let pos = 0;
+      for (const m of rest.matchAll(_FENCE)) {
+        out += _in(rest.slice(pos, m.index), "markdown");
+        const open = m[0].slice(0, m[0].indexOf("\n") + 1);
+        const close = m[0].slice(open.length + m[3].length);
+        const language = m[2].trim().split(/\s+/)[0];
+        out += '<span class="hljs-code">' + _escaped(open) + (_isMarkdown(language) ? _markdown(m[3]) : _in(m[3], language)) + _escaped(close) + "</span>";
+        pos = m.index + m[0].length;
+      }
+      return out + _in(rest.slice(pos), "markdown");
+    };
     const _colorize = (root) => (root || document)
       .querySelectorAll('pre code[class*="language-"]')
-      .forEach((el) => { if (!el.dataset.highlighted && hljs.getLanguage(_language(el))) { hljs.highlightElement(el); } });
+      .forEach((el) => {
+        if (el.dataset.highlighted || !hljs.getLanguage(_language(el))) return;
+        if (!_isMarkdown(_language(el))) { hljs.highlightElement(el); return; }
+        el.innerHTML = _markdown(el.textContent);
+        el.classList.add("hljs");
+        el.dataset.highlighted = "yes";
+      });
     /* Eine Zeichenkette färben, ohne Element – etwa Zeile für Zeile in einer
        Visualisierung: HTML mit den Klassen der Hervorhebung, der Text maskiert. Eine
        Sprache, die die Unterlage nicht lädt, kommt nur maskiert zurück. */
-    const _escaped = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
     const _code = (text, language) => {
       const t = String(text == null ? "" : text);
       if (!language || !hljs.getLanguage(language)) return _escaped(t);
-      return hljs.highlight(t, { language: language, ignoreIllegals: true }).value;
+      return _isMarkdown(language) ? _markdown(t) : _in(t, language);
     };
     _colorize(document);
     if (window.skr && !window.skr.highlight) Object.defineProperty(window.skr, "highlight", { value: Object.freeze({ hljs, apply: _colorize, code: _code, languages: _hlLanguages.slice() }), enumerable: true });

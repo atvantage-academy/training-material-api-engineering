@@ -156,6 +156,23 @@
   }
 
   /* --- Anzeige --------------------------------------------------------------- */
+  /* DER FORTSCHRITT IST DER DER BÜHNE: `skr.stage.progress()` setzt den Balken unter der
+     Steuerleiste. Den Zähler schreibt die Simulation selbst (`simStepCounter`), er trägt darum
+     kein `data-skr-stage-counter`. Ohne Client-API (`client_api: off`) gibt es `skr.stage`
+     nicht; dann setzt sie die Breite am stabilen `data-skr-stage-progress` selbst. */
+  function progress(current, total) {
+    var stage = window.skr && window.skr.stage;
+    if (stage && typeof stage.progress === "function") {
+      stage.progress(current, total);
+      return;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("[data-skr-stage-progress]"), function (fill) {
+      fill.style.width = (current / total) * 100 + "%";
+      var bar = fill.closest(".skr-stage__progress");
+      if (bar) bar.hidden = false;
+    });
+  }
+
   function draw(previous, richtung) {
     // Auf der Übersicht gibt es keinen Schritt zu zeichnen – nur die Reiter und
     // die Adresse wollen nachgezogen werden.
@@ -166,7 +183,7 @@
       // und nichts abzuspielen. Zähler, Fortschritt und Erklärspalte treten ab.
       if (el.root) el.root.setAttribute("data-skr-didaktikon-simulation-overview", "");
       if (el.counter) el.counter.textContent = T("simScenarioCount", { count: scenarios.length });
-      if (el.progress) el.progress.style.width = "0";
+      progress(0, 1);
       if (el.prev) el.prev.disabled = true;
       if (el.next) el.next.disabled = false;
       if (el.reset) el.reset.disabled = true;
@@ -229,7 +246,8 @@
     if (el.counter) {
       el.counter.textContent = stepList.length ? T("simStepCounter", { current: index + 1, total: stepList.length }) : "";
     }
-    if (el.progress) el.progress.style.width = stepList.length ? ((index + 1) / stepList.length) * 100 + "%" : "0";
+    if (stepList.length) progress(index + 1, stepList.length);
+    else progress(0, 1);
     if (el.prev) el.prev.disabled = index === 0;
     if (el.next) el.next.disabled = index >= stepList.length - 1;
     if (el.reset) el.reset.disabled = index === 0 && !playing;
@@ -799,9 +817,11 @@
      Zieht die Erklärspalte breiter – mit Maus, Finger oder Pfeiltasten. Schmaler als die
      Vorgabe des Layouts wird sie nicht (`max()` in simulation.css), breiter als drei Fünftel
      der Fläche auch nicht. Die Breite gilt für ALLE Simulationen der Unterlage, nicht je Seite:
-     Wer sie einmal passend gezogen hat, will sie überall so. Ohne Local Storage (privates
-     Fenster, gesperrt) gilt sie nur bis zum Neuladen. */
-  var ASIDE_KEY = "skr-didaktikon-simulation-aside";
+     Wer sie einmal passend gezogen hat, will sie überall so – über `skr.storage` des
+     Skriptoriums, unter dem Bereich der Unterlage. Ohne Speicher (privates Fenster, gesperrt)
+     gilt sie nur bis zum Neuladen. Die Breite unter dem früheren Schlüssel übernimmt sie einmal. */
+  var ASIDE_KEY = "skr-didaktikon:simulation-aside";
+  var ASIDE_KEY_BEFORE = "skr-didaktikon-simulation-aside";
   var ASIDE_STEP = 16;
 
   function splitter() {
@@ -810,8 +830,13 @@
     var aside = main && main.querySelector(".skr-didaktikon-simulation__aside");
     if (!aside) return;
     // Die Breite, die der Leser gewählt hat; angewandt wird höchstens, was das Fenster erlaubt.
-    var chosen = 0;
-    try { chosen = Number(window.localStorage.getItem(ASIDE_KEY)) || 0; } catch (e) { /* ohne Speicher */ }
+    var store = window.skr.storage;
+    var before = store.get(ASIDE_KEY_BEFORE);
+    if (before !== null) {
+      if (store.get(ASIDE_KEY) === null) store.set(ASIDE_KEY, before);
+      store.remove(ASIDE_KEY_BEFORE);
+    }
+    var chosen = Number(store.get(ASIDE_KEY)) || 0;
 
     function widest() { return Math.round(main.clientWidth * 0.6); }
     function current() { return Math.round(aside.getBoundingClientRect().width); }
@@ -824,7 +849,7 @@
     function choose(w) {
       apply(w);
       chosen = current();
-      try { window.localStorage.setItem(ASIDE_KEY, String(chosen)); } catch (e) { /* ohne Speicher */ }
+      store.set(ASIDE_KEY, chosen);
     }
 
     bar.addEventListener("pointerdown", function (e) {
@@ -874,8 +899,8 @@
       note: q("note"),
       noteTitle: q("note-title"),
       counter: q("counter"),
-      progress: q("progress"),
-      controls: q("controls"),
+      // Die Steuerleiste legt die Bühne um den Einschub stage.controls (stage-controls.html).
+      controls: document.querySelector(".skr-stage__controls"),
       reset: q("reset"),
       prev: q("prev"),
       next: q("next"),
