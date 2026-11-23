@@ -1,30 +1,49 @@
 /* Stylesheet der Seite 04-idempotenz-und-spezialfaelle/simulation.md – über `styles:` im Front Matter geladen. */
+/* FÜNF SPALTEN: Client, Leitung, Proxy, Leitung, Kundenbestand. Die Leitungen
+   sind schmaler; darunter stapelt sich alles. */
 .buehne {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) minmax(0, 1.1fr) minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(.5rem, .25rem + 1vw, 1rem);
   align-items: start;
   align-content: center;
   min-height: 100%;
 }
+@media (max-width: 64rem) {
+  .buehne { grid-template-columns: minmax(0, 1fr); }
+}
 .buehne .skr-didaktikon-simulation-panel__body { min-height: 11rem; }
+/* Zellen untereinander statt nebeneinander – in fünf Spalten ist für Etikett,
+   Adresse und Status in einer Zeile kein Platz. */
+.buehne .skr-didaktikon-simulation-cell {
+  font-size: .8rem; flex-direction: column; align-items: flex-start;
+  gap: .15rem; padding: .45rem .6rem; min-width: 0;
+}
+.buehne .skr-didaktikon-simulation-cell > * { max-width: 100%; overflow-wrap: anywhere; }
 .leitung {
-  display: flex; flex-direction: column; gap: .5rem; justify-content: center;
+  display: flex; flex-direction: column; gap: .4rem; justify-content: center;
   min-height: 11rem; text-align: center;
 }
-.leitung__pfeil { font-size: 1.6rem; line-height: 1; color: var(--skr-color-ink-muted); }
+.leitung__pfeil { font-size: 1.2rem; line-height: 1; color: var(--skr-color-ink-muted); }
 .leitung__paket {
-  font-family: var(--skr-font-mono, monospace); font-size: .85rem;
-  padding: .5rem .6rem; border-radius: var(--skr-radius-sm, 4px);
+  font-family: var(--skr-font-mono, monospace); font-size: .68rem; line-height: 1.35;
+  padding: .3rem .25rem; border-radius: var(--skr-radius-sm, 4px);
   border: 1px dashed var(--skr-color-border);
   background: var(--skr-color-bg-subtle);
-  word-break: break-all;
+  overflow-wrap: break-word; /* Umbruch erst nach einem „/“ (<wbr> im Skript) */
 }
 .leitung__paket.is-weg {
   border-color: var(--skr-color-danger);
   color: var(--skr-color-danger);
   text-decoration: line-through;
 }
-.leitung__still { color: var(--skr-color-ink-muted); font-size: .85rem; font-style: italic; }
-.notiz { font-size: .85rem; color: var(--skr-color-ink-muted); margin-top: .6rem; }
+.leitung__still { color: var(--skr-color-ink-muted); font-size: .8rem; font-style: italic; }
+.notiz { font-size: .78rem; color: var(--skr-color-ink-muted); margin: .2rem 0 0; }
 .notiz strong { color: var(--skr-color-ink); }
+/* Gelöschte Kunden bleiben stehen – durchgestrichen und ausgegraut –, damit man
+   sieht, WER fehlt, nicht nur, dass jemand fehlt. */
+.buehne .skr-didaktikon-simulation-cell.is-geloescht,
+.buehne .skr-didaktikon-simulation-cell.is-geloescht * {
+  color: var(--skr-color-ink-muted); text-decoration: line-through;
+}
+.buehne .skr-didaktikon-simulation-cell.is-geloescht { background: var(--skr-color-bg-subtle); }

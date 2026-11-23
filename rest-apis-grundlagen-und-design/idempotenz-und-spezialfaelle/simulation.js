@@ -15,140 +15,168 @@
     return {
       kunden: ausgangsbestand(),
       clientZeilen: [{ id: "c0", label: "Stand", name: "noch nichts geschickt", wert: "" }],
-      leitung: null,
-      notiz: ""
+      proxyZeilen: [{ id: "p0", label: "Stand", name: "nichts weiterzuleiten", wert: "" }],
+      leitung1: null,   // Client ↔ Proxy
+      leitung2: null    // Proxy ↔ Server
     };
+  }
+
+  function zelle() {
+    var el = document.createElement("div");
+    el.className = "skr-didaktikon-simulation-cell";
+    el.innerHTML = '<span class="skr-didaktikon-simulation-cell__label"></span>' +
+                   '<span class="skr-didaktikon-simulation-cell__name"></span>' +
+                   '<span class="skr-didaktikon-simulation-cell__value"></span>';
+    return el;
+  }
+
+  function zeilen(el, liste, ctx) {
+    sim.list(el, liste, {
+      animated: ctx.animated,
+      key: function (x) { return x.id; },
+      create: zelle,
+      update: function (el, x) {
+        el.querySelector(".skr-didaktikon-simulation-cell__label").textContent = x.label || "";
+        el.querySelector(".skr-didaktikon-simulation-cell__name").textContent = x.name || "";
+        el.querySelector(".skr-didaktikon-simulation-cell__value").textContent = x.wert || "";
+        el.classList.toggle("is-error", !!x.fehler);
+      }
+    });
+  }
+
+  function zeichneLeitung(el, l) {
+    if (!el) return;
+    if (!l) { el.innerHTML = '<p class="leitung__still">still</p>'; return; }
+    el.innerHTML =
+      '<div class="leitung__pfeil">' + (l.rueckweg ? "◀" : "▶") + "</div>" +
+      '<div class="leitung__paket' + (l.weg ? " is-weg" : "") + '">' +
+      l.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/([^ ])\//g, "$1/<wbr>") + "</div>" +
+      (l.notiz ? '<p class="notiz">' + l.notiz + "</p>" : "");
   }
 
   sim.setup({
     state: startzustand,
 
     render: function (s, ctx) {
-      var szenario = ctx.scenario || "superlativ";
+      var sz = ctx.scenario || "superlativ";
+      zeilen(document.getElementById(sz + "-client"), s.clientZeilen, ctx);
+      zeilen(document.getElementById(sz + "-proxy"), s.proxyZeilen, ctx);
 
-      sim.list(document.getElementById(szenario + "-client"), s.clientZeilen, {
+      // Gelöschte bleiben stehen – durchgestrichen und ausgegraut.
+      sim.list(document.getElementById(sz + "-server"), s.kunden, {
         animated: ctx.animated,
         key: function (x) { return x.id; },
-        create: function () {
-          var el = document.createElement("div");
-          el.className = "skr-didaktikon-simulation-cell";
-          el.innerHTML = '<span class="skr-didaktikon-simulation-cell__label"></span>' +
-                         '<span class="skr-didaktikon-simulation-cell__name"></span>' +
-                         '<span class="skr-didaktikon-simulation-cell__value"></span>';
-          return el;
-        },
-        update: function (el, x) {
-          el.querySelector(".skr-didaktikon-simulation-cell__label").textContent = x.label || "";
-          el.querySelector(".skr-didaktikon-simulation-cell__name").textContent = x.name || "";
-          el.querySelector(".skr-didaktikon-simulation-cell__value").textContent = x.wert || "";
-          el.classList.toggle("is-error", !!x.fehler);
-        }
-      });
-
-      sim.list(document.getElementById(szenario + "-server"), s.kunden.filter(function (k) { return !k.weg; }), {
-        animated: ctx.animated,
-        key: function (x) { return x.id; },
-        create: function () {
-          var el = document.createElement("div");
-          el.className = "skr-didaktikon-simulation-cell";
-          el.innerHTML = '<span class="skr-didaktikon-simulation-cell__label"></span>' +
-                         '<span class="skr-didaktikon-simulation-cell__name"></span>' +
-                         '<span class="skr-didaktikon-simulation-cell__value"></span>';
-          return el;
-        },
+        create: zelle,
         update: function (el, x) {
           el.querySelector(".skr-didaktikon-simulation-cell__label").textContent = "ID " + x.id;
           el.querySelector(".skr-didaktikon-simulation-cell__name").textContent = x.name;
           el.querySelector(".skr-didaktikon-simulation-cell__value").textContent = x.seit;
-          el.classList.toggle("is-active", !!x.markiert);
+          el.classList.toggle("is-active", !!x.markiert && !x.weg);
+          el.classList.toggle("is-geloescht", !!x.weg);
         }
       });
 
-      var leitung = document.getElementById(szenario + "-leitung");
-      if (!leitung) return;
-      if (!s.leitung) {
-        leitung.innerHTML = '<p class="leitung__still">still</p>';
-      } else {
-        leitung.innerHTML =
-          '<div class="leitung__pfeil">' + (s.leitung.rueckweg ? "◀" : "▶") + "</div>" +
-          '<div class="leitung__paket' + (s.leitung.weg ? " is-weg" : "") + '">' +
-          s.leitung.text.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>" +
-          (s.notiz ? '<p class="notiz">' + s.notiz + "</p>" : "");
-      }
+      zeichneLeitung(document.getElementById(sz + "-leitung1"), s.leitung1);
+      zeichneLeitung(document.getElementById(sz + "-leitung2"), s.leitung2);
     }
   });
+
+  /* Die beiden Szenarien unterscheiden sich nur in der Adresse und darin, was
+     beim zweiten Versuch auf dem Server passiert. */
+  function szenario(o) {
+    var A = o.adresse, vorab = o.vorab ? [o.vorab] : [];
+    function client(wert, fehler) {
+      return vorab.concat([{ id: "c1", label: "Anfrage", name: "DELETE " + A, wert: wert, fehler: !!fehler }]);
+    }
+    var p1 = { id: "p1", label: "1. Versuch", name: "DELETE " + A, wert: "weitergeleitet" };
+    var p1weg = { id: "p1", label: "1. Versuch", name: "DELETE " + A, wert: "Timeout", fehler: true };
+
+    return [
+      {
+        title: "Die Ausgangslage",
+        text: o.start,
+        apply: function (s) {
+          if (o.vorab) { s.clientZeilen = [o.vorab]; s.kunden[0].markiert = true; }
+        }
+      },
+      {
+        title: "Der Client schickt den Auftrag – über den Proxy",
+        text: o.schicken,
+        apply: function (s) {
+          s.clientZeilen = client("wartet …");
+          s.proxyZeilen = [p1];
+          s.leitung1 = { text: "DELETE " + A, rueckweg: false };
+          s.leitung2 = { text: "DELETE " + A, rueckweg: false };
+        }
+      },
+      {
+        title: "Der Server führt aus",
+        text: o.ausfuehren,
+        apply: function (s) {
+          s.kunden[0].weg = true;
+          s.leitung1 = null;
+          s.leitung2 = { text: "204 No Content", rueckweg: true, notiz: "Auf dem Server ist die Arbeit <strong>getan</strong>." };
+        }
+      },
+      {
+        title: "Die Antwort kommt beim Proxy nie an",
+        text: o.verloren,
+        apply: function (s) {
+          s.proxyZeilen = [p1weg];
+          s.leitung2 = { text: "204 No Content", rueckweg: true, weg: true, notiz: "Der Proxy sieht <strong>nur einen Timeout</strong>." };
+        }
+      },
+      {
+        title: "Also noch einmal – der Proxy wiederholt",
+        text: o.wiederholen,
+        apply: function (s) {
+          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: "DELETE " + A, wert: "wartet …" }];
+          s.clientZeilen = client("wartet noch …");
+          s.leitung1 = null;
+          s.leitung2 = { text: "DELETE " + A, rueckweg: false };
+        }
+      },
+      {
+        title: o.zweitTitel,
+        text: o.zweitText,
+        apply: function (s) {
+          if (o.zweitLoescht) s.kunden[1].weg = true;
+          s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: "DELETE " + A, wert: o.zweitStatus }];
+          s.clientZeilen = client(o.clientWert, o.clientFehler);
+          s.leitung2 = { text: o.zweitStatus, rueckweg: true };
+          s.leitung1 = { text: o.zweitStatus, rueckweg: true, notiz: o.clientNotiz };
+        }
+      },
+      {
+        title: o.schlussTitel,
+        text: o.schlussText,
+        apply: function (s) { s.leitung1 = null; s.leitung2 = null; },
+        duration: 5000
+      }
+    ];
+  }
 
   sim.registerScenario({
     id: "superlativ",
     title: "Der Superlativ in der Adresse",
     description: "DELETE /customers/oldest – die Adresse bezeichnet bei jedem Aufruf jemand anderen.",
-    steps: [
-      {
-        title: "Die Ausgangslage",
-        text: "<p>Drei Kunden im Bestand. Der Fachbereich möchte, dass der <b>älteste</b> gelöscht wird – Anna Berger, seit 2019 dabei.</p><p>Der Client hat noch nichts geschickt.</p>",
-        apply: function () { /* Ausgangslage */ }
-      },
-      {
-        title: "Der Client schickt den Auftrag",
-        text: "<p>Ein einziger Aufruf, bequem und lesbar. Der Server soll selbst herausfinden, wer der älteste ist.</p>",
-        apply: function (s) {
-          s.leitung = { text: "DELETE /customers/oldest", rueckweg: false, weg: false };
-          s.clientZeilen = [{ id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "wartet …" }];
-        }
-      },
-      {
-        title: "Der Server führt aus",
-        text: "<p>Der Server sortiert, findet Anna Berger – und löscht sie. Fachlich genau richtig.</p>",
-        apply: function (s) {
-          s.kunden[0].weg = true;
-          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
-          s.notiz = "Auf dem Server ist die Arbeit <strong>getan</strong>.";
-        }
-      },
-      {
-        title: "Die Antwort kommt nie an",
-        text: "<p>Ein Timeout, ein Verbindungsabbruch, ein überlastetes Gateway – die Antwort geht auf dem Rückweg verloren.</p><p><b>Der Client weiß jetzt nichts.</b> Er kann nicht unterscheiden, ob der Server gar nichts getan hat oder ob nur die Bestätigung fehlt.</p>",
-        apply: function (s) {
-          s.leitung = { text: "204 No Content", rueckweg: true, weg: true };
-          s.clientZeilen = [{ id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true }];
-          s.notiz = "Der Client sieht <strong>nur einen Timeout</strong>.";
-        }
-      },
-      {
-        title: "Also noch einmal",
-        text: "<p>Genau das tut jede Retry-Logik – in der Client-Bibliothek, im Gateway, oder weil jemand den Knopf noch einmal drückt.</p><p>Es ist <b>dieselbe Anfrage</b>, Zeichen für Zeichen.</p>",
-        apply: function (s) {
-          s.leitung = { text: "DELETE /customers/oldest", rueckweg: false, weg: false };
-          s.clientZeilen = [
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true },
-            { id: "c2", label: "2. Versuch", name: "DELETE /customers/oldest", wert: "wartet …" }
-          ];
-          s.notiz = "";
-        }
-      },
-      {
-        title: "Und jetzt ist Bruno der älteste",
-        text: "<p>Der Server sortiert erneut. Anna ist weg – also ist <b>Bruno Cimen</b> der älteste Kunde. Und wird gelöscht.</p><p>Zwei Kunden verloren, obwohl nur einer gemeint war. Beide Aufrufe waren korrekt.</p>",
-        apply: function (s) {
-          s.kunden[1].weg = true;
-          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
-          s.clientZeilen = [
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/oldest", wert: "Timeout", fehler: true },
-            { id: "c2", label: "2. Versuch", name: "DELETE /customers/oldest", wert: "204 – alles gut?", fehler: true }
-          ];
-          s.notiz = "Der Client hält das für <strong>einen</strong> erfolgreichen Löschvorgang.";
-        }
-      },
-      {
-        title: "Es lag nicht an der Methode",
-        text: "<p><b>DELETE ist idempotent – diese Adresse ist es nicht.</b> <code>/customers/oldest</code> hat beim zweiten Aufruf jemand anderen bezeichnet als beim ersten.</p><p>Eine Adresse muss bei jedem Aufruf dieselbe Sache meinen. Sonst ist keine Wiederholung mehr sicher.</p>",
-        apply: function (s) {
-          s.leitung = null;
-          s.notiz = "";
-        },
-        duration: 5000
-      }
-    ]
+    steps: szenario({
+      adresse: "/customers/oldest",
+      start: "<p>Drei Kunden im Bestand. Der Fachbereich möchte, dass der <b>älteste</b> gelöscht wird – Anna Berger, seit 2019 dabei.</p><p>Zwischen Client und Server steht ein <b>Proxy</b> – ein Gateway, ein Load Balancer, ein Sidecar. Er ist so eingestellt, dass er bei einem Timeout <b>selbst</b> noch einmal versucht.</p>",
+      schicken: "<p>Ein einziger Aufruf, bequem und lesbar. Der Proxy leitet ihn weiter; der Server soll selbst herausfinden, wer der älteste ist.</p>",
+      ausfuehren: "<p>Der Server sortiert, findet Anna Berger – und löscht sie. Fachlich genau richtig.</p>",
+      verloren: "<p>Ein Verbindungsabbruch, ein überlasteter Knoten – die Antwort geht <b>zwischen Server und Proxy</b> verloren.</p><p><b>Der Proxy weiß jetzt nichts.</b> Er kann nicht unterscheiden, ob der Server gar nichts getan hat oder ob nur die Bestätigung fehlt.</p>",
+      wiederholen: "<p>Der Proxy tut, wofür er eingestellt ist: Er schickt die Anfrage <b>noch einmal</b> – dieselbe, Zeichen für Zeichen.</p><p>Der Client merkt davon nichts. Für ihn ist es noch immer seine erste und einzige Anfrage.</p>",
+      zweitTitel: "Und jetzt ist Bruno der älteste",
+      zweitText: "<p>Der Server sortiert erneut. Anna ist weg – also ist <b>Bruno Cimen</b> der älteste Kunde. Und wird gelöscht.</p><p>Der Client hat <b>eine</b> Anfrage geschickt und <b>eine</b> Antwort bekommen. Dass zwei Kunden fehlen, sieht er nicht.</p>",
+      zweitLoescht: true,
+      zweitStatus: "204 No Content",
+      clientWert: "204 – alles gut?",
+      clientFehler: true,
+      clientNotiz: "Der Client hält das für <strong>einen</strong> erfolgreichen Löschvorgang.",
+      schlussTitel: "Es lag nicht an der Methode – und nicht am Proxy",
+      schlussText: "<p><b>DELETE ist idempotent – diese Adresse ist es nicht.</b> <code>/customers/oldest</code> hat beim zweiten Aufruf jemand anderen bezeichnet als beim ersten.</p><p>Der Proxy hat nichts falsch gemacht: Eine idempotente Anfrage darf er wiederholen, ohne zu fragen – genau darauf verlässt er sich. Eine Adresse muss deshalb bei jedem Aufruf dieselbe Sache meinen.</p>"
+    })
   });
 
   sim.registerScenario({
@@ -156,81 +184,23 @@
     title: "Dieselbe Adresse, dieselbe Sache",
     description: "Erst nachsehen, dann gezielt löschen – ein Aufruf mehr, dafür beliebig wiederholbar.",
     state: startzustand,
-    steps: [
-      {
-        title: "Die Ausgangslage",
-        text: "<p>Derselbe Bestand, dieselbe Anforderung. Diesmal fragt der Client aber <b>zuerst</b>, wer der älteste ist: <code>GET /customers?sort=createdAt&amp;limit=1</code>.</p><p>Die Antwort: Anna Berger, ID 1.</p>",
-        apply: function (s) {
-          s.clientZeilen = [{ id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" }];
-          s.kunden[0].markiert = true;
-        }
-      },
-      {
-        title: "Der Client löscht gezielt",
-        text: "<p>Jetzt trägt die Adresse eine <b>feste ID</b>. Der Client weiß, wen er löscht – und könnte es vorher jemandem zeigen.</p>",
-        apply: function (s) {
-          s.leitung = { text: "DELETE /customers/1", rueckweg: false, weg: false };
-          s.clientZeilen = [
-            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "wartet …" }
-          ];
-        }
-      },
-      {
-        title: "Der Server führt aus",
-        text: "<p>Anna Berger wird gelöscht. Genau wie im ersten Szenario.</p>",
-        apply: function (s) {
-          s.kunden[0].weg = true;
-          s.leitung = { text: "204 No Content", rueckweg: true, weg: false };
-        }
-      },
-      {
-        title: "Und wieder geht die Antwort verloren",
-        text: "<p>Dieselbe Störung wie vorhin. Der Client sieht wieder nur einen Timeout und weiß nicht, was passiert ist.</p>",
-        apply: function (s) {
-          s.leitung = { text: "204 No Content", rueckweg: true, weg: true };
-          s.clientZeilen = [
-            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true }
-          ];
-          s.notiz = "Der Client sieht <strong>nur einen Timeout</strong>.";
-        }
-      },
-      {
-        title: "Also noch einmal – dieselbe Anfrage",
-        text: "<p>Dieselbe Retry-Logik, derselbe Reflex. Nur heißt die Adresse jetzt <code>/customers/1</code>.</p>",
-        apply: function (s) {
-          s.leitung = { text: "DELETE /customers/1", rueckweg: false, weg: false };
-          s.clientZeilen = [
-            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true },
-            { id: "c2", label: "2. Versuch", name: "DELETE /customers/1", wert: "wartet …" }
-          ];
-          s.notiz = "";
-        }
-      },
-      {
-        title: "Diesmal passiert nichts mehr",
-        text: "<p>Kunde 1 ist schon weg. Der Server hat nichts zu tun und antwortet <code>404</code> – oder wieder <code>204</code>, das ist eine Entwurfsentscheidung.</p><p><b>Der Bestand ist unverändert.</b> Bruno und Cem sind noch da.</p>",
-        apply: function (s) {
-          s.leitung = { text: "404 Not Found", rueckweg: true, weg: false };
-          s.clientZeilen = [
-            { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
-            { id: "c1", label: "1. Versuch", name: "DELETE /customers/1", wert: "Timeout", fehler: true },
-            { id: "c2", label: "2. Versuch", name: "DELETE /customers/1", wert: "404 – war schon weg" }
-          ];
-          s.notiz = "Andere <strong>Antwort</strong>, gleicher <strong>Zustand</strong>.";
-        }
-      },
-      {
-        title: "Idempotenz ist entwerfbar",
-        text: "<p><b>Idempotent heißt: derselbe Zustand, nicht dieselbe Antwort.</b> Die <code>404</code> beim zweiten Mal ist kein Widerspruch – der Bestand ist gleich geblieben.</p><p>Der Preis: ein Aufruf mehr, und zwischen Lesen und Löschen kann sich die Liste ändern. Dafür entscheidet der Client, wen er löscht – und kann es vorher sehen.</p>",
-        apply: function (s) {
-          s.leitung = null;
-          s.notiz = "";
-        },
-        duration: 5000
-      }
-    ]
+    steps: szenario({
+      adresse: "/customers/1",
+      vorab: { id: "c0", label: "Vorab", name: "GET …?sort=createdAt&limit=1", wert: "→ ID 1" },
+      start: "<p>Derselbe Bestand, derselbe Proxy, dieselbe Anforderung. Diesmal fragt der Client aber <b>zuerst</b>, wer der älteste ist: <code>GET /customers?sort=createdAt&amp;limit=1</code>.</p><p>Die Antwort: Anna Berger, ID 1.</p>",
+      schicken: "<p>Jetzt trägt die Adresse eine <b>feste ID</b>. Der Client weiß, wen er löscht – und könnte es vorher jemandem zeigen.</p>",
+      ausfuehren: "<p>Anna Berger wird gelöscht. Genau wie im ersten Szenario.</p>",
+      verloren: "<p>Dieselbe Störung wie vorhin: Die Antwort geht zwischen Server und Proxy verloren, der Proxy sieht nur einen Timeout.</p>",
+      wiederholen: "<p>Derselbe Proxy, dieselbe Einstellung – er wiederholt. Nur heißt die Adresse jetzt <code>/customers/1</code>.</p>",
+      zweitTitel: "Diesmal passiert nichts mehr",
+      zweitText: "<p>Kunde 1 ist schon weg. Der Server hat nichts zu tun und antwortet <code>404</code> – oder wieder <code>204</code>, das ist eine Entwurfsentscheidung.</p><p><b>Der Bestand ist unverändert.</b> Bruno und Cem sind noch da.</p>",
+      zweitLoescht: false,
+      zweitStatus: "404 Not Found",
+      clientWert: "404 – war schon weg",
+      clientFehler: false,
+      clientNotiz: "Andere <strong>Antwort</strong>, gleicher <strong>Zustand</strong>.",
+      schlussTitel: "Idempotenz ist entwerfbar",
+      schlussText: "<p><b>Idempotent heißt: derselbe Zustand, nicht dieselbe Antwort.</b> Die <code>404</code> beim zweiten Mal ist kein Widerspruch – der Bestand ist gleich geblieben.</p><p>Der Preis: ein Aufruf mehr, und zwischen Lesen und Löschen kann sich die Liste ändern. Dafür darf der Proxy wiederholen, so oft er will – und der Client entscheidet, wen er löscht.</p>"
+    })
   });
 })();
