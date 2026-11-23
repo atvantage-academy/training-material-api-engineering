@@ -14,8 +14,8 @@
   function startzustand() {
     return {
       kunden: ausgangsbestand(),
-      clientZeilen: [{ id: "c0", label: "Stand", name: "noch nichts geschickt", wert: "" }],
-      proxyZeilen: [{ id: "p0", label: "Stand", name: "nichts weiterzuleiten", wert: "" }],
+      clientZeilen: [{ id: "c1", label: "Anfrage", name: "noch nichts geschickt", wert: "" }],
+      proxyZeilen: [{ id: "p1", label: "1. Versuch", name: "nichts weiterzuleiten", wert: "" }],
       leitung1: null,   // Client ↔ Proxy
       leitung2: null    // Proxy ↔ Server
     };
@@ -44,14 +44,38 @@
     });
   }
 
-  function zeichneLeitung(el, l) {
+  /* Die Leitung ist eine Linie, die Nachricht ein Punkt darauf. Der Punkt
+     wandert nur, wenn der Schritt vorwärts kommt (ctx.animated) und sich die
+     Nachricht geändert hat – sonst steht er gleich am Ziel. `danach` lässt ihn
+     erst losgehen, wenn der Punkt auf der anderen Leitung angekommen ist: Der
+     Proxy leitet weiter, nachdem er die Nachricht hat. */
+  function zeichneLeitung(el, l, animiert) {
     if (!el) return;
-    if (!l) { el.innerHTML = '<p class="leitung__still">still</p>'; return; }
-    el.innerHTML =
-      '<div class="leitung__pfeil">' + (l.rueckweg ? "◀" : "▶") + "</div>" +
-      '<div class="leitung__paket' + (l.weg ? " is-weg" : "") + '">' +
-      l.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/([^ ])\//g, "$1/<wbr>") + "</div>" +
-      (l.notiz ? '<p class="notiz">' + l.notiz + "</p>" : "");
+    if (!el.firstChild) {
+      el.innerHTML = '<div class="leitung__text"></div>' +
+        '<div class="leitung__draht"><span class="leitung__punkt"></span></div>' +
+        '<p class="notiz"></p>';
+    }
+    var text = el.querySelector(".leitung__text"),
+        draht = el.querySelector(".leitung__draht"),
+        notiz = el.querySelector(".notiz");
+    var sig = l ? (l.rueckweg ? "<" : ">") + (l.weg ? "x" : "") + l.text : "";
+    var neu = el.getAttribute("data-sig") !== sig;
+    el.setAttribute("data-sig", sig);
+
+    text.innerHTML = l ? l.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/([^ ])\//g, "$1/<wbr>") : "";
+    text.classList.toggle("is-weg", !!(l && l.weg));
+    notiz.innerHTML = l && l.notiz ? l.notiz : "";
+
+    if (!neu) return;                     // läuft schon oder steht schon am Ziel
+    draht.className = "leitung__draht" +
+      (l && !l.ruhe ? (l.rueckweg ? " is-rueck" : " is-hin") : "") +
+      (l && l.weg ? " is-weg" : "") +
+      (l && l.danach ? " is-danach" : "");
+    if (l && !l.ruhe && animiert) {
+      void draht.offsetWidth;             // Animation neu starten
+      draht.classList.add("is-laeuft");
+    }
   }
 
   sim.setup({
@@ -76,8 +100,8 @@
         }
       });
 
-      zeichneLeitung(document.getElementById(sz + "-leitung1"), s.leitung1);
-      zeichneLeitung(document.getElementById(sz + "-leitung2"), s.leitung2);
+      zeichneLeitung(document.getElementById(sz + "-leitung1"), s.leitung1, ctx.animated);
+      zeichneLeitung(document.getElementById(sz + "-leitung2"), s.leitung2, ctx.animated);
     }
   });
 
@@ -96,7 +120,10 @@
         title: "Die Ausgangslage",
         text: o.start,
         apply: function (s) {
-          if (o.vorab) { s.clientZeilen = [o.vorab]; s.kunden[0].markiert = true; }
+          if (o.vorab) {
+            s.clientZeilen = [o.vorab, { id: "c1", label: "Anfrage", name: "noch nichts geschickt", wert: "" }];
+            s.kunden[0].markiert = true;
+          }
         }
       },
       {
@@ -106,7 +133,7 @@
           s.clientZeilen = client("wartet …");
           s.proxyZeilen = [p1];
           s.leitung1 = { text: "DELETE " + A, rueckweg: false };
-          s.leitung2 = { text: "DELETE " + A, rueckweg: false };
+          s.leitung2 = { text: "DELETE " + A, rueckweg: false, danach: true };
         }
       },
       {
@@ -115,7 +142,7 @@
         apply: function (s) {
           s.kunden[0].weg = true;
           s.leitung1 = null;
-          s.leitung2 = { text: "204 No Content", rueckweg: true, notiz: "Auf dem Server ist die Arbeit <strong>getan</strong>." };
+          s.leitung2 = { text: "", ruhe: true, notiz: "Auf dem Server ist die Arbeit <strong>getan</strong>." };
         }
       },
       {
@@ -144,7 +171,7 @@
           s.proxyZeilen = [p1weg, { id: "p2", label: "2. Versuch", name: "DELETE " + A, wert: o.zweitStatus }];
           s.clientZeilen = client(o.clientWert, o.clientFehler);
           s.leitung2 = { text: o.zweitStatus, rueckweg: true };
-          s.leitung1 = { text: o.zweitStatus, rueckweg: true, notiz: o.clientNotiz };
+          s.leitung1 = { text: o.zweitStatus, rueckweg: true, danach: true, notiz: o.clientNotiz };
         }
       },
       {

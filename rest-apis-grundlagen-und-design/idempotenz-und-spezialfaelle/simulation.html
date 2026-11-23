@@ -53,8 +53,8 @@
 <script src="../../skriptorium/stage.js?v=8f67b2ec" defer></script>
 <script src="../../extensions/didaktikon/simulation.js?v=2863d95e"></script>
 
-<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.css?v=618faddc">
-<script src="../../rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.js?v=79cc52ad" defer></script>
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.css?v=47148ef3">
+<script src="../../rest-apis-grundlagen-und-design/idempotenz-und-spezialfaelle/simulation.js?v=2c166ea5" defer></script>
 
 </head>
 <body class="skr-didaktikon-simulation" data-skr-layout="didaktikon.simulation" data-skr-layouts="didaktikon.simulation skriptorium.stage" data-skr-lang="de" data-skr-stage-home="../../" data-skr-audience="learner" data-skr-didaktikon-simulation data-skr-didaktikon-simulation-title="Idempotenz: Wenn dieselbe Anfrage zweimal ankommt">
@@ -144,18 +144,12 @@
     <h2 class="skr-didaktikon-simulation-panel__title">Client <span class="skr-didaktikon-simulation-panel__hint">weiß nur, was zurückkommt</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="superlativ-client"></div>
   </div>
-  <div class="skr-didaktikon-simulation-panel">
-    <h2 class="skr-didaktikon-simulation-panel__title">Leitung</h2>
-    <div class="skr-didaktikon-simulation-panel__body leitung" id="superlativ-leitung1"></div>
-  </div>
+  <div class="leitung" id="superlativ-leitung1" role="img" aria-label="Leitung zwischen Client und Proxy"></div>
   <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-3">
     <h2 class="skr-didaktikon-simulation-panel__title">Proxy <span class="skr-didaktikon-simulation-panel__hint">wiederholt bei Timeout</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="superlativ-proxy"></div>
   </div>
-  <div class="skr-didaktikon-simulation-panel">
-    <h2 class="skr-didaktikon-simulation-panel__title">Leitung</h2>
-    <div class="skr-didaktikon-simulation-panel__body leitung" id="superlativ-leitung2"></div>
-  </div>
+  <div class="leitung" id="superlativ-leitung2" role="img" aria-label="Leitung zwischen Proxy und Server"></div>
   <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-4">
     <h2 class="skr-didaktikon-simulation-panel__title">Kundenbestand <span class="skr-didaktikon-simulation-panel__hint">auf dem Server</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="superlativ-server"></div>
@@ -166,18 +160,12 @@
     <h2 class="skr-didaktikon-simulation-panel__title">Client <span class="skr-didaktikon-simulation-panel__hint">hat vorher nachgesehen</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="feste-id-client"></div>
   </div>
-  <div class="skr-didaktikon-simulation-panel">
-    <h2 class="skr-didaktikon-simulation-panel__title">Leitung</h2>
-    <div class="skr-didaktikon-simulation-panel__body leitung" id="feste-id-leitung1"></div>
-  </div>
+  <div class="leitung" id="feste-id-leitung1" role="img" aria-label="Leitung zwischen Client und Proxy"></div>
   <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-3">
     <h2 class="skr-didaktikon-simulation-panel__title">Proxy <span class="skr-didaktikon-simulation-panel__hint">wiederholt bei Timeout</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="feste-id-proxy"></div>
   </div>
-  <div class="skr-didaktikon-simulation-panel">
-    <h2 class="skr-didaktikon-simulation-panel__title">Leitung</h2>
-    <div class="skr-didaktikon-simulation-panel__body leitung" id="feste-id-leitung2"></div>
-  </div>
+  <div class="leitung" id="feste-id-leitung2" role="img" aria-label="Leitung zwischen Proxy und Server"></div>
   <div class="skr-didaktikon-simulation-panel skr-didaktikon-simulation-panel--tone-4">
     <h2 class="skr-didaktikon-simulation-panel__title">Kundenbestand <span class="skr-didaktikon-simulation-panel__hint">auf dem Server</span></h2>
     <div class="skr-didaktikon-simulation-panel__body" id="feste-id-server"></div>
