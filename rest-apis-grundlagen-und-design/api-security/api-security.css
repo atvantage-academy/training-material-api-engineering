@@ -1,0 +1,190 @@
+/* Stylesheet der Seite 13-api-security/api-security.md – über `styles:` im Front Matter geladen. */
+.as, .as__filter, .as-karte, .as-panel {
+  --as-gateway: #1f5f9e; --as-service: #187452; --as-halt: #b3402c; --as-durch: #187452;
+}
+[data-skr-scheme="dark"] :is(.as, .as__filter, .as-karte, .as-panel) {
+  --as-gateway: #7fb6f0; --as-service: #4fd1a5; --as-halt: #ff8a70; --as-durch: #4fd1a5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-skr-scheme="light"]) :is(.as, .as__filter, .as-karte, .as-panel) {
+    --as-gateway: #7fb6f0; --as-service: #4fd1a5; --as-halt: #ff8a70; --as-durch: #4fd1a5;
+  }
+}
+
+/* Abstand nach oben für Überschriften direkt nach einem eigenen Block - Begründung
+   wie in vier-stile.css: Das Theme gibt h2 keinen margin-top, die Luft kommt sonst
+   aus dem margin-bottom des Vorgängers, und den hat ein <div> nicht. */
+main :is(.as, .as__scroll, .as-panel) + :is(h2, h3) { margin-top: var(--skr-space-12, 3rem); }
+.as__lead { color: var(--skr-color-ink-muted); }
+
+/* Tabellen dürfen schmal nicht die Seite verbreitern - sie scrollen in sich. */
+.as__scroll { overflow-x: auto; }
+.as__scroll table { min-width: 36rem; }
+
+/* ------------------------------------------------------------ Bedienknöpfe */
+.as__anfragen { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 1.2rem; }
+.as__anfrage, .as__filter-knopf, .as__zeigen, .as-karte__knoten {
+  font: inherit; font-size: .9rem; cursor: pointer;
+  padding: .4rem .75rem; border-radius: var(--skr-radius-sm, 4px);
+  border: 1px solid var(--skr-color-border);
+  background: var(--skr-color-bg-subtle); color: var(--skr-color-ink);
+}
+.as__anfrage span {
+  font-size: .75rem; font-weight: 700; margin-left: .3rem;
+  color: var(--skr-color-ink-muted);
+}
+.as__anfrage.is-aktiv, .as__filter-knopf.is-aktiv, .as-karte__knoten.is-aktiv {
+  background: var(--skr-color-accent); color: var(--skr-color-accent-contrast);
+  border-color: var(--skr-color-accent);
+}
+.as__anfrage.is-aktiv span { color: inherit; }
+:is(.as__anfrage, .as__filter-knopf, .as__zeigen, .as-karte__knoten):focus-visible {
+  outline: 2px solid var(--skr-color-accent); outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------- Schichten */
+.as__weg {
+  display: grid; gap: .75rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.as__schicht--gateway { --as-farbe: var(--as-gateway); }
+.as__schicht--service { --as-farbe: var(--as-service); }
+.as__pfeil { align-self: center; font-size: 1.6rem; color: var(--skr-color-ink-muted); }
+
+.as__schicht {
+  border: 1px solid var(--skr-color-border);
+  border-top: 4px solid var(--as-farbe);
+  border-radius: var(--skr-radius-sm, 4px);
+  padding: .75rem 1rem;
+  background: var(--skr-color-bg);
+}
+.as .as__schicht-titel { margin: 0 0 .5rem; font-size: 1.05rem; color: var(--as-farbe); }
+.as__schicht-titel small { display: block; font-weight: 400; font-size: .8rem; color: var(--skr-color-ink-muted); }
+
+.as__pruefungen { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
+.as__pruefungen li {
+  font-size: .88rem; padding: .3rem .5rem .3rem 1.6rem; position: relative;
+  border-radius: var(--skr-radius-sm, 4px); border: 1px solid transparent;
+  transition: opacity .2s, background-color .2s;
+}
+.as__pruefungen li::before { position: absolute; left: .5rem; content: "·"; color: var(--skr-color-ink-muted); }
+
+/* Zustände, sobald eine Anfrage gewählt ist */
+.as.hat-anfrage .as__pruefungen li { opacity: .45; }
+.as .as__pruefungen li.is-halt {
+  opacity: 1; font-weight: 600;
+  border-color: var(--as-halt);
+  background: color-mix(in oklab, var(--as-halt) 12%, transparent);
+}
+.as .as__pruefungen li.is-halt::before { content: "✋"; left: .3rem; }
+.as .as__pruefungen li.is-mit {
+  opacity: 1; border-color: var(--as-farbe, var(--skr-color-border));
+  border-style: dashed;
+}
+.as .as__pruefungen li.is-mit::before { content: "+"; color: inherit; }
+.as .as__pruefungen li.is-durch { opacity: 1; }
+.as .as__pruefungen li.is-durch::before { content: "✓"; color: var(--as-durch); }
+
+.as__legende { display: flex; flex-wrap: wrap; gap: 1rem; margin: .6rem 0 0; font-size: .8rem; color: var(--skr-color-ink-muted); }
+.as__marke::before { margin-right: .3rem; }
+.as__marke--halt::before { content: "✋"; }
+.as__marke--mit::before { content: "+"; font-weight: 700; }
+.as__marke--durch::before { content: "✓"; color: var(--as-durch); }
+
+/* ------------------------------------------------------------------ Detail */
+.as__detail {
+  margin: 1rem 0 0; padding: 1rem;
+  border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius-sm, 4px);
+  background: var(--skr-color-bg-subtle);
+}
+.as__leer { margin: 0; color: var(--skr-color-ink-muted); }
+.as__detail-titel { font-weight: 700; margin: 0 0 .6rem; }
+.as__nachrichten { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+.as__nachricht-titel { margin: 0 0 .2rem; font-size: .8rem; font-weight: 600; color: var(--skr-color-ink-muted); text-transform: uppercase; letter-spacing: .04em; }
+/* FARBEN DES THEMES FÜR CODEBLÖCKE, NICHT DIE DER SEITE: Das Theme färbt jedes
+   <pre> mit heller Schrift auf dunklem Grund. Ein eigener heller Hintergrund
+   allein ergäbe helle Schrift auf hellem Grund - deshalb beide Werte aus
+   denselben Tokens wie jeder andere Codeblock. */
+.as .as__nachricht {
+  margin: 0; padding: .6rem .75rem; font-size: .82rem; line-height: 1.45;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  background: var(--skr-code-block-bg); color: var(--skr-code-block-text);
+}
+.as__zeigen { font-size: .85rem; }
+.as__detail-inhalt > p:not(.as__detail-titel) { margin: .9rem 0 0; }
+
+/* ------------------------------------------------------------------- Karte */
+.as__filter { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 1rem 0; }
+.as__filter-label { font-size: .88rem; color: var(--skr-color-ink-muted); margin-right: .2rem; }
+.as__filter-zahl { font-size: .88rem; font-weight: 600; margin-left: .4rem; }
+
+.as-karte {
+  position: relative;
+  display: grid; align-items: center; column-gap: 3.5rem;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 11rem) minmax(0, 1fr);
+  margin: 1.5rem 0;
+}
+.as-karte__linien {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; overflow: visible;
+}
+.as-karte__linie { fill: none; stroke: var(--skr-color-border); stroke-width: 2; transition: opacity .2s; }
+.as-karte__linie.is-aktiv { stroke: var(--skr-color-accent); stroke-width: 3; }
+.as-karte__linie.is-gedimmt { opacity: .35; }
+
+.as-karte__ast { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; position: relative; }
+.as-karte__ast--links { text-align: right; }
+.as-karte__knoten {
+  width: 100%; text-align: inherit; line-height: 1.3;
+  background: var(--skr-color-bg);
+  transition: opacity .2s, background-color .2s;
+}
+.as-karte__knoten b { display: block; font-size: .78rem; color: var(--skr-color-ink-muted); }
+.as-karte__knoten.is-aktiv b { color: inherit; }
+.as-karte__knoten.is-gedimmt:not(.is-aktiv) { opacity: .35; }
+
+.as-karte__mitte {
+  position: relative; text-align: center;
+  padding: 1rem .75rem; border-radius: 999px;
+  border: 2px solid var(--skr-color-accent);
+  background: var(--skr-color-bg-subtle);
+}
+.as-karte__mitte span, .as-karte__mitte small { display: block; font-size: .8rem; color: var(--skr-color-ink-muted); }
+.as-karte__mitte strong { display: block; font-size: 1.5rem; line-height: 1.2; }
+
+/* ------------------------------------------------------------------- Panel */
+/* FESTE GRÖSSE: Die Karte darüber springt nicht, wenn man von einem kurzen zu
+   einem langen Risiko wechselt; was länger ist, scrollt im Panel. */
+.as-panel {
+  height: 34rem; overflow: auto;
+  border: 1px solid var(--skr-color-border); border-radius: var(--skr-radius-sm, 4px);
+  padding: 1rem 1.25rem;
+  background: var(--skr-color-bg);
+}
+.as-panel__leer { margin: 0; color: var(--skr-color-ink-muted); }
+.as-risiko__kopf { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 0 0 .75rem; }
+.as-badge {
+  font-size: .75rem; font-weight: 700; padding: .12rem .55rem; border-radius: 999px;
+  border: 1px solid var(--as-farbe); color: var(--as-farbe);
+}
+.as-badge--gateway { --as-farbe: var(--as-gateway); }
+.as-badge--service { --as-farbe: var(--as-service); }
+.as-panel pre { font-size: .8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------------ Schmal */
+@media (max-width: 44rem) {
+  .as__weg { grid-template-columns: minmax(0, 1fr); }
+  .as__pfeil { justify-self: center; transform: rotate(90deg); }
+
+  /* Die Karte wird eine Liste: Mitte oben, die Äste als Einrückung darunter. */
+  .as-karte { grid-template-columns: minmax(0, 1fr); row-gap: .6rem; }
+  .as-karte__linien { display: none; }
+  .as-karte__mitte { order: -1; border-radius: var(--skr-radius-sm, 4px); }
+  .as-karte__ast { padding-left: 1rem; border-left: 2px solid var(--skr-color-border); text-align: left; }
+  .as-panel { height: 40rem; }
+}
+
+@media print {
+  .as__anfragen, .as__filter, .as__zeigen, .as__legende, .as__detail, .as-panel { display: none; }
+  .as.hat-anfrage .as__pruefungen li, .as-karte__knoten.is-gedimmt { opacity: 1; }
+}

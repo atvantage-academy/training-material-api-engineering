@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="skr-root" content="../../">
+<script src="../../skriptorium/skr.js?v=c06299bd"></script>
+<title>API Security: Wer hält was auf – Gateway und Service · ATVANTAGE Academy</title>
+<meta name="description" content="Wo eine Anfrage gestoppt wird, was das Gateway leisten kann und was nur der Service – dazu die OWASP API Security Top 10 als Mindmap mit Do’s und Don’ts am Account Service.">
+
+<meta property="og:site_name" content="ATVANTAGE Academy">
+<meta property="og:title" content="API Security: Wer hält was auf – Gateway und Service">
+<meta property="og:description" content="Wo eine Anfrage gestoppt wird, was das Gateway leisten kann und was nur der Service – dazu die OWASP API Security Top 10 als Mindmap mit Do’s und Don’ts am Account Service.">
+<meta property="og:type" content="website">
+<link rel="preload" href="../../themes/atvantage/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../themes/default/theme.css?v=b795c99c" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/fonts.css?v=0f189d71" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/colors.css?v=8ed47a94" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/typography.css?v=6445d4d3" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/spacing.css?v=58e35278" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/components.css?v=3fcd65a3" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/tokens/base.css?v=b47b1e2d" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/atvantage/theme.css?v=e7026433" data-skr-source="theme">
+<link rel="stylesheet" href="../../themes/didaktikon/theme.css?v=4a593b58" data-skr-source="theme">
+<link rel="stylesheet" href="../../skriptorium/tokens.css?v=28abf864">
+<link rel="stylesheet" href="../../extensions/didaktikon/tokens.css?v=5966d76a">
+<link rel="stylesheet" href="../../skriptorium/base.css?v=86e37c43">
+<link rel="stylesheet" href="../../skriptorium/components.css?v=3a968127">
+<link rel="stylesheet" href="../../skriptorium/doclinks.css?v=2ef23515">
+<link rel="stylesheet" href="../../skriptorium/linkmarks.css?v=a6e38666">
+<link rel="stylesheet" href="../../skriptorium/site.css?v=2a7f5baf">
+<link rel="stylesheet" href="../../skriptorium/logo.css?v=43a7fbaf">
+<link rel="stylesheet" media="print" href="../../skriptorium/print.css?v=6c7ec44c">
+<meta name="generator" content="Skriptorium 2.0.0-rc.15">
+<script type="application/json" id="skr-build-info">{"audience":"learner","extensions":[{"name":"didaktikon","version":"2.0.0-rc.11"}],"internal":false,"languages":["de"],"skriptorium":"2.0.0-rc.15","theme":"didaktikon","themeOptions":["didaktikon"],"themes":[{"name":"didaktikon","version":"2.0.0-rc.11"},{"name":"atvantage","version":"2.2.0"},{"name":"default","version":"2.0.0-rc.15"}]}</script>
+<script type="application/json" id="skr-page-info">{"clientApi":"full","defaultLanguage":"de","description":"Wo eine Anfrage gestoppt wird, was das Gateway leisten kann und was nur der Service – dazu die OWASP API Security Top 10 als Mindmap mit Do’s und Don’ts am Account Service.","duration":null,"fields":null,"language":"de","languages":["de"],"layout":"didaktikon.visualization","pageAssets":[{"path":"rest-apis-grundlagen-und-design/api-security/api-security.css","src":"api-security.css","type":"style"},{"path":"rest-apis-grundlagen-und-design/api-security/api-security.js","src":"api-security.js","type":"script"}],"pageId":"rest-apis-grundlagen-und-design-api-security-schutzschichten","runtimeFragments":null,"siteIndex":"/skriptorium/site.json","title":"API Security: Wer hält was auf – Gateway und Service","topics":null,"untranslated":null,"url":"/rest-apis-grundlagen-und-design/api-security/api-security.html"}</script>
+<script type="application/json" id="skr-texts">{"didaktikon.capture":"Capture-Modus","didaktikon.captureExit":"beenden","didaktikon.captureText":"Text einblenden","didaktikon.crosswordAcross":"Waagerecht","didaktikon.crosswordCellAcross":"{number} waagerecht, Buchstabe {position}","didaktikon.crosswordCellDown":"{number} senkrecht, Buchstabe {position}","didaktikon.crosswordDown":"Senkrecht","didaktikon.crosswordHintLetter":"Tipp: Buchstabe","didaktikon.crosswordHintWord":"Tipp: Wort","didaktikon.crosswordRestart":"Neu beginnen","didaktikon.crosswordRestartText":"Deine Eingaben in diesem Rätsel werden gelöscht.","didaktikon.crosswordRestartTitle":"Kreuzworträtsel neu beginnen?","didaktikon.crosswordReveal":"Auflösen","didaktikon.crosswordRevealText":"Alle Felder werden ausgefüllt.","didaktikon.crosswordRevealTitle":"Kreuzworträtsel auflösen?","didaktikon.crosswordSolution":"Lösungswort","didaktikon.crosswordSolutionCell":"Lösungswort, Buchstabe {position}","didaktikon.crosswordSolved":"Gelöst – alle Begriffe stimmen.","didaktikon.doclinkCrossword":"Kreuzworträtsel","didaktikon.doclinkExercise":"Übung","didaktikon.doclinkQuiz":"Wissens-Check","didaktikon.doclinkSimulation":"Simulation","didaktikon.doclinkVisualization":"Visualisierung","didaktikon.exerciseObjectives":"Lernziele","didaktikon.exerciseQuestionsDone":"Du hast die Kontrollfragen beantwortet","didaktikon.exerciseReflectiveQuestions":"Reflexionsfragen","didaktikon.exerciseUserStory":"User Story","didaktikon.moduleBlock":"Grobthema: {block}","didaktikon.moduleDuration":"{minutes} Minuten","didaktikon.moduleMaterial":"Material","didaktikon.moduleMaterialOver":"Das Material dauert zusammen {material}′ – länger als das Modul mit {module}′.","didaktikon.quizAgain":"Noch einmal","didaktikon.quizCorrect":"Richtig.","didaktikon.quizCorrectCount":"{count} richtig","didaktikon.quizCorrectWouldBe":"Richtig wäre gewesen:","didaktikon.quizDone":"Fertig","didaktikon.quizEvaluate":"Auswertung","didaktikon.quizJump":"Zu Frage springen","didaktikon.quizNext":"Weiter","didaktikon.quizOverview":"Alle Fragen","didaktikon.quizOverviewClose":"Zurück zum Check","didaktikon.quizOverviewCorrect":"(richtig)","didaktikon.quizOverviewGoTo":"Zu dieser Frage","didaktikon.quizProgress":"Fortschritt","didaktikon.quizQuestionOf":"Frage {current} von {total}","didaktikon.quizRestart":"Neu beginnen","didaktikon.quizRestartText":"Deine Antworten in diesem Wissens-Check werden gelöscht.","didaktikon.quizRestartTitle":"Wissens-Check neu beginnen?","didaktikon.quizResult":"{correct} von {total} richtig","didaktikon.quizResultLong":"{correct} von {total} Fragen richtig","didaktikon.quizTrainerOnly":"Nur für Trainer:innen","didaktikon.quizWrong":"Nicht ganz.","didaktikon.scenarios":"Szenarien","didaktikon.simAllScenarios":"Alle Szenarien (Taste 0)","didaktikon.simControls":"Simulation steuern","didaktikon.simNext":"Schritt vor (→)","didaktikon.simNextAria":"Schritt vor","didaktikon.simOverview":"Übersicht","didaktikon.simPause":"Pause (Leertaste)","didaktikon.simPauseAria":"Pause","didaktikon.simPlay":"Abspielen (Leertaste)","didaktikon.simPlayAria":"Abspielen","didaktikon.simPrev":"Schritt zurück (←)","didaktikon.simPrevAria":"Schritt zurück","didaktikon.simPrintHint":"Diese Simulation lebt von der Bewegung. Auf Papier steht nur der gerade sichtbare Schritt – der QR-Code oben führt zurück zur laufenden Fassung.","didaktikon.simReset":"Zurück auf Anfang (Taste R)","didaktikon.simResetAria":"Zurück auf Anfang","didaktikon.simResize":"Breite der Erklärspalte (Pfeiltasten)","didaktikon.simScenarioCount":"{count} Szenarien","didaktikon.simScenarioKey":"{title} (Taste {number})","didaktikon.simScenarioTitle":"Szenario {number}","didaktikon.simSpeed":"Tempo wählen (Taste T)","didaktikon.simSpeedAria":"Tempo wählen","didaktikon.simSpeedMenu":"Tempo","didaktikon.simStepCount":"{count} Schritte","didaktikon.simStepCountOne":"{count} Schritt","didaktikon.simStepCounter":"Schritt {current} / {total}","didaktikon.speedFast":"zügig","didaktikon.speedNormal":"normal","didaktikon.speedSlow":"langsam","didaktikon.speedTurbo":"im Zeitraffer","didaktikon.speedValue":"{speed}×","didaktikon.stepNote":"Erklärung zum aktuellen Schritt","didaktikon.trainerNoteClose":"Schließen","didaktikon.trainerNoteOpen":"Hinweis für Trainer:innen anzeigen","didaktikon.trainerNoteTitle":"Hinweis für Trainer:innen","didaktikon.trainingCatalogEmpty":"Hier gibt es noch keine Schulung.","didaktikon.trainingCatalogTrainings":"Schulungen","didaktikon.trainingDays":"{days} Tage","didaktikon.trainingDaysOne":"{days} Tag","didaktikon.trainingHomeInfo":"Kursbeschreibung","didaktikon.trainingHomeManifest":"Didaktisches Manifest","didaktikon.trainingHomeSales":"Sales-Asset","didaktikon.trainingInfoAudience":"Zielgruppe","didaktikon.trainingInfoObjectives":"Lernziele","didaktikon.trainingInfoObjectivesLead":"Die Lernenden …","didaktikon.trainingInfoOverview":"Überblick","didaktikon.trainingInfoPrerequisites":"Voraussetzungen","didaktikon.trainingMaterials":"Kursmaterial","didaktikon.trainingMaterialsExercises":"Übungen","didaktikon.trainingMaterialsLead":"Links stehen die **Übungen**, an denen Du selbst arbeitest, rechts das **Material zum Nachschlagen**.","didaktikon.trainingMaterialsMore":"Weitere Themen","didaktikon.trainingMaterialsOther":"Sonstige Unterlagen","didaktikon.trainingMaterialsReference":"Zum Nachschlagen","didaktikon.trainingModules":"Module","didaktikon.trainingModulesBlock":"Grobthema","didaktikon.trainingModulesDuration":"Dauer","didaktikon.trainingModulesMaterial":"Material","didaktikon.trainingModulesModule":"Modul","didaktikon.trainingModulesOver":"länger als das Modul","didaktikon.trainingSalesBuyers":"Käufer","didaktikon.trainingSalesPitch":"Pitch","didaktikon.trainingSalesPricing":"Preisrahmen","didaktikon.trainingSalesUsp":"Unterscheidungsmerkmale","didaktikon.trainingSalesValueProposition":"Nutzenversprechen"}</script>
+
+<script src="../../skriptorium/client.js?v=756a5d69" defer></script>
+<script src="../../skriptorium/site.js?v=6472c794" defer></script>
+<script src="../../skriptorium/search-trail.js?v=31279378" data-skr-search-trail
+        data-base="../../" data-index="../../skriptorium/search/de.json?v=92b38b1d" defer></script>
+<link rel="stylesheet" href="../../skriptorium/highlight.css?v=f8a3fc05">
+<script type="module" src="../../skriptorium/highlight.js?v=0b2d40aa" data-skr-highlight="[&#34;java&#34;]"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="../../themes/atvantage/assets/icon-180.png">
+<link rel="icon" sizes="32x32" href="../../themes/atvantage/assets/icon-32.png">
+<link rel="icon" sizes="16x16" href="../../themes/atvantage/assets/icon-16.png">
+
+<link rel="stylesheet" href="../../skriptorium/stage.css?v=c76b28bc">
+<script src="../../skriptorium/stage.js?v=a8ce5bf6" defer></script>
+
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/api-security/api-security.css?v=287a9f76">
+<script src="../../rest-apis-grundlagen-und-design/api-security/api-security.js?v=5298c56a" defer></script>
+
+</head>
+<body class="skr-stage" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization skriptorium.stage" data-skr-lang="de" data-skr-stage-home="../../" data-skr-audience="learner">
+  <a class="skr-skip-link" href="#skr-stage-main">Zum Inhalt springen</a>
+  
+<header class="skr-stage__bar">
+  <img class="skr-stage__logo" src="../../themes/didaktikon/assets/logo-schulung.svg" alt="ATVANTAGE Academy"><span class="skr-stage__logo-mask" role="img" aria-label="ATVANTAGE Academy" data-skr-logo-mask></span><span class="skr-stage__title">API Security: Wer hält was auf – Gateway und Service</span>
+  <div class="skr-stage__tools">
+<div class="skr-search" data-skr-search hidden
+     data-mode="expand" data-shortcut="double_shift"
+     data-index="../../skriptorium/search/de.json?v=92b38b1d"
+     data-base="../../">
+  <button type="button" class="skr-tool skr-tool--search" data-skr-search-toggle
+          aria-expanded="false" aria-controls="skr-search-dialog"
+          title="Suchen (zweimal Umschalt)" aria-label="Suchen"><svg viewBox="0 0 24 24" width="1em" height="1em"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"
+          ><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+  <dialog class="skr-search__dialog" id="skr-search-dialog" aria-label="Suchen">
+    <div class="skr-search__bar" role="search"><label class="skr-search__field skr-search__field--scope" hidden>
+        <span class="skr-search__label">Bereich</span>
+        <select class="skr-search__scope">
+          <option value="">Alle</option>
+        </select>
+      </label>
+      <label class="skr-search__field skr-search__field--query">
+        <span class="skr-search__label">Suchbegriff</span>
+        <input type="search" class="skr-search__input"
+               placeholder="Diese Site durchsuchen" autocomplete="off" spellcheck="false"
+               aria-describedby="skr-search-status">
+      </label>
+      <button type="button" class="skr-tool skr-search__close" data-skr-search-close
+              title="Suche schließen" aria-label="Suche schließen"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="skr-search__status" id="skr-search-status" data-skr-search-status role="status"></p>
+    <ul class="skr-search__results" data-skr-search-results aria-label="Suchergebnisse"></ul>
+  </dialog>
+</div>
+<script src="../../skriptorium/search.js?v=2be133a6" defer></script>
+<button type="button" class="skr-qr" data-skr-qr hidden
+        title="Diese Seite auf Deinem Smartphone öffnen"
+        aria-label="Diese Seite auf Deinem Smartphone öffnen"></button>
+<button type="button" class="skr-tool skr-tool--scheme" data-skr-scheme-toggle
+        title="Farbschema umschalten (hell/dunkel)"
+        aria-label="Dunkles Farbschema"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"
+        ><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+<button type="button" class="skr-tool skr-tool--print"
+        data-skr-print=""
+        title="Diese Seite drucken" aria-label="Diese Seite drucken"></button>
+<button type="button" class="skr-tool skr-tool--full"
+        data-skr-stage-full=""
+        title="Vollbild (Taste F)" aria-label="Vollbild"><svg viewBox="0 0 24 24" width="1em" height="1em"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+        ><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+</div>
+  <button type="button" class="skr-stage__nav skr-stage__close" data-skr-stage-close hidden
+        title="Schließen" aria-label="Schließen"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+
+</header>
+  
+  <main class="skr-stage__main" id="skr-stage-main">
+    <h1 id="api-security-wer-hält-was-auf--gateway-und-service">API Security: Wer hält was auf – Gateway und Service</h1>
+<p>Oben <strong>zehn Anfragen, die nicht durchkommen sollten</strong> – wähle eine und sieh, an
+welcher Stelle sie aufgehalten wird. Darunter die <strong>Grenzen</strong>, die eine API robust
+machen, und die <strong>OWASP API Security Top 10</strong> als Karte: Ein Klick auf ein Risiko
+zeigt, worum es geht, und die Do’s und Don’ts am Account Service.</p>
+<div class="skr-callout skr-callout--info">
+<p><strong>Diese Seite verortet Security, sie lehrt sie nicht.</strong> Sie zeigt, <em>wo</em> geprüft
+wird und welche Entscheidungen schon im <strong>Entwurf</strong> fallen. Wie Tokens
+ausgestellt, signiert und geprüft werden – OAuth 2, OpenID Connect, JWT, mTLS –,
+ist eine eigene Spezialisierung: <a href="#weiter">Weiter</a>.</p>
+</div>
+<h2 id="schichten">Wer hält das auf?</h2>
+<div class="as">
+<p class="as__lead">Jede Anfrage kommt zuerst am <strong>Gateway</strong> an, dann
+beim <strong>Service</strong>. Das Gateway setzt den <strong>Vertrag</strong>
+(OpenAPI) durch: Was dort an Scopes, Typen und Grenzen steht, prüft es, bevor ein
+Service etwas davon merkt.</p>
+<div class="as__anfragen" role="toolbar" aria-label="Anfrage wählen">
+  <button type="button" class="as__anfrage" data-anfrage="api1">Fremden Kunden lesen <span>API1</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api2">Abgelaufenes Token <span>API2</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api3">Eigenen Zustand setzen <span>API3</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api4">Eine Million auf einmal <span>API4</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="flut">600 Anfragen pro Sekunde <span>API4</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api5">Sperren ohne Recht <span>API5</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api6">Gutschein-Jagd per Skript <span>API6</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api7">Profilbild von einer fremden Adresse <span>API7</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api8">Kaputter Cursor <span>API8</span></button>
+  <button type="button" class="as__anfrage" data-anfrage="api9">Die alte Version <span>API9</span></button>
+</div>
+<div class="as__weg">
+  <section class="as__schicht as__schicht--gateway" aria-labelledby="as-gateway">
+    <h3 id="as-gateway" class="as__schicht-titel">Gateway <small>prüft grob – ohne Fachwissen, gegen den Vertrag</small></h3>
+    <ul class="as__pruefungen">
+      <li data-pruefung="g-token">Token prüfen: vorhanden, gültig, nicht abgelaufen</li>
+      <li data-pruefung="g-scope">Scope je Operation, wie im Vertrag unter <code>security</code> festgelegt</li>
+      <li data-pruefung="g-schema">Anfrage gegen den Vertrag prüfen: Typen, Pflichtfelder, Grenzen wie <code>maximum</code> und <code>maxLength</code></li>
+      <li data-pruefung="g-rate">Rate Limiting und Quoten je Aufrufer</li>
+      <li data-pruefung="g-groesse">Größenlimits: Body, URL, Header, Antwortzeit</li>
+      <li data-pruefung="g-routing">Nur veröffentlichte Versionen erreichbar machen</li>
+      <li data-pruefung="g-konfig">TLS, CORS, Sicherheits-Header, einheitliche Fehler</li>
+    </ul>
+  </section>
+  <div class="as__pfeil" aria-hidden="true">→</div>
+  <section class="as__schicht as__schicht--service" aria-labelledby="as-service">
+    <h3 id="as-service" class="as__schicht-titel">Service <small>prüft fein – mit Fachwissen</small></h3>
+    <ul class="as__pruefungen">
+      <li data-pruefung="s-objekt">Gehört <em>dieses</em> Objekt dem Aufrufer?</li>
+      <li data-pruefung="s-feld">Welche Felder darf er lesen, welche schreiben?</li>
+      <li data-pruefung="s-fachlich">Fachliche Regeln: Zustände, Mengen, Vorgänge</li>
+      <li data-pruefung="s-grenzen">Grenzen selbst einhalten – auch für Aufrufe ohne Gateway</li>
+      <li data-pruefung="s-fehler">Fehler ohne Interna melden (Problem Details)</li>
+      <li data-pruefung="s-ausgehend">Eigene Abrufe nach außen nur zu erlaubten Zielen</li>
+    </ul>
+  </section>
+</div>
+<div class="as__legende" aria-hidden="true">
+  <span class="as__marke as__marke--halt">hält auf</span>
+  <span class="as__marke as__marke--mit">trägt dazu bei</span>
+  <span class="as__marke as__marke--durch">lässt durch</span>
+</div>
+<div class="as__detail" aria-live="polite">
+  <p class="as__leer" data-as-leer>Wähle oben eine Anfrage.</p>
+  <div class="as__detail-inhalt" data-as-inhalt hidden>
+    <p class="as__detail-titel" data-as-titel></p>
+    <div class="as__nachrichten">
+      <div><p class="as__nachricht-titel">Anfrage</p><pre class="as__nachricht" data-as-anfrage></pre></div>
+      <div><p class="as__nachricht-titel">Antwort</p><pre class="as__nachricht" data-as-antwort></pre></div>
+    </div>
+    <p data-as-text></p>
+    <p><button type="button" class="as__zeigen" data-as-risiko-knopf>Zum Risiko in der Karte</button></p>
+  </div>
+</div>
+</div>
+<h3 id="nicht-genug">Warum das Gateway nicht reicht</h3>
+<p>Das Gateway kennt <strong>Adressen, Methoden, Tokens und den Vertrag</strong> – aber keine
+Fachlichkeit. Es weiß, dass Tom Mayer <code>reader_access</code> hat. Es weiß nicht, dass
+der Kunde <code>9b2e4c1a-…</code> jemand anderes ist. Die häufigsten Risiken der
+OWASP-Liste entstehen genau in dieser Lücke.</p>
+<p>Und: <strong>Nicht jeder Aufruf kommt über das Gateway.</strong> Ein anderer Service im selben
+Netz ruft den Account Service direkt. Ein Service, der sich blind darauf verlässt,
+dass „vorne schon geprüft wurde“, ist von innen offen. Deshalb prüft der Service
+selbst noch einmal, <em>wer</em> fragt – und entscheidet über seine Objekte selbst.</p>
+<p><strong>Faustregel:</strong> <em>Das Gateway prüft, ob jemand diese Tür benutzen darf. Der Service
+prüft, ob er in dieses Zimmer darf.</em></p>
+<h2 id="grenzen">Robustheit: keine Antwort ohne Grenze</h2>
+<p>Die meisten Angriffe auf APIs sind kein Einbruch, sondern <strong>Überlastung</strong> – oft
+nicht einmal böswillig. Jede Stelle, an der ein Aufrufer die Menge bestimmt,
+braucht eine Obergrenze. Steht sie im Vertrag, setzt das Gateway sie durch.</p>
+<div class="as__scroll">
+<table>
+	<thead>
+			<tr>
+					<th>Was</th>
+					<th>Im Vertrag</th>
+					<th>Durchgesetzt von</th>
+					<th>Antwort bei Überschreitung</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Einträge je Seite</td>
+					<td><code>limit</code> mit <code>maximum: 200</code>, <code>default: 50</code></td>
+					<td>Gateway (gegen den Vertrag)</td>
+					<td><code>400</code></td>
+			</tr>
+			<tr>
+					<td>Länge eines Feldes</td>
+					<td><code>maxLength: 100</code></td>
+					<td>Gateway (gegen den Vertrag)</td>
+					<td><code>400</code></td>
+			</tr>
+			<tr>
+					<td>Elemente einer Liste im Body</td>
+					<td><code>maxItems</code></td>
+					<td>Gateway (gegen den Vertrag)</td>
+					<td><code>400</code></td>
+			</tr>
+			<tr>
+					<td>Größe des ganzen Bodys</td>
+					<td>– (Betriebsgrenze)</td>
+					<td>Gateway</td>
+					<td><code>413 Content Too Large</code></td>
+			</tr>
+			<tr>
+					<td>Länge der URL</td>
+					<td>–</td>
+					<td>Gateway</td>
+					<td><code>414 URI Too Long</code></td>
+			</tr>
+			<tr>
+					<td>Größe der Header</td>
+					<td>–</td>
+					<td>Gateway</td>
+					<td><code>431 Request Header Fields Too Large</code></td>
+			</tr>
+			<tr>
+					<td>Anfragen pro Zeit</td>
+					<td><code>429</code> als Antwort dokumentiert</td>
+					<td>Gateway</td>
+					<td><code>429 Too Many Requests</code> mit <code>Retry-After</code></td>
+			</tr>
+			<tr>
+					<td>Dauer einer Anfrage</td>
+					<td>–</td>
+					<td>Gateway</td>
+					<td><code>504 Gateway Timeout</code></td>
+			</tr>
+	</tbody>
+</table>
+</div>
+<h2 id="owasp">OWASP API Security Top 10</h2>
+<p>Die Liste des Open Worldwide Application Security Project: die zehn häufigsten
+Risiken bei APIs, Ausgabe <strong>2023</strong> (<a href="https://owasp.org/API-Security/editions/2023/en/0x11-t10/">Original</a>).
+Klicke auf ein Risiko.</p>
+<div class="as__filter" role="toolbar" aria-label="Nach Schicht hervorheben">
+  <span class="as__filter-label">Hervorheben, wo beteiligt:</span>
+  <button type="button" class="as__filter-knopf is-aktiv" data-filter="alle">Alle</button>
+  <button type="button" class="as__filter-knopf" data-filter="gateway">Gateway</button>
+  <button type="button" class="as__filter-knopf" data-filter="service">Service</button>
+  <span class="as__filter-zahl" data-as-zahl aria-live="polite"></span>
+</div>
+<div class="as-karte" data-as-karte>
+  <svg class="as-karte__linien" data-as-linien aria-hidden="true" focusable="false"></svg>
+  <ul class="as-karte__ast as-karte__ast--links">
+    <li><button type="button" class="as-karte__knoten" data-risiko="api1" data-wo="service"><b>API1</b> Broken Object Level Authorization</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api2" data-wo="gateway"><b>API2</b> Broken Authentication</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api3" data-wo="service gateway"><b>API3</b> Broken Object Property Level Authorization</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api4" data-wo="gateway service"><b>API4</b> Unrestricted Resource Consumption</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api5" data-wo="gateway service"><b>API5</b> Broken Function Level Authorization</button></li>
+  </ul>
+  <div class="as-karte__mitte" data-as-mitte><span>OWASP API Security</span><strong>Top 10</strong><small>Ausgabe 2023</small></div>
+  <ul class="as-karte__ast as-karte__ast--rechts">
+    <li><button type="button" class="as-karte__knoten" data-risiko="api6" data-wo="service gateway"><b>API6</b> Unrestricted Access to Sensitive Business Flows</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api7" data-wo="service"><b>API7</b> Server Side Request Forgery</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api8" data-wo="gateway service"><b>API8</b> Security Misconfiguration</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api9" data-wo="gateway"><b>API9</b> Improper Inventory Management</button></li>
+    <li><button type="button" class="as-karte__knoten" data-risiko="api10" data-wo="service"><b>API10</b> Unsafe Consumption of APIs</button></li>
+  </ul>
+</div>
+<div class="as-panel" data-as-panel>
+<p class="as-panel__leer" data-as-panel-leer>Wähle in der Karte ein Risiko.</p>
+<div class="as-risiko" data-risiko-inhalt="api1" hidden>
+<p class="as-risiko__kopf"><strong>API1 · Broken Object Level Authorization</strong> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api1" open>
+<summary>Worum geht’s?</summary>
+<p>Der Aufrufer ändert die Kennung in der Adresse – und bekommt ein Objekt, das ihm
+nicht gehört. Das Token ist gültig, der Scope passt; nur <em>dieses eine Objekt</em>
+darf er nicht. Das häufigste API-Risiko überhaupt.</p>
+<pre><code class="language-http">GET /customers/4712
+Authorization: Bearer …   (Tom Mayer, Kunde 4711)
+
+HTTP/1.1 200 OK
+{ &quot;id&quot;: 4712, &quot;name&quot;: &quot;Eva Schulz&quot;, … }
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> nur der <strong>Service</strong>. Dem Gateway fehlt das Wissen, wem welcher
+Kunde gehört.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api1">
+<summary>Do’s</summary>
+<ul>
+<li>Bei <strong>jedem</strong> Zugriff prüfen, ob das Objekt zum Aufrufer gehört – auch bei
+Unterressourcen wie <code>/customers/{id}/address</code>.</li>
+<li>Kennungen nicht erratbar vergeben (<code>format: uuid</code>) – das erschwert das Raten,
+ersetzt die Prüfung aber nicht.</li>
+<li>Fremde Objekte mit <code>404</code> beantworten, wenn schon ihre Existenz schützenswert ist.</li>
+</ul>
+<pre><code class="language-http">GET /customers/9b2e4c1a-0d3f-4c55-8a1e-2f5b6c7d77f0
+Authorization: Bearer …   (Token von Tom Mayer)
+
+HTTP/1.1 404 Not Found
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api1">
+<summary>Don’ts</summary>
+<ul>
+<li>„Token gültig“ als „darf alles lesen“ behandeln.</li>
+<li>Fortlaufende Kennungen, die man einfach hochzählen kann.</li>
+<li>Sich darauf verlassen, dass die Oberfläche nur eigene Kennungen anbietet.</li>
+</ul>
+<pre><code class="language-http">POST /customers
+
+HTTP/1.1 201 Created
+Location: /customers/4712
+  → der nächste Kunde ist 4713, der vorige 4711
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api2" hidden>
+<p class="as-risiko__kopf"><strong>API2 · Broken Authentication</strong> <span class="as-badge as-badge--gateway">Gateway</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api2" open>
+<summary>Worum geht’s?</summary>
+<p>Die Prüfung, <em>wer</em> fragt, ist lückenhaft: Abgelaufene Tokens werden angenommen,
+Signaturen nicht geprüft, Passwörter lassen sich unbegrenzt durchprobieren,
+Tokens stehen in der URL.</p>
+<pre><code class="language-http">GET /customers
+Authorization: Bearer eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9.
+  (selbst gebautes Token: &quot;alg&quot;: &quot;none&quot;, keine Signatur)
+
+HTTP/1.1 200 OK
+{ &quot;items&quot;: [ … alle Kunden … ] }
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> das <strong>Gateway</strong> zusammen mit dem Identity Provider – an
+<strong>einer</strong> Stelle, nicht in jedem Service neu erfunden.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api2">
+<summary>Do’s</summary>
+<ul>
+<li>Das Token steht im Header <code>Authorization</code>, nie in der Adresse.</li>
+<li>Das Gateway prüft Signatur, Ablauf und Aussteller zentral.</li>
+<li>Bei Fehlern <code>401</code> mit <code>WWW-Authenticate</code> – der Aufrufer erfährt, was fehlt.</li>
+<li>Anmeldeversuche begrenzen.</li>
+</ul>
+<pre><code class="language-http">GET /customers
+Authorization: Bearer eyJhbGciOi…
+
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer error=&quot;invalid_token&quot;,
+  error_description=&quot;The access token expired&quot;
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api2">
+<summary>Don’ts</summary>
+<ul>
+<li>Zugangsdaten oder Tokens in der URL – sie landen in jedem Log, jedem
+Browserverlauf, jedem Proxy.</li>
+<li>Abgelaufene Tokens „kulanterweise“ annehmen.</li>
+<li>Jeder Service baut seine eigene Anmeldung.</li>
+</ul>
+<pre><code class="language-http">GET /customers?api_key=sk_live_51H8x…&amp;user=admin
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api3" hidden>
+<p class="as-risiko__kopf"><strong>API3 · Broken Object Property Level Authorization</strong> <span class="as-badge as-badge--service">Service</span> <span class="as-badge as-badge--gateway">Gateway</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api3" open>
+<summary>Worum geht’s?</summary>
+<p>Nicht das Objekt, sondern einzelne <strong>Felder</strong> sind das Problem. Beim Schreiben
+setzt der Aufrufer Felder, die er nicht setzen darf (<em>Mass Assignment</em>); beim
+Lesen bekommt er Felder, die er nicht sehen soll (<em>Excessive Data Exposure</em>).</p>
+<pre><code class="language-http">GET /customers/3fa85f64-…
+Authorization: Bearer …   (Tom Mayer)
+
+HTTP/1.1 200 OK
+{ &quot;id&quot;: &quot;3fa85f64-…&quot;, &quot;name&quot;: &quot;Tom Mayer&quot;,
+  &quot;passwordHash&quot;: &quot;$2a$10$N9qo8uLO…&quot;,
+  &quot;creditScore&quot;: 312 }
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> der <strong>Service</strong>. Das <strong>Gateway</strong> fängt es ab, wenn der Vertrag
+unbekannte Felder verbietet – dann weist es die Anfrage schon bei der Prüfung
+gegen den Vertrag ab.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api3">
+<summary>Do’s</summary>
+<ul>
+<li>Felder, die der Server vergibt, sind <code>readOnly</code>.</li>
+<li>Zum Schreiben ein eigenes Schema, das unbekannte Felder verbietet.</li>
+<li>Antworten liefern ein ausdrückliches Schema, nicht „die ganze Entität“.</li>
+<li>Unterschiedlich geschützte Felder werden eine eigene Ressource – Bezahldaten
+unter <code>/customers/{id}/payments</code>.</li>
+</ul>
+<pre><code class="language-yaml">CustomerPatch:
+  type: object
+  additionalProperties: false
+  properties:
+    name:      { type: string, maxLength: 100 }
+    birthdate: { type: string, format: date }
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api3">
+<summary>Don’ts</summary>
+<ul>
+<li>Den Body ungeprüft auf das gespeicherte Objekt übertragen.</li>
+<li>Alle Felder ausliefern und das Ausblenden der Oberfläche überlassen.</li>
+</ul>
+<pre><code class="language-http">PATCH /customers/3fa85f64-…
+{ &quot;name&quot;: &quot;Tom Mayer&quot;, &quot;state&quot;: &quot;aktiv&quot; }
+
+HTTP/1.1 200 OK
+{ …, &quot;state&quot;: &quot;aktiv&quot; }   ← vorher: gesperrt
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api4" hidden>
+<p class="as-risiko__kopf"><strong>API4 · Unrestricted Resource Consumption</strong> <span class="as-badge as-badge--gateway">Gateway</span> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api4" open>
+<summary>Worum geht’s?</summary>
+<p>Ein Aufrufer bestimmt, wie viel Arbeit der Server leistet – riesige Seiten,
+riesige Bodys, unzählige Anfragen, teure Abfragen. Das Ergebnis: Ausfall oder
+eine hohe Rechnung.</p>
+<pre><code class="language-http">POST /customers/3fa85f64-…/avatar
+Content-Type: image/png
+Content-Length: 2147483648   (2 GB)
+
+HTTP/1.1 503 Service Unavailable
+  (der Service hat beim Einlesen den Speicher verbraucht)
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> das <strong>Gateway</strong> – es prüft die Grenzen aus dem Vertrag, die
+Größe und die Rate. Der <strong>Service</strong> hält dieselben Grenzen trotzdem ein, für
+Aufrufe, die nicht über das Gateway kommen. Siehe <a href="#grenzen">Robustheit</a>.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api4">
+<summary>Do’s</summary>
+<ul>
+<li>Jede Menge, die der Aufrufer bestimmt, hat im Vertrag eine Obergrenze –
+<code>maximum</code>, <code>maxLength</code>, <code>maxItems</code>.</li>
+<li>Listen sind paginiert, mit Vorgabe und Obergrenze.</li>
+<li>Rate Limits mit <code>429</code> und <code>Retry-After</code>.</li>
+</ul>
+<pre><code class="language-yaml">- name: limit
+  in: query
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 200
+    default: 50
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api4">
+<summary>Don’ts</summary>
+<ul>
+<li>Die Menge dem Aufrufer überlassen.</li>
+<li>Ohne Parameter „alles“ liefern.</li>
+<li>Nur am Eingang begrenzen und zwischen den Services nicht.</li>
+</ul>
+<pre><code class="language-http">GET /customers?limit=1000000
+
+HTTP/1.1 200 OK   (nach 94 Sekunden)
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api5" hidden>
+<p class="as-risiko__kopf"><strong>API5 · Broken Function Level Authorization</strong> <span class="as-badge as-badge--gateway">Gateway</span> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api5" open>
+<summary>Worum geht’s?</summary>
+<p>Nicht das Objekt, sondern die <strong>Funktion</strong> ist verboten: Ein
+Kundenservice-Konto sperrt Kunden, ein Lesekonto löscht. Oft, weil
+Admin-Funktionen nur in der Oberfläche versteckt, an der API aber offen sind.</p>
+<pre><code class="language-http">DELETE /customers/3fa85f64-…
+Authorization: Bearer …   (reader_access – darf nur lesen)
+
+HTTP/1.1 204 No Content
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> das <strong>Gateway</strong>, wenn der Vertrag je Operation sagt, welcher
+Scope nötig ist. Was feiner ist als ein Scope – Rollen innerhalb eines
+Mandanten –, prüft der <strong>Service</strong>.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api5">
+<summary>Do’s</summary>
+<ul>
+<li>An jeder Operation steht im Vertrag, welchen Scope sie verlangt.</li>
+<li>Was einen eigenen Schutzbedarf hat, bekommt eine eigene Adresse – dann kann
+das Gateway daran prüfen.</li>
+<li><code>403</code>: Mit diesem Token hilft kein zweiter Versuch.</li>
+</ul>
+<pre><code class="language-yaml">/customers/{id}/flags/lock:
+  put:
+    security:
+      - openId: [lock_access]
+    responses:
+      '403': { $ref: '#/components/responses/Forbidden' }
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api5">
+<summary>Don’ts</summary>
+<ul>
+<li>Admin-Funktionen nur in der Oberfläche verstecken.</li>
+<li>Ein Scope für alles, was schreibt.</li>
+<li>Die Sperre als Feld im normalen <code>PATCH</code>.</li>
+</ul>
+<pre><code class="language-http">PATCH /customers/3fa85f64-…
+Authorization: Bearer …   (writer_access)
+{ &quot;locked&quot;: true }
+
+HTTP/1.1 200 OK
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api6" hidden>
+<p class="as-risiko__kopf"><strong>API6 · Unrestricted Access to Sensitive Business Flows</strong> <span class="as-badge as-badge--service">Service</span> <span class="as-badge as-badge--gateway">Gateway</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api6" open>
+<summary>Worum geht’s?</summary>
+<p>Jede einzelne Anfrage ist korrekt – das Problem ist die <strong>Absicht dahinter</strong>.
+Ein Beispiel: Der Shop schenkt jedem neuen Konto einen Gutschein über 10 €. Ein
+Skript legt alle 4 Sekunden ein Konto an, zehn Stunden lang. Das sind 10.000
+gültige Anfragen, alle unter dem Rate Limit – und 100.000 € Gutscheine.</p>
+<pre><code class="language-http">POST /customers
+{ &quot;name&quot;: &quot;Kim Neu 0001&quot;, … }
+
+HTTP/1.1 201 Created
+{ &quot;id&quot;: &quot;…&quot;, &quot;voucher&quot;: &quot;WELCOME-10-7Q2X&quot; }
+  (Anfrage 1 von 10.000 – alle 4 Sekunden die nächste)
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> der <strong>Service</strong> mit fachlichen Regeln. Das <strong>Gateway</strong> hilft mit
+Quoten und Bot-Erkennung, weiß aber nichts von Gutscheinen.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api6">
+<summary>Do’s</summary>
+<ul>
+<li>Mit der Fachseite die Abläufe benennen, die automatisiert Geld oder Vertrauen
+kosten – Gutscheine, Reservierungen, Bewertungen.</li>
+<li>Diese Abläufe fachlich begrenzen – etwa ein Gutschein je Zahlungsmittel.</li>
+<li>Quoten und Bot-Erkennung am Gateway als Ergänzung.</li>
+</ul>
+<pre><code class="language-http">POST /customers
+{ &quot;name&quot;: &quot;Kim Neu&quot;, … }
+
+HTTP/1.1 409 Conflict
+{ &quot;title&quot;: &quot;Für diese Zahlungsart besteht
+   bereits ein Konto&quot;, &quot;status&quot;: 409 }
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api6">
+<summary>Don’ts</summary>
+<ul>
+<li>Sich auf das Rate Limit verlassen.</li>
+<li>Das Thema der Technik überlassen – es ist eine fachliche Frage.</li>
+</ul>
+<pre><code class="language-http">POST /customers        → 201 Created
+POST /customers        → 201 Created
+…  (10.000-mal, je 4 Sekunden Abstand)
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api7" hidden>
+<p class="as-risiko__kopf"><strong>API7 · Server Side Request Forgery</strong> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api7" open>
+<summary>Worum geht’s?</summary>
+<p>Die API ruft selbst eine Adresse ab, die der Aufrufer angibt – etwa ein
+Profilbild per URL. Dieser Abruf geschieht <strong>von innen</strong>: Der Server erreicht,
+was von außen gesperrt ist – interne Verwaltungsdienste oder die Metadaten der
+Cloud mit ihren Zugangsschlüsseln. Der Angreifer lässt den Server für sich
+hineinschauen.</p>
+<pre><code class="language-http">POST /customers/3fa85f64-…/avatar
+{ &quot;imageUrl&quot;: &quot;http://169.254.169.254/latest/meta-data/iam/security-credentials/shop&quot; }
+
+HTTP/1.1 201 Created
+
+GET /customers/3fa85f64-…/avatar
+
+HTTP/1.1 200 OK
+{ &quot;AccessKeyId&quot;: &quot;ASIA…&quot;, &quot;SecretAccessKey&quot;: &quot;wJalr…&quot; }
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> der <strong>Service</strong>. Für das Gateway ist die URL nur Text im Body.
+Es kann ihre Form prüfen (nur <code>https</code>), aber nicht, wohin sie führt: Ein harmlos
+aussehender Name kann auf eine interne Adresse zeigen oder dorthin umleiten.
+Das merkt erst, wer den Abruf macht.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api7">
+<summary>Do’s</summary>
+<ul>
+<li>Hochladen statt verlinken lassen – dann ruft der Server gar nichts ab.</li>
+<li>Muss er abrufen: nur erlaubte Ziele, keine internen Adressen, keinen
+Umleitungen folgen, Größe und Zeit begrenzen.</li>
+</ul>
+<pre><code class="language-http">POST /customers/3fa85f64-…/avatar
+Content-Type: image/png
+(Bilddaten, höchstens 2 MB)
+
+HTTP/1.1 201 Created
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api7">
+<summary>Don’ts</summary>
+<ul>
+<li>Jede URL laden, die im Body steht.</li>
+<li>Nur die Form der URL prüfen und dann blind abrufen.</li>
+</ul>
+<pre><code class="language-http">POST /customers/3fa85f64-…/avatar
+{ &quot;imageUrl&quot;: &quot;https://bild.example.net/tom.png&quot; }
+  (der Name zeigt auf 169.254.169.254)
+
+HTTP/1.1 201 Created
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api8" hidden>
+<p class="as-risiko__kopf"><strong>API8 · Security Misconfiguration</strong> <span class="as-badge as-badge--gateway">Gateway</span> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api8" open>
+<summary>Worum geht’s?</summary>
+<p>Nicht der Entwurf ist falsch, sondern der <strong>Betrieb</strong>: Stacktraces in
+Fehlermeldungen, CORS für <code>*</code>, unverschlüsseltes HTTP, Debug-Endpunkte in
+Produktion, fehlende Sicherheits-Header.</p>
+<pre><code class="language-http">GET /customers
+Origin: https://boese-seite.example
+Cookie: session=…
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: https://boese-seite.example
+Access-Control-Allow-Credentials: true
+  (die API spiegelt jede Origin zurück)
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> das <strong>Gateway</strong> für alles, was einheitlich sein soll – TLS,
+CORS, Header –, der <strong>Service</strong> für seine Fehlermeldungen.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api8">
+<summary>Do’s</summary>
+<ul>
+<li>TLS überall, auch intern.</li>
+<li>CORS nur für bekannte Origins.</li>
+<li>Fehler im vereinbarten Format (Problem Details), verständlich und ohne
+Innenleben.</li>
+</ul>
+<pre><code class="language-http">HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+
+{ &quot;title&quot;: &quot;Ungültiger Cursor&quot;,
+  &quot;detail&quot;: &quot;Bitte die Liste von vorn laden.&quot;,
+  &quot;status&quot;: 400 }
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api8">
+<summary>Don’ts</summary>
+<ul>
+<li>Stacktraces und SQL in der Antwort.</li>
+<li><code>Access-Control-Allow-Origin: *</code> für eine API mit Anmeldung.</li>
+<li>Debug-Endpunkte in Produktion.</li>
+</ul>
+<pre><code class="language-http">HTTP/1.1 500 Internal Server Error
+
+{ &quot;error&quot;: &quot;SQLSyntaxErrorException at
+  CustomerRepository.findAfter(…):
+  SELECT * FROM t_customer WHERE …&quot; }
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api9" hidden>
+<p class="as-risiko__kopf"><strong>API9 · Improper Inventory Management</strong> <span class="as-badge as-badge--gateway">Gateway</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api9" open>
+<summary>Worum geht’s?</summary>
+<p>Niemand weiß genau, welche APIs und Versionen erreichbar sind. Die alte <code>v0</code>,
+die Testumgebung mit echten Daten, der vergessene Endpunkt – sie laufen weiter,
+ohne die Prüfungen der neuen.</p>
+<pre><code class="language-http">GET https://api.test.example.com/v1/customers
+  (Testumgebung, ohne Token)
+
+HTTP/1.1 200 OK
+{ &quot;items&quot;: [ … echte Kundendaten, Abzug von gestern … ] }
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> ein <strong>Inventar</strong> – jede API hat einen Vertrag, jede Version
+einen Abschalttermin – und das <strong>Gateway</strong>, das nur erreichbar macht, was dort
+verzeichnet ist.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api9">
+<summary>Do’s</summary>
+<ul>
+<li>Jede API und jede Version mit Vertrag und Abschalttermin verzeichnen.</li>
+<li>Die Abschaltung ankündigen und danach eindeutig antworten.</li>
+</ul>
+<pre><code class="language-http">GET /v1/customers
+
+HTTP/1.1 200 OK
+Deprecation: @1767225600
+Sunset: Wed, 30 Jun 2027 23:59:59 GMT
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api9">
+<summary>Don’ts</summary>
+<ul>
+<li>Die alte Version „sicherheitshalber“ weiterlaufen lassen.</li>
+<li>Testumgebungen mit echten Daten offen erreichbar.</li>
+</ul>
+<pre><code class="language-http">GET /v0/customers?limit=1000000
+(kein Token nötig – v0 kannte noch keins)
+
+HTTP/1.1 200 OK
+</code></pre>
+</details>
+</div>
+</div>
+<div class="as-risiko" data-risiko-inhalt="api10" hidden>
+<p class="as-risiko__kopf"><strong>API10 · Unsafe Consumption of APIs</strong> <span class="as-badge as-badge--service">Service</span></p>
+<div class="skr-tabs">
+<details class="skr-tabs__panel" name="risiko-api10" open>
+<summary>Worum geht’s?</summary>
+<p>Die eigene API ist selbst Aufrufer – etwa einer Adressprüfung oder eines
+Zahlungsdienstes. Deren Antworten werden <strong>ungeprüft</strong> übernommen, weil der
+Partner ja „vertrauenswürdig“ ist. Ist der Partner kompromittiert oder fehlerhaft,
+landet sein Inhalt ungefiltert in der eigenen Datenbank.</p>
+<pre><code class="language-http">GET https://adressen.partner.example/check?zip=50667
+  (der Account Service fragt den Partner)
+
+HTTP/1.1 200 OK
+{ &quot;zip&quot;: &quot;50667&quot;,
+  &quot;city&quot;: &quot;Köln'); DROP TABLE address;--&quot; }
+  → ungeprüft in die eigene Datenbank übernommen
+</code></pre>
+<p><strong>Wer wehrt ab:</strong> der <strong>Service</strong>, der den Partner aufruft. Kein Gateway steht
+dazwischen.</p>
+</details>
+<details class="skr-tabs__panel" name="risiko-api10">
+<summary>Do’s</summary>
+<ul>
+<li>Die Antwort des Partners gegen dessen Vertrag prüfen – wie jede Eingabe.</li>
+<li>Zeitlimit und Größenlimit setzen, nur <code>https</code>.</li>
+</ul>
+<pre><code class="language-http">GET https://adressen.partner.example/check?zip=50667
+
+HTTP/1.1 200 OK
+{ &quot;zip&quot;: &quot;50667&quot;, &quot;city&quot;: &quot;Köln&quot; }
+</code></pre>
+</details>
+<details class="skr-tabs__panel" name="risiko-api10">
+<summary>Don’ts</summary>
+<ul>
+<li>Antworten ungeprüft speichern oder weiterreichen.</li>
+<li>Umleitungen des Partners blind folgen.</li>
+</ul>
+<pre><code class="language-http">HTTP/1.1 200 OK
+{ &quot;zip&quot;: &quot;&lt;script&gt;…&lt;/script&gt;&quot;,
+  &quot;city&quot;: &quot;… (48 MB)&quot; }
+</code></pre>
+</details>
+</div>
+</div>
+</div>
+<h2 id="weiter">Weiter: die Spezialisierung</h2>
+<p>Hier endet, was das <strong>Design</strong> einer API braucht. Wer Security selbst
+umsetzt oder betreibt, findet die Fortsetzung im Kurs <strong>„API Security“</strong> der
+ATVANTAGE Academy:</p>
+<ul>
+<li><strong>OAuth 2 und OpenID Connect</strong> – Flows, Clients, Consent, Token-Austausch</li>
+<li><strong>JWT</strong> – Aufbau, Signatur, Prüfung, Lebensdauer und Widerruf</li>
+<li><strong>Identity Provider</strong> wie Keycloak – Rollen, Scopes, Mandanten</li>
+<li><strong>mTLS</strong> und Zertifikate zwischen Services, <strong>API Keys</strong> und ihre Grenzen</li>
+<li><strong>Secrets</strong> – Ablage, Rotation, Weitergabe</li>
+</ul>
+<p>Die <strong>Produkte</strong> dahinter – IBM API Connect, Apigee, Kong, Developer Portals –
+behandelt der Kurs <strong>„API Management“</strong>.</p>
+
+  </main>
+  <div class="skr-print-contact" aria-hidden="true">
+  <span>Kontakt: https://www.atvantage.com</span>
+  <span>academy@atvantage.com</span>
+</div>
+
+</body>
+</html>
