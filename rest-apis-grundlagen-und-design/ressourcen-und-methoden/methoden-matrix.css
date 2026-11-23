@@ -56,6 +56,11 @@
 .mm__verdict.t-ok { background: color-mix(in srgb, var(--skr-color-success) 18%, transparent); color: color-mix(in srgb, var(--skr-color-success) 72%, var(--skr-color-ink)); }
 .mm__verdict.t-warn { background: color-mix(in srgb, var(--skr-color-warning) 20%, transparent); color: var(--skr-color-warning); }
 .mm__verdict.t-no { background: color-mix(in srgb, var(--skr-color-danger) 18%, transparent); color: var(--skr-color-danger-ink); }
+.mm__warnung {
+  padding: .5rem .75rem; border-left: 4px solid var(--skr-color-warning);
+  background: color-mix(in srgb, var(--skr-color-warning) 10%, transparent);
+  border-radius: 0 var(--skr-radius-sm, 4px) var(--skr-radius-sm, 4px) 0;
+}
 .mm__ex { font-family: var(--skr-font-mono, monospace); font-size: .88em; background: var(--skr-code-bg, rgba(127,127,127,.12)); padding: .5rem .7rem; border-radius: var(--skr-radius-sm, 4px); display: block; white-space: pre-wrap; }
 
 /* SPEZIFITÄT MIT ABSICHT (0-2-1): Vor der Überschrift steht ein eigenes Raster-<div>

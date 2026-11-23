@@ -51,8 +51,8 @@
 <link rel="stylesheet" href="../../skriptorium/stage.css?v=032d2a00">
 <script src="../../skriptorium/stage.js?v=8f67b2ec" defer></script>
 
-<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.css?v=1f501fea">
-<script src="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.js?v=aa95a904" defer></script>
+<link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.css?v=673b8478">
+<script src="../../rest-apis-grundlagen-und-design/ressourcen-und-methoden/methoden-matrix.js?v=b7aec848" defer></script>
 
 </head>
 <body class="skr-stage" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization skriptorium.stage" data-skr-lang="de" data-skr-stage-home="../../" data-skr-audience="learner">
@@ -167,7 +167,7 @@ Zelle entscheidet – es ist öfter die erste, als man erwartet.</p>
 </div>
 <h2 class="mm__h2">Und wie leert man dann eine Liste?</h2>
 <p class="mm__foot">DELETE ist dafür die falsche Methode – die Aufgabe bleibt aber
-bestehen. Drei Entwürfe, die alle vorkommen. <strong>Keiner ist umsonst zu haben:</strong>
+bestehen. Vier Entwürfe, die alle vorkommen. <strong>Keiner ist umsonst zu haben:</strong>
 Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
 <div class="mm__scroll">
 <table class="mm__props">
@@ -175,6 +175,12 @@ Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
     <tr><th scope="col">Entwurf</th><th scope="col">Die Idee</th><th scope="col">Dafür spricht</th><th scope="col">Das kostet es</th></tr>
   </thead>
   <tbody>
+    <tr>
+      <th scope="row"><code>GET /products</code><br>+ je Eintrag<br><code>DELETE /products/{id}</code></th>
+      <td>Die Liste lesen und jeden Eintrag einzeln löschen. Leeren ist dann kein eigener Vorgang, sondern die Summe vieler.</td>
+      <td>Ganz ohne Sonderweg: nur Methoden, die es ohnehin gibt, jede in ihrer eigentlichen Bedeutung. Vollständig REST-konform, nichts zu dokumentieren, und die Rechte sind die, die schon für einzelnes Löschen gelten.</td>
+      <td>Ein <strong>n+1-Problem</strong>: eine Anfrage zum Lesen, dann eine je Eintrag – bei 10.000 Produkten 10.001 Aufrufe. Dazu kein gemeinsamer Abschluss: Bricht es mittendrin ab, ist die Liste halb leer, und was zwischen Lesen und Löschen dazukam, bleibt stehen.</td>
+    </tr>
     <tr>
       <th scope="row"><code>PUT /products</code></th>
       <td>Die Liste vollständig ersetzen – durch eine leere.</td>
@@ -196,7 +202,7 @@ Lies die letzte Spalte, bevor Du Dich entscheidest.</p>
   </tbody>
 </table>
 </div>
-<p class="mm__foot"><strong>Die Probe für alle drei:</strong> Was antwortet
+<p class="mm__foot"><strong>Die Probe für alle vier:</strong> Was antwortet
 <code>GET /products</code> danach? <code>200 OK</code> mit <code>[]</code>. Die Liste ist
 leer, aber sie ist da. Käme <code>404</code>, hättest Du sie wirklich gelöscht – und das
 war nicht die Aufgabe.</p>

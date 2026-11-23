@@ -10,6 +10,7 @@
   ];
 
   // ton: ok = tragfähig, warn = geht, will aber begründet sein, no = ergibt keinen Sinn
+  // warnung: optional – ein Haken, den man auch bei „ok“ kennen muss (eigener Absatz)
   var ZELLEN = {
     "GET|liste":        { mark: "R", wort: "Read", ton: "ok",
       urteil: "Der Normalfall",
@@ -20,9 +21,9 @@
       text: "Eine Einzelressource lesen. Gibt es die ID nicht, ist die Antwort <code>404</code> – nicht <code>200</code> mit einem leeren Objekt.",
       bsp: "GET /products/12345\n200 OK\n404 Not Found" },
     "GET|unterliste":   { mark: "R", wort: "Read", ton: "warn",
-      urteil: "Ja – aber frag Dich, warum es sie gibt",
-      text: "Technisch unstrittig. Die eigentliche Entwurfsfrage ist eine andere: Warum ist <code>images</code> überhaupt eine eigene Adresse und nicht ein Feld im Produkt? Gute Gründe: Es sind viele, sie sind groß, sie ändern sich unabhängig, oder sie haben eigene Rechte. Kein guter Grund: „so liegt es in der Datenbank“.",
-      bsp: "GET /products/12345/images\n200 OK" },
+      urteil: "Ja – aber was kommt eigentlich zurück?",
+      text: "Bei Daten wie Namen oder Preisen ist die Frage trivial, bei Bildern nicht: Bilder sind Binärdaten, und eine Antwort hat <em>einen</em> Body. Was also liefert <code>GET /products/12345/images</code>? Ein ZIP-Archiv mit allen Bildern? Das ist groß, lässt sich nicht einzeln cachen und zwingt den Client, alles zu laden. Üblich ist deshalb eine <strong>Liste von Verweisen</strong>: je Bild ein paar Metadaten und die Adresse, unter der es liegt – das Bild selbst holt der Client mit einem eigenen <code>GET</code>, wenn er es braucht.",
+      bsp: "GET /products/12345/images\n200 OK\n[ { \"id\": 7, \"url\": \"/products/12345/images/7\",\n    \"type\": \"image/png\" }, … ]" },
     "GET|abgeleitet":   { mark: "R", wort: "Read", ton: "ok",
       urteil: "Der klassische Fall für eine abgeleitete Ressource",
       text: "Das Vorschaubild zu den Bildern dieses Produkts – nichts Gespeichertes, sondern etwas Berechnetes, und trotzdem eine Ressource: Es hat eine Adresse, ist lesbar und cachebar. Genau dafür ist REST gut. Der häufige Anfängerfehler wäre <code>POST /products/12345/images/generatePreview</code>: ein Verb in der URL für etwas, das man einfach lesen kann.<br><br>Beachte, wo sie hängt: <strong>unter</strong> der Bilderliste, nicht neben ihr. Die Vorschau gibt es nur, weil es die Bilder gibt.",
@@ -45,21 +46,23 @@
       text: "Die Vorschau ist berechnet – sie entsteht nicht dadurch, dass jemand sie einreicht. Wer hier POST braucht, hat in Wahrheit eine Aktion gemeint („neu berechnen“). Die gehört dann als eigene Ressource modelliert, oder sie ist gar nicht nötig: Beim nächsten GET ist sie ohnehin aktuell.",
       bsp: "POST /products/12345/images/preview\n405 Method Not Allowed" },
 
-    "PUT|liste":        { mark: "U?", wort: "Replace", ton: "warn",
+    "PUT|liste":        { mark: "U ⚠", wort: "Replace", ton: "warn",
       urteil: "Definiert, aber gefährlich",
       text: "PUT ersetzt die Ressource <em>vollständig</em> durch das Mitgeschickte. Auf einer Liste heißt das: „Ab jetzt sind das alle Produkte, die es gibt.“ Das ist eindeutig definiert – und selten das, was jemand will. Wer es anbietet, sollte sehr genau wissen, warum.",
+      warnung: "Ein vergessenes Produkt im Body ist danach gelöscht – für den ganzen Shop, mit einer einzigen Anfrage.",
       bsp: "PUT /products\n[ … alle Produkte … ]\n\n→ alles, was nicht dabei ist, ist weg" },
     "PUT|einzeln":      { mark: "U/C", wort: "Replace / Create", ton: "ok",
       urteil: "Ersetzen – und anlegen, wenn der Client die ID bestimmt",
       text: "PUT ist <em>idempotent</em>: Dieselbe Anfrage zweimal führt zum selben Zustand. Deshalb ist PUT der richtige Griff, wenn der <strong>Client</strong> die ID kennt – etwa bei einem fachlichen Schlüssel. Achtung beim Ersetzen: Was Du nicht mitschickst, ist danach weg.",
       bsp: "PUT /customers/john@acme.com\n{ \"name\": \"John\" }\n\n201 beim ersten Mal, 200/204 danach" },
-    "PUT|unterliste":   { mark: "U?", wort: "Replace", ton: "warn",
-      urteil: "Hier oft sinnvoller als auf der Hauptliste",
+    "PUT|unterliste":   { mark: "U", wort: "Replace", ton: "ok",
+      urteil: "Sinnvoll – die Menge ist überschaubar, der Besitzer eindeutig",
       text: "„Genau diese Bilder soll das Produkt haben“ ist ein realistischer Wunsch – und die Menge ist überschaubar und gehört einem einzigen Besitzer. Das ist der Unterschied zur globalen Liste: Der Schaden ist begrenzt und der Besitzer ist eindeutig.",
       bsp: "PUT /products/12345/images\n[ … die gewünschten Bilder … ]" },
-    "PUT|abgeleitet":   { mark: "U/C", wort: "Replace / Create", ton: "warn",
-      urteil: "Nur, wenn die Vorschau hinterlegbar ist",
-      text: "Ist die Vorschau rein berechnet, gibt es nichts zu setzen – dann <code>405</code>. Darf man sie aber überschreiben („nimm dieses Bild statt des automatisch erzeugten“), ist PUT genau richtig: Es gibt <strong>eine</strong> davon, der Client bestimmt den Inhalt, mehrfach gesendet ändert sich nichts.",
+    "PUT|abgeleitet":   { mark: "U/C", wort: "Replace / Create", ton: "ok",
+      urteil: "Ja – eine eigene Vorschau hinterlegen",
+      text: "„Nimm dieses Bild statt des automatisch erzeugten“: Dafür ist PUT genau richtig. Es gibt <strong>eine</strong> Vorschau, der Client bestimmt den Inhalt, und mehrfach gesendet ändert sich nichts.",
+      warnung: "Ist die Vorschau rein <strong>berechnet</strong>, gibt es nichts zu setzen – dann <code>405</code>. Oder schlimmer: Der Server nimmt das Bild an und überschreibt es bei der nächsten Berechnung wieder.",
       bsp: "PUT /products/12345/images/preview\nContent-Type: image/png\n204 No Content" },
 
     "PATCH|liste":      { mark: "U", wort: "Update", ton: "warn",
@@ -74,14 +77,15 @@
       urteil: "Wie bei der Hauptliste – selten",
       text: "Dasselbe Bild wie oben: Es braucht ein Änderungsformat, und meist ist es einfacher, das einzelne Element zu ändern (<code>PATCH /products/12345/images/7</code>).",
       bsp: "PATCH /products/12345/images" },
-    "PATCH|abgeleitet": { mark: "U", wort: "Update", ton: "warn",
-      urteil: "Nur, wenn sie überhaupt Felder hat",
-      text: "Ein Bild hat keine Teilfelder, die man einzeln ändern könnte – dann ergibt PATCH keinen Sinn. Ist die Vorschau dagegen ein Objekt mit Einstellungen (Ausschnitt, Größe), ist PATCH der übliche Weg.",
-      bsp: "PATCH /products/12345/images/preview\n{ \"crop\": \"square\" }" },
+    "PATCH|abgeleitet": { mark: "U", wort: "Update", ton: "ok",
+      urteil: "Ja – das Bild verändern lassen",
+      text: "Ein Bild hat keine Teilfelder, die man einzeln setzen könnte. <strong>Aber</strong> man kann es verändern lassen: verkleinern, in Graustufen umwandeln. Das Patch-Dokument beschreibt dann nicht neue Feldwerte, sondern die <em>Änderung</em> – genau das, wofür PATCH gedacht ist.<br><br>Achte dabei auf Idempotenz: „auf 200 Pixel Breite“ ergibt beim zweiten Mal dasselbe Bild, „halb so groß“ nicht.",
+      warnung: "Ist die Vorschau <strong>berechnet</strong>, geht die Änderung bei der nächsten Berechnung verloren – oder der Server muss sie sich merken und jedes Mal neu anwenden.",
+      bsp: "PATCH /products/12345/images/preview\n{ \"width\": 200, \"grayscale\": true }\n\n204 No Content" },
 
     "DELETE|liste":     { mark: "✗", wort: "geht nicht", ton: "no",
       urteil: "Löschen und Leeren sind nicht dasselbe",
-      text: "Eine Ressource zu löschen heißt: Sie ist danach <strong>weg</strong> – ein anschließendes <code>GET</code> antwortet <code>404</code>. Genau das lässt sich mit einer Listenressource nicht machen. <code>/products</code> ist die Produktliste des Shops; sie existiert, solange es den Shop gibt – ob Produkte darin stehen oder keine. Nach einem <code>DELETE</code> wäre sie also immer noch da, nur leer. Und eine leere Liste antwortet <code>200</code> mit <code>[]</code>, nicht <code>404</code>.<br><br>Wer hier DELETE verlangt, meint deshalb nicht <em>löschen</em>, sondern <strong>leeren</strong> – und dafür ist DELETE die falsche Methode. Die Aufgabe bleibt damit aber bestehen: <em>Wie leert man eine Liste?</em> Drei Entwürfe stehen unter der Matrix.",
+      text: "Eine Ressource zu löschen heißt: Sie ist danach <strong>weg</strong> – ein anschließendes <code>GET</code> antwortet <code>404</code>. Genau das lässt sich mit einer Listenressource nicht machen. <code>/products</code> ist die Produktliste des Shops; sie existiert, solange es den Shop gibt – ob Produkte darin stehen oder keine. Nach einem <code>DELETE</code> wäre sie also immer noch da, nur leer. Und eine leere Liste antwortet <code>200</code> mit <code>[]</code>, nicht <code>404</code>.<br><br>Wer hier DELETE verlangt, meint deshalb nicht <em>löschen</em>, sondern <strong>leeren</strong> – und dafür ist DELETE die falsche Methode. Die Aufgabe bleibt damit aber bestehen: <em>Wie leert man eine Liste?</em> Vier Entwürfe stehen unter der Matrix.",
       bsp: "DELETE /products\n405 Method Not Allowed\n\nGET /products\n200 OK\n[]   ← die Liste gibt es weiterhin" },
     "DELETE|einzeln":   { mark: "D", wort: "Delete", ton: "ok",
       urteil: "Der Normalfall",
@@ -89,11 +93,12 @@
       bsp: "DELETE /products/12345\n204 No Content" },
     "DELETE|unterliste":{ mark: "✗", wort: "geht nicht", ton: "no",
       urteil: "Unterressource hin oder her – es bleibt eine Liste",
-      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>/products/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die drei Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
+      text: "Der naheliegende Einwand lautet: Hier ist der Schaden doch begrenzt – die Bilder gehören einem einzigen Produkt, ein Versehen trifft nicht den ganzen Katalog. Das stimmt, trifft aber die Sache nicht. Der Grund ist derselbe wie bei <code>/products</code>: <code>/products/12345/images</code> <strong>ist</strong> eine Listenressource. Sie existiert, solange es das Produkt gibt. Löschte man sie wirklich, müsste das nächste <code>GET</code> mit <code>404</code> antworten – es antwortet aber <code>200</code> mit <code>[]</code>.<br><br>Gemeint ist also auch hier <strong>leeren</strong>. Die vier Entwürfe unter der Matrix gelten unverändert, nur lautet die Adresse dann <code>/products/12345/images</code>. <em>Die Unterscheidung Haupt- gegen Unterressource hilft hier nicht weiter – die Unterscheidung Listen- gegen Einzelressource schon.</em>",
       bsp: "DELETE /products/12345/images\n405 Method Not Allowed\n\nGET /products/12345/images\n200 OK\n[]" },
-    "DELETE|abgeleitet":{ mark: "D", wort: "Delete", ton: "warn",
-      urteil: "Nur, wenn es etwas zu löschen gibt",
-      text: "Bei einer rein berechneten Vorschau: nichts zu löschen, <code>405</code>. Bei einer hinterlegten: „nimm meine hochgeladene Vorschau weg und berechne wieder selbst“ – das ist eine saubere Bedeutung für DELETE.",
+    "DELETE|abgeleitet":{ mark: "D", wort: "Delete", ton: "ok",
+      urteil: "Ja – die hinterlegte Vorschau entfernen",
+      text: "„Nimm meine hochgeladene Vorschau weg und berechne wieder selbst“ – das ist eine saubere Bedeutung für DELETE.",
+      warnung: "Bei einer rein <strong>berechneten</strong> Vorschau gibt es nichts zu löschen – dann <code>405</code>. Und ein anschließendes <code>GET</code> liefert wieder eine Vorschau, kein <code>404</code>: Das sollte der Client wissen.",
       bsp: "DELETE /products/12345/images/preview\n204 No Content" }
   };
 
@@ -151,6 +156,7 @@
       '<h3><code>' + methode + " " + spalte.url + "</code></h3>" +
       '<p class="mm__verdict t-' + daten.ton + '">' + daten.urteil + "</p>" +
       "<p>" + daten.text + "</p>" +
+      (daten.warnung ? '<p class="mm__warnung"><strong>Achtung:</strong> ' + daten.warnung + "</p>" : "") +
       '<code class="mm__ex">' + daten.bsp.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</code>";
     zaehle();
   }
