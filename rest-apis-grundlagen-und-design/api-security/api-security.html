@@ -52,7 +52,7 @@
 <script src="../../skriptorium/stage.js?v=8f67b2ec" defer></script>
 
 <link rel="stylesheet" href="../../rest-apis-grundlagen-und-design/api-security/api-security.css?v=287a9f76">
-<script src="../../rest-apis-grundlagen-und-design/api-security/api-security.js?v=5298c56a" defer></script>
+<script src="../../rest-apis-grundlagen-und-design/api-security/api-security.js?v=7ed4ca52" defer></script>
 
 </head>
 <body class="skr-stage" data-skr-layout="didaktikon.visualization" data-skr-layouts="didaktikon.visualization skriptorium.stage" data-skr-lang="de" data-skr-stage-home="../../" data-skr-audience="learner">
@@ -448,10 +448,10 @@ unter <code>/customers/{id}/payments</code>.</li>
 <li>Alle Felder ausliefern und das Ausblenden der Oberfläche überlassen.</li>
 </ul>
 <pre><code class="language-http">PATCH /customers/3fa85f64-…
-{ &quot;name&quot;: &quot;Tom Mayer&quot;, &quot;state&quot;: &quot;aktiv&quot; }
+{ &quot;name&quot;: &quot;Tom Mayer&quot;, &quot;state&quot;: &quot;active&quot; }
 
 HTTP/1.1 200 OK
-{ …, &quot;state&quot;: &quot;aktiv&quot; }   ← vorher: gesperrt
+{ …, &quot;state&quot;: &quot;active&quot; }   ← vorher: locked
 </code></pre>
 </details>
 </div>
@@ -531,8 +531,8 @@ Mandanten –, prüft der <strong>Service</strong>.</p>
 das Gateway daran prüfen.</li>
 <li><code>403</code>: Mit diesem Token hilft kein zweiter Versuch.</li>
 </ul>
-<pre><code class="language-yaml">/customers/{id}/flags/lock:
-  put:
+<pre><code class="language-yaml">/customers/{id}/status-actions/lock:
+  post:
     security:
       - openId: [lock_access]
     responses:

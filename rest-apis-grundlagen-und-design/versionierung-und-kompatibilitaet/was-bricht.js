@@ -34,7 +34,7 @@
       weg: "Ein <strong>neues Feld daneben</strong> (<code>kundennummerText</code>), das alte unverändert weiterliefern – und dann denselben Dreischritt wie beim Entfernen."
     },
     {
-      was: "Der Status kann neben <code>aktiv</code>, <code>deaktiviert</code> und <code>gesperrt</code> künftig auch <code>in_pruefung</code> sein.",
+      was: "Der Status kann neben <code>active</code>, <code>disabled</code> und <code>locked</code> künftig auch <code>in_review</code> sein.",
       art: "praxis", urteil: "Formal verträglich – und trotzdem einer der gefährlichsten Fälle",
       warum: "Es wird nichts weggenommen und nichts umbenannt. Aber jeder Aufrufer, der daraus ein Aufzählungsobjekt gemacht hat, bekommt beim Einlesen eine Ausnahme – und jedes <code>switch</code> ohne <code>default</code> läuft ins Leere. <strong>Die Aufrufer haben die Werteliste für vollständig gehalten, weil nirgends stand, dass sie wächst.</strong>",
       weg: "Von Anfang an zusichern: „Diese Liste kann wachsen. Behandle unbekannte Werte wie <em>X</em>.“ Danach ist derselbe Schritt harmlos."

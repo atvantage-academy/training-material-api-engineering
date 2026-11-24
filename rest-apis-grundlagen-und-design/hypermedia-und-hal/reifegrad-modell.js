@@ -21,15 +21,15 @@
       titel: "Stufe 2 – HTTP-Verben und Statuscodes",
       text: "Die Methode sagt, <em>was</em> geschieht, die Adresse, <em>womit</em>. Der Statuscode sagt, wie es ausging. Jetzt arbeitet die Infrastruktur mit: <code>GET</code> ist cachebar, <code>PUT</code> und <code>DELETE</code> sind wiederholbar, <code>404</code> ist ein Fehler für jeden Beteiligten.",
       anfrage: "GET /customers/5\nAccept: application/json",
-      antwort: "200 OK\nContent-Type: application/json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"status\": \"aktiv\"\n}",
+      antwort: "200 OK\nContent-Type: application/json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"state\": \"active\"\n}",
       merke: "<strong>Hier steht praktisch alles, was „REST-API“ heißt</strong> – und alles, was in diesem Kurs entworfen wurde. Das ist kein Zwischenstand, sondern für die meisten APIs der richtige Platz."
     },
     "3": {
       titel: "Stufe 3 – Hypermedia",
-      text: "Die Antwort enthält, was jetzt möglich ist. Ein <strong>aktiver</strong> Kunde bekommt den Verweis zum Deaktivieren, ein <strong>deaktivierter</strong> den zum Aktivieren. Der Client muss die Regel nicht kennen – er zeigt einen Knopf, wenn der Verweis da ist.",
+      text: "Die Antwort enthält, was jetzt möglich ist. Ein <strong>aktiver</strong> Kunde bekommt den Verweis zum Stilllegen, ein <strong>stillgelegter</strong> den zum Aktivieren. Der Client muss die Regel nicht kennen – er zeigt einen Knopf, wenn der Verweis da ist.",
       anfrage: "GET /customers/5\nAccept: application/hal+json",
-      antwort: "200 OK\nContent-Type: application/hal+json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"status\": \"aktiv\",\n  \"_links\": {\n    \"self\":       { \"href\": \"/customers/5\" },\n    \"orders\":     { \"href\": \"/customers/5/orders\" },\n    \"deactivate\": { \"href\": \"/customers/5/flags/deactivation\" }\n  }\n}",
-      merke: "<strong>Die Geschäftsregel steht nur noch an einer Stelle.</strong> Ändert sich, wann ein Kunde deaktiviert werden darf, muss kein einziger Client angefasst werden – der Verweis ist einfach da oder nicht."
+      antwort: "200 OK\nContent-Type: application/hal+json\n\n{\n  \"id\": 5,\n  \"name\": \"Maier\",\n  \"state\": \"active\",\n  \"_links\": {\n    \"self\":       { \"href\": \"/customers/5\" },\n    \"orders\":     { \"href\": \"/customers/5/orders\" },\n    \"disable\":    { \"href\": \"/customers/5/status-actions/disable\" }\n  }\n}",
+      merke: "<strong>Die Geschäftsregel steht nur noch an einer Stelle.</strong> Ändert sich, wann ein Kunde stillgelegt werden darf, muss kein einziger Client angefasst werden – der Verweis ist einfach da oder nicht."
     }
   };
 

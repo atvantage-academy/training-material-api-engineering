@@ -73,7 +73,7 @@
       text: "Die Struktur eines Datensatzes: welche Felder es gibt, welchen Typ sie haben, welche Pflicht sind und welche Grenzen gelten. Das ist gewöhnliches JSON Schema.",
       merke: "<code>readOnly: true</code> löst die Frage, an der viele Entwürfe hängen: ID und Zustand kommen beim Lesen mit, werden beim Anlegen aber nicht geschickt. <strong>Damit braucht es kein zweites Schema.</strong>" },
 
-    { id: "zustand-schema", zeilen: ["    CustomerState:", "      type: string", "      enum: [aktiv, deaktiviert, gesperrt]"],
+    { id: "zustand-schema", zeilen: ["    CustomerState:", "      type: string", "      enum: [active, disabled, locked]"],
       titel: "Ein Aufzählungstyp",
       text: "<code>enum</code> legt die erlaubten Werte abschließend fest. Als eigenes Schema lässt sich der Typ an mehreren Stellen nutzen – hier im Feld <code>state</code> des Kunden und im Filter von <code>GET /customers</code>.",
       merke: "Ab OpenAPI 3.1 darf neben einem <code>$ref</code> noch etwas stehen – hier <code>readOnly: true</code> am Feld <code>state</code>. In 3.0 wurde alles neben <code>$ref</code> ignoriert." },
